@@ -1,0 +1,122 @@
+# Lanternhouse — Godot Asset Conventions
+
+## File Organization
+
+```
+assets/
+  sprites/
+    overworld/
+      player.png              # 64×64 sheet (4 dir × 4 frames)
+      npc_<role>.png          # 64×64 sheet per NPC
+      monster_<name>.png      # 64×64 sheet per encounter icon
+    battle/
+      enemies/
+        <name>.png            # 96×48 sheet (idle + hit flash)
+      party/
+        <class>.png           # 64×48 sheet (2 idle frames)
+    tiles/
+      <tile_type>.png         # 16×16 (or 16×N for animated)
+    ui/
+      cursor.png              # 16×16 menu cursor
+      frame_border.png        # 8×8 corner/edge tiles for dialog frames
+      icons/                  # item/spell icons, 16×16 each
+```
+
+## Import Settings (project.godot defaults)
+
+All textures should use nearest-neighbor filtering. The following
+`[import_defaults]` section in project.godot enforces this globally.
+
+**Per-texture override** (if needed via `.import` file):
+- Filter: Nearest
+- Mipmaps: Disabled
+- Repeat: Disabled
+- sRGB: Enabled
+
+## Naming Conventions
+
+### General Rules
+
+- Lowercase, snake_case for all file names.
+- No spaces or special characters.
+- Sprite names match the keys used in `SpriteCache` calls.
+- Scene files: `snake_case.tscn`. Script files: `snake_case.gd`.
+
+### Entity Naming
+
+| Entity type | File pattern | Example |
+|---|---|---|
+| Player sprite | `overworld/player.png` | — |
+| Party class | `battle/party/<class>.png` | `fighter.png`, `redmage.png` |
+| Enemy | `battle/enemies/<name>.png` | `slime.png`, `drake.png` |
+| NPC | `overworld/npc_<role>.png` | `npc_merchant.png` |
+| Terrain tile | `tiles/<type>.png` | `water.png`, `forest.png` |
+| Animated tile | `tiles/<type>.png` (vertical strip) | `water.png` (16×64) |
+| UI element | `ui/<element>.png` | `cursor.png` |
+| Spell icon | `ui/icons/spell_<name>.png` | `spell_fire.png` |
+
+### Frame Naming (within sheets)
+
+Frames are addressed by column/row index, not named regions. In code:
+```
+# Overworld walk: row = facing (0=down, 1=up, 2=left, 3=right), col = step frame
+# Battle idle: col 0 = frame 1, col 1 = frame 2
+```
+
+If `SpriteFrames` resources are used later, name them:
+```
+idle_down, idle_up, idle_left, idle_right
+walk_down, walk_up, walk_left, walk_right
+```
+
+## Adding New Sprites
+
+1. Place the PNG in the correct `assets/sprites/` subdirectory.
+2. No code change needed — `SpriteCache.get_sprite()` auto-detects files
+   and returns the texture, falling back to `null` (which triggers colored
+   block rendering).
+3. For new tile types, add the color entry to `COLORS` and any block/encounter
+   logic in the relevant scene script, then drop the matching PNG.
+
+## Adding New Enemy Types
+
+1. Add template to `scripts/data/enemies.gd` → `template()`.
+2. Add color to `battle.gd` → `ENEMY_COLORS` (fallback for before art exists).
+3. Add formation entries to the appropriate zone formation function.
+4. Place sprite at `assets/sprites/battle/enemies/<name>.png`.
+
+## Adding New Tile Types
+
+1. Add tile symbol to the `MAP` array in `overworld.gd` or `town.gd`.
+2. Add entry to `COLORS` dictionary.
+3. Add to `BLOCKED`, `ENCOUNTER`, or other constraint dicts as needed.
+4. Place sprite at `assets/sprites/tiles/<name>.png`.
+
+## Godot Scene Structure
+
+Current node hierarchy (for reference when adding art nodes):
+
+```
+Overworld (Node2D)         Town (Node2D)            Battle (Node2D)
+  MapLayer (Node2D)          MapLayer (Node2D)        Background (ColorRect)
+  PlayerSprite (Node2D)      PlayerSprite (Node2D)    EnemyArea (Node2D)
+    Body (Polygon2D)           Body (Polygon2D)       PartyArea (Node2D)
+    Face (ColorRect)          Dialog (RichTextLabel)   Panel (Panel)
+  HUD (RichTextLabel)                                   TextDisplay (RichTextLabel)
+```
+
+When replacing colored blocks with sprites, add `Sprite2D` children under
+the same parent nodes. The existing `Polygon2D` and `ColorRect` nodes can
+be removed once sprite art is in place.
+
+## Texture Import Checklist
+
+For each PNG added to the project:
+
+- [ ] Confirm Nearest filtering (not Linear) in the Import dock
+- [ ] Confirm "Repeat" is Disabled
+- [ ] Confirm Mipmaps are Off
+- [ ] Transparent background (alpha channel)
+- [ ] Pixel-perfect edges — no anti-aliased outlines
+- [ ] Fits the grid: 16×16 for tiles/overworld, 48×48 for enemies, 32×48 for party
+- [ ] Uses colors from the Lanternhouse palette (see pixel-art-direction.md)
