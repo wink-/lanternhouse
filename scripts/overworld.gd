@@ -4,35 +4,20 @@ extends Node2D
 const TILE_SIZE := 32
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
-# terrain_atlas.png is 1024x1024 → 32x32 tiles
-# These will be refined as we test
-const T_WATER_DEEP   := Vector2i(3, 9)
-const T_WATER_SHALLOW:= Vector2i(7, 9)
-const T_SAND         := Vector2i(2, 9)
-const T_SAND_WATER   := Vector2i(0, 11)  # sand touching water edge
-const T_GRASS        := Vector2i(6, 9)
-const T_GRASS_FLOWER := Vector2i(4, 21)
-const T_FOREST       := Vector2i(5, 20)  # pine tree
-const T_TREE         := Vector2i(4, 20)  # deciduous tree
-const T_HILL         := Vector2i(8, 17)
-const T_HILL_GRASS   := Vector2i(7, 17)
-const T_MOUNTAIN     := Vector2i(1, 16)
-const T_MOUNTAIN_HI  := Vector2i(2, 16)
-const T_CLIFF        := Vector2i(1, 0)
-const T_DIRT_PATH    := Vector2i(0, 11)
-const T_BRIDGE       := Vector2i(10, 7)
-const T_LIGHTHOUSE   := Vector2i(8, 7)  # lighthouse-like structure
-const T_HOUSE        := Vector2i(1, 20)  # farm house
-const T_FENCE        := Vector2i(9, 7)
-const T_DOCK         := Vector2i(10, 8)
+# terrain_simple.png is 224x32 → 7 tiles across, 1 row
+const T_WATER_DEEP   := Vector2i(0, 0)
+const T_WATER_SHALLOW:= Vector2i(1, 0)
+const T_SAND         := Vector2i(2, 0)
+const T_GRASS        := Vector2i(3, 0)
+const T_FOREST       := Vector2i(4, 0)
+const T_HILL         := Vector2i(5, 0)
+const T_MOUNTAIN     := Vector2i(6, 0)
 
 # ── Island map (40x40) ────────────────────────────────────────────────────
-# Legend:
-#  ~ = deep water   ~ = shallow water   . = sand beach
-#  , = grass        T = forest          ^ = hill
-#  M = mountain     # = impassable peak  = = path
-#  h = house        b = bridge          d = dock
-#  L = lighthouse encounter zone
+#  ~ = water    . = sand beach    , = grass
+#  T = forest   ^ = hill          M = mountain
+#  # = impassable peak           = = dirt path
+#  h = house    L = lighthouse
 
 const MAP := [
 	"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
@@ -43,23 +28,23 @@ const MAP := [
 	"~~~~~~~~~~~~,,,,,,,,,,,~~~~~~~~~~~~~~~~~",
 	"~~~~~~~~~~~,,,,,,,,,,,,,,~~~~~~~~~~~~~~~",
 	"~~~~~~~~~~.,,,,,,,,,,,,,,,.~~~~~~~~~~~~~",
-	"~~~~~~~~~.,,,,,=,,,,,,,,,,,,~~~~~~~~~~~~",
-	"~~~~~~~~.,,,,,,=,,,,,TTTTT,,.~~~~~~~~~~",
+	"~~~~~~~~~.,,,,,,=,,,,,,,,,,,,~~~~~~~~~~~",
+	"~~~~~~~~.,,,,,,,=,,,,,TTTTT,,.~~~~~~~~~",
 	"~~~~~~~~,,,,,,===,,,TTTTTTTT,,,~~~~~~~~",
 	"~~~~~~.,,,,,,,,,=,,,TTTTTTTTTT,,,~~~~~~",
 	"~~~~~~,,,,,,,,,,,,,,,TTTTTTTTTT,,,.~~~~",
 	"~~~~~.,,,,,,,,,,,,,,,TTTT!=TTTT,,,,.~~~",
 	"~~~~~,,,,,,,,,,,,,,,,,TTTTTTTT,,,,,,~~~",
 	"~~~~~,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,~~~",
-	"~~~~~~,,,,,,,,=,,,,,,,^^^^^,,,,,,,,~~~~",
-	"~~~~~~.,,,,,,===,,,,,^^^^^^^^,,,,,,~~~~",
+	"~~~~~~,,,,,,,,,=,,,,,,,^^^^^,,,,,,,,~~~",
+	"~~~~~~.,,,,,,,===,,,,,^^^^^^^^,,,,,,~~~",
 	"~~~~~~~~,,,,,,,,,,,,^^^^^^^^^^^,,,~~~~~",
 	"~~~~~~~~~.,,,,,,,,,,,,,,^^^^^^,,,,,~~~~",
-	"~~~~~~~~~~.,,,,h,,,,,,,,,,,,,,,,,,,~~~~",
-	"~~~~~~~~~~~~,,,,,,,,,,,,,,,,,,,,,,,,~~~",
-	"~~~~~~~~~~~~.,,,,,,,,,,,,,=,,,,,,,..~~~",
-	"~~~~~~~~~~~~~~,,,,,,,,,,,,=,,..~~~~~~~~",
-	"~~~~~~~~~~~~~~.,,,,,,,,,,,=..~~~~~~~~~~",
+	"~~~~~~~~~~.,,,,h,,,,,,,,,,,,,,,,,,~~~~~",
+	"~~~~~~~~~~~~,,,,,,,,,,,,,,,,,,,,,,~~~~~",
+	"~~~~~~~~~~~~.,,,,,,,,,,,,,,=,,,,,,.~~~",
+	"~~~~~~~~~~~~~~,,,,,,,,,,,,,=,,..~~~~~~~",
+	"~~~~~~~~~~~~~~.,,,,,,,,,,,=..~~~~~~~~~",
 	"~~~~~~~~~~~~~~~~.,,,,,,,,.~~~~~~~~~~~~~",
 	"~~~~~~~~~~~~~~~~~~,,,,,,~~~~~~~~~~~~~~~",
 	"~~~~~~~~~~~~~~~~~~.,,,,,~~~~~~~~~~~~~~~",
@@ -85,20 +70,11 @@ const TILE_ATLAS := {
 	"T": T_FOREST,
 	"^": T_HILL,
 	"M": T_MOUNTAIN,
-	"#": T_MOUNTAIN_HI,
-	"=": T_DIRT_PATH,
-	"h": T_HOUSE,
-	"b": T_BRIDGE,
-	"d": T_DOCK,
-	"L": T_LIGHTHOUSE,
+	"#": T_MOUNTAIN,
 }
 
-const BLOCKED := {
-	"~": true, "M": true, "#": true, "h": true, "L": true, "b": true, "d": true,
-}
-
-const ENCOUNTER := {"T": true}  # forest = random encounters
-const TOWN_TILE := "h"
+const BLOCKED := {"~": true, "M": true, "#": true}
+const ENCOUNTER := {"T": true}
 const MAP_W := 40
 const MAP_H := 40
 
@@ -113,6 +89,7 @@ var step_count: int = 0
 
 # ── Nodes ──────────────────────────────────────────────────────────────────
 @onready var tilemap: TileMap = $TileMap
+@onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var player_body: Polygon2D = $PlayerSprite/Body
 @onready var player_face: ColorRect = $PlayerSprite/Face
@@ -124,14 +101,20 @@ func _ready() -> void:
 	_build_tileset()
 	_draw_map()
 	_update_player_visual()
+	_update_camera()
 	_update_hud()
+	print("Overworld ready. Player at ", pos, " (tile: ", _tile(pos), ")")
 
 func _build_tileset() -> void:
-	"""Create a TileSet from the terrain atlas at runtime."""
-	var tex: Texture2D = load("res://assets/sprites/tiles/terrain_atlas.png")
+	var tex: Texture2D = load("res://assets/sprites/tiles/terrain_simple.png")
 	if not tex:
 		push_error("Failed to load terrain atlas!")
+		print("ERROR: terrain_atlas.png not found!")
+		# Fallback: render map with colors
+		_fallback_draw()
 		return
+
+	print("terrain_atlas loaded: ", tex.get_width(), "x", tex.get_height())
 
 	var ts := TileSet.new()
 	var source := TileSetAtlasSource.new()
@@ -139,24 +122,55 @@ func _build_tileset() -> void:
 	source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
 	source.use_texture_padding = true
 
-	# Add all tiles we use
+	# Register every tile we reference
 	for key: String in TILE_ATLAS:
 		var coord: Vector2i = TILE_ATLAS[key]
+		if source.has_tile(coord):
+			continue
 		source.create_tile(coord)
-		source.set_tile_animation_columns(coord, 1)
+		print("  added tile '", key, "' at atlas ", coord)
 
 	ts.add_source(source, 0)
 	tilemap.tileset = ts
 
-func _tile_atlas_coord(tile_char: String) -> Vector2i:
-	return TILE_ATLAS.get(tile_char, T_GRASS)
+	# Ensure layer 0 exists
+	if tilemap.get_layers_count() == 0:
+		tilemap.add_layer(-1)
+	print("TileSet built with ", TILE_ATLAS.size(), " tile types")
 
 func _draw_map() -> void:
+	var tile_count: int = 0
 	for y in range(MAP_H):
 		for x in range(MAP_W):
 			var tile_char: String = MAP[y].substr(x, 1)
-			var atlas_coord: Vector2i = _tile_atlas_coord(tile_char)
+			var atlas_coord: Vector2i = TILE_ATLAS.get(tile_char, T_GRASS)
 			tilemap.set_cell(0, Vector2i(x, y), 0, atlas_coord)
+			tile_count += 1
+	print("Map drawn: ", tile_count, " tiles")
+
+func _fallback_draw() -> void:
+	"""Draw colored rectangles if tileset failed to load."""
+	print("Using colored-block fallback")
+	for y in range(MAP_H):
+		for x in range(MAP_W):
+			var tile_char: String = MAP[y].substr(x, 1)
+			var color := Color.GRAY
+			match tile_char:
+				"~": color = Color("1a3a5c")
+				".": color = Color("c8b070")
+				",": color = Color("4c9040")
+				"T": color = Color("1c5730")
+				"^": color = Color("8a8a6a")
+				"M": color = Color("69677a")
+				"#": color = Color("4a4858")
+				"=": color = Color("a08050")
+				"h": color = Color("8b6914")
+				"L": color = Color("fbf236")
+			var rect := ColorRect.new()
+			rect.color = color
+			rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+			rect.size = Vector2(TILE_SIZE, TILE_SIZE)
+			add_child(rect)
 
 # ── Player visual ──────────────────────────────────────────────────────────
 func _update_player_visual() -> void:
@@ -166,6 +180,10 @@ func _update_player_visual() -> void:
 	player_body.color = base_color
 	if walking:
 		player_sprite.position.y -= 2
+
+func _update_camera() -> void:
+	if camera:
+		camera.position = player_sprite.position
 
 # ── Input ──────────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
@@ -198,6 +216,7 @@ func _try_move(dir: Vector2i) -> void:
 	walking = true
 	walk_timer = walk_duration
 	_update_player_visual()
+	_update_camera()
 	_step_effects()
 
 func _is_blocked(grid: Vector2i) -> bool:
@@ -212,8 +231,6 @@ func _step_effects() -> void:
 	step_count += 1
 	var tile := _tile(pos)
 
-	if tile == "h":
-		_update_hud_with_msg("A small cottage. (not yet enterable)")
 	if tile == "L":
 		_interact_lighthouse()
 	if ENCOUNTER.has(tile):
@@ -229,21 +246,16 @@ func _interact() -> void:
 	if tile == "L":
 		_interact_lighthouse()
 	elif tile == "h":
-		_update_hud_with_msg("The door is locked. Come back later.")
+		_update_hud_with_msg("A small cottage. The door is locked.")
 	else:
 		_update_hud_with_msg("Nothing here.")
 
 func _interact_lighthouse() -> void:
 	if not GameData.beacon_lit:
 		GameData.beacon_lit = true
-		_update_hud_with_msg("You light the ancient beacon. The coast is safe.")
+		_update_hud_with_msg("You light the ancient beacon! The coast is safe.")
 	else:
 		_update_hud_with_msg("The beacon burns bright against the dark.")
-
-func _enter_town() -> void:
-	GameData.overworld_position = pos
-	GameData.overworld_facing = facing
-	get_tree().change_scene_to_file("res://scenes/town/town.tscn")
 
 func _start_battle(zone: String) -> void:
 	GameData.overworld_position = pos

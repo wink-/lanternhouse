@@ -4,9 +4,12 @@
 
 [node name="Overworld" type="Node2D"]
 
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = true
+current = true
+anchor_mode = 0
+
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = null
-format = 2
 
 [node name="PlayerSprite" type="Node2D" parent="."]
 

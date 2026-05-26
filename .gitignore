@@ -1,7 +1,5 @@
 # Godot
 .godot/
-*.uid
-*.import
 
 # Temp work
 assets_work/
