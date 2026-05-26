@@ -26,6 +26,7 @@ var overworld_facing: Vector2i = Vector2i.DOWN
 var cleared_encounters: Dictionary = {}   # str(Vector2i) → true
 var visited_town: bool = false
 var boss_defeated: bool = false
+var beacon_lit: bool = false
 
 # ── Initialization ────────────────────────────────────────────────────────
 func _ready() -> void:

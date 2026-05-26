@@ -47,6 +47,7 @@ and frame counts.
 | `assets/sprites/tiles/path.png` | 16×16 | 1 | Dirt path |
 | `assets/sprites/tiles/cave.png` | 16×16 | 1 | Dark entrance |
 | `assets/sprites/tiles/bridge.png` | 16×16 | 1 | Wooden bridge |
+| `assets/sprites/tiles/lighthouse.png` | 16×16 | 1 | Coastal beacon |
 
 ## UI (Future)
 

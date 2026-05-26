@@ -14,6 +14,7 @@ deliver a cohesive visual experience for a first playable demo.
 - [ ] `tiles/water.png` — 16×64 (4-frame animated wave strip)
 - [ ] `tiles/town.png` — 16×16 small building icon with lit window
 - [ ] `tiles/bridge.png` — 16×16 wooden plank over blue
+- [ ] `tiles/lighthouse.png` — 16×16 coastal beacon tower
 - [ ] `overworld/player.png` — 64×64 walk cycle (4 dir × 4 frames)
 - [ ] `tiles/cave.png` — 16×16 dark cliff entrance with torch glow
 - [ ] `overworld/monster_encounter.png` — 64×64 optional encounter icon

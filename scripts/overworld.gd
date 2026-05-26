@@ -7,6 +7,7 @@ const TILE_SIZE := 16
 #  ~ = ocean       . = grassland    T = forest
 #  ^ = mountain    @ = town         = = path
 #  C = cave        B = bridge       ! = visible encounter
+#  L = lighthouse
 
 const MAP := [
 	"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
@@ -27,9 +28,9 @@ const MAP := [
 	"~~~~~~~TTTTTTTTTTT==TTTTT~~~^^~~",
 	"~~~~~~~~~TTTTTTT====TTTTTTTT~~~~",
 	"~~~~~~~~@@TTTT======TTTTTTTTTT~~",
-	"~~~~~~~~@@TT==TT====TTTTTTTTTTT",
-	"~~~~~~~~@@TT==TTTTTTTTTTBBTTTTT",
-	"~~~~~~~~~~~~==TTTTTTTTTBBTTTTT~",
+	"~~~~~~~~@@TT==TT====TTTTTTTTTTT~",
+	"~~~~~~~~@@TT==TTTTTTTTTTBBTTTTT~",
+	"~~~~~~~~~~~~==TTTTTTTTTBBLTTTT~~",
 	"~~~~~~~~~~~~~~TTTTTTTTTTTT~~~~~~",
 	"~~~~~~~~~~~~~~~TTTTTTTT~~~~~~~~~",
 	"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
@@ -39,9 +40,10 @@ const COLORS := {
 	"~": Color("1a3a5c"), ".": Color("4c9040"), "T": Color("1c5730"),
 	"^": Color("69677a"), "@": Color("8b6914"), "=": Color("a08050"),
 	"C": Color("3a3a4a"), "B": Color("8b6914"), "!": Color("a64b46"),
+	"L": Color("fbf236"),
 }
 
-const BLOCKED := {"~":true, "^":true, "T":true}
+const BLOCKED := {"~":true, "^":true, "T":true, "L":true}
 const ENCOUNTER := {"T":true, "!":true}   # forest = random, ! = visible
 const TOWN_TILE := "@"
 const CAVE_TILE := "C"
@@ -170,9 +172,18 @@ func _interact() -> void:
 		_enter_town()
 	elif tile == "C":
 		_update_hud_with_msg("The cave entrance looms... (not yet implemented)")
+	elif tile == "L":
+		_interact_lighthouse()
 	else:
 		# Check for town NPC or sign nearby
 		_update_hud_with_msg("Nothing here.")
+
+func _interact_lighthouse() -> void:
+	if not GameData.beacon_lit:
+		GameData.beacon_lit = true
+		_update_hud_with_msg("You light the ancient beacon of Lanternhouse. The coast is safe.")
+	else:
+		_update_hud_with_msg("The lighthouse beacon burns bright against the dark.")
 
 func _enter_town() -> void:
 	GameData.visited_town = true
@@ -205,7 +216,8 @@ func _update_hud() -> void:
 			lines.append("Lv%d %-10s %s" % [m["level"], m["name"], bar])
 		else:
 			lines.append("Lv%d %-10s [color=red]KO[/color]" % [m["level"], m["name"]])
-	lines.append("Gold: %d    Tonics: %d" % [GameData.gold, GameData.tonics])
+	var beacon_status: String = "[color=cyan]LIT[/color]" if GameData.beacon_lit else "[color=gray]UNLIT[/color]"
+	lines.append("Gold: %d    Tonics: %d    Beacon: %s" % [GameData.gold, GameData.tonics, beacon_status])
 	hud.text = "\n".join(lines)
 
 func _update_hud_with_msg(msg: String) -> void:
