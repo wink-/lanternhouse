@@ -37,15 +37,24 @@ The colored-block placeholder era is over. Replace with real pixel art that
 establishes the Lanternhouse atmosphere: coastal, warm, haunted.
 
 ### 1.1 — Terrain Tileset (high priority)
-- [ ] Commission or create a proper 32x32 pixel art tileset (or source from Pipoya)
-- [ ] Tiles needed: deep water, shallow water, sand, grass (x3 variants), tall grass
-- [ ] Forest (pine + deciduous), thick forest (blocking), forest edge
-- [ ] Hills (x4 slope directions), mountains (x4 faces + peak)
-- [ ] Dirt path, stone path, bridge (horizontal + vertical)
-- [ ] Cliffs (x4 directions + corners), cave entrance
-- [ ] Lighthouse tiles (base, mid, top, beacon light beam)
-- [ ] Dock/wharf tiles, fence tiles
-- [ ] **Integration:** Replace `terrain_simple.png` generated tiles in the TileSet
+- [ ] **Current state:** `terrain_simple.png` — procedurally generated 32x32 tiles
+       (water, sand, grass, forest, hill, mountain). Works but looks basic.
+- [ ] **Option A — Pipoya's Free RPG World Tileset (preferred):** 32x32/40x40/48x48 pixel
+       tiles with proper art. Available on itch.io (name-your-own-price, free).
+       Download from: https://pipoya.itch.io/pipoya-free-rpg-world-tileset-32x32-40x40-48x48
+       Once downloaded, swap in as the TileSet texture and update atlas coordinates.
+- [ ] **Option B — LPC (Liberated Pixel Cup) Tile Atlas (already on disk):**
+       `terrain_atlas.png` + `base_out_atlas.png`. Very comprehensive (cliffs, caves,
+       water, sand, grass, trees, hills, mountains, buildings, bridges, docks, props).
+       License: CC-BY-SA 3.0 / GPL 3.0 (attribution required — `Attribution.txt` included).
+       Tiles are organized as feature tiles (ponds, islands, set-pieces) rather than
+       simple terrain squares, so mapping to a 40x40 tile grid requires custom work.
+- [ ] **Decision needed:** Pick Option A (Pipoya) or Option B (LPC), or continue with
+       generated tiles until custom art is made.
+- [ ] Tiles needed regardless of option: deep water, shallow water, sand, grass (x3 variants),
+       tall grass, forest (pine + deciduous), thick forest (blocking), forest edge,
+       hills (slope transitions), mountains (faces + peak), dirt path, stone path,
+       bridge (horizontal + vertical), cliffs, cave entrance, lighthouse segments
 
 ### 1.2 — Building Tileset
 - [ ] Lanternhouse exterior (multi-tile building with tower attachment)
