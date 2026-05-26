@@ -1,0 +1,18 @@
+# Godot
+.godot/
+*.uid
+*.import
+
+# Temp work
+assets_work/
+assets/sprites/tiles/assets_work/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
