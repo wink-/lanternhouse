@@ -94,6 +94,10 @@ var step_count: int = 0
 @onready var player_body: Polygon2D = $PlayerSprite/Body
 @onready var player_face: ColorRect = $PlayerSprite/Face
 @onready var hud: RichTextLabel = $HUD
+@onready var debug_label: Label = $DebugLabel
+
+# ── Debug ───────────────────────────────────────────────────────────────────
+var debug_visible: bool = false
 
 # ── Init ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -104,6 +108,9 @@ func _ready() -> void:
 	_update_camera()
 	_update_hud()
 	print("Overworld ready. Player at ", pos, " (tile: ", _tile(pos), ")")
+
+	if debug_label:
+		debug_label.hide()
 
 func _build_tileset() -> void:
 	var tex: Texture2D = load("res://assets/sprites/tiles/terrain_simple.png")
@@ -200,6 +207,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif Input.is_action_just_pressed("interact"):
 		_interact()
 		return
+	elif event.keycode == KEY_F3:
+		_toggle_debug()
+		return
 
 	if dir != Vector2i.ZERO:
 		_try_move(dir)
@@ -272,6 +282,9 @@ func _process(delta: float) -> void:
 			walking = false
 		_update_player_visual()
 
+	if debug_visible and debug_label and debug_label.visible:
+		_update_debug()
+
 # ── HUD ────────────────────────────────────────────────────────────────────
 func _update_hud() -> void:
 	var lines: Array = []
@@ -298,3 +311,39 @@ func _hp_string(hp: int, max_hp: int, width: int) -> String:
 	for _i in range(width - n): s += "░"
 	s += "[/color]"
 	return s
+
+# ── Debug ──────────────────────────────────────────────────────────────────
+func _toggle_debug() -> void:
+	debug_visible = not debug_visible
+	if debug_label:
+		debug_label.visible = debug_visible
+		if debug_visible:
+			_update_debug()
+
+func _update_debug() -> void:
+	if not debug_label:
+		return
+	var tile_char := _tile(pos)
+	var fps := Engine.get_frames_per_second()
+	var tt := tick_count
+	debug_label.text = (
+		"[F3] Debug\n"
+		+ "Pos: (%d, %d)\n" % [pos.x, pos.y]
+		+ "Tile: '%s'\n" % tile_char
+		+ "Facing: %s\n" % _dir_name(facing)
+		+ "FPS: %d\n" % fps
+		+ "Tiles: %d x %d\n" % [MAP_W, MAP_H]
+		+ "Steps: %d\n" % step_count
+		+ "Beacon: %s" % ("Lit" if GameData.beacon_lit else "Unlit")
+	)
+
+var tick_count: int = 0
+
+func _dir_name(d: Vector2i) -> String:
+	match d:
+		Vector2i.UP: return "Up"
+		Vector2i.DOWN: return "Down"
+		Vector2i.LEFT: return "Left"
+		Vector2i.RIGHT: return "Right"
+	return "?"
+
