@@ -147,7 +147,7 @@ func _draw_map() -> void:
 		for x in range(MAP_W):
 			var tile_char: String = MAP[y].substr(x, 1)
 			var atlas_coord: Vector2i = TILE_ATLAS.get(tile_char, T_GRASS)
-			tilemap.set_cell(0, Vector2i(x, y), 0, atlas_coord)
+			tilemap.set_cell(Vector2i(x, y), 0, atlas_coord)
 			tile_count += 1
 	print("Map drawn: ", tile_count, " tiles")
 
@@ -196,11 +196,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	var dir := Vector2i.ZERO
-	if Input.is_action_just_pressed("move_up"):    dir = Vector2i.UP
-	elif Input.is_action_just_pressed("move_down"):  dir = Vector2i.DOWN
-	elif Input.is_action_just_pressed("move_left"):  dir = Vector2i.LEFT
-	elif Input.is_action_just_pressed("move_right"): dir = Vector2i.RIGHT
-	elif Input.is_action_just_pressed("interact"):
+	if event.is_action("move_up"):         dir = Vector2i.UP
+	elif event.is_action("move_down"):     dir = Vector2i.DOWN
+	elif event.is_action("move_left"):     dir = Vector2i.LEFT
+	elif event.is_action("move_right"):    dir = Vector2i.RIGHT
+	elif event.is_action("interact"):
 		_interact()
 		return
 	elif event.keycode == KEY_F3:
