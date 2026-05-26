@@ -9,7 +9,7 @@ enabled = true
 current = true
 anchor_mode = 0
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="TileLayer" type="TileMapLayer" parent="."]
 
 [node name="PlayerSprite" type="Node2D" parent="."]
 

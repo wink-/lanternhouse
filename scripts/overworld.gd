@@ -88,7 +88,7 @@ var rng := RandomNumberGenerator.new()
 var step_count: int = 0
 
 # ── Nodes ──────────────────────────────────────────────────────────────────
-@onready var tilemap: TileMap = $TileMap
+@onready var tilemap: TileMapLayer = $TileLayer
 @onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var player_body: Polygon2D = $PlayerSprite/Body
@@ -138,11 +138,7 @@ func _build_tileset() -> void:
 		print("  added tile '", key, "' at atlas ", coord)
 
 	ts.add_source(source, 0)
-	tilemap.tileset = ts
-
-	# Ensure layer 0 exists
-	if tilemap.get_layers_count() == 0:
-		tilemap.add_layer(-1)
+	tilemap.tile_set = ts
 	print("TileSet built with ", TILE_ATLAS.size(), " tile types")
 
 func _draw_map() -> void:
