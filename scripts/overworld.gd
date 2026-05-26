@@ -4,14 +4,16 @@ extends Node2D
 const TILE_SIZE := 32
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
-# terrain_simple.png is 224x32 → 7 tiles across, 1 row
-const T_WATER_DEEP   := Vector2i(0, 0)
-const T_WATER_SHALLOW:= Vector2i(1, 0)
-const T_SAND         := Vector2i(2, 0)
-const T_GRASS        := Vector2i(3, 0)
-const T_FOREST       := Vector2i(4, 0)
-const T_HILL         := Vector2i(5, 0)
-const T_MOUNTAIN     := Vector2i(6, 0)
+# pipoya_combined.png is 256x1728 → 8 cols x 54 rows of 32x32 tiles
+# Row layout: 0-5=water, 6-11=grass, 12-17=sand, 18-23=forest,
+#   24-29=mtn1(rocky), 30-35=mtn2(green/hill), 36-41=mtn3(snow),
+#   42-47=path, 48-53=dirt
+const T_WATER_FULL  := Vector2i(4, 2)   # deep open water
+const T_SAND         := Vector2i(1, 13) # beach sand
+const T_GRASS        := Vector2i(6, 9)  # solid grass field
+const T_FOREST       := Vector2i(0, 18) # tree cluster
+const T_HILL         := Vector2i(0, 30) # green mountain / hill
+const T_MOUNTAIN     := Vector2i(0, 24) # rocky mountain
 
 # ── Island map (40x40) ────────────────────────────────────────────────────
 #  ~ = water    . = sand beach    , = grass
@@ -64,13 +66,13 @@ const MAP := [
 
 # ── Tile mappings ──────────────────────────────────────────────────────────
 const TILE_ATLAS := {
-	"~": T_WATER_DEEP,
+	"~": T_WATER_FULL,
 	".": T_SAND,
 	",": T_GRASS,
 	"T": T_FOREST,
 	"^": T_HILL,
 	"M": T_MOUNTAIN,
-	"#": T_MOUNTAIN,
+	"#": Vector2i(0, 36),  # snow peak
 }
 
 const BLOCKED := {"~": true, "M": true, "#": true}
@@ -113,10 +115,10 @@ func _ready() -> void:
 		debug_label.hide()
 
 func _build_tileset() -> void:
-	var tex: Texture2D = load("res://assets/sprites/tiles/terrain_simple.png")
+	var tex: Texture2D = load("res://assets/sprites/tiles/pipoya_combined.png")
 	if not tex:
-		push_error("Failed to load terrain atlas!")
-		print("ERROR: terrain_atlas.png not found!")
+		push_error("Failed to load Pipoya terrain atlas!")
+		print("ERROR: pipoya_combined.png not found!")
 		# Fallback: render map with colors
 		_fallback_draw()
 		return
