@@ -9,7 +9,7 @@ const TILE_SIZE := 32
 #   24-29=mtn1(rocky), 30-35=mtn2(green/hill), 36-41=mtn3(snow),
 #   42-47=path, 48-53=dirt
 const T_WATER_FULL  := Vector2i(4, 2)   # deep open water
-const T_SAND         := Vector2i(1, 13) # beach sand
+const T_SAND         := Vector2i(1, 12) # beach sand
 const T_GRASS        := Vector2i(6, 9)  # solid grass field
 const T_FOREST       := Vector2i(0, 18) # tree cluster
 const T_HILL         := Vector2i(0, 30) # green mountain / hill
