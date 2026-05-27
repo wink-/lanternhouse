@@ -84,4 +84,5 @@ func _tile_color(tile_char: String) -> Color:
 		"C": return Color("ff6633")
 		"!": return Color("2a4720")
 		"O": return Color("ffcc00")
-	_: return Color("333333")
+		_:
+			return Color("333333")

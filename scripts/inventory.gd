@@ -221,7 +221,7 @@ func _use_consumable() -> void:
 	if selected_idx == 0:
 		if GameData.tonics <= 0:
 			return
-		var tg := _lowest_hp_alive()
+		var tg: Variant = _lowest_hp_alive()
 		if tg == null:
 			return
 		GameData.tonics -= 1
@@ -233,7 +233,7 @@ func _use_consumable() -> void:
 	if selected_idx == 1:
 		if GameData.ethers <= 0:
 			return
-		var tg := _lowest_mp_alive()
+		var tg: Variant = _lowest_mp_alive()
 		if tg == null:
 			return
 		GameData.ethers -= 1
@@ -254,20 +254,20 @@ func _use_consumable() -> void:
 			var effect: Dictionary = c.get("effect", {})
 			match effect.get("type", ""):
 				"heal":
-					var tg := _lowest_hp_alive()
+					var tg: Variant = _lowest_hp_alive()
 					if tg != null and tg["hp"] < tg["max_hp"]:
 						GameData.crafted_items.remove_at(ci)
 						var heal: int = mini(effect.get("hp", 15), tg["max_hp"] - tg["hp"])
 						tg["hp"] += heal
 				"ether":
-					var tg := _lowest_mp_alive()
+					var tg: Variant = _lowest_mp_alive()
 					if tg != null:
 						GameData.crafted_items.remove_at(ci)
 						var charges: int = effect.get("charges", 2)
 						for lvl: int in tg["magic_levels"]:
 							tg["magic_levels"][lvl]["charges"] = mini(tg["magic_levels"][lvl]["charges"] + charges, tg["magic_levels"][lvl]["max"])
 				"full_restore":
-					var tg := _lowest_hp_alive()
+					var tg: Variant = _lowest_hp_alive()
 					if tg != null:
 						GameData.crafted_items.remove_at(ci)
 						tg["hp"] = tg["max_hp"]

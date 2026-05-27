@@ -65,6 +65,10 @@ var _pre_buff_stats: Dictionary = {}
 var _status_effects: Dictionary = {}  # party_name -> {"type": str, "turns": int, "dmg": int}
 var _boss_special_idx: int = 0
 var _enemy_spawn_queue: Array = []  # enemies to spawn mid-battle (boss summons)
+var _screen_flash_timer: float = 0.0
+var _screen_flash_color: Color = Color.WHITE
+var _screen_shake_timer: float = 0.0
+var _screen_shake_intensity: float = 0.0
 
 # ── Visual nodes ───────────────────────────────────────────────────────────
 @onready var enemy_area: Node2D = $EnemyArea
@@ -129,7 +133,7 @@ func _process(delta: float) -> void:
 		if entry["timer"] <= 0.0:
 			entry["node"].queue_free()
 		else:
-			var progress := 1.0 - (entry["timer"] / FLOAT_DURATION)
+			var progress: float = 1.0 - (entry["timer"] / FLOAT_DURATION)
 			entry["node"].position.y = entry["start_y"] - progress * 30.0
 			entry["node"].modulate.a = clampf(entry["timer"] / 0.4, 0.0, 1.0)
 			remaining_labels.append(entry)
@@ -138,8 +142,8 @@ func _process(delta: float) -> void:
 	if _screen_flash_timer > 0:
 		_screen_flash_timer -= delta
 		if background:
-			var orig := ZONE_BG.get(zone, ZONE_BG["grassland"])
-			var blend := _screen_flash_color if _screen_flash_timer > 0 else orig
+			var orig: Color = ZONE_BG.get(zone, ZONE_BG["grassland"])
+			var blend: Color = _screen_flash_color if _screen_flash_timer > 0 else orig
 			background.color = blend
 			if _screen_flash_timer <= 0:
 				background.color = orig
@@ -168,7 +172,7 @@ func _show_damage_number(world_pos: Vector2, text: String, color: Color) -> void
 	_floating_labels.append({"node": label, "timer": FLOAT_DURATION, "start_y": world_pos.y})
 
 func _enemy_pos(i: int) -> Vector2:
-	var spacing := 60.0 if enemies.size() <= 4 else (300.0 / max(enemies.size() - 1, 1))
+	var spacing: float = 60.0 if enemies.size() <= 4 else (300.0 / max(enemies.size() - 1, 1))
 	return Vector2(_enemy_x, 80.0 + i * spacing - 30.0)
 
 func _party_pos(i: int) -> Vector2:
@@ -213,9 +217,6 @@ func _spawn_slash_effect(pos: Vector2) -> void:
 	var tween := create_tween()
 	tween.tween_property(slash, "modulate:a", 0.0, 0.25)
 	tween.tween_callback(slash.queue_free)
-	add_child(particles)
-	# Auto-free after particles finish
-	get_tree().create_timer(0.5).timeout.connect(particles.queue_free)
 
 
 # ── Enemy init ─────────────────────────────────────────────────────────────
@@ -224,7 +225,7 @@ func _init_enemies() -> void:
 	for m: Dictionary in GameData.party:
 		max_party_lvl = maxi(max_party_lvl, m["level"])
 	if zone == "cave_boss":
-		var tmpl := EnemyDB.scaled_template("Mournlight Shade", max_party_lvl)
+		var tmpl: Dictionary = EnemyDB.scaled_template("Mournlight Shade", max_party_lvl)
 		enemies.append({
 			"name": "Mournlight Shade",
 			"hp": tmpl["hp"], "max_hp": tmpl["hp"],
@@ -233,8 +234,8 @@ func _init_enemies() -> void:
 			"alive": true, "command": "",
 		})
 		return
-	var new_enemies := EnemyDB.get_formation(zone, max_party_lvl)
-	var multi_chance := {"forest": 0.25, "mountain": 0.30, "cave": 0.35, "beach": 0.10}.get(zone, 0.15)
+	var new_enemies: Array = EnemyDB.get_formation(zone, max_party_lvl)
+	var multi_chance: float = {"forest": 0.25, "mountain": 0.30, "cave": 0.35, "beach": 0.10}.get(zone, 0.15)
 	if max_party_lvl >= 5 and rng.randf() < multi_chance:
 		new_enemies.append_array(EnemyDB.get_formation(zone, max_party_lvl))
 	while new_enemies.size() > 8:
@@ -256,9 +257,9 @@ func _draw_sprites() -> void:
 	var alive_enemies := _alive_enemy_indices()
 	for i in range(enemies.size()):
 		var e: Dictionary = enemies[i]
-		var enemy_spacing := 60.0 if enemies.size() <= 4 else (300.0 / max(enemies.size() - 1, 1))
-		var py := 80.0 + i * enemy_spacing
-		var base_color := ENEMY_COLORS.get(e["name"], Color.GRAY)
+		var enemy_spacing: float = 60.0 if enemies.size() <= 4 else (300.0 / max(enemies.size() - 1, 1))
+		var py: float = 80.0 + i * enemy_spacing
+		var base_color: Color = ENEMY_COLORS.get(e["name"], Color.GRAY)
 		if not e["alive"]:
 			base_color = Color("333333")
 		_draw_block(enemy_area, Vector2(_enemy_x, py), base_color, 24)
@@ -278,8 +279,8 @@ func _draw_sprites() -> void:
 	# Draw party
 	for i in range(GameData.party.size()):
 		var m: Dictionary = GameData.party[i]
-		var py := 80.0 + i * 60.0
-		var color := PARTY_COLORS.get(m["class"], Color.GRAY)
+		var py: float = 80.0 + i * 60.0
+		var color: Color = PARTY_COLORS.get(m["class"], Color.GRAY)
 		if not m["alive"]:
 			color = Color("555555")
 		_draw_block(party_area, Vector2(_party_x, py), color, 20)
@@ -396,7 +397,7 @@ func _handle_command(keycode: int) -> void:
 					_push_log("%s uses a Tonic on %s! +%d HP" % [m["name"], tg["name"], heal])
 					used_item = true
 			if not used_item and GameData.ethers > 0:
-				var tg := _lowest_mp_party()
+				var tg: Variant = _lowest_mp_party()
 				if tg != null:
 					GameData.ethers -= 1
 					for lvl: int in tg["magic_levels"]:
@@ -414,7 +415,7 @@ func _handle_command(keycode: int) -> void:
 					var effect: Dictionary = crafted.get("effect", {})
 					match effect.get("type", ""):
 						"heal":
-							var tg := _lowest_hp_party()
+							var tg: Variant = _lowest_hp_party()
 							if tg["hp"] < tg["max_hp"]:
 								GameData.crafted_items.remove_at(ci)
 								var heal: int = min(effect.get("hp", 15), tg["max_hp"] - tg["hp"])
@@ -425,7 +426,7 @@ func _handle_command(keycode: int) -> void:
 								used_item = true
 								break
 						"ether":
-							var tg := _lowest_mp_party()
+							var tg: Variant = _lowest_mp_party()
 							if tg != null:
 								GameData.crafted_items.remove_at(ci)
 								var charges: int = effect.get("charges", 2)
@@ -650,7 +651,6 @@ func _confirm_endgame_choice() -> void:
 	_update_display()
 
 func _advance_selection() -> void:
-func _advance_selection() -> void:
 	selecting_idx = _next_alive_party(selecting_idx)
 	if _all_commands_set():
 		_start_resolution()
@@ -717,23 +717,23 @@ func _execute_player(pi: int) -> void:
 	var m: Dictionary = GameData.party[pi]
 	var cmd: String = m["command"]
 
-		# Loyalty refusal check (only for recruited NPCs with wage/loyalty)
-		if m.has("loyalty") and m.get("wage", 0) > 0:
-			var loyalty: int = m["loyalty"]
-			if loyalty <= 10:
-				_push_log("%s refuses to fight!" % m["name"])
-				_screen_flash(Color("555555"))
-				m["command"] = "pass"
-				cmd = "pass"
-			elif loyalty <= 20 and rng.randf() < 0.4:
-				_push_log("%s refuses to fight!" % m["name"])
-				_screen_flash(Color("555555"))
-				m["command"] = "pass"
-				cmd = "pass"
-			elif loyalty <= 35 and rng.randf() < 0.15:
-				_push_log("%s hesitates..." % m["name"])
-				m["command"] = "pass"
-				cmd = "pass"
+	# Loyalty refusal check (only for recruited NPCs with wage/loyalty)
+	if m.has("loyalty") and m.get("wage", 0) > 0:
+		var loyalty: int = m["loyalty"]
+		if loyalty <= 10:
+			_push_log("%s refuses to fight!" % m["name"])
+			_screen_flash(Color("555555"))
+			m["command"] = "pass"
+			cmd = "pass"
+		elif loyalty <= 20 and rng.randf() < 0.4:
+			_push_log("%s refuses to fight!" % m["name"])
+			_screen_flash(Color("555555"))
+			m["command"] = "pass"
+			cmd = "pass"
+		elif loyalty <= 35 and rng.randf() < 0.15:
+			_push_log("%s hesitates..." % m["name"])
+			m["command"] = "pass"
+			cmd = "pass"
 
 	if cmd.begins_with("fight:"):
 		var tg := int(cmd.split(":")[1])
@@ -806,11 +806,11 @@ func _execute_player(pi: int) -> void:
 					GameData.track_skill_use("healing")
 					GameData.set_meta("heal_casts", GameData.get_meta("heal_casts", 0) + 1)
 					_push_log("%s casts %s! %s +%d HP" % [m["name"], spell["name"], GameData.party[tg]["name"], actual])
-		elif cmd == "smoke_bomb":
-			_push_log("%s throws a Smoke Bomb! Escaped!" % m["name"])
-			round_phase = "ran"
-			_update_display()
-			return
+	elif cmd == "smoke_bomb":
+		_push_log("%s throws a Smoke Bomb! Escaped!" % m["name"])
+		round_phase = "ran"
+		_update_display()
+		return
 	elif cmd == "run":
 		var leader_agi: int = m["agi"]
 		var avg_enemy_agi: float = 0.0
@@ -904,7 +904,7 @@ func _execute_boss_special(ei: int, cmd: String) -> void:
 				_spawn_spell_effect(_party_pos(tg), Color("aa44ff"))
 				_screen_flash(Color("6600aa"))
 				_screen_shake(4.0)
-				_push_log("[color=purple]%s fires a Shadow Bolt! %d dmg \xe2\x86\x92 %s[/color]" % [e["name"], dmg, GameData.party[tg]["name"]])
+				_push_log("[color=purple]%s fires a Shadow Bolt! %d dmg -> %s[/color]" % [e["name"], dmg, GameData.party[tg]["name"]])
 				if GameData.party[tg]["hp"] <= 0:
 					GameData.party[tg]["alive"] = false
 					_push_log("%s falls!" % GameData.party[tg]["name"])
@@ -1111,8 +1111,14 @@ func _grant_quest_reward(quest: Dictionary) -> void:
 	var fac: String = quest.get("reward_faction", "")
 	var rep: int = quest.get("reward_rep", 0)
 	if fac != "" and rep > 0:
-		GameData.change_faction_rep(fac, rep)
+		var faction_map := {"keepers_guild": 0, "harbor_compact": 1, "grey_chapel": 2, "the_unlit": 3}
+		var faction_key: int = faction_map.get(fac, -1)
+		if faction_key >= 0:
+			GameData.change_faction_rep(faction_key, rep)
 	_push_log("[color=cyan]Quest complete: %s! +%dc, +%d XP[/color]" % [quest["name"], reward, xp])
+
+func _process_loot_drops() -> void:
+	pass
 
 func _check_quest_progress() -> void:
 	const QuestDB := preload("res://scripts/data/quests.gd")
@@ -1170,7 +1176,7 @@ func _check_quest_progress() -> void:
 						break
 				if not in_party:
 					continue
-				var sub := quest.get("sub_type", "flag")
+				var sub: String = quest.get("sub_type", "flag")
 				match sub:
 					"flag":
 						completed = GameData.get_meta(quest.get("target", ""), false)
@@ -1261,7 +1267,7 @@ func _pick_enemy_target(ei: int, ai: String) -> int:
 	match ai:
 		"smart":
 			# Target lowest-HP party member
-			var best_idx := alive[0]
+			var best_idx: int = alive[0]
 			for idx in alive:
 				if GameData.party[idx]["hp"] < GameData.party[best_idx]["hp"]:
 					best_idx = idx
@@ -1280,7 +1286,7 @@ func _pick_enemy_target(ei: int, ai: String) -> int:
 			return alive[rng.randi_range(0, alive.size() - 1)]
 		"cunning":
 			# Target party member with lowest defense
-			var best_idx := alive[0]
+			var best_idx: int = alive[0]
 			for idx in alive:
 				if _eff_def(idx) < _eff_def(best_idx):
 					best_idx = idx
@@ -1428,7 +1434,7 @@ func _update_display() -> void:
 		lines.append("[color=gray]Up/Down to choose  [1]/Enter to confirm[/color]")
 	elif round_phase == "fight_target":
 		var m: Dictionary = GameData.party[selecting_idx]
-		var tgt_name := enemies[fight_target_idx]["name"] if fight_target_idx < enemies.size() else "?"
+		var tgt_name: String = enemies[fight_target_idx]["name"] if fight_target_idx < enemies.size() else "?"
 		lines.append("[b]%s — Choose target[/b]  ← → arrows  [1]/Enter confirm  [Esc] back  (→ %s)" % [m["name"], tgt_name])
 	elif round_phase in ["command", "magic_target"]:
 		var m: Dictionary = GameData.party[selecting_idx]
@@ -1438,7 +1444,7 @@ func _update_display() -> void:
 		elif round_phase == "magic_target":
 			var si: int = pending_spell.get("spell_idx", 0)
 			var lvl: int = pending_spell.get("spell_level", 1)
-			var sn := CharDB.spells_for_level(lvl)[si]["name"]
+			var sn: String = CharDB.spells_for_level(lvl)[si]["name"]
 			lines.append("[b]Target for %s:[/b] ← → to switch, [1]/Enter to confirm" % sn)
 		else:
 			var lvl: int = pending_spell["level"]

@@ -1,6 +1,6 @@
 class_name TinkerDB
 
-enum Material {
+enum TinkerMaterial {
 	NONE = 0,
 	SCRAP_METAL = 1,
 	GLASS_SHARDS = 2,
@@ -11,12 +11,12 @@ enum Material {
 }
 
 const MATERIAL_INFO := {
-	Material.SCRAP_METAL: {"id": "scrap_metal", "name": "Scrap Metal", "color": "#95a5a6", "tiles": ["^", "#"]},
-	Material.GLASS_SHARDS: {"id": "glass_shards", "name": "Glass Shards", "color": "#85c1e9", "tiles": [".", "~"]},
-	Material.COPPER_WIRE: {"id": "copper_wire", "name": "Copper Wire", "color": "#e67e22", "tiles": ["h", "="]},
-	Material.LEATHER_SCRAP: {"id": "leather_scrap", "name": "Leather Scrap", "color": "#8b6914", "tiles": [",", "T"]},
-	Material.WOOD_CHIP: {"id": "wood_chip", "name": "Wood Chip", "color": "#a0522d", "tiles": ["T", "="]},
-	Material.OIL_RESIDUE: {"id": "oil_residue", "name": "Oil Residue", "color": "#2c3e50", "tiles": ["B", "L"]},
+	TinkerMaterial.SCRAP_METAL: {"id": "scrap_metal", "name": "Scrap Metal", "color": "#95a5a6", "tiles": ["^", "#"]},
+	TinkerMaterial.GLASS_SHARDS: {"id": "glass_shards", "name": "Glass Shards", "color": "#85c1e9", "tiles": [".", "~"]},
+	TinkerMaterial.COPPER_WIRE: {"id": "copper_wire", "name": "Copper Wire", "color": "#e67e22", "tiles": ["h", "="]},
+	TinkerMaterial.LEATHER_SCRAP: {"id": "leather_scrap", "name": "Leather Scrap", "color": "#8b6914", "tiles": [",", "T"]},
+	TinkerMaterial.WOOD_CHIP: {"id": "wood_chip", "name": "Wood Chip", "color": "#a0522d", "tiles": ["T", "="]},
+	TinkerMaterial.OIL_RESIDUE: {"id": "oil_residue", "name": "Oil Residue", "color": "#2c3e50", "tiles": ["B", "L"]},
 }
 
 const RECIPES := [
@@ -24,7 +24,7 @@ const RECIPES := [
 		"id": "repair_kit",
 		"name": "Repair Kit",
 		"desc": "Restore 50% of equipment value",
-		"materials": {Material.SCRAP_METAL: 2, Material.LEATHER_SCRAP: 1},
+		"materials": {TinkerMaterial.SCRAP_METAL: 2, TinkerMaterial.LEATHER_SCRAP: 1},
 		"skill_level": 0,
 		"output_count": 1,
 		"value": 60,
@@ -33,7 +33,7 @@ const RECIPES := [
 		"id": "lantern_lens",
 		"name": "Lantern Lens",
 		"desc": "Trade good — sells well to keepers",
-		"materials": {Material.GLASS_SHARDS: 3, Material.COPPER_WIRE: 1},
+		"materials": {TinkerMaterial.GLASS_SHARDS: 3, TinkerMaterial.COPPER_WIRE: 1},
 		"skill_level": 1,
 		"output_count": 1,
 		"value": 80,
@@ -42,7 +42,7 @@ const RECIPES := [
 		"id": "simple_lockpick",
 		"name": "Simple Lockpick",
 		"desc": "Open locked chests in dungeons",
-		"materials": {Material.COPPER_WIRE: 2, Material.SCRAP_METAL: 1},
+		"materials": {TinkerMaterial.COPPER_WIRE: 2, TinkerMaterial.SCRAP_METAL: 1},
 		"skill_level": 1,
 		"output_count": 2,
 		"value": 30,
@@ -51,7 +51,7 @@ const RECIPES := [
 		"id": "beacon_lens",
 		"name": "Beacon Lens",
 		"desc": "Increases beacon reveal radius",
-		"materials": {Material.GLASS_SHARDS: 4, Material.OIL_RESIDUE: 2, Material.COPPER_WIRE: 2},
+		"materials": {TinkerMaterial.GLASS_SHARDS: 4, TinkerMaterial.OIL_RESIDUE: 2, TinkerMaterial.COPPER_WIRE: 2},
 		"skill_level": 2,
 		"output_count": 1,
 		"value": 200,
@@ -60,7 +60,7 @@ const RECIPES := [
 		"id": "oil_lantern",
 		"name": "Oil Lantern",
 		"desc": "Permanent fog reduction in a small area",
-		"materials": {Material.OIL_RESIDUE: 3, Material.GLASS_SHARDS: 2, Material.WOOD_CHIP: 2},
+		"materials": {TinkerMaterial.OIL_RESIDUE: 3, TinkerMaterial.GLASS_SHARDS: 2, TinkerMaterial.WOOD_CHIP: 2},
 		"skill_level": 2,
 		"output_count": 1,
 		"value": 150,
@@ -69,7 +69,7 @@ const RECIPES := [
 		"id": "master_repair_kit",
 		"name": "Master Repair Kit",
 		"desc": "Fully restore equipment value",
-		"materials": {Material.SCRAP_METAL: 4, Material.COPPER_WIRE: 2, Material.LEATHER_SCRAP: 2},
+		"materials": {TinkerMaterial.SCRAP_METAL: 4, TinkerMaterial.COPPER_WIRE: 2, TinkerMaterial.LEATHER_SCRAP: 2},
 		"skill_level": 3,
 		"output_count": 1,
 		"value": 300,
@@ -78,7 +78,7 @@ const RECIPES := [
 		"id": "trap_kit",
 		"name": "Trap Kit",
 		"desc": "Set a trap for the next encounter",
-		"materials": {Material.WOOD_CHIP: 3, Material.SCRAP_METAL: 1, Material.LEATHER_SCRAP: 1},
+		"materials": {TinkerMaterial.WOOD_CHIP: 3, TinkerMaterial.SCRAP_METAL: 1, TinkerMaterial.LEATHER_SCRAP: 1},
 		"skill_level": 1,
 		"output_count": 2,
 		"value": 40,
@@ -104,8 +104,11 @@ static func get_material_name(mat_id: int) -> String:
 		return MATERIAL_INFO[mat_id]["name"]
 	return "Unknown Material"
 
+static func get_material_info(mat_id: int) -> Dictionary:
+	return MATERIAL_INFO.get(mat_id, {})
+
 static func get_material_id_by_string(mat_str: String) -> int:
 	for mat_id: int in MATERIAL_INFO:
 		if MATERIAL_INFO[mat_id]["id"] == mat_str:
 			return mat_id
-	return Material.NONE
+	return TinkerMaterial.NONE

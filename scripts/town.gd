@@ -657,7 +657,7 @@ func _show_upgrade_browse() -> void:
 		if GameData.has_upgrade(u["id"]):
 			lines.append("[color=green]%s ✓ %s — Already installed[/color]" % [marker, u["name"]])
 		else:
-			var can_afford := GameData.gold >= u["price"]
+			var can_afford: bool = GameData.gold >= u["price"]
 			var color_start := "" if can_afford else "[color=#666]"
 			var color_end := "" if can_afford else "[/color]"
 			lines.append("%s%s ★ %-18s %dc  %s%s" % [color_start, marker, u["name"], u["price"], u["desc"], color_end])
@@ -985,7 +985,7 @@ func _show_cook() -> void:
 			var entry: Dictionary = cookable[i]
 			var item: Dictionary = entry["item"]
 			var marker := "▶" if i == cook_idx else " "
-			var hp := item.get("cooking", {}).get("hp", 0)
+			var hp: int = item.get("cooking", {}).get("hp", 0)
 			lines.append("%s %-18s Heals %d HP to party" % [marker, item["name"], hp])
 		lines.append("")
 		lines.append("[1]/Enter to cook, arrows to browse, [Esc] back")
@@ -1013,7 +1013,7 @@ func _try_cook() -> void:
 		return
 	var entry: Dictionary = cookable[cook_idx]
 	var item: Dictionary = entry["item"]
-	var hp := item.get("cooking", {}).get("hp", 0)
+	var hp: int = item.get("cooking", {}).get("hp", 0)
 	# Remove the fish from trade goods
 	GameData.trade_goods.remove_at(entry["idx"])
 	# Heal all alive party members
@@ -1067,7 +1067,7 @@ func _show_exchange() -> void:
 	for i in range(options.size()):
 		var opt: Dictionary = options[i]
 		var marker := "▶" if i == exchange_idx else " "
-		var can_afford := GameData.get_currency_balance(opt["from"]) >= opt["cost"]
+		var can_afford: bool = GameData.get_currency_balance(opt["from"]) >= opt["cost"]
 		var color_start := "" if can_afford else "[color=#666]"
 		var color_end := "" if can_afford else "[/color]"
 		lines.append("%s%s %-18s %s%s" % [color_start, marker, opt["label"], opt["rate_text"], color_end])
@@ -1214,7 +1214,7 @@ func _show_elder_dialogue(npc_name: String, npc_line: String) -> void:
 					msg += "● %s (%d/%d)\n" % [quest["name"], prog, needed]
 				"beacon":
 					var bp: Vector2i = QuestDB.BEACON_POS.get(quest.get("target", ""), Vector2i(-1, -1))
-					var lit := GameData.beacon_states.get(str(bp), false)
+					var lit: bool = GameData.beacon_states.get(str(bp), false)
 					msg += "● %s %s\n" % [quest["name"], "[color=green](lit)[/color]" if lit else ""]
 				_:
 					msg += "● %s\n" % quest["name"]
@@ -1272,8 +1272,8 @@ func _check_quest_completions() -> void:
 					if GameData.beacon_states.get(str(QuestDB.BEACON_POS[bname]), false):
 						lit += 1
 				completed = lit >= QuestDB.BEACON_POS.size()
-				"explore_flag":
-					completed = GameData.get_meta(quest.get("target", ""), false)
+			"explore_flag":
+				completed = GameData.get_meta(quest.get("target", ""), false)
 		if completed and not GameData.is_quest_complete(qid):
 			GameData.complete_quest(qid)
 			var reward_gold: int = quest.get("reward_gold", 0)

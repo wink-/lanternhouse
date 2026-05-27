@@ -209,7 +209,7 @@ func _interact() -> void:
 		context = "hostile"
 	elif rep >= 20:
 		context = "friendly"
-	var line := npc["lines"].get(context, npc["lines"].get("default", "..."))
+	var line: String = npc["lines"].get(context, npc["lines"].get("default", "..."))
 	match npc_id:
 		"unlit_elder":
 			_interact_elder(npc, line, rep)
@@ -250,15 +250,17 @@ func _interact_healer(npc: Dictionary, line: String, rep: int) -> void:
 		_say("[color=#%s]%s[/color]: %s\n\n[Esc] Back" % [npc["color"].to_html(), npc["name"], line])
 		talking_to = ""
 		return
-	var cost := 100 if rep < 20 else 50
-	var msg := "[color=#%s]%s[/color]: %s\n\n[Restores all HP and magic!]\nCost: %dc\n\n[1] Heal party (%dc)  [Esc] Back" % [npc["color"].to_html(), npc["name"], line, cost, cost]
+	var cost: int = 100 if rep < 20 else 50
+	var msg: String = "[color=#%s]%s[/color]: %s\n\n[Restores all HP and magic!]\nCost: %dc\n\n[1] Heal party (%dc)  [Esc] Back" % [npc["color"].to_html(), npc["name"], line, cost, cost]
 	talking_to = "healer_confirm"
 	# Store cost in meta for confirmation
 	GameData.set_meta("unlit_heal_cost", cost)
+	_say(msg)
 
 func _interact_trader(npc: Dictionary, line: String) -> void:
-	var msg := "[color=#%s]%s[/color]: %s\n\n[1] Browse goods  [Esc] Back" % [npc["color"].to_html(), npc["name"], line]
+	var msg: String = "[color=#%s]%s[/color]: %s\n\n[1] Browse goods  [Esc] Back" % [npc["color"].to_html(), npc["name"], line]
 	talking_to = "trader_confirm"
+	_say(msg)
 
 func _interact_recruit(npc: Dictionary, line: String, rep: int) -> void:
 	if rep <= -20:
@@ -269,11 +271,12 @@ func _interact_recruit(npc: Dictionary, line: String, rep: int) -> void:
 		_say("[color=#%s]%s[/color]: Your party's full. Come back when there's room." % npc["color"].to_html())
 		talking_to = ""
 		return
-	var wage := 60 if rep >= 20 else 80
-	var msg := "[color=#%s]%s[/color]: %s\n\nWage: %dc/wk  Class: Thief\n\n[1] Recruit (%dc)  [Esc] Back" % [
+	var wage: int = 60 if rep >= 20 else 80
+	var msg: String = "[color=#%s]%s[/color]: %s\n\nWage: %dc/wk  Class: Thief\n\n[1] Recruit (%dc)  [Esc] Back" % [
 		npc["color"].to_html(), npc["name"], line, wage, wage]
 	GameData.set_meta("unlit_recruit_wage", wage)
 	talking_to = "recruit_confirm"
+	_say(msg)
 
 func _handle_dialog_input(keycode: int) -> void:
 	match keycode:
@@ -284,6 +287,9 @@ func _handle_dialog_input(keycode: int) -> void:
 			recruit_mode = false
 			trade_mode = false
 			_update_hud()
+
+func _handle_recruit_input(keycode: int) -> void:
+	_handle_dialog_input(keycode)
 
 func _confirm_dialog() -> void:
 	match talking_to:
@@ -345,17 +351,17 @@ const TRADE_GOODS := [
 
 func _show_trade() -> void:
 	var lines: Array = []
-	var rep := GameData.get_faction_rep(FactionDB.Faction.THE_UNLIT)
-	var price_mod := 1.0 if rep >= 20 else (1.5 if rep <= -20 else 1.0)
+	var rep: int = GameData.get_faction_rep(FactionDB.Faction.THE_UNLIT)
+	var price_mod: float = 1.0 if rep >= 20 else (1.5 if rep <= -20 else 1.0)
 	lines.append("[b]Black Market[/b]    %s" % GameData.format_money_short())
 	lines.append("")
 	for i in range(TRADE_GOODS.size()):
 		var item: Dictionary = TRADE_GOODS[i]
-		var price := int(item["price"] * price_mod)
-		var marker := "▶" if i == trade_idx else " "
-		var can_afford := GameData.gold >= price
-		var color_start := "" if can_afford else "[color=#666]"
-		var color_end := "" if can_afford else "[/color]"
+		var price: int = int(item["price"] * price_mod)
+		var marker: String = "▶" if i == trade_idx else " "
+		var can_afford: bool = GameData.gold >= price
+		var color_start: String = "" if can_afford else "[color=#666]"
+		var color_end: String = "" if can_afford else "[/color]"
 		lines.append("%s%s %-18s %dc  %s%s" % [color_start, marker, item["name"], price, item["desc"], color_end])
 	lines.append("")
 	lines.append("[1]/Enter to buy, arrows to browse, [Esc] back")
@@ -379,9 +385,9 @@ func _try_buy_trade() -> void:
 	if trade_idx >= TRADE_GOODS.size():
 		return
 	var item: Dictionary = TRADE_GOODS[trade_idx]
-	var rep := GameData.get_faction_rep(FactionDB.Faction.THE_UNLIT)
-	var price_mod := 1.0 if rep >= 20 else (1.5 if rep <= -20 else 1.0)
-	var price := int(item["price"] * price_mod)
+	var rep: int = GameData.get_faction_rep(FactionDB.Faction.THE_UNLIT)
+	var price_mod: float = 1.0 if rep >= 20 else (1.5 if rep <= -20 else 1.0)
+	var price: int = int(item["price"] * price_mod)
 	if not GameData.spend_copper(price):
 		_say("Not enough copper. Need %dc." % price)
 		return

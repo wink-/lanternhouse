@@ -67,8 +67,8 @@ static func template(enemy_name: String) -> Dictionary:
 	return {"hp":5, "atk":2, "def":0, "agi":2, "xp":3, "gold":1}
 
 static func scaled_template(enemy_name: String, party_level: int) -> Dictionary:
-	var base := template(enemy_name).duplicate(true)
-	var scale := 1.0 + (party_level - 1) * 0.12
+	var base: Dictionary = template(enemy_name).duplicate(true)
+	var scale: float = 1.0 + (party_level - 1) * 0.12
 	if scale < 1.0:
 		scale = 1.0
 	base["hp"] = int(base["hp"] * scale)
@@ -92,7 +92,7 @@ static func get_formation(zone: String, party_level: int) -> Array:
 		"cave_boss": formations = cave_boss_formation()
 		"cave_deep": formations = cave_deep_formation()
 		_: formations = grassland_formations()
-	var formation := formations[randi() % formations.size()]
+	var formation: Array = formations[randi() % formations.size()]
 	var enemies: Array = []
 	for group: Dictionary in formation:
 		for _i in range(group["count"]):

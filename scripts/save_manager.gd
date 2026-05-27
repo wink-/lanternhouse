@@ -103,7 +103,7 @@ func load_game() -> bool:
 	var json_text := file.get_as_text()
 	file.close()
 
-	var result := JSON.parse_string(json_text)
+	var result: Variant = JSON.parse_string(json_text)
 	if result == null or not result is Dictionary:
 		push_error("Load failed: invalid JSON")
 		return false

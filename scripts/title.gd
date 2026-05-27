@@ -74,10 +74,10 @@ func _select() -> void:
 			GameData.explored_tiles.clear()
 			GameData.active_quests.clear()
 			GameData.kill_counts.clear()
-	GameData.gather_counts.clear()
-		GameData.crafted_items.clear()
-		GameData.herb_bag.clear()
-		GameData.material_bag.clear()
+			GameData.gather_counts.clear()
+			GameData.crafted_items.clear()
+			GameData.herb_bag.clear()
+			GameData.material_bag.clear()
 			GameData.faction_reputation.clear()
 			GameData.play_time = 0.0
 			GameData.skill_uses.clear()
@@ -127,7 +127,7 @@ func _update_display() -> void:
 
 	var lines := []
 	for i in range(MENU_ITEMS.size()):
-		var item := MENU_ITEMS[i]
+		var item: String = MENU_ITEMS[i]
 		var marker := "▶ " if i == selected else "  "
 		if item == "Continue":
 			if has_save:

@@ -61,12 +61,12 @@ func _update() -> void:
 					lines.append("  Progress: %s %d/%d %s" % [bar, current, needed, quest["target"]])
 				"beacon":
 					var beacon_pos: Vector2i = QuestDB.BEACON_POS.get(quest.get("target", ""), Vector2i(-1, -1))
-					var lit := GameData.beacon_states.get(str(beacon_pos), false)
-					var status := "[color=green]Lit[/color]" if lit else "[color=red]Unlit[/color]"
+					var lit: bool = GameData.beacon_states.get(str(beacon_pos), false)
+					var status: String = "[color=green]Lit[/color]" if lit else "[color=red]Unlit[/color]"
 					lines.append("  Status: %s" % status)
 				"flag":
-					var flag_val := GameData.get(quest.get("target", ""))
-					var status := "[color=green]Complete[/color]" if flag_val else "[color=yellow]Incomplete[/color]"
+					var flag_val: Variant = GameData.get(quest.get("target", ""))
+					var status: String = "[color=green]Complete[/color]" if flag_val else "[color=yellow]Incomplete[/color]"
 					lines.append("  Status: %s" % status)
 				"all_beacons":
 					var lit_count := 0
@@ -98,11 +98,11 @@ func _update() -> void:
 					lines.append("  Upgrades: %s %d/%d" % [bar_u, count, needed_u])
 				"member_quest":
 					var member_name: String = quest.get("member", "?")
-					var sub := quest.get("sub_type", "flag")
+					var sub: String = quest.get("sub_type", "flag")
 					match sub:
 						"flag":
-							var done := GameData.get_meta(quest.get("target", ""), false)
-							var status := "[color=green]Complete[/color]" if done else "[color=yellow]Incomplete[/color]"
+							var done: bool = GameData.get_meta(quest.get("target", ""), false)
+							var status: String = "[color=green]Complete[/color]" if done else "[color=yellow]Incomplete[/color]"
 							lines.append("  %s's quest: %s" % [member_name, status])
 						"skill":
 							var val: int = GameData.get_meta(quest.get("target", ""), 0)
@@ -110,8 +110,8 @@ func _update() -> void:
 							var bar_mq := _progress_bar(val, needed_mq, 20)
 							lines.append("  %s: %s %d/%d" % [member_name, bar_mq, val, needed_mq])
 				"explore_flag":
-					var done_ef := GameData.get_meta(quest.get("target", ""), false)
-					var status_ef := "[color=green]Complete[/color]" if done_ef else "[color=yellow]Incomplete[/color]"
+					var done_ef: bool = GameData.get_meta(quest.get("target", ""), false)
+					var status_ef: String = "[color=green]Complete[/color]" if done_ef else "[color=yellow]Incomplete[/color]"
 					lines.append("  Status: %s" % status_ef)
 			var reward_gold: int = quest.get("reward_gold", 0)
 			lines.append("  Reward: %dg" % (reward_gold / 100))

@@ -139,12 +139,12 @@ const BEACON_POSITIONS := {
 
 # Signpost texts — keyed by position string
 const SIGNPOST_TEXTS := {
-	str(Vector2i(24, 21)): "Brindlewick — west toward town. Forest to the north holds old beacons.",
-	str(Vector2i(15, 21)): "Brindlewick Village. The inn offers rest and healing.",
-	str(Vector2i(14, 12)): "Forest of Mournlight. Tread carefully — the trees here are old and watchful.",
-	str(Vector2i(21, 17)): "Mountain Pass. The beacon on the overlook controls access to the peaks.",
-	str(Vector2i(26, 22)): "South Shore Beacon. The sea grows restless when the light fades.",
-	str(Vector2i(17, 26)): "West Point. On clear nights you can see the mainland — or what remains of it.",
+	"(24, 21)": "Brindlewick — west toward town. Forest to the north holds old beacons.",
+	"(15, 21)": "Brindlewick Village. The inn offers rest and healing.",
+	"(14, 12)": "Forest of Mournlight. Tread carefully — the trees here are old and watchful.",
+	"(21, 17)": "Mountain Pass. The beacon on the overlook controls access to the peaks.",
+	"(26, 22)": "South Shore Beacon. The sea grows restless when the light fades.",
+	"(17, 26)": "West Point. On clear nights you can see the mainland — or what remains of it.",
 }
 
 # ── Day/Night cycle (real-time seconds) ────────────────────────────────────
@@ -243,19 +243,14 @@ func _ready() -> void:
 	_update_player_visual()
 	_update_camera()
 	_update_hud()
-	_auto_save_timer += delta
-	if _auto_save_timer >= AUTO_SAVE_INTERVAL:
-		_auto_save_timer = 0.0
-		if SaveManager.save_game():
-			_update_hud_with_msg("[color=#444]Auto-saved[/color]")
 	_update_day_night()
 	_update_fog()
 	_init_fog_of_war()
 	print("Overworld ready. Player at ", pos, " (tile: ", _tile(pos), ")")
 
-		if GameData.boss_defeated and not GameData.get_meta("overworld_victory_msg", false):
-			GameData.set_meta("overworld_victory_msg", true)
-			_update_hud_with_msg("[color=cyan]The fog lifts. The Lantern Line burns bright. Brindlewick is safe.[/color]")
+	if GameData.boss_defeated and not GameData.get_meta("overworld_victory_msg", false):
+		GameData.set_meta("overworld_victory_msg", true)
+		_update_hud_with_msg("[color=cyan]The fog lifts. The Lantern Line burns bright. Brindlewick is safe.[/color]")
 
 	# Zone label
 	_zone_label = Label.new()
@@ -618,115 +613,114 @@ func _start_battle(zone: String) -> void:
 	GameData.set_meta("battle_weather", "rain" if _raining else "clear")
 	SceneTransition.change_scene("res://scenes/battle/battle.tscn")
 
-
-	# ── Cave / Ruins / Dock interactions ──────────────────────────────────────
-	func _interact_cave(target: Vector2i) -> void:
-		if GameData.boss_defeated and GameData.is_quest_active("what_the_line_imprisons"):
-			GameData.set_meta("cave_deep", true)
-			GameData.overworld_position = pos
-			GameData.overworld_facing = facing
-			SceneTransition.change_scene("res://scenes/cave/cave.tscn")
-		elif GameData.boss_defeated:
-			_update_hud_with_msg("The cave is silent. The seal has been broken and whatever dwelled within is gone.")
-		elif _all_beacons_lit():
-			if not GameData.get_meta("cave_opened", false):
-				GameData.set_meta("cave_opened", true)
-				_update_hud_with_msg("[color=cyan]All beacons are lit! The seal cracks open![/color]")
-			GameData.overworld_position = pos
-			GameData.overworld_facing = facing
-			SceneTransition.change_scene("res://scenes/cave/cave.tscn")
-		else:
-			_update_hud_with_msg("A sealed cave mouth. Ancient runes glow faintly across the entrance.\n[color=cyan]Light all the beacons to break the seal.[/color]")
-
-	func _interact_ruins(target: Vector2i) -> void:
+# ── Cave / Ruins / Dock interactions ──────────────────────────────────────
+func _interact_cave(target: Vector2i) -> void:
+	if GameData.boss_defeated and GameData.is_quest_active("what_the_line_imprisons"):
+		GameData.set_meta("cave_deep", true)
 		GameData.overworld_position = pos
 		GameData.overworld_facing = facing
-		SceneTransition.change_scene("res://scenes/abandoned_village/abandoned_village.tscn")
-
-	func _interact_dock() -> void:
+		SceneTransition.change_scene("res://scenes/cave/cave.tscn")
+	elif GameData.boss_defeated:
+		_update_hud_with_msg("The cave is silent. The seal has been broken and whatever dwelled within is gone.")
+	elif _all_beacons_lit():
+		if not GameData.get_meta("cave_opened", false):
+			GameData.set_meta("cave_opened", true)
+			_update_hud_with_msg("[color=cyan]All beacons are lit! The seal cracks open![/color]")
 		GameData.overworld_position = pos
 		GameData.overworld_facing = facing
-		SceneTransition.change_scene("res://scenes/dock/dock.tscn")
+		SceneTransition.change_scene("res://scenes/cave/cave.tscn")
+	else:
+		_update_hud_with_msg("A sealed cave mouth. Ancient runes glow faintly across the entrance.\n[color=cyan]Light all the beacons to break the seal.[/color]")
 
-	func _interact_forest_clearing() -> void:
-		GameData.overworld_position = pos
-		GameData.overworld_facing = facing
-		SceneTransition.change_scene("res://scenes/forest_clearing/forest_clearing.tscn")
+func _interact_ruins(target: Vector2i) -> void:
+	GameData.overworld_position = pos
+	GameData.overworld_facing = facing
+	SceneTransition.change_scene("res://scenes/abandoned_village/abandoned_village.tscn")
 
-	func _interact_overlook() -> void:
-		var revealed := 0
-		for dy in range(-8, 9):
-			for dx in range(-8, 9):
-				var tx := pos.x + dx
-				var ty := pos.y + dy
-				if tx >= 0 and tx < MAP_W and ty >= 0 and ty < MAP_H:
-					if Vector2(dx, dy).length() <= 8:
-						var key := str(Vector2i(tx, ty))
-						if not GameData.explored_tiles.get(key, false):
-							GameData.explored_tiles[key] = true
-							revealed += 1
-							if not _fog_tiles.is_empty():
-								_fog_tiles[ty][tx].visible = false
-		GameData.track_skill_use("exploration", 1)
-		var explore_pct := int(float(GameData.explored_tiles.size()) / max(1, _count_land_tiles()) * 100)
-		explore_pct = mini(explore_pct, 100)
-		var msg := "From the overlook, the island stretches out before you.\n"
-		msg += "Mournlight Sound glimmers to the east. The forest canopy hides old paths.\n"
-		msg += "To the south, the lighthouse beam cuts through the dusk.\n\n"
-		msg += "[color=cyan]Revealed %d new tiles![/color] Exploration: %d%%" % [revealed, explore_pct]
-		if GameData.boss_defeated:
-			msg += "\n\nThe fog has lifted entirely. The island breathes again."
-		elif GameData.beacon_lit:
-			msg += "\n\nThe beacons burn below like a string of stars against the dark."
-		else:
-			msg += "\n\nDarkness presses in from all sides. The beacons wait to be lit."
-		_update_hud_with_msg(msg)
+func _interact_dock() -> void:
+	GameData.overworld_position = pos
+	GameData.overworld_facing = facing
+	SceneTransition.change_scene("res://scenes/dock/dock.tscn")
 
-	func _count_land_tiles() -> int:
-		var count := 0
-		for y in range(MAP_H):
-			for x in range(MAP_W):
-				if MAP[y].substr(x, 1) != "~":
-					count += 1
-		return count
+func _interact_forest_clearing() -> void:
+	GameData.overworld_position = pos
+	GameData.overworld_facing = facing
+	SceneTransition.change_scene("res://scenes/forest_clearing/forest_clearing.tscn")
+
+func _interact_overlook() -> void:
+	var revealed := 0
+	for dy in range(-8, 9):
+		for dx in range(-8, 9):
+			var tx := pos.x + dx
+			var ty := pos.y + dy
+			if tx >= 0 and tx < MAP_W and ty >= 0 and ty < MAP_H:
+				if Vector2(dx, dy).length() <= 8:
+					var key := str(Vector2i(tx, ty))
+					if not GameData.explored_tiles.get(key, false):
+						GameData.explored_tiles[key] = true
+						revealed += 1
+						if not _fog_tiles.is_empty():
+							_fog_tiles[ty][tx].visible = false
+	GameData.track_skill_use("exploration", 1)
+	var explore_pct := int(float(GameData.explored_tiles.size()) / max(1, _count_land_tiles()) * 100)
+	explore_pct = mini(explore_pct, 100)
+	var msg := "From the overlook, the island stretches out before you.\n"
+	msg += "Mournlight Sound glimmers to the east. The forest canopy hides old paths.\n"
+	msg += "To the south, the lighthouse beam cuts through the dusk.\n\n"
+	msg += "[color=cyan]Revealed %d new tiles![/color] Exploration: %d%%" % [revealed, explore_pct]
+	if GameData.boss_defeated:
+		msg += "\n\nThe fog has lifted entirely. The island breathes again."
+	elif GameData.beacon_lit:
+		msg += "\n\nThe beacons burn below like a string of stars against the dark."
+	else:
+		msg += "\n\nDarkness presses in from all sides. The beacons wait to be lit."
+	_update_hud_with_msg(msg)
+
+func _count_land_tiles() -> int:
+	var count := 0
+	for y in range(MAP_H):
+		for x in range(MAP_W):
+			if MAP[y].substr(x, 1) != "~":
+				count += 1
+	return count
 
 
-	# ── Gathering (herbs & materials) ──────────────────────────────────────────
-	func _try_gather_herbs(target: Vector2i) -> void:
-		var tile := _tile(target)
-		var herbs := AlchemyDB.herbs_for_tile(tile)
-		if herbs.is_empty():
-			_update_hud_with_msg("Nothing to gather here.")
-			return
-		var skill_bonus := GameData.get_skill_bonus("alchemy")
-		var chance := 0.4 + skill_bonus * 0.1
-		if rng.randf() > chance:
-			_update_hud_with_msg("You search the area but find nothing useful.")
-			return
-		var herb_id: int = herbs[rng.randi() % herbs.size()]
-		var info: Dictionary = AlchemyDB.HERB_INFO[herb_id]
-		var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
-		GameData.add_herb(info["id"], count)
-		GameData.track_skill_use("alchemy", 1)
-		_update_hud_with_msg("Gathered %s x%d!" % [info["name"], count])
+# ── Gathering (herbs & materials) ──────────────────────────────────────────
+func _try_gather_herbs(target: Vector2i) -> void:
+	var tile := _tile(target)
+	var herbs := AlchemyDB.herbs_for_tile(tile)
+	if herbs.is_empty():
+		_update_hud_with_msg("Nothing to gather here.")
+		return
+	var skill_bonus := GameData.get_skill_bonus("alchemy")
+	var chance := 0.4 + skill_bonus * 0.1
+	if rng.randf() > chance:
+		_update_hud_with_msg("You search the area but find nothing useful.")
+		return
+	var herb_id: int = herbs[rng.randi() % herbs.size()]
+	var info: Dictionary = AlchemyDB.HERB_INFO[herb_id]
+	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
+	GameData.add_herb(info["id"], count)
+	GameData.track_skill_use("alchemy", 1)
+	_update_hud_with_msg("Gathered %s x%d!" % [info["name"], count])
 
-	func _try_gather_materials(target: Vector2i) -> void:
-		var tile := _tile(target)
-		var materials := TinkerDB.materials_for_tile(tile)
-		if materials.is_empty():
-			_update_hud_with_msg("Nothing to scavenge here.")
-			return
-		var skill_bonus := GameData.get_skill_bonus("tinkering")
-		var chance := 0.4 + skill_bonus * 0.1
-		if rng.randf() > chance:
-			_update_hud_with_msg("You search the area but find nothing useful.")
-			return
-		var mat_id: int = materials[rng.randi() % materials.size()]
-		var info: Dictionary = TinkerDB.MATERIAL_INFO[mat_id]
-		var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
-		GameData.add_material(info["id"], count)
-		GameData.track_skill_use("tinkering", 1)
-		_update_hud_with_msg("Scavenged %s x%d!" % [info["name"], count])
+func _try_gather_materials(target: Vector2i) -> void:
+	var tile := _tile(target)
+	var materials := TinkerDB.materials_for_tile(tile)
+	if materials.is_empty():
+		_update_hud_with_msg("Nothing to scavenge here.")
+		return
+	var skill_bonus := GameData.get_skill_bonus("tinkering")
+	var chance := 0.4 + skill_bonus * 0.1
+	if rng.randf() > chance:
+		_update_hud_with_msg("You search the area but find nothing useful.")
+		return
+	var mat_id: int = materials[rng.randi() % materials.size()]
+	var info: Dictionary = TinkerDB.get_material_info(mat_id)
+	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
+	GameData.add_material(info["id"], count)
+	GameData.track_skill_use("tinkering", 1)
+	_update_hud_with_msg("Scavenged %s x%d!" % [info["name"], count])
 
 
 # ── Process ────────────────────────────────────────────────────────────────
@@ -910,13 +904,16 @@ func _make_particles(count: int, color: Color, size: Vector2, lifetime: float, v
 	mat.scale_min = size.x
 	mat.scale_max = size.y
 	var gradient := Gradient.new()
+	gradient.add_point(1.0, Color(color.r, color.g, color.b, 0.0))
 	gradient.set_color(0, Color(color.r, color.g, color.b, 0.0))
 	gradient.set_color(1, color)
 	gradient.set_color(2, Color(color.r, color.g, color.b, 0.0))
 	gradient.set_offset(0, 0.0)
 	gradient.set_offset(1, 0.3)
 	gradient.set_offset(2, 1.0)
-	mat.color_ramp = gradient
+	var gradient_texture := GradientTexture1D.new()
+	gradient_texture.gradient = gradient
+	mat.color_ramp = gradient_texture
 	p.process_material = mat
 	return p
 

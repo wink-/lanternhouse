@@ -62,15 +62,15 @@ var boss_defeated: bool = false
 var beacon_lit: bool = false
 var beacon_states: Dictionary = {}  # str(Vector2i) → true/false for each beacon
 
-	# ── Home ownership ──────────────────────────────────────────────────────────
-	var owned_home: String = ""  # id of owned property, "" = none
-	var home_upgrades: Dictionary = {}  # upgrade_id → true
-	var home_storage: Array = []  # items stored in home chest
+# ── Home ownership ──────────────────────────────────────────────────────────
+var owned_home: String = ""  # id of owned property, "" = none
+var home_upgrades: Dictionary = {}  # upgrade_id → true
+var home_storage: Array = []  # items stored in home chest
 
-	# ── Alchemy & Tinkering inventory ──────────────────────────────────────────
-	var herb_bag: Dictionary = {}   # herb_id_string -> int count
-	var material_bag: Dictionary = {}  # material_id_string -> int count
-	var crafted_items: Array = []  # potions/tools crafted
+# ── Alchemy & Tinkering inventory ──────────────────────────────────────────
+var herb_bag: Dictionary = {}   # herb_id_string -> int count
+var material_bag: Dictionary = {}  # material_id_string -> int count
+var crafted_items: Array = []  # potions/tools crafted
 
 var explored_tiles: Dictionary = {}  # str(Vector2i) → true
 var active_quests: Dictionary = {}   # quest_id → {"status": "active"/"complete", "progress": int}
@@ -103,17 +103,17 @@ const SKILL_TIERS := {
 	0: "Novice", 10: "Adept", 30: "Expert", 60: "Master",
 }
 
-	# ── Inventory limits ────────────────────────────────────────────────────
-	const WEAPONS_BAG_LIMIT := 12
-	const ARMOR_BAG_LIMIT := 12
-	const TRADE_GOODS_LIMIT := 8
+# ── Inventory limits ────────────────────────────────────────────────────
+const WEAPONS_BAG_LIMIT := 12
+const ARMOR_BAG_LIMIT := 12
+const TRADE_GOODS_LIMIT := 8
 
-	func bag_full(bag_type: String) -> bool:
-		match bag_type:
-			"weapons": return weapons_bag.size() >= WEAPONS_BAG_LIMIT
-			"armor": return armor_bag.size() >= ARMOR_BAG_LIMIT
-			"trade": return trade_goods.size() >= TRADE_GOODS_LIMIT
-		return false
+func bag_full(bag_type: String) -> bool:
+	match bag_type:
+		"weapons": return weapons_bag.size() >= WEAPONS_BAG_LIMIT
+		"armor": return armor_bag.size() >= ARMOR_BAG_LIMIT
+		"trade": return trade_goods.size() >= TRADE_GOODS_LIMIT
+	return false
 
 # ── Initialization ────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -122,11 +122,11 @@ func _ready() -> void:
 		_init_party()
 
 func _process(delta: float) -> void:
-		play_time += delta
-		wage_timer += delta
-		if wage_timer >= WAGE_INTERVAL:
-	wage_timer -= WAGE_INTERVAL
-	_process_wages()
+	play_time += delta
+	wage_timer += delta
+	if wage_timer >= WAGE_INTERVAL:
+		wage_timer -= WAGE_INTERVAL
+		_process_wages()
 
 func _process_wages() -> void:
 	for m: Dictionary in party:
@@ -481,36 +481,36 @@ func get_quest_progress(qid: String) -> int:
 func track_kill(enemy_name: String) -> void:
 	kill_counts[enemy_name] = kill_counts.get(enemy_name, 0) + 1
 
-	# ── Herb helpers ─────────────────────────────────────────────────────────────
-	func add_herb(herb_id: String, count: int = 1) -> void:
-		herb_bag[herb_id] = herb_bag.get(herb_id, 0) + count
+# ── Herb helpers ─────────────────────────────────────────────────────────────
+func add_herb(herb_id: String, count: int = 1) -> void:
+	herb_bag[herb_id] = herb_bag.get(herb_id, 0) + count
 
-	func remove_herb(herb_id: String, count: int = 1) -> bool:
-		if herb_bag.get(herb_id, 0) < count:
-			return false
-		herb_bag[herb_id] -= count
-		if herb_bag[herb_id] <= 0:
-			herb_bag.erase(herb_id)
-		return true
+func remove_herb(herb_id: String, count: int = 1) -> bool:
+	if herb_bag.get(herb_id, 0) < count:
+		return false
+	herb_bag[herb_id] -= count
+	if herb_bag[herb_id] <= 0:
+		herb_bag.erase(herb_id)
+	return true
 
-	func get_herb_count(herb_id: String) -> int:
-		return herb_bag.get(herb_id, 0)
+func get_herb_count(herb_id: String) -> int:
+	return herb_bag.get(herb_id, 0)
 
-	# ── Material helpers ──────────────────────────────────────────────────────
-	func add_material(material_id: String, count: int = 1) -> void:
-		material_bag[material_id] = material_bag.get(material_id, 0) + count
+# ── Material helpers ──────────────────────────────────────────────────────
+func add_material(material_id: String, count: int = 1) -> void:
+	material_bag[material_id] = material_bag.get(material_id, 0) + count
 
-	func remove_material(material_id: String, count: int = 1) -> bool:
-		if material_bag.get(material_id, 0) < count:
-			return false
-		material_bag[material_id] -= count
-		if material_bag[material_id] <= 0:
-			material_bag.erase(material_id)
-		return true
+func remove_material(material_id: String, count: int = 1) -> bool:
+	if material_bag.get(material_id, 0) < count:
+		return false
+	material_bag[material_id] -= count
+	if material_bag[material_id] <= 0:
+		material_bag.erase(material_id)
+	return true
 
-	func get_material_count(material_id: String) -> int:
-		return material_bag.get(material_id, 0)
+func get_material_count(material_id: String) -> int:
+	return material_bag.get(material_id, 0)
 
-	# ── Crafted items ─────────────────────────────────────────────────────────
-	func add_crafted_item(item: Dictionary) -> void:
-		crafted_items.append(item)
+# ── Crafted items ─────────────────────────────────────────────────────────
+func add_crafted_item(item: Dictionary) -> void:
+	crafted_items.append(item)

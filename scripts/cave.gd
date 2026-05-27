@@ -56,7 +56,7 @@ var victory_phase: int = -1
 @onready var dialog: RichTextLabel = $Dialog
 
 func _ready() -> void:
-	var deep := GameData.get_meta("cave_deep", false)
+	var deep: bool = GameData.get_meta("cave_deep", false)
 	if not GameData.get_meta("cave_opened", false) and not deep:
 		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
 		return
@@ -94,7 +94,7 @@ func _draw_map() -> void:
 			marker.size = Vector2(12, 12)
 			map_layer.add_child(marker)
 	# Draw boss marker
-	var deep := GameData.get_meta("cave_deep", false)
+	var deep: bool = GameData.get_meta("cave_deep", false)
 	if deep and not GameData.get_meta("endgame_choice_made", false):
 		var deep_marker := ColorRect.new()
 		deep_marker.color = Color("2a1a4a")
@@ -176,12 +176,12 @@ func _tile(grid: Vector2i) -> String:
 
 func _check_exit() -> void:
 	if pos.y >= MAP.size() - 1:
-		var deep := GameData.get_meta("cave_deep", false)
+		var deep: bool = GameData.get_meta("cave_deep", false)
 		GameData.set_meta("cave_deep", false)
 		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
 
 func _check_tile() -> void:
-	var deep := GameData.get_meta("cave_deep", false)
+	var deep: bool = GameData.get_meta("cave_deep", false)
 	# Deep cave boss encounter
 	if deep and pos == BOSS_POS and not GameData.get_meta("endgame_choice_made", false):
 		_start_deep_boss()
@@ -206,7 +206,7 @@ func _check_tile() -> void:
 
 func _interact() -> void:
 	var target := pos + facing
-	var deep := GameData.get_meta("cave_deep", false)
+	var deep: bool = GameData.get_meta("cave_deep", false)
 	# Check chests adjacent
 	for cpos in CHESTS:
 		if target == cpos:

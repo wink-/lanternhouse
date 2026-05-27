@@ -397,9 +397,9 @@ func _show_exchange() -> void:
 	for i in range(options.size()):
 		var opt: Dictionary = options[i]
 		var marker := "▶" if i == exchange_idx else " "
-		var can_afford := GameData.get_currency_balance(opt["from"]) >= opt["cost"]
-		var color_start := "" if can_afford else "[color=#666]"
-		var color_end := "" if can_afford else "[/color]"
+		var can_afford: bool = GameData.get_currency_balance(opt["from"]) >= opt["cost"]
+		var color_start: String = "" if can_afford else "[color=#666]"
+		var color_end: String = "" if can_afford else "[/color]"
 		lines.append("%s%s %-18s %s%s" % [color_start, marker, opt["label"], opt["rate_text"], color_end])
 	lines.append("")
 	lines.append("[1]/Enter to trade, arrows to browse, [Esc] back")
