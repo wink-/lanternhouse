@@ -42,8 +42,8 @@ const ZONE_BG := {
 
 # ── Damage numbers ────────────────────────────────────────────────────────
 var _floating_labels: Array = []
-var _enemy_x: float = 80.0
-var _party_x: float = 720.0
+var _enemy_x: float = 180.0
+var _party_x: float = 1040.0
 const FLOAT_DURATION := 1.2
 
 # ── Battle state ───────────────────────────────────────────────────────────
