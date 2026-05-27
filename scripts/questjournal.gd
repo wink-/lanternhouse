@@ -19,7 +19,7 @@ func close() -> void:
 	active = false
 	hide()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not active:
 		return
 	if not (event is InputEventKey and event.pressed and not event.echo):
@@ -27,6 +27,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	match event.keycode:
 		KEY_ESCAPE, KEY_J:
 			close()
+			get_viewport().set_input_as_handled()
 
 func _update() -> void:
 	var lines: Array = []

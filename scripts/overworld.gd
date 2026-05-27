@@ -174,7 +174,7 @@ const BEACON_POSITIONS := {
 
 # Signpost texts — keyed by position string
 const SIGNPOST_TEXTS := {
-	"(24, 21)": "Brindlewick lies west. The lighthouse beacon stands north of this road.",
+	"(24, 21)": "Brindlewick lies west. To reach the lighthouse, follow the eastern road, then turn north at the Lighthouse marker.",
 	"(15, 21)": "Brindlewick Village. The inn offers rest and healing.",
 	"(14, 12)": "Forest of Mournlight. Tread carefully — the trees here are old and watchful.",
 	"(21, 17)": "Mountain Pass. The beacon on the overlook controls access to the peaks.",
@@ -291,6 +291,17 @@ var _last_zone_tile: String = ""
 # ── Debug ───────────────────────────────────────────────────────────────────────
 var debug_visible: bool = false
 var admin_mode: bool = false
+var command_menu_open: bool = false
+var command_menu_idx: int = 0
+
+const COMMAND_MENU_OPTIONS := [
+	{"label": "Party", "hint": "Review party status and loyalty.", "action": "party"},
+	{"label": "Journal", "hint": "Review active quests and objectives.", "action": "journal"},
+	{"label": "Items", "hint": "Use Tonics, equip gear, and inspect goods.", "action": "items"},
+	{"label": "Settings", "hint": "Adjust volume and display options.", "action": "settings"},
+	{"label": "Save", "hint": "Save the current game.", "action": "save"},
+	{"label": "Load", "hint": "Load the last save.", "action": "load"},
+]
 
 # ── Init ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -338,9 +349,7 @@ func _ready() -> void:
 func _build_tileset() -> void:
 	var tex: Texture2D
 	if FileAccess.file_exists(OVERWORLD_ATLAS_PATH):
-		var image := Image.new()
-		if image.load(OVERWORLD_ATLAS_PATH) == OK:
-			tex = ImageTexture.create_from_image(image)
+		tex = _load_png_texture(OVERWORLD_ATLAS_PATH)
 	if not tex:
 		push_error("Failed to load overworld terrain atlas!")
 		print("ERROR: overworld terrain atlas not found: ", OVERWORLD_ATLAS_PATH)
@@ -477,10 +486,9 @@ func _init_player_sprite() -> void:
 		return
 	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
 		return
-	var image := Image.new()
-	if image.load(PLAYER_SPRITE_PATH) != OK:
+	player_texture.texture = _load_png_texture(PLAYER_SPRITE_PATH)
+	if not player_texture.texture:
 		return
-	player_texture.texture = ImageTexture.create_from_image(image)
 	player_texture.centered = true
 	player_texture.position = Vector2.ZERO
 	player_texture.z_index = 4
@@ -496,6 +504,10 @@ func _load_player_textures() -> void:
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
 		return null
+	if ResourceLoader.exists(path):
+		var texture: Texture2D = load(path)
+		if texture:
+			return texture
 	var image := Image.new()
 	if image.load(path) != OK:
 		push_warning("Image could not be loaded: %s" % path)
@@ -547,16 +559,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		char_sheet._unhandled_input(event)
 		return
 	if quest_journal and quest_journal.active:
-		quest_journal._unhandled_input(event)
+		if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_J:
+			quest_journal.close()
+			return
 		return
 	if inventory_screen and inventory_screen.active:
 		inventory_screen._unhandled_input(event)
 		return
 	if settings_screen and settings_screen.active:
-		settings_screen._unhandled_input(event)
+		settings_screen._input(event)
 		return
 	if fishing_screen and fishing_screen.active:
 		fishing_screen._unhandled_input(event)
+		return
+	if command_menu_open:
+		_handle_command_menu_input(event)
 		return
 	if minimap and minimap.visible:
 		return
@@ -598,11 +615,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_admin_mode()
 		return
 	elif event.keycode == KEY_C or event.keycode == KEY_M:
+		_open_command_menu()
+		return
+	elif event.keycode == KEY_P:
 		if char_sheet:
-			if char_sheet.active:
-				char_sheet.close()
-			else:
-				char_sheet.open()
+			_close_command_menu()
+			char_sheet.open()
 		return
 	elif event.keycode == KEY_J:
 		if quest_journal:
@@ -619,15 +637,73 @@ func _unhandled_input(event: InputEvent) -> void:
 				inventory_screen.open()
 		return
 	elif event.keycode == KEY_ESCAPE:
-		if settings_screen:
-			if settings_screen.active:
-				settings_screen.close()
-			else:
-				settings_screen.open()
+		_open_command_menu()
 		return
 
 	if dir != Vector2i.ZERO:
 		_try_move(dir)
+
+func _open_command_menu() -> void:
+	command_menu_open = true
+	command_menu_idx = 0
+	_update_hud()
+
+func _close_command_menu() -> void:
+	command_menu_open = false
+	_update_hud()
+
+func _handle_command_menu_input(event: InputEvent) -> void:
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	match event.keycode:
+		KEY_ESCAPE, KEY_M:
+			_close_command_menu()
+		KEY_UP:
+			command_menu_idx = maxi(0, command_menu_idx - 1)
+			_update_hud()
+		KEY_DOWN:
+			command_menu_idx = mini(COMMAND_MENU_OPTIONS.size() - 1, command_menu_idx + 1)
+			_update_hud()
+		KEY_ENTER, KEY_SPACE:
+			_activate_command_menu_option(command_menu_idx)
+		KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6:
+			_activate_command_menu_option(event.keycode - KEY_1)
+
+func _activate_command_menu_option(index: int) -> void:
+	if index < 0 or index >= COMMAND_MENU_OPTIONS.size():
+		return
+	var action: String = COMMAND_MENU_OPTIONS[index]["action"]
+	command_menu_open = false
+	match action:
+		"party":
+			if char_sheet:
+				char_sheet.open()
+		"journal":
+			if quest_journal:
+				quest_journal.open()
+		"items":
+			if inventory_screen:
+				inventory_screen.open()
+		"settings":
+			if settings_screen:
+				settings_screen.open()
+		"save":
+			if SaveManager.save_game():
+				_update_hud_with_msg("Game saved!")
+			else:
+				_update_hud_with_msg("Save failed!")
+		"load":
+			if SaveManager.load_game():
+				pos = GameData.overworld_position
+				facing = GameData.overworld_facing
+				_update_player_visual()
+				_update_camera()
+				_refresh_fog_of_war()
+				_update_hud_with_msg("Game loaded!")
+			else:
+				_update_hud_with_msg("No save found.")
+		_:
+			_update_hud()
 
 # ── Movement ───────────────────────────────────────────────────────────────
 func _try_move(dir: Vector2i) -> void:
@@ -822,6 +898,8 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
 			GameData.active_quests[quest_id]["progress"] = 1
 			msg = "%s\n[color=#f0d46a]%s[/color]" % [quest.get("event_text", msg), quest.get("turn_in", "Return to the Elder in Brindlewick.")]
+			if beacon_name == "lighthouse":
+				msg += "\n[color=#9fc5ff]Route back:[/color] Follow the path west to Brindlewick."
 		_update_hud_with_msg(msg)
 		_check_all_beacons_event()
 	else:
@@ -1262,7 +1340,24 @@ func _update_hud() -> void:
 				land_tiles += 1
 	var explored := GameData.explored_tiles.size()
 	var pct := int(float(explored) / max(land_tiles, 1) * 100)
-	lines.append("Explored:%d%%    [M] Party    [J] Journal    [I] Items" % mini(pct, 100))
+	lines.append("Explored:%d%%    [M]/[Esc] Menu    [J] Journal    [I] Items" % mini(pct, 100))
+	if command_menu_open:
+		lines.append("")
+		lines.append("[b][color=#f0d46a]Command Menu[/color][/b]")
+		for i in range(COMMAND_MENU_OPTIONS.size()):
+			var option: Dictionary = COMMAND_MENU_OPTIONS[i]
+			var marker := ">" if i == command_menu_idx else " "
+			var color_start := "[color=#f0d46a]" if i == command_menu_idx else ""
+			var color_end := "[/color]" if i == command_menu_idx else ""
+			lines.append("%s%s [%d] %s - %s%s" % [
+				color_start,
+				marker,
+				i + 1,
+				option["label"],
+				option["hint"],
+				color_end,
+			])
+		lines.append("[color=gray]Enter/number selects. Esc closes.[/color]")
 	hud.text = "\n".join(lines)
 
 
