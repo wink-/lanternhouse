@@ -240,6 +240,7 @@ func _ready() -> void:
 	_draw_map()
 	_init_overlays()
 	_init_particles()
+	_configure_camera_limits()
 	_update_player_visual()
 	_update_camera()
 	_update_hud()
@@ -351,7 +352,21 @@ func _update_player_visual() -> void:
 
 func _update_camera() -> void:
 	if camera:
-		camera.position = player_sprite.position
+		camera.global_position = player_sprite.global_position
+
+func _configure_camera_limits() -> void:
+	if not camera:
+		return
+	camera.limit_enabled = true
+	var world_w: float = MAP_W * TILE_SIZE
+	var world_h: float = MAP_H * TILE_SIZE
+	var vp_size: Vector2 = get_viewport_rect().size
+	var half_w: float = vp_size.x * 0.5
+	var half_h: float = vp_size.y * 0.5
+	camera.limit_left = int(half_w)
+	camera.limit_top = int(half_h)
+	camera.limit_right = int(world_w - half_w)
+	camera.limit_bottom = int(world_h - half_h)
 
 # ── Input ──────────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
@@ -730,6 +745,7 @@ func _process(delta: float) -> void:
 		if walk_timer <= 0:
 			walking = false
 		_update_player_visual()
+	_update_camera()
 
 	_auto_save_timer += delta
 	if _auto_save_timer >= AUTO_SAVE_INTERVAL:
@@ -756,6 +772,10 @@ func _process(delta: float) -> void:
 
 	if debug_visible and debug_label and debug_label.visible:
 		_update_debug()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_SIZE_CHANGED:
+		_configure_camera_limits()
 
 # ── Overlays (day/night, fog) ──────────────────────────────────────────────
 func _init_overlays() -> void:
