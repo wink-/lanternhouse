@@ -192,6 +192,7 @@ var _rain_particles: GPUParticles2D
 
 # ── Nodes ──────────────────────────────────────────────────────────────────
 @onready var tilemap: TileMapLayer = $TileLayer
+@onready var location_markers: Node2D = $LocationMarkers
 @onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var player_body: Polygon2D = $PlayerSprite/Body
@@ -240,6 +241,7 @@ func _ready() -> void:
 	_warn_bad_map_rows()
 	_build_tileset()
 	_draw_map()
+	_draw_location_markers()
 	_init_overlays()
 	_init_particles()
 	_configure_camera_limits()
@@ -314,6 +316,43 @@ func _draw_map() -> void:
 			tilemap.set_cell(Vector2i(x, y), 0, atlas_coord)
 			tile_count += 1
 	print("Map drawn: ", tile_count, " tiles")
+
+func _draw_location_markers() -> void:
+	if not location_markers:
+		return
+	for child in location_markers.get_children():
+		child.queue_free()
+	_add_location_marker(Vector2i(15, 20), "Brindlewick")
+
+func _add_location_marker(grid: Vector2i, label_text: String) -> void:
+	var marker := Node2D.new()
+	marker.position = Vector2(grid * TILE_SIZE) + Vector2(TILE_SIZE / 2, 2)
+
+	var pin := Polygon2D.new()
+	pin.color = Color(1.0, 0.86, 0.24, 0.9)
+	pin.polygon = PackedVector2Array([
+		Vector2(0, -10),
+		Vector2(8, -2),
+		Vector2(3, -2),
+		Vector2(3, 8),
+		Vector2(-3, 8),
+		Vector2(-3, -2),
+		Vector2(-8, -2)
+	])
+	marker.add_child(pin)
+
+	var label := Label.new()
+	label.text = label_text
+	label.position = Vector2(-44, -31)
+	label.size = Vector2(88, 20)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.62, 1.0))
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	marker.add_child(label)
+
+	location_markers.add_child(marker)
 
 func _fallback_draw() -> void:
 	"""Draw colored rectangles if tileset failed to load."""
