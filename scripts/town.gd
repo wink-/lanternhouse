@@ -100,14 +100,16 @@ const WANDER_INTERVAL := 2.5
 const WANDER_RADIUS := 3
 
 @onready var map_layer: Node2D = $MapLayer
+@onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
-@onready var dialog: RichTextLabel = $Dialog
+@onready var dialog: RichTextLabel = $UILayer/Dialog
 
 func _ready() -> void:
 	_load_town_atlas()
 	_draw_map()
 	_build_npc_positions()
 	_draw_npcs()
+	_configure_camera()
 	GameData.visited_town = true
 	# Auto-accept and complete Visit Brindlewick quest
 	if not GameData.active_quests.has("visit_brindlewick"):
@@ -270,6 +272,7 @@ func _update_player() -> void:
 	_refresh_npcs()
 	_apply_day_tint()
 	player_sprite.position = Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
+	_update_camera()
 	if _town_atlas and not player_sprite.has_node("Sprite"):
 		var sprite := Sprite2D.new()
 		sprite.name = "Sprite"
@@ -279,6 +282,21 @@ func _update_player() -> void:
 		player_sprite.add_child(sprite)
 		if player_sprite.has_node("Body"):
 			player_sprite.get_node("Body").visible = false
+
+func _configure_camera() -> void:
+	if not camera:
+		return
+	camera.anchor_mode = Camera2D.ANCHOR_MODE_DRAG_CENTER
+	camera.limit_enabled = true
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = MAP[0].length() * TILE_SIZE
+	camera.limit_bottom = MAP.size() * TILE_SIZE
+	_update_camera()
+
+func _update_camera() -> void:
+	if camera:
+		camera.global_position = player_sprite.global_position
 
 func _apply_day_tint() -> void:
 	var phase: String = GameData.get_day_phase()

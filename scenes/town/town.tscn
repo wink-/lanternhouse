@@ -7,13 +7,21 @@ script = ExtResource("1_town")
 
 [node name="MapLayer" type="Node2D" parent="."]
 
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = true
+current = true
+anchor_mode = 1
+zoom = Vector2(2, 2)
+
 [node name="PlayerSprite" type="Node2D" parent="."]
 
 [node name="Body" type="Polygon2D" parent="PlayerSprite"]
 color = Color(0.941, 0.831, 0.416, 1)
 polygon = PackedVector2Array(-6, -8, 6, -8, 8, 6, 0, 10, -8, 6)
 
-[node name="Dialog" type="RichTextLabel" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="Dialog" type="RichTextLabel" parent="UILayer"]
 bbcode_enabled = true
 position = Vector2(8, 8)
 size = Vector2(400, 120)
