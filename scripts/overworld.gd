@@ -322,9 +322,7 @@ func _ready() -> void:
 func _build_tileset() -> void:
 	var tex: Texture2D
 	if FileAccess.file_exists(OVERWORLD_ATLAS_PATH):
-		var image := Image.new()
-		if image.load(OVERWORLD_ATLAS_PATH) == OK:
-			tex = ImageTexture.create_from_image(image)
+		tex = _load_png_texture(OVERWORLD_ATLAS_PATH)
 	if not tex:
 		push_error("Failed to load overworld terrain atlas!")
 		print("ERROR: overworld terrain atlas not found: ", OVERWORLD_ATLAS_PATH)
@@ -461,10 +459,9 @@ func _init_player_sprite() -> void:
 		return
 	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
 		return
-	var image := Image.new()
-	if image.load(PLAYER_SPRITE_PATH) != OK:
+	player_texture.texture = _load_png_texture(PLAYER_SPRITE_PATH)
+	if not player_texture.texture:
 		return
-	player_texture.texture = ImageTexture.create_from_image(image)
 	player_texture.centered = true
 	player_texture.position = Vector2.ZERO
 	player_texture.z_index = 4
@@ -480,6 +477,10 @@ func _load_player_textures() -> void:
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
 		return null
+	if ResourceLoader.exists(path):
+		var texture: Texture2D = load(path)
+		if texture:
+			return texture
 	var image := Image.new()
 	if image.load(path) != OK:
 		push_warning("Image could not be loaded: %s" % path)

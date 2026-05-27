@@ -188,11 +188,9 @@ func _load_town_atlas() -> void:
 	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
 		push_warning("Town atlas missing: %s" % TOWN_ATLAS_PATH)
 		return
-	var image := Image.new()
-	if image.load(TOWN_ATLAS_PATH) != OK:
+	_town_atlas = _load_png_texture(TOWN_ATLAS_PATH)
+	if not _town_atlas:
 		push_warning("Town atlas could not be loaded: %s" % TOWN_ATLAS_PATH)
-		return
-	_town_atlas = ImageTexture.create_from_image(image)
 
 func _load_quiet_village_assets() -> void:
 	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
@@ -203,6 +201,10 @@ func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
 		push_warning("Image missing: %s" % path)
 		return null
+	if ResourceLoader.exists(path):
+		var texture: Texture2D = load(path)
+		if texture:
+			return texture
 	var image := Image.new()
 	if image.load(path) != OK:
 		push_warning("Image could not be loaded: %s" % path)
