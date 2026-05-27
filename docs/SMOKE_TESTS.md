@@ -11,6 +11,10 @@
 **Goal:** Confirm a fresh player can start, move around, enter locations, fight,
 save, and load without breaking the game loop.
 
+**Admin mode:** Press **F4** on the overworld to toggle admin mode. Admin mode
+disables random and visible encounters so routes can be tested without combat.
+Press **F4** again to return to normal encounter behavior.
+
 ### Route A - Fresh Start And Home/Town Entry
 
 1. Launch the project.

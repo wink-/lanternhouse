@@ -232,6 +232,7 @@ var _last_zone_tile: String = ""
 
 # ── Debug ───────────────────────────────────────────────────────────────────────
 var debug_visible: bool = false
+var admin_mode: bool = false
 
 # ── Init ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -354,16 +355,14 @@ func _update_camera() -> void:
 func _configure_camera_limits() -> void:
 	if not camera:
 		return
+	camera.anchor_mode = Camera2D.ANCHOR_MODE_DRAG_CENTER
 	camera.limit_enabled = true
 	var world_w: float = MAP_W * TILE_SIZE
 	var world_h: float = MAP_H * TILE_SIZE
-	var vp_size: Vector2 = get_viewport_rect().size
-	var half_w: float = vp_size.x * 0.5
-	var half_h: float = vp_size.y * 0.5
-	camera.limit_left = int(half_w)
-	camera.limit_top = int(half_h)
-	camera.limit_right = int(world_w - half_w)
-	camera.limit_bottom = int(world_h - half_h)
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = int(world_w)
+	camera.limit_bottom = int(world_h)
 
 # ── Input ──────────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
@@ -412,6 +411,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	elif event.keycode == KEY_F3:
 		_toggle_debug()
+		return
+	elif event.keycode == KEY_F4:
+		_toggle_admin_mode()
 		return
 	elif event.keycode == KEY_C:
 		if char_sheet:
@@ -515,8 +517,8 @@ func _step_effects() -> void:
 
 	if tile == "L":
 		_interact_beacon("lighthouse", pos)
-	# Fog in a Bottle blocks encounters
-	if GameData.get_meta("fog_active", false):
+	# Admin mode and Fog in a Bottle block encounters.
+	if admin_mode or GameData.get_meta("fog_active", false):
 		return
 	# Visible encounter markers — guaranteed combat
 	if tile == "!" and not GameData.cleared_encounters.get(str(pos), false):
@@ -987,6 +989,8 @@ func _is_night() -> bool:
 
 # ── Encounter respawn ────────────────────────────────────────────────────
 func _respawn_encounters(delta: float) -> void:
+	if admin_mode:
+		return
 	_encounter_respawn_timer += delta
 	if _encounter_respawn_timer < ENCOUNTER_RESPAWN_TIME:
 		return
@@ -1011,11 +1015,14 @@ func _update_hud() -> void:
 			lines.append("Lv%d %-10s [color=red]KO[/color]" % [m["level"], m["name"]])
 	var beacon_status: String = "[color=cyan]LIT[/color]" if GameData.beacon_lit else "[color=gray]UNLIT[/color]"
 	lines.append("%s    Tonics: %d    Ethers: %d    Beacon: %s" % [GameData.format_money_short(), GameData.tonics, GameData.ethers, beacon_status])
-	var danger := clampi(steps_since_encounter / 3, 0, 5)
-	var danger_bar := ""
-	for d in range(5):
-		danger_bar += "[color=red]|[/color]" if d < danger else "[color=gray].[/color]"
-	lines.append("Danger: %s" % danger_bar)
+	if admin_mode:
+		lines.append("[color=yellow]ADMIN MODE: encounters disabled[/color]")
+	else:
+		var danger := clampi(steps_since_encounter / 3, 0, 5)
+		var danger_bar := ""
+		for d in range(5):
+			danger_bar += "[color=red]|[/color]" if d < danger else "[color=gray].[/color]"
+		lines.append("Danger: %s" % danger_bar)
 	# Exploration percentage
 	var land_tiles := 0
 	for y in range(MAP_H):
@@ -1073,6 +1080,16 @@ func _toggle_debug() -> void:
 		if debug_visible:
 			_update_debug()
 
+func _toggle_admin_mode() -> void:
+	admin_mode = not admin_mode
+	steps_since_encounter = 0
+	_update_hud_with_msg("[color=yellow]Admin mode %s. Encounters %s.[/color]" % [
+		"enabled" if admin_mode else "disabled",
+		"disabled" if admin_mode else "enabled",
+	])
+	if debug_visible:
+		_update_debug()
+
 func _update_debug() -> void:
 	if not debug_label:
 		return
@@ -1087,6 +1104,7 @@ func _update_debug() -> void:
 		+ "FPS: %d\n" % fps
 		+ "Tiles: %d x %d\n" % [MAP_W, MAP_H]
 		+ "Steps: %d\n" % step_count
+		+ "Admin: %s\n" % ("ON" if admin_mode else "OFF")
 		+ "Time: %s\n" % _format_time(GameData.play_time)
 		+ "Period: %s\n" % _day_period_name()
 		+ "Beacon: %s\n" % ("Lit" if GameData.beacon_lit else "Unlit")

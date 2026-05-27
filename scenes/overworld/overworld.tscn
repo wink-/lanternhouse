@@ -14,7 +14,7 @@ script = ExtResource("1_main")
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = true
 current = true
-anchor_mode = 0
+anchor_mode = 1
 
 [node name="TileLayer" type="TileMapLayer" parent="."]
 
