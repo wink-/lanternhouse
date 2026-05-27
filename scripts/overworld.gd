@@ -52,6 +52,8 @@ const T_MEADOW := Vector2i(4, 2)
 const T_ROCKY_COAST := Vector2i(5, 2)
 const T_PALM := Vector2i(6, 2)
 const T_MARSH := Vector2i(7, 2)
+const T_SAND_SHORE_BASE := Vector2i(0, 3)
+const T_ROCK_SHORE_BASE := Vector2i(0, 5)
 
 # ── Island map (48x48) ────────────────────────────────────────────────────
 #  ~ = water    . = sand beach    , = grass
@@ -373,6 +375,11 @@ func _build_tileset() -> void:
 			continue
 		source.create_tile(coord)
 		print("  added tile '", key, "' at atlas ", coord)
+	for mask in range(16):
+		for base in [T_SAND_SHORE_BASE, T_ROCK_SHORE_BASE]:
+			var coord := Vector2i(base.x + mask % 8, base.y + int(mask / 8))
+			if not source.has_tile(coord):
+				source.create_tile(coord)
 
 	ts.add_source(source, 0)
 	tilemap.tile_set = ts
@@ -383,10 +390,32 @@ func _draw_map() -> void:
 	for y in range(MAP_H):
 		for x in range(MAP_W):
 			var tile_char: String = _tile(Vector2i(x, y))
-			var atlas_coord: Vector2i = TILE_ATLAS.get(tile_char, T_GRASS)
+			var atlas_coord: Vector2i = _atlas_coord_for_tile(Vector2i(x, y), tile_char)
 			tilemap.set_cell(Vector2i(x, y), 0, atlas_coord)
 			tile_count += 1
 	print("Map drawn: ", tile_count, " tiles")
+
+func _atlas_coord_for_tile(grid: Vector2i, tile_char: String) -> Vector2i:
+	if tile_char == ".":
+		var mask := _water_neighbor_mask(grid)
+		if mask > 0:
+			return Vector2i(T_SAND_SHORE_BASE.x + mask % 8, T_SAND_SHORE_BASE.y + int(mask / 8))
+	elif tile_char == "r":
+		var mask := _water_neighbor_mask(grid)
+		return Vector2i(T_ROCK_SHORE_BASE.x + mask % 8, T_ROCK_SHORE_BASE.y + int(mask / 8))
+	return TILE_ATLAS.get(tile_char, T_GRASS)
+
+func _water_neighbor_mask(grid: Vector2i) -> int:
+	var mask := 0
+	if _tile(grid + Vector2i.UP) == "~":
+		mask |= 1
+	if _tile(grid + Vector2i.RIGHT) == "~":
+		mask |= 2
+	if _tile(grid + Vector2i.DOWN) == "~":
+		mask |= 4
+	if _tile(grid + Vector2i.LEFT) == "~":
+		mask |= 8
+	return mask
 
 func _draw_location_markers() -> void:
 	if not location_markers:

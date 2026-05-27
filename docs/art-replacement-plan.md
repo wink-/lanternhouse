@@ -42,6 +42,7 @@ Created/downloaded PixelLab assets are tracked in `docs/pixellab-art-inventory.m
 |---|---|---|
 | Coastline | PixelLab ocean/beach and beach/grass tilesets, dock, cave | Rebuilt overworld atlas water, beach, dock, cave |
 | Expanded biomes | Local Pillow atlas pass using PixelLab coastline sources | Added desert, tall grass, meadow, rocky coast, palm stand, and marsh terrain symbols to the overworld |
+| Shoreline variants | Local Pillow atlas pass using PixelLab coastline sources | Added runtime-selected sand and rocky coast edge variants so coastlines respond to neighboring water |
 
 ## Working Build Queue
 
@@ -53,7 +54,7 @@ Created/downloaded PixelLab assets are tracked in `docs/pixellab-art-inventory.m
 | 4 | Town prop clusters | `assets/sprites/town/props/*.png` | PixelLab barrels, crates, benches, lantern posts, flower boxes, wells, notice board, herb planters integrated through `TOWN_PROPS`. |
 | 5 | Town interior starter set | `assets/sprites/interiors/town/home_interior.png` | Home interior atlas integrated into `scripts/home.gd`; next pass can add shop/interior scenes as they become playable. |
 | 6 | Battle party silhouettes | `assets/sprites/battle/party/*.png` | Fighter, thief, blackbelt, redmage, whitemage, blackmage integrated with polygon fallback. |
-| 7 | Early enemy set | `assets/sprites/battle/enemies/*.png` | Slime, imp, wolf, ghoul, skeleton, ogre, wraith, drake, golem integrated with polygon fallback. |
+| 7 | Early enemy set | `assets/sprites/battle/enemies/*.png` | Slime, imp, wolf, ghoul, skeleton, ogre, wraith, drake, golem, crab, bat, bandit, serpent, mossling, jelly integrated with polygon fallback. |
 | 8 | UI item icons | `assets/sprites/ui/icons/*.png` | Potions, herbs, fish, ore, spell icons after combat/inventory art paths settle. |
 
 ## Current PixelLab Batch

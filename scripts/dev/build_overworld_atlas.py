@@ -128,12 +128,51 @@ def draw_marsh(draw: ImageDraw.ImageDraw, col: int, row: int) -> None:
 
 def draw_rocky_coast(draw: ImageDraw.ImageDraw, col: int, row: int) -> None:
     x, y = tile_origin(col, row)
-    draw.rectangle((x, y, x + 31, y + 31), fill=PALETTE["water"])
-    rocks = [(2, 18, 12, 9, 22, 20), (12, 28, 20, 12, 32, 29), (0, 7, 8, 2, 15, 10)]
-    for pts in rocks:
-        draw.polygon([(x + pts[0], y + pts[1]), (x + pts[2], y + pts[3]), (x + pts[4], y + pts[5])], fill=PALETTE["rock"], outline=PALETTE["dark"])
-        draw.line((x + pts[2], y + pts[3], x + pts[2] + 3, y + pts[3] + 7), fill=PALETTE["rock_hi"])
-    draw.line((x + 1, y + 24, x + 27, y + 27), fill=PALETTE["foam"])
+    draw.rectangle((x, y, x + 31, y + 31), fill=PALETTE["rock"])
+    for px, py in [(4, 6), (14, 12), (24, 8), (8, 22), (21, 25)]:
+        draw.polygon(
+            [(x + px - 4, y + py + 4), (x + px, y + py - 4), (x + px + 5, y + py + 4)],
+            fill=PALETTE["rock_hi"],
+            outline=PALETTE["hill_dark"],
+        )
+    draw.line((x, y + 30, x + 31, y + 29), fill=PALETTE["hill_dark"])
+
+
+def draw_shore_variant(draw: ImageDraw.ImageDraw, col: int, row: int, land: str, mask: int) -> None:
+    x, y = tile_origin(col, row)
+    land_color = PALETTE[land]
+    edge_color = PALETTE["sand2"] if land == "sand" else PALETTE["hill_dark"]
+    hi_color = PALETTE["sand3"] if land == "sand" else PALETTE["rock_hi"]
+    draw.rectangle((x, y, x + 31, y + 31), fill=land_color)
+    if land == "sand":
+        for px, py in [(5, 20), (13, 15), (22, 23), (27, 17), (10, 27)]:
+            draw.point((x + px, y + py), fill=PALETTE["sand2"])
+    else:
+        for px, py in [(5, 7), (17, 12), (25, 22), (10, 25)]:
+            draw.polygon([(x + px - 3, y + py + 3), (x + px, y + py - 3), (x + px + 4, y + py + 3)], fill=hi_color, outline=PALETTE["hill_dark"])
+
+    if mask & 1:
+        draw.rectangle((x, y, x + 31, y + 8), fill=PALETTE["water"])
+        draw.line((x, y + 8, x + 31, y + 7), fill=PALETTE["foam"], width=2)
+        draw.line((x, y + 11, x + 31, y + 10), fill=edge_color)
+    if mask & 2:
+        draw.rectangle((x + 23, y, x + 31, y + 31), fill=PALETTE["water"])
+        draw.line((x + 23, y, x + 22, y + 31), fill=PALETTE["foam"], width=2)
+        draw.line((x + 20, y, x + 20, y + 31), fill=edge_color)
+    if mask & 4:
+        draw.rectangle((x, y + 23, x + 31, y + 31), fill=PALETTE["water"])
+        draw.line((x, y + 23, x + 31, y + 22), fill=PALETTE["foam"], width=2)
+        draw.line((x, y + 20, x + 31, y + 20), fill=edge_color)
+    if mask & 8:
+        draw.rectangle((x, y, x + 8, y + 31), fill=PALETTE["water"])
+        draw.line((x + 8, y, x + 7, y + 31), fill=PALETTE["foam"], width=2)
+        draw.line((x + 11, y, x + 11, y + 31), fill=edge_color)
+    if mask:
+        for yy in range(y + 4, y + 32, 8):
+            draw.line((x + 2, yy, x + 8, yy), fill=PALETTE["water2"])
+            draw.line((x + 16, yy + 2, x + 23, yy + 2), fill=PALETTE["foam"])
+    elif land == "rock":
+        draw_rocky_coast(draw, col, row)
 
 
 def draw_palm(draw: ImageDraw.ImageDraw, col: int, row: int) -> None:
@@ -220,7 +259,7 @@ def main() -> None:
         if not before.exists():
             Image.open(ATLAS_PATH).save(before)
 
-    atlas = Image.new("RGBA", (256, 128), (0, 0, 0, 0))
+    atlas = Image.new("RGBA", (256, 224), (0, 0, 0, 0))
     draw = ImageDraw.Draw(atlas)
 
     ocean_beach = load_optional(SOURCE_DIR / "ocean_to_beach.png")
@@ -268,6 +307,10 @@ def main() -> None:
     draw_rocky_coast(draw, 5, 2)
     draw_palm(draw, 6, 2)
     draw_marsh(draw, 7, 2)
+
+    for mask in range(16):
+        draw_shore_variant(draw, mask % 8, 3 + mask // 8, "sand", mask)
+        draw_shore_variant(draw, mask % 8, 5 + mask // 8, "rock", mask)
 
     atlas.save(ATLAS_PATH)
     atlas.save(ARCHIVE_DIR / "lanternhouse_overworld_expanded_biomes.png")

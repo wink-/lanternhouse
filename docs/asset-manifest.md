@@ -66,6 +66,15 @@ python scripts/dev/build_battle_party_sprites.py
 | `assets/sprites/battle/enemies/wraith.png` | 96×48 | 1 idle | Mountain/Cave |
 | `assets/sprites/battle/enemies/drake.png` | 96×48 | 1 idle | Cave (mini-boss) |
 | `assets/sprites/battle/enemies/golem.png` | 96×48 | 1 idle | Cave (boss-tier) |
+| `assets/sprites/battle/enemies/crab.png` | 96×48 | 1 idle | Beach |
+| `assets/sprites/battle/enemies/bat.png` | 96×48 | 1 idle | Forest/Mountain/Cave |
+| `assets/sprites/battle/enemies/bandit.png` | 96×48 | 1 idle | Grassland |
+| `assets/sprites/battle/enemies/serpent.png` | 96×48 | 1 idle | Beach/Mountain/Cave |
+| `assets/sprites/battle/enemies/mossling.png` | 96×48 | 1 idle | Grassland/Forest |
+| `assets/sprites/battle/enemies/jelly.png` | 96×48 | 1 idle | Beach |
+| `assets/sprites/battle/enemies/shadow_wisp.png` | 96×48 | 1 idle | Post-seal |
+| `assets/sprites/battle/enemies/dark_shade.png` | 96×48 | 1 idle | Boss summon |
+| `assets/sprites/battle/enemies/mournlight_shade.png` | 128×96 | 1 idle | Cave boss |
 
 Rebuild battle enemy sprites with:
 
@@ -204,6 +213,8 @@ python scripts/dev/build_home_interior_atlas.py
 | `r` | `(5, 2)` | Rocky coast | Blocked coastline terrain |
 | `p` | `(6, 2)` | Palm stand | Coastal decoration/walkable terrain |
 | `m` | `(7, 2)` | Marsh | Reedmire Marsh biome |
+| `.` + water neighbor mask | rows `3-4` | Sand shoreline variants | Runtime-selected beach edges for natural coastlines |
+| `r` + water neighbor mask | rows `5-6` | Rocky shoreline variants | Runtime-selected rocky coast edges for blocked shoreline |
 
 Rebuild `assets/sprites/tiles/lanternhouse_overworld.png` with:
 

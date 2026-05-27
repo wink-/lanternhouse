@@ -32,6 +32,12 @@ const AI_BEHAVIORS := {
 	"Wraith": "cunning",
 	"Drake": "smart",
 	"Golem": "attack",
+	"Crab": "attack",
+	"Bat": "cunning",
+	"Bandit": "smart",
+	"Serpent": "cunning",
+	"Mossling": "attack",
+	"Jelly": "attack",
 	"ShadowWisp": "cunning",
 	"Mournlight Shade": "boss",
 	"AncientGrief": "boss",
@@ -44,6 +50,8 @@ const AI_BEHAVIORS := {
 const ENEMY_SPECIALS := {
 	"Ghoul": {"effect": "poison", "chance": 0.20},
 	"Wraith": {"effect": "blind", "chance": 0.25},
+	"Serpent": {"effect": "poison", "chance": 0.15},
+	"Jelly": {"effect": "silence", "chance": 0.10},
 	"ShadowWisp": {"effect": "silence", "chance": 0.20},
 	"Mournlight Shade": {"specials": ["shadow_bolt", "life_drain", "summon_shadows"]},
 	"AncientGrief": {"specials": ["sorrow_wave", "entomb", "wail"]},
@@ -60,6 +68,12 @@ static func template(enemy_name: String) -> Dictionary:
 		"Wraith":   return {"hp":17, "atk":8,  "def":5,  "agi":6,  "xp":16, "gold":8}
 		"Drake":    return {"hp":30, "atk":12, "def":7,  "agi":4,  "xp":35, "gold":20}
 		"Golem":    return {"hp":40, "atk":14, "def":10, "agi":1,  "xp":50, "gold":30}
+		"Crab":     return {"hp":9,  "atk":4,  "def":3,  "agi":2,  "xp":6,  "gold":2}
+		"Bat":      return {"hp":7,  "atk":4,  "def":1,  "agi":7,  "xp":6,  "gold":2}
+		"Bandit":   return {"hp":14, "atk":6,  "def":2,  "agi":4,  "xp":12, "gold":8}
+		"Serpent":  return {"hp":12, "atk":6,  "def":2,  "agi":6,  "xp":11, "gold":4}
+		"Mossling": return {"hp":11, "atk":4,  "def":4,  "agi":2,  "xp":8,  "gold":3}
+		"Jelly":    return {"hp":10, "atk":5,  "def":2,  "agi":3,  "xp":8,  "gold":2}
 		"ShadowWisp": return {"hp":14, "atk":9,  "def":4,  "agi":7,  "xp":18, "gold":8}
 		"Mournlight Shade": return {"hp":120, "atk":18, "def":8,  "agi":6,  "xp":200, "gold":50}
 		"AncientGrief": return {"hp":200, "atk":22, "def":12, "agi":5,  "xp":300, "gold":100}
@@ -112,6 +126,8 @@ static func grassland_formations() -> Array:
 		[{"name":"Slime","count":2}],
 		[{"name":"Imp","count":1}],
 		[{"name":"Imp","count":1}, {"name":"Slime","count":1}],
+		[{"name":"Bandit","count":1}],
+		[{"name":"Mossling","count":1}, {"name":"Slime","count":1}],
 		[{"name":"Imp","count":2}],
 		[{"name":"Slime","count":1}, {"name":"Imp","count":1}],
 	]
@@ -122,6 +138,8 @@ static func forest_formations() -> Array:
 		[{"name":"Wolf","count":2}],
 		[{"name":"Imp","count":2}],
 		[{"name":"Ghoul","count":1}],
+		[{"name":"Mossling","count":2}],
+		[{"name":"Bat","count":2}],
 		[{"name":"Wolf","count":1}, {"name":"Imp","count":1}],
 		[{"name":"Skeleton","count":1}],
 		[{"name":"Wolf","count":1}, {"name":"Ghoul","count":1}],
@@ -134,6 +152,8 @@ static func mountain_formations() -> Array:
 		[{"name":"Skeleton","count":2}],
 		[{"name":"Ogre","count":1}],
 		[{"name":"Wraith","count":1}],
+		[{"name":"Bat","count":3}],
+		[{"name":"Serpent","count":1}],
 		[{"name":"Ghoul","count":1}, {"name":"Skeleton","count":1}],
 		[{"name":"Wolf","count":2}, {"name":"Ghoul","count":1}],
 	]
@@ -144,6 +164,8 @@ static func cave_formations() -> Array:
 		[{"name":"Ghoul","count":2}],
 		[{"name":"Wraith","count":1}],
 		[{"name":"Ogre","count":1}, {"name":"Skeleton","count":1}],
+		[{"name":"Bat","count":2}, {"name":"Skeleton","count":1}],
+		[{"name":"Serpent","count":2}],
 		[{"name":"Drake","count":1}],
 		[{"name":"Golem","count":1}],
 		[{"name":"Wraith","count":2}],
@@ -153,7 +175,10 @@ static func beach_formations() -> Array:
 	return [
 		[{"name":"Slime","count":2}],
 		[{"name":"Slime","count":3}],
+		[{"name":"Crab","count":2}],
+		[{"name":"Jelly","count":1}, {"name":"Crab","count":1}],
 		[{"name":"Imp","count":1}, {"name":"Slime","count":1}],
+		[{"name":"Serpent","count":1}],
 		[{"name":"Wolf","count":1}],
 		[{"name":"Imp","count":2}],
 	]

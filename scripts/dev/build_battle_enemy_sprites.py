@@ -136,6 +136,87 @@ def golem() -> Image.Image:
     return img
 
 
+def crab() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((24, 36, 72, 44), fill=SHADOW)
+    draw.ellipse((34, 18, 62, 36), fill=OUTLINE)
+    draw.ellipse((37, 20, 59, 34), fill=(197, 80, 55, 255))
+    draw.line((34, 27, 22, 21), fill=OUTLINE, width=2)
+    draw.line((62, 27, 74, 21), fill=OUTLINE, width=2)
+    draw.arc((15, 15, 27, 27), 30, 320, fill=(225, 108, 69, 255), width=3)
+    draw.arc((69, 15, 81, 27), 220, 150, fill=(225, 108, 69, 255), width=3)
+    draw.point((43, 24), fill=OUTLINE)
+    draw.point((53, 24), fill=OUTLINE)
+    return img
+
+
+def bat() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((29, 35, 67, 43), fill=SHADOW)
+    draw.polygon([(47, 14), (17, 8), (27, 28), (38, 23)], fill=OUTLINE)
+    draw.polygon([(49, 14), (79, 8), (69, 28), (58, 23)], fill=OUTLINE)
+    draw.polygon([(47, 17), (23, 12), (30, 25), (40, 22)], fill=(74, 54, 88, 255))
+    draw.polygon([(49, 17), (73, 12), (66, 25), (56, 22)], fill=(74, 54, 88, 255))
+    draw.ellipse((38, 13, 58, 32), fill=OUTLINE)
+    draw.ellipse((41, 16, 55, 30), fill=(91, 67, 109, 255))
+    draw.point((44, 22), fill=(232, 211, 92, 255))
+    draw.point((52, 22), fill=(232, 211, 92, 255))
+    return img
+
+
+def bandit() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((28, 37, 68, 44), fill=SHADOW)
+    draw.rectangle((39, 14, 57, 30), fill=OUTLINE)
+    draw.rectangle((41, 16, 55, 29), fill=(198, 137, 94, 255))
+    draw.rectangle((40, 18, 56, 23), fill=(41, 38, 38, 255))
+    draw.point((44, 21), fill=(236, 222, 160, 255))
+    draw.point((52, 21), fill=(236, 222, 160, 255))
+    draw.polygon([(32, 29), (64, 29), (68, 41), (28, 41)], fill=OUTLINE)
+    draw.polygon([(35, 30), (61, 30), (64, 39), (32, 39)], fill=(92, 86, 71, 255))
+    draw.line((63, 26, 75, 16), fill=(198, 205, 196, 255), width=2)
+    return img
+
+
+def serpent() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((21, 37, 75, 44), fill=SHADOW)
+    draw.arc((24, 18, 72, 48), 185, 352, fill=OUTLINE, width=8)
+    draw.arc((27, 20, 69, 44), 185, 352, fill=(197, 155, 73, 255), width=5)
+    draw.ellipse((57, 12, 75, 28), fill=OUTLINE)
+    draw.ellipse((59, 14, 73, 26), fill=(215, 177, 84, 255))
+    draw.point((68, 19), fill=OUTLINE)
+    draw.line((72, 22, 80, 20), fill=(191, 52, 55, 255))
+    return img
+
+
+def mossling() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((25, 36, 71, 44), fill=SHADOW)
+    draw.ellipse((31, 17, 65, 39), fill=OUTLINE)
+    draw.ellipse((34, 20, 62, 37), fill=(76, 133, 66, 255))
+    for x, y in [(36, 18), (43, 15), (51, 17), (59, 20)]:
+        draw.ellipse((x - 2, y - 2, x + 3, y + 3), fill=(111, 177, 82, 255))
+    draw.point((42, 27), fill=OUTLINE)
+    draw.point((54, 27), fill=OUTLINE)
+    draw.rectangle((39, 35, 45, 42), fill=OUTLINE)
+    draw.rectangle((52, 35, 58, 42), fill=OUTLINE)
+    return img
+
+
+def jelly() -> Image.Image:
+    img, draw = new_img()
+    draw.ellipse((28, 36, 68, 44), fill=SHADOW)
+    draw.ellipse((31, 12, 65, 32), fill=OUTLINE)
+    draw.ellipse((34, 15, 62, 30), fill=(82, 173, 201, 210))
+    for x in [36, 43, 50, 57]:
+        draw.line((x, 29, x - 3, 40), fill=(68, 142, 173, 230), width=2)
+    draw.point((43, 22), fill=OUTLINE)
+    draw.point((53, 22), fill=OUTLINE)
+    draw.point((39, 17), fill=(166, 231, 241, 255))
+    return img
+
+
 def main() -> None:
     save("slime", slime())
     save("imp", imp())
@@ -146,6 +227,12 @@ def main() -> None:
     save("wraith", wraith())
     save("drake", drake())
     save("golem", golem())
+    save("crab", crab())
+    save("bat", bat())
+    save("bandit", bandit())
+    save("serpent", serpent())
+    save("mossling", mossling())
+    save("jelly", jelly())
 
 
 if __name__ == "__main__":
