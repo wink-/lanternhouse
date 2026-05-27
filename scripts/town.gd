@@ -121,6 +121,7 @@ const BUILDING_LABELS := [
 ]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
+var _npc_positions_phase: String = ""
 
 var pos: Vector2i = Vector2i(20, 22)
 var facing: Vector2i = Vector2i.DOWN
@@ -292,6 +293,7 @@ func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 func _build_npc_positions() -> void:
 	npc_positions.clear()
 	var phase: String = GameData.get_day_phase()
+	_npc_positions_phase = phase
 	for npc_id: String in NPC_IDS:
 		var home: Vector2i = NPCDB.get_npc_position(npc_id, phase)
 		if home.x >= 0:
@@ -343,15 +345,13 @@ func _find_npc_pos(npc_id: String) -> Vector2i:
 	return Vector2i(-1, -1)
 
 func _refresh_npcs() -> void:
-	var old_phase: String = npc_positions.get("_phase", "")
 	var phase: String = GameData.get_day_phase()
-	if phase == old_phase:
+	if phase == _npc_positions_phase:
 		return
 	for npc_id: String in NPC_IDS:
 		var home: Vector2i = NPCDB.get_npc_position(npc_id, phase)
 		_npc_wander_pos[npc_id] = home
 	_build_npc_positions()
-	npc_positions["_phase"] = phase
 	for npc_id: String in NPC_IDS:
 		if _npc_markers.has(npc_id):
 			var marker: Sprite2D = _npc_markers[npc_id]
