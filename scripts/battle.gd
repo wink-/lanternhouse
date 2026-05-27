@@ -122,6 +122,7 @@ func _ready() -> void:
 	round_phase = "command"
 	selecting_idx = _first_alive_party()
 	fight_target_idx = _first_alive_enemy()
+	_push_log("[color=#f0d46a]Tip:[/color] [1] Attack, [2] Guard, [4] Item auto-heals the most wounded ally.")
 	_draw_sprites()
 	_update_display()
 
@@ -201,6 +202,10 @@ func _spawn_spell_effect(pos: Vector2, color: Color) -> void:
 	particles.scale_amount_min = 2.0
 	particles.scale_amount_max = 4.0
 	particles.modulate = color
+	add_child(particles)
+	var tween := create_tween()
+	tween.tween_interval(0.5)
+	tween.tween_callback(particles.queue_free)
 
 func _spawn_slash_effect(pos: Vector2) -> void:
 	var slash := Line2D.new()
@@ -468,8 +473,7 @@ func _handle_command(keycode: int) -> void:
 							if m2["alive"] and m2["command"] == "":
 								m2["command"] = "pass"
 						_start_resolution()
-						used_item = true
-						break
+						return
 			if used_item:
 				_advance_selection()
 			else:
@@ -1408,11 +1412,28 @@ func _push_log(msg: String) -> void:
 	combat_log.append(msg)
 	if combat_log.size() > 10: combat_log.pop_front()
 
+func _enemy_summary() -> String:
+	var parts: Array[String] = []
+	for e: Dictionary in enemies:
+		var status := "[color=#555]down[/color]" if not e["alive"] else "%d/%d HP" % [e["hp"], e["max_hp"]]
+		parts.append("%s %s" % [e["name"], status])
+	return ", ".join(parts) if not parts.is_empty() else "none"
+
+func _party_summary() -> String:
+	var parts: Array[String] = []
+	for m: Dictionary in GameData.party:
+		var status := "[color=#c0392b]KO[/color]" if not m["alive"] else "%d/%d HP" % [m["hp"], m["max_hp"]]
+		parts.append("%s %s" % [m["name"], status])
+	return ", ".join(parts)
+
 # ── Display ────────────────────────────────────────────────────────────────
 func _update_display() -> void:
 	_draw_sprites()
 	var lines: Array = []
 	if surprised: lines.append("[color=#c0392b][b]AMBUSH! The enemy has the better ground.[/b][/color]")
+	lines.append("[color=#f0d46a]Enemies:[/color] %s" % _enemy_summary())
+	lines.append("[color=#9fc5ff]Party:[/color] %s" % _party_summary())
+	lines.append("")
 
 	if round_phase == "victory":
 		lines.append("[b][color=#f0d46a]★★ VICTORY ★★[/color][/b]")
@@ -1465,7 +1486,7 @@ func _update_display() -> void:
 	# Combat log
 	if not combat_log.is_empty():
 		lines.append("")
-		for msg in combat_log.slice(max(0, combat_log.size()-4)):
+		for msg in combat_log.slice(max(0, combat_log.size()-6)):
 			lines.append("[i]%s[/i]" % msg)
 
 	text_display.text = "\n".join(lines)

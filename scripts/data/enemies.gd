@@ -113,7 +113,7 @@ static func grassland_formations() -> Array:
 		[{"name":"Imp","count":1}],
 		[{"name":"Imp","count":1}, {"name":"Slime","count":1}],
 		[{"name":"Imp","count":2}],
-		[{"name":"Wolf","count":1}],
+		[{"name":"Slime","count":1}, {"name":"Imp","count":1}],
 	]
 
 static func forest_formations() -> Array:

@@ -119,6 +119,12 @@ Run the first quest reward check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_dead_wick.tscn
 ```
 
+Run the basic battle victory check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_battle_basic.tscn
+```
+
 Run every scene:
 
 ```powershell

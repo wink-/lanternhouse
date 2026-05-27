@@ -216,3 +216,48 @@ Capture anything that should become clearer after future slices.
 - Question: Should unexplored landmarks hide their labels until discovered?
 - Why it matters: Always-visible labels help the demo, but discovery can make exploration feel more rewarding later.
 - When to revisit: After the first quest arc has map markers or journal tracking.
+
+---
+
+## Slice
+
+- Name: Battle readability and smoke pass
+- Date: 2026-05-27
+- Playable goal: Make the first battle easier to parse and prove the starter party can win a simple encounter.
+
+## What Changed
+
+- Player-facing change: Battles now show compact enemy and party HP summaries, an opening tip, longer combat log context, and gentler grassland formations.
+- Systems or content added: A deterministic `smoke_battle_basic` scene checks that the starter party can defeat a Slime and receive rewards.
+- Bug or design problem solved: Smoke Bomb no longer advances selection after starting escape resolution, and spell particles are now added to the scene before cleanup.
+
+## Files to Read
+
+- `res://scripts/battle.gd` - look for `_enemy_summary()`, `_party_summary()`, `_spawn_spell_effect()`, and `_update_display()`.
+- `res://scripts/data/enemies.gd` - inspect the grassland formation list.
+- `res://scripts/dev/smoke_battle_basic.gd` - see how a scene can instantiate a real battle and drive it from code.
+- `res://scenes/dev/smoke_battle_basic.tscn` - the minimal scene wrapper for the automated smoke.
+
+## GDScript Concepts
+
+- Concept: Test scenes as executable scripts
+- Where it appears: `smoke_battle_basic.gd` creates a known party, injects one Slime, assigns commands, and waits for the battle state to settle.
+- What to notice: The test does not need a special framework; Godot scenes can be tiny executable harnesses that exit with success or failure.
+
+## Why This Pattern
+
+- Problem this pattern solves: Combat changes are risky because several systems move at once: party stats, enemy data, rewards, and scene transitions.
+- Why it fits this slice: A deterministic Slime fight catches obvious breakage before each commit without forcing a manual playthrough.
+- Tradeoff or thing to watch: This smoke proves one happy path, not overall balance. More encounter tests should be added as zones become important to the demo.
+
+## Tiny Exercise
+
+- Task: Change the smoke test enemy from `Slime` to `Imp` and run the scene.
+- Expected result in-game: The starter party should still win, but the fight may last longer.
+- Hint: Update both the enemy dictionary's `name` and its stat values together.
+
+## Questions to Revisit
+
+- Question: Which specific encounters should define "fair" for the 20-30 minute demo?
+- Why it matters: Balance should be anchored to expected player route and level, not just individual enemy numbers.
+- When to revisit: After the lighthouse objective and return-to-Elder reward are fully paced.
