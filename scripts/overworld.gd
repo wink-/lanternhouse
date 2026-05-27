@@ -113,6 +113,8 @@ const ENCOUNTER_ZONES := {"T": "forest", "^": "mountain", ",": "grassland", ".":
 const ENCOUNTER_RATE := {"forest": 6, "mountain": 5, "grassland": 8, "beach": 10, "post_seal": 5}
 const MAP_W := 40
 const MAP_H := 40
+const BRINDLEWICK_POS := Vector2i(15, 20)
+const BRINDLEWICK_EXIT_POS := BRINDLEWICK_POS + Vector2i.DOWN
 
 # Positions blocked until a specific beacon is lit
 const GATED_ROUTES := {
@@ -322,7 +324,7 @@ func _draw_location_markers() -> void:
 		return
 	for child in location_markers.get_children():
 		child.queue_free()
-	_add_location_marker(Vector2i(15, 20), "Brindlewick")
+	_add_location_marker(BRINDLEWICK_POS, "Brindlewick")
 
 func _add_location_marker(grid: Vector2i, label_text: String) -> void:
 	var marker := Node2D.new()
@@ -632,6 +634,8 @@ func _interact() -> void:
 func _enter_brindlewick() -> void:
 	GameData.overworld_position = pos
 	GameData.overworld_facing = facing
+	GameData.set_meta("overworld_return_position", BRINDLEWICK_EXIT_POS)
+	GameData.set_meta("overworld_return_facing", Vector2i.DOWN)
 	if GameData.owns_home():
 		SceneTransition.change_scene("res://scenes/home/home.tscn")
 	else:

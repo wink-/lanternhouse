@@ -270,7 +270,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_interact()
 		return
 	elif event.keycode == KEY_ESCAPE:
-		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		_exit_to_overworld()
 		return
 
 	if dir != Vector2i.ZERO:
@@ -364,7 +364,7 @@ func _handle_roster_input(keycode: int) -> void:
 func _try_move(dir: Vector2i) -> void:
 	facing = dir
 	if _is_exit_step(dir):
-		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		_exit_to_overworld()
 		return
 	var next := pos + dir
 	if _is_blocked(next):
@@ -380,10 +380,15 @@ func _is_blocked(grid: Vector2i) -> bool:
 
 func _check_exit() -> void:
 	if pos.y >= MAP.size() - 1:
-		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		_exit_to_overworld()
 
 func _is_exit_step(dir: Vector2i) -> bool:
 	return dir == Vector2i.DOWN and pos.y >= MAP.size() - 2
+
+func _exit_to_overworld() -> void:
+	GameData.overworld_position = GameData.get_meta("overworld_return_position", GameData.overworld_position)
+	GameData.overworld_facing = GameData.get_meta("overworld_return_facing", Vector2i.DOWN)
+	SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
 
 func _interact() -> void:
 	var target := pos + facing
