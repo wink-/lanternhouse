@@ -420,8 +420,9 @@ func _update_status_panels() -> void:
 	var enemy_lines: Array[String] = ["[b][color=#f0d46a]ENEMY[/color][/b]"]
 	for e: Dictionary in enemies:
 		var marker := ">" if e["alive"] and (round_phase == "fight_target" or round_phase == "magic_target") and enemies.find(e) == fight_target_idx else " "
+		var enemy_name := _fixed_cell(e["name"], 11)
 		var status := "[color=#666]DOWN[/color]" if not e["alive"] else "%s HP" % _make_hp_bar(e["hp"], e["max_hp"], 8)
-		enemy_lines.append("%s %-10s %s" % [marker, e["name"], status])
+		enemy_lines.append("%s %s %s" % [marker, enemy_name, status])
 	enemy_status_text.text = "\n".join(enemy_lines)
 
 	var party_lines: Array[String] = ["[b][color=#9fc5ff]PARTY[/color][/b]"]
@@ -434,6 +435,14 @@ func _update_status_panels() -> void:
 			status = " [color=#f0d46a]%s[/color]" % String(_status_effects[m["name"]]["type"]).to_upper()
 		party_lines.append("%s %-10s Lv%-2d HP %s%s" % [marker, m["name"], m["level"], hp_status, status])
 	party_status_text.text = "\n".join(party_lines)
+
+func _fixed_cell(value: String, width: int) -> String:
+	var clipped := value
+	if clipped.length() > width:
+		clipped = clipped.substr(0, max(width - 1, 0)) + "…"
+	while clipped.length() < width:
+		clipped += " "
+	return clipped
 
 func _make_hp_bar(hp: int, max_hp: int, width: int) -> String:
 	var n := clampi(int(ceil(float(hp) / max_hp * width)), 0, width)
