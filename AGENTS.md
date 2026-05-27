@@ -54,6 +54,8 @@ used by the live game.
   floor and atmospheric panoramic backdrop.
 - Buildings need visible 3/4 roofs/facades and grid-aligned entrance thresholds.
 - Props and character/entity sprites should usually have transparent backgrounds.
+- For town building/environment art, use the Brindlewick town kit prompt in
+  `docs/pixel-art-direction.md` and keep the manifest fields there up to date.
 - Preserve useful PixelLab folder structure such as `rotations/` and
   `walk/<direction>/`.
 - Prefer imported texture resources over runtime `Image.load()` paths where

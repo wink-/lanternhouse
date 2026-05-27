@@ -18,6 +18,10 @@ assets/
         <name>.png            # 96×48 sheet (idle + hit flash)
       party/
         <class>.png           # 64×48 sheet (2 idle frames)
+    town/
+      buildings/              # 3/4 town building kit
+      ground/                 # 3/4 town ground/path tiles
+      props/                  # transparent 3/4 town props
     tiles/
       <tile_type>.png         # 16×16 (or 16×N for animated)
     ui/
@@ -58,6 +62,9 @@ All textures should use nearest-neighbor filtering. The following
 | Party class | `battle/party/<class>.png` | `fighter.png`, `redmage.png` |
 | Enemy | `battle/enemies/<name>.png` | `slime.png`, `drake.png` |
 | NPC | `overworld/npc_<role>.png` | `npc_merchant.png` |
+| Town building | `town/buildings/<name>.png` | `weapon_shop.png` |
+| Town ground tile | `town/ground/<name>.png` | `cobblestone_plaza.png` |
+| Town prop | `town/props/<name>.png` | `lantern_post.png` |
 | Terrain tile | `tiles/<type>.png` | `water.png`, `forest.png` |
 | Animated tile | `tiles/<type>.png` (vertical strip) | `water.png` (16×64) |
 | UI element | `ui/<element>.png` | `cursor.png` |
@@ -105,6 +112,29 @@ batches, default to humans unless a specific fantasy ancestry is requested.
 When dimensions do not match the older conventions, prefer a small adapter in
 code over destructive resizing. For example, the cat's source frames are 68×68,
 but `town.gd` displays them at a smaller scale on the 16×16 town grid.
+
+## Adding Town Environment Art
+
+Town, dungeon, and interior art should use the top-down 3/4 JRPG perspective in
+`docs/pixel-art-direction.md`. For Brindlewick and future towns, save coherent
+environment kit output under:
+
+- `assets/sprites/town/buildings/`
+- `assets/sprites/town/ground/`
+- `assets/sprites/town/props/`
+
+Keep a lightweight manifest for generated town-kit batches with:
+
+- asset name
+- intended grid footprint in 16x16 tiles
+- suggested entrance tile offset
+- intended scale
+- placement notes for town use
+
+Building sprites must include visible roof/facade depth and a clear doorway at
+the base/front facade. Doors should align to walkable 16x16 entrance thresholds.
+Props should hug building fronts, roads, walls, or plazas rather than appearing
+as scattered decoration.
 
 ## Adding New Enemy Types
 
