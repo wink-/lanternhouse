@@ -17,6 +17,7 @@
 extends Node2D
 
 const FactionDB := preload("res://scripts/data/factions.gd")
+const QuestDB := preload("res://scripts/data/quests.gd")
 const FishDB := preload("res://scripts/data/fish.gd")
 const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
@@ -671,10 +672,24 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 						GameData.explored_tiles[str(Vector2i(tx, ty))] = true
 						if not _fog_tiles.is_empty():
 							_fog_tiles[ty][tx].visible = false
-		_update_hud_with_msg("You light the %s beacon! The surrounding darkness recedes." % beacon_name.replace("_", " "))
+		var msg := "You light the %s beacon! The surrounding darkness recedes." % beacon_name.replace("_", " ")
+		var quest_id := _active_beacon_quest_for(beacon_name)
+		if quest_id != "":
+			var quest: Dictionary = QuestDB.get_quest(quest_id)
+			msg += "\n[color=#f0d46a]%s[/color]" % quest.get("turn_in", "Return to the Elder in Brindlewick.")
+		_update_hud_with_msg(msg)
 		_check_all_beacons_event()
 	else:
 		_update_hud_with_msg("The %s beacon burns bright against the dark." % beacon_name.replace("_", " "))
+
+func _active_beacon_quest_for(beacon_name: String) -> String:
+	for qid: String in GameData.active_quests:
+		if GameData.active_quests[qid].get("status", "") != "active":
+			continue
+		var quest: Dictionary = QuestDB.get_quest(qid)
+		if quest.get("type", "") == "beacon" and quest.get("target", "") == beacon_name:
+			return qid
+	return ""
 
 func _beacon_name_at(grid: Vector2i) -> String:
 	for name: String in BEACON_POSITIONS:

@@ -1506,7 +1506,7 @@ func _accept_next_quest() -> void:
 	if next != "":
 		GameData.accept_quest(next)
 		var quest: Dictionary = QuestDB.get_quest(next)
-		_say("[color=cyan]Quest accepted: %s[/color]\n%s" % [quest["name"], quest.get("dialogue_start", quest["description"])])
+		_say(_quest_accepted_text(quest, quest.get("dialogue_start", quest["description"])))
 		talking_to = ""
 		return
 	# Fall back to any available quest
@@ -1515,10 +1515,22 @@ func _accept_next_quest() -> void:
 		var qid: String = available[0]
 		GameData.accept_quest(qid)
 		var quest: Dictionary = QuestDB.get_quest(qid)
-		_say("[color=cyan]Quest accepted: %s[/color]\n%s" % [quest["name"], quest["description"]])
+		_say(_quest_accepted_text(quest, quest["description"]))
 	else:
 		_say("No more quests available right now.")
 	talking_to = ""
+
+func _quest_accepted_text(quest: Dictionary, intro: String) -> String:
+	var lines := [
+		"[color=cyan]Quest accepted: %s[/color]" % quest["name"],
+		intro,
+	]
+	if quest.has("objective"):
+		lines.append("\n[color=#f0d46a]Objective:[/color] %s" % quest["objective"])
+	if quest.has("hint"):
+		lines.append("[color=#9fc5ff]Hint:[/color] %s" % quest["hint"])
+	lines.append("[color=#888]Press J on the overworld to review your journal.[/color]")
+	return "\n".join(lines)
 
 func _say(msg: String) -> void:
 	dialog.text = "[b]Brindlewick[/b]    %s    Tonics: %d\n\n%s" % [GameData.format_money_short(), GameData.tonics, msg]

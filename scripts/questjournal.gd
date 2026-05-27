@@ -53,6 +53,10 @@ func _update() -> void:
 			lines.append("")
 			lines.append("[b]%s[/b]" % quest["name"])
 			lines.append("  %s" % quest["description"])
+			if quest.has("objective"):
+				lines.append("  [color=#f0d46a]Objective:[/color] %s" % quest["objective"])
+			if quest.has("hint"):
+				lines.append("  [color=#9fc5ff]Hint:[/color] %s" % quest["hint"])
 			match quest["type"]:
 				"kill":
 					var current: int = GameData.get_quest_progress(qid)
@@ -64,6 +68,8 @@ func _update() -> void:
 					var lit: bool = GameData.beacon_states.get(str(beacon_pos), false)
 					var status: String = "[color=green]Lit[/color]" if lit else "[color=red]Unlit[/color]"
 					lines.append("  Status: %s" % status)
+					if lit and quest.has("turn_in"):
+						lines.append("  [color=#f0d46a]Next:[/color] %s" % quest["turn_in"])
 				"flag":
 					var flag_val: Variant = GameData.get(quest.get("target", ""))
 					var status: String = "[color=green]Complete[/color]" if flag_val else "[color=yellow]Incomplete[/color]"

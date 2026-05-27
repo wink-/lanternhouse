@@ -29,6 +29,9 @@ static func all_quests() -> Dictionary:
 		"the_dead_wick": {
 			"name": "The Dead Wick",
 			"description": "The lighthouse beacon has gone dark. The elder asks you to relight it and push back the fog.",
+			"objective": "Relight the lighthouse beacon east of Brindlewick.",
+			"hint": "Leave Brindlewick by the south road, follow the shore path east, then turn north toward the lighthouse tower.",
+			"turn_in": "Return to Old Thatch in Brindlewick.",
 			"story_act": 1,
 			"giver": "elder",
 			"type": "beacon",

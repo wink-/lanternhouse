@@ -20,9 +20,10 @@ Press **F4** again to return to normal encounter behavior.
 1. Launch the project.
 2. Choose **New Game** from the title screen.
 3. Confirm the player appears on the overworld near Brindlewick.
-4. Press **Interact** immediately.
+4. Step onto the Brindlewick `h` tile, or face it and press **Interact**.
 5. Confirm the game enters town or home depending on ownership state.
-6. Press **Esc** or use the scene's exit route to return to the overworld.
+6. Walk out through the south edge of the town/home scene to return to the
+   overworld. **Esc** should not exit town.
 
 **Systems covered:** title reset, overworld spawn, facing direction, interaction
 targeting, scene transition, persisted overworld return position.
