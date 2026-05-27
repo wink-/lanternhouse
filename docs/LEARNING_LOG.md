@@ -529,3 +529,47 @@ Capture anything that should become clearer after future slices.
 - Question: Should the avatar get four directional frames?
 - Why it matters: Directional frames would make exploration feel more polished, but a single readable sprite is enough for the current demo loop.
 - When to revisit: During animation and character-art polish.
+
+---
+
+## Slice
+
+- Name: Overworld HUD trim
+- Date: 2026-05-27
+- Playable goal: Keep the overworld readable by moving party status out of the always-visible HUD.
+
+## What Changed
+
+- Player-facing change: The overworld HUD now shows travel essentials only: money, supplies, beacon state, danger/admin state, exploration, and menu hints.
+- Systems or content added: Long overworld action messages are wrapped before being appended to the HUD.
+- Bug or design problem solved: Party HP bars and long quest text could cover the map and run off the visible HUD area.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - inspect `_update_hud()`, `_update_hud_with_msg()`, and `_wrap_hud_message()`.
+- `res://scenes/overworld/overworld.tscn` - see the wider, shorter HUD label.
+- `res://scripts/charactersheet.gd` - party status remains accessible from the existing `[M] Party` screen.
+
+## GDScript Concepts
+
+- Concept: Presentation state versus menu state
+- Where it appears: `_update_hud()` now keeps transient overworld info separate from the full party status menu.
+- What to notice: The same `GameData.party` information still exists, but it is presented only when the player asks for it.
+
+## Why This Pattern
+
+- Problem this pattern solves: Dense RPG data is useful, but not all of it belongs on the exploration screen.
+- Why it fits this slice: Older JRPGs keep the map clean and put deeper status details behind a menu.
+- Tradeoff or thing to watch: If combat danger becomes more important, the compact danger display may need clearer art or sound cues.
+
+## Tiny Exercise
+
+- Task: Change the HUD hint from `[M] Party` to `[M] Menu` and boot the overworld.
+- Expected result in-game: The top-left HUD should update without touching the character sheet behavior.
+- Hint: The visible hint text lives in `_update_hud()`.
+
+## Questions to Revisit
+
+- Question: Should `M` open a broader command menu instead of directly opening party status?
+- Why it matters: Final Fantasy-style menus usually gather Items, Status, Save, and Settings in one place.
+- When to revisit: During the overworld command-menu slice.

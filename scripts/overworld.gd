@@ -1162,16 +1162,10 @@ func _respawn_encounters(delta: float) -> void:
 # ── HUD ────────────────────────────────────────────────────────────────────
 func _update_hud() -> void:
 	var lines: Array = []
-	for m: Dictionary in GameData.party:
-		if m["alive"]:
-			var bar := _hp_string(m["hp"], m["max_hp"], 8)
-			lines.append("Lv%d %-10s %s" % [m["level"], m["name"], bar])
-		else:
-			lines.append("Lv%d %-10s [color=red]KO[/color]" % [m["level"], m["name"]])
 	var beacon_status: String = "[color=cyan]LIT[/color]" if GameData.beacon_lit else "[color=gray]UNLIT[/color]"
-	lines.append("%s    Tonics: %d    Ethers: %d    Beacon: %s" % [GameData.format_money_short(), GameData.tonics, GameData.ethers, beacon_status])
+	lines.append("%s    Tonics:%d    Ethers:%d    Beacon:%s" % [GameData.format_money_short(), GameData.tonics, GameData.ethers, beacon_status])
 	if admin_mode:
-		lines.append("[color=yellow]ADMIN MODE: encounters disabled[/color]")
+		lines.append("[color=yellow]ADMIN MODE[/color]    Encounters off")
 	else:
 		var danger := clampi(steps_since_encounter / 3, 0, 5)
 		var danger_bar := ""
@@ -1186,7 +1180,7 @@ func _update_hud() -> void:
 				land_tiles += 1
 	var explored := GameData.explored_tiles.size()
 	var pct := int(float(explored) / max(land_tiles, 1) * 100)
-	lines.append("Explored: %d%%" % mini(pct, 100))
+	lines.append("Explored:%d%%    [M] Party    [J] Journal    [I] Items" % mini(pct, 100))
 	hud.text = "\n".join(lines)
 
 
@@ -1205,7 +1199,20 @@ func _interact_campfire() -> void:
 
 func _update_hud_with_msg(msg: String) -> void:
 	_update_hud()
-	hud.text += "\n\n[i]%s[/i]" % msg
+	hud.text += "\n\n[i]%s[/i]" % _wrap_hud_message(msg, 76)
+
+func _wrap_hud_message(msg: String, max_chars: int) -> String:
+	var wrapped_lines: Array = []
+	for raw_line: String in msg.split("\n"):
+		var line := raw_line.strip_edges()
+		while line.length() > max_chars:
+			var split_at := line.rfind(" ", max_chars)
+			if split_at <= 0:
+				split_at = max_chars
+			wrapped_lines.append(line.substr(0, split_at))
+			line = line.substr(split_at).strip_edges()
+		wrapped_lines.append(line)
+	return "\n".join(wrapped_lines)
 
 
 func _on_wage_paid(npc_name: String, amount: int) -> void:

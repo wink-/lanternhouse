@@ -41,7 +41,7 @@ position = Vector2(-4, -10)
 bbcode_enabled = true
 scroll_active = false
 position = Vector2(6, 4)
-size = Vector2(500, 200)
+size = Vector2(760, 160)
 
 [node name="DebugLabel" type="Label" parent="UILayer"]
 visible = false
