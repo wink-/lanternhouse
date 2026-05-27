@@ -24,6 +24,15 @@ const NPC_FACTION_MAP := {
 const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
 const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
+const QUIET_TILES_PATH := "res://assets/sprites/vendor/quiet_village/Tiles.png"
+const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
+const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
+const QUIET_TILE_RECTS := {
+	".": Rect2i(Vector2i(0, 162), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"=": Rect2i(Vector2i(6, 8), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"@": Rect2i(Vector2i(272, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"H": Rect2i(Vector2i(0, 162), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
 const TILE_RECTS := {
 	"#": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	".": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -48,30 +57,30 @@ const NPC_RECTS := {
 const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
-	"########################################",
-	"#......................................#",
-	"#..WWWW......SSSS..........AAAA....RR..#",
-	"#..WWWW......SSSS..........AAAA....RR..#",
-	"#..WWWW....................AAAA........#",
-	"#......................................#",
-	"#..............@@@@@@..................#",
-	"#..............@@@@@@..................#",
-	"#..............@@@@@@..................#",
-	"#......................................#",
-	"#..IIII..........................EEEE..#",
-	"#..IIII..........................EEEE..#",
-	"#..IIII..............@@@@........EEEE..#",
-	"#....................@@@@..............#",
-	"#....................@@@@..............#",
-	"#......................................#",
-	"#......SSSS....................AAAA....#",
-	"#......SSSS....................AAAA....#",
-	"#......................................#",
-	"#..............@@@@@@..................#",
-	"#..............@@@@@@..................#",
-	"#......................................#",
-	"#..................@@..................#",
-	"########################################",
+	"........................................",
+	"........................................",
+	"...HHHHHH.......HHHHHHH......HHHHHHH....",
+	"...HHHHHH.......HHHHHHH......HHHHHHH....",
+	"...HHHHHH.......HHHHHHH......HHHHHHH....",
+	"...HHHHHH...............................",
+	"..............======....................",
+	"..............======....................",
+	"...======.....======......======........",
+	"...======.....======......======........",
+	"...HHHHHH..................HHHHHH.......",
+	"...HHHHHH.......@@@@......HHHHHH........",
+	"...HHHHHH.......@@@@......HHHHHH........",
+	"................@@@@....................",
+	"........................................",
+	".......HHHHHH.................HHHHHH....",
+	".......HHHHHH.................HHHHHH....",
+	".......HHHHHH.................HHHHHH....",
+	"..............======....................",
+	"..............======....................",
+	"..............======....................",
+	".................==.....................",
+	".................==.....................",
+	"........................................",
 ]
 
 const COLORS := {
@@ -79,7 +88,7 @@ const COLORS := {
 	"W": Color("27ae60"), "A": Color("27ae60"), "I": Color("3498db"),
 	"S": Color("9b59b6"), "E": Color("e67e22"), "R": Color("e67e22"),
 }
-const BLOCKED := {"#":true}
+const BLOCKED := {"#": true, "H": true}
 const NPC_IDS := ["weapon_merchant", "armor_merchant", "innkeeper", "elder", "tavern_keeper", "healer", "tinkerer", "realtor"]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
@@ -96,17 +105,25 @@ var exchange_idx: int = 0
 var _wander_timer: float = 0.0
 var _npc_wander_pos: Dictionary = {}
 var _town_atlas: Texture2D
+var _quiet_tiles: Texture2D
+var _quiet_buildings: Texture2D
+var _quiet_props: Texture2D
 const WANDER_INTERVAL := 2.5
 const WANDER_RADIUS := 3
 
 @onready var map_layer: Node2D = $MapLayer
+@onready var building_layer: Node2D = $BuildingLayer
+@onready var prop_layer: Node2D = $PropLayer
 @onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var dialog: RichTextLabel = $UILayer/Dialog
 
 func _ready() -> void:
 	_load_town_atlas()
+	_load_quiet_village_assets()
 	_draw_map()
+	_draw_buildings()
+	_draw_props()
 	_build_npc_positions()
 	_draw_npcs()
 	_configure_camera()
@@ -135,11 +152,34 @@ func _load_town_atlas() -> void:
 		return
 	_town_atlas = ImageTexture.create_from_image(image)
 
+func _load_quiet_village_assets() -> void:
+	_quiet_tiles = _load_png_texture(QUIET_TILES_PATH)
+	_quiet_buildings = _load_png_texture(QUIET_BUILDINGS_PATH)
+	_quiet_props = _load_png_texture(QUIET_PROPS_PATH)
+
+func _load_png_texture(path: String) -> Texture2D:
+	if not FileAccess.file_exists(path):
+		push_warning("Image missing: %s" % path)
+		return null
+	var image := Image.new()
+	if image.load(path) != OK:
+		push_warning("Image could not be loaded: %s" % path)
+		return null
+	return ImageTexture.create_from_image(image)
+
 func _draw_map() -> void:
 	for y in range(MAP.size()):
 		for x in range(MAP[y].length()):
 			var tile: String = MAP[y].substr(x, 1)
-			if _town_atlas:
+			if _quiet_tiles and QUIET_TILE_RECTS.has(tile):
+				var sprite := Sprite2D.new()
+				sprite.texture = _quiet_tiles
+				sprite.region_enabled = true
+				sprite.region_rect = QUIET_TILE_RECTS.get(tile, QUIET_TILE_RECTS["."])
+				sprite.centered = false
+				sprite.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+				map_layer.add_child(sprite)
+			elif _town_atlas:
 				var sprite := Sprite2D.new()
 				sprite.texture = _town_atlas
 				sprite.region_enabled = true
@@ -153,6 +193,45 @@ func _draw_map() -> void:
 				rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
 				rect.size = Vector2(TILE_SIZE, TILE_SIZE)
 				map_layer.add_child(rect)
+
+func _draw_buildings() -> void:
+	if not _quiet_buildings:
+		return
+	_add_building(Vector2i(3, 2), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
+	_add_building(Vector2i(15, 2), Rect2i(Vector2i(219, 16), Vector2i(172, 72)), 0.48)
+	_add_building(Vector2i(28, 2), Rect2i(Vector2i(354, 466), Vector2i(129, 72)), 0.52)
+	_add_building(Vector2i(3, 10), Rect2i(Vector2i(15, 573), Vector2i(117, 72)), 0.55)
+	_add_building(Vector2i(26, 10), Rect2i(Vector2i(610, 2), Vector2i(193, 83)), 0.42)
+	_add_building(Vector2i(7, 15), Rect2i(Vector2i(16, 681), Vector2i(116, 72)), 0.55)
+	_add_building(Vector2i(30, 15), Rect2i(Vector2i(791, 609), Vector2i(84, 92)), 0.55)
+
+func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
+	var sprite := Sprite2D.new()
+	sprite.texture = _quiet_buildings
+	sprite.region_enabled = true
+	sprite.region_rect = region
+	sprite.centered = false
+	sprite.position = Vector2(grid * TILE_SIZE)
+	sprite.scale = Vector2(scale_amount, scale_amount)
+	building_layer.add_child(sprite)
+
+func _draw_props() -> void:
+	if not _quiet_props:
+		return
+	_add_prop(Vector2i(21, 12), Rect2i(Vector2i(100, 39), Vector2i(36, 36)), 0.55)
+	_add_prop(Vector2i(13, 8), Rect2i(Vector2i(65, 24), Vector2i(28, 17)), 0.7)
+	_add_prop(Vector2i(23, 8), Rect2i(Vector2i(18, 41), Vector2i(26, 27)), 0.6)
+	_add_prop(Vector2i(8, 20), Rect2i(Vector2i(0, 108), Vector2i(38, 10)), 0.8)
+
+func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
+	var sprite := Sprite2D.new()
+	sprite.texture = _quiet_props
+	sprite.region_enabled = true
+	sprite.region_rect = region
+	sprite.centered = false
+	sprite.position = Vector2(grid * TILE_SIZE)
+	sprite.scale = Vector2(scale_amount, scale_amount)
+	prop_layer.add_child(sprite)
 
 
 func _build_npc_positions() -> void:
