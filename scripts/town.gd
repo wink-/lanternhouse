@@ -125,12 +125,6 @@ const BUILDING_DOORS := {
 }
 const BUILDING_LABELS := [
 	{"grid": Vector2i(15, 1), "text": "Elder Hall"},
-	{"grid": Vector2i(3, 7), "text": "Weapons"},
-	{"grid": Vector2i(28, 7), "text": "Armor"},
-	{"grid": Vector2i(4, 14), "text": "Inn"},
-	{"grid": Vector2i(12, 14), "text": "Tavern"},
-	{"grid": Vector2i(22, 14), "text": "Workshop"},
-	{"grid": Vector2i(32, 14), "text": "Chapel"},
 ]
 const TOWN_BUILDINGS := [
 	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
@@ -160,14 +154,27 @@ const SHOP_AWNINGS := [
 const TOWN_PROPS := [
 	{"id": "well", "grid": Vector2i(20, 11), "offset": Vector2(8, 8), "scale": 0.62},
 	{"id": "notice_board", "grid": Vector2i(12, 7), "offset": Vector2(8, 4), "scale": 0.65},
+	{"id": "notice_board", "grid": Vector2i(28, 12), "offset": Vector2(8, 4), "scale": 0.54},
 	{"id": "lantern_post", "grid": Vector2i(17, 6), "offset": Vector2(8, -2), "scale": 0.58},
+	{"id": "lantern_post", "grid": Vector2i(19, 7), "offset": Vector2(8, -2), "scale": 0.54},
 	{"id": "lantern_post", "grid": Vector2i(22, 13), "offset": Vector2(8, -2), "scale": 0.58},
+	{"id": "lantern_post", "grid": Vector2i(19, 16), "offset": Vector2(8, -2), "scale": 0.54},
+	{"id": "lantern_post", "grid": Vector2i(31, 13), "offset": Vector2(8, -2), "scale": 0.54},
 	{"id": "bench", "grid": Vector2i(18, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "bench", "grid": Vector2i(21, 13), "offset": Vector2(8, 8), "scale": 0.55},
 	{"id": "flower_box", "grid": Vector2i(3, 7), "offset": Vector2(8, 8), "scale": 0.56},
+	{"id": "flower_box", "grid": Vector2i(8, 7), "offset": Vector2(8, 8), "scale": 0.52},
 	{"id": "flower_box", "grid": Vector2i(30, 7), "offset": Vector2(8, 8), "scale": 0.56},
+	{"id": "flower_box", "grid": Vector2i(35, 7), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "flower_box", "grid": Vector2i(5, 14), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "flower_box", "grid": Vector2i(33, 14), "offset": Vector2(8, 8), "scale": 0.52},
 	{"id": "herb_planter", "grid": Vector2i(33, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "herb_planter", "grid": Vector2i(17, 20), "offset": Vector2(8, 8), "scale": 0.54},
+	{"id": "herb_planter", "grid": Vector2i(21, 20), "offset": Vector2(8, 8), "scale": 0.54},
 	{"id": "crate_stack", "grid": Vector2i(24, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "crate_stack", "grid": Vector2i(27, 17), "offset": Vector2(8, 8), "scale": 0.52},
 	{"id": "barrel_pair", "grid": Vector2i(14, 13), "offset": Vector2(8, 8), "scale": 0.6},
+	{"id": "barrel_pair", "grid": Vector2i(11, 17), "offset": Vector2(8, 8), "scale": 0.52},
 	{"id": "crate_stack", "grid": Vector2i(8, 19), "offset": Vector2(8, 8), "scale": 0.55},
 	{"id": "barrel_pair", "grid": Vector2i(10, 19), "offset": Vector2(8, 8), "scale": 0.58},
 ]
