@@ -150,9 +150,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif Input.is_action_just_pressed("interact"):
 		_interact()
 		return
-	elif event.keycode == KEY_ESCAPE:
-		_exit_to_overworld()
-		return
 
 	if dir != Vector2i.ZERO:
 		_try_move(dir)
