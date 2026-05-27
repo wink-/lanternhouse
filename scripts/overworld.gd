@@ -236,6 +236,7 @@ var debug_visible: bool = false
 # ── Init ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	rng.seed = hash("lanternhouse_overworld")
+	_warn_bad_map_rows()
 	_build_tileset()
 	_draw_map()
 	_init_overlays()
@@ -311,7 +312,7 @@ func _draw_map() -> void:
 	var tile_count: int = 0
 	for y in range(MAP_H):
 		for x in range(MAP_W):
-			var tile_char: String = MAP[y].substr(x, 1)
+			var tile_char: String = _tile(Vector2i(x, y))
 			var atlas_coord: Vector2i = TILE_ATLAS.get(tile_char, T_GRASS)
 			tilemap.set_cell(Vector2i(x, y), 0, atlas_coord)
 			tile_count += 1
@@ -322,7 +323,7 @@ func _fallback_draw() -> void:
 	print("Using colored-block fallback")
 	for y in range(MAP_H):
 		for x in range(MAP_W):
-			var tile_char: String = MAP[y].substr(x, 1)
+			var tile_char: String = _tile(Vector2i(x, y))
 			var color := Color.GRAY
 			match tile_char:
 				"~": color = Color("1a3a5c")
@@ -478,9 +479,23 @@ func _is_blocked(grid: Vector2i) -> bool:
 	return false
 
 func _tile(grid: Vector2i) -> String:
-	if grid.x < 0 or grid.x >= MAP_W or grid.y < 0 or grid.y >= MAP_H:
+	if grid.x < 0 or grid.x >= MAP_W or grid.y < 0 or grid.y >= MAP_H or grid.y >= MAP.size():
 		return "~"
-	return MAP[grid.y].substr(grid.x, 1)
+	var row: String = MAP[grid.y]
+	if grid.x >= row.length():
+		return "~"
+	return row.substr(grid.x, 1)
+
+func _warn_bad_map_rows() -> void:
+	var bad_rows: Array[String] = []
+	for y in range(MAP.size()):
+		var row: String = MAP[y]
+		if row.length() != MAP_W:
+			bad_rows.append("%d:%d" % [y, row.length()])
+	if MAP.size() != MAP_H:
+		bad_rows.append("height:%d" % MAP.size())
+	if not bad_rows.is_empty():
+		push_warning("Overworld MAP shape differs from %dx%d; out-of-row cells render as water. Rows: %s" % [MAP_W, MAP_H, ", ".join(bad_rows)])
 
 func _step_effects() -> void:
 	step_count += 1
@@ -509,8 +524,6 @@ func _step_effects() -> void:
 		return
 	# Visible encounter markers — guaranteed combat
 	if tile == "!" and not GameData.cleared_encounters.get(str(pos), false):
-		GameData.cleared_encounters[str(pos)] = true
-		tilemap.set_cell(pos, 0, TILE_ATLAS[","])  # Replace with grass
 		_start_battle("forest")
 		return
 	# [CODING CONCEPT: Probability / Random Encounters]
@@ -528,8 +541,8 @@ func _step_effects() -> void:
 		if sprinting:
 			rate = max(3, rate - 2)
 		if rng.randi_range(1, rate) == 1:
+			steps_since_encounter = 0
 			_start_battle(zone)
-	steps_since_encounter = 0
 
 	GameData.overworld_position = pos
 	GameData.overworld_facing = facing
@@ -697,7 +710,7 @@ func _count_land_tiles() -> int:
 	var count := 0
 	for y in range(MAP_H):
 		for x in range(MAP_W):
-			if MAP[y].substr(x, 1) != "~":
+			if _tile(Vector2i(x, y)) != "~":
 				count += 1
 	return count
 
@@ -985,7 +998,7 @@ func _respawn_encounters(delta: float) -> void:
 	for y in range(MAP_H):
 		for x in range(MAP_W):
 			var key := str(Vector2i(x, y))
-			if GameData.cleared_encounters.has(key) and MAP[y].substr(x, 1) == ",":
+			if GameData.cleared_encounters.has(key) and _tile(Vector2i(x, y)) == ",":
 				if rng.randf() < 0.3:
 					GameData.cleared_encounters.erase(key)
 					tilemap.set_cell(Vector2i(x, y), 0, TILE_ATLAS["!"])
@@ -1011,7 +1024,7 @@ func _update_hud() -> void:
 	var land_tiles := 0
 	for y in range(MAP_H):
 		for x in range(MAP_W):
-			if MAP[y].substr(x, 1) != "~":
+			if _tile(Vector2i(x, y)) != "~":
 				land_tiles += 1
 	var explored := GameData.explored_tiles.size()
 	var pct := int(float(explored) / max(land_tiles, 1) * 100)

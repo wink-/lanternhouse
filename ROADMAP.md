@@ -476,11 +476,10 @@ can download and try.
 
 These are the next concrete tasks that should feed Slice 1 and Slice 2.
 
-- [ ] Write a fresh-player smoke test route.
+- [x] Write a fresh-player smoke test route. See `docs/SMOKE_TESTS.md`.
 - [ ] Verify title -> new game -> overworld -> town -> overworld.
 - [ ] Verify one battle can start and return cleanly.
 - [ ] Pick the first quest NPC and objective.
-- [ ] Audit save/load fields against current `GameData`.
-- [ ] Add a short `docs/LEARNING_LOG.md` format for slice debriefs.
+- [x] Audit save/load fields against current `GameData`.
+- [x] Add a short `docs/LEARNING_LOG.md` format for slice debriefs.
 - [ ] Decide whether generated `.uid` and `.import` files should all stay tracked.
-

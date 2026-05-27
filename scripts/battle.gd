@@ -701,6 +701,8 @@ func _build_turn_order() -> void:
 	turn_order = entries
 
 func _resolve_next() -> void:
+	if round_phase != "resolution":
+		return
 	if turn_idx >= turn_order.size():
 		_end_round()
 		return
@@ -710,6 +712,8 @@ func _resolve_next() -> void:
 		_execute_player(entry["index"])
 	elif entry["type"] == "enemy":
 		_execute_enemy(entry["index"])
+	if round_phase != "resolution":
+		return
 	await get_tree().create_timer(0.05).timeout
 	_resolve_next()
 
@@ -857,6 +861,8 @@ func _execute_player(pi: int) -> void:
 	_check_end()
 
 func _execute_enemy(ei: int) -> void:
+	if ei < 0 or ei >= enemies.size() or not enemies[ei].get("alive", false):
+		return
 	var e: Dictionary = enemies[ei]
 	var cmd: String = e["command"]
 	if cmd.begins_with("special:"):
