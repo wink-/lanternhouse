@@ -7,7 +7,11 @@ script = ExtResource("1_battle")
 
 [node name="Background" type="ColorRect" parent="."]
 color = Color(0.08, 0.08, 0.15, 1)
-size = Vector2(960, 640)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="EnemyArea" type="Node2D" parent="."]
 
