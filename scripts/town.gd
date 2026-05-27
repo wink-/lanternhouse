@@ -86,18 +86,18 @@ const MAP := [
 	",,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,,,",
 	",,,..gg..,,,,,,,,,==,,,,,,,,,..gg..,,,,,",
 	",,,HHHHHH,,,,,,,,,==,,,,,,,,,HHHHHH,,,,,",
-	",,,HHHHHH========++@@@@@@@@++==HHHHHH,,,",
-	",,,HHHHHH,,,,,,,,,,@mmmmmm@,,HHHHHH,,,,,",
-	",,,,,,,,,,,,,,,,,,,@mmmmmm@,,,,,,,,,,,,,",
-	",,,,,,;;;;,,,,,,,,,@bbbbbb@,,,,,;;;;,,,,",
-	",,,,,,;;;;,,,,,,,=====,,,,,,,,,,;;;;,,,,",
-	",,,,HHHHHH,,,HHHHHH,wwwHHHHHH,,,HHHHHH,,",
-	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
-	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
-	",,,,,++==++,,,,++==++,,,,++==++,,,,==,,,",
+	",,,HHHHHH========++====++====HHHHHH,,,,,",
+	",,,HHHHHH,,,,,,,,,,====,,,,,,HHHHHH,,,,,",
+	",,,,,,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,",
+	",,,,,,;;;;,,,,,,,======,,,,,,,,;;;;,,,,,",
+	",,,,HHHHHH,,,HHHHHH,wwwHHHHHH,,,HHHHHH,",
+	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,",
+	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,",
+	",,,,,++==++,,,,++==++,,,,++==++,,++==+,",
 	",,,,,,,================================,",
-	",,,,,,,,,,llll,,,,,,==,,,,,,llll,,,,,,,,",
-	",,,,,,,,,,llll,,,,,,==,,,,,,llll,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
@@ -137,9 +137,7 @@ const BUILDING_DOORS := {
 	Vector2i(34, 17): "healer",
 	Vector2i(35, 17): "healer",
 }
-const BUILDING_LABELS := [
-	{"grid": Vector2i(15, 1), "text": "Elder Hall"},
-]
+const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
 	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
 	{"id": "weapon_shop", "grid": Vector2i(3, 7), "fallback_region": Rect2i(Vector2i(15, 573), Vector2i(117, 72)), "fallback_scale": 0.55},
@@ -167,9 +165,9 @@ const SHOP_AWNINGS := [
 ]
 const TOWN_PROPS := [
 	{"id": "well", "grid": Vector2i(20, 11), "offset": Vector2(8, 8), "scale": 0.62},
-	{"id": "notice_board", "grid": Vector2i(12, 7), "offset": Vector2(8, 4), "scale": 0.65},
+	{"id": "notice_board", "grid": Vector2i(12, 10), "offset": Vector2(8, 4), "scale": 0.62},
 	{"id": "lantern_post", "grid": Vector2i(17, 6), "offset": Vector2(8, -2), "scale": 0.58},
-	{"id": "lantern_post", "grid": Vector2i(22, 13), "offset": Vector2(8, -2), "scale": 0.58},
+	{"id": "lantern_post", "grid": Vector2i(22, 12), "offset": Vector2(8, -2), "scale": 0.58},
 	{"id": "lantern_post", "grid": Vector2i(19, 16), "offset": Vector2(8, -2), "scale": 0.54},
 	{"id": "bench", "grid": Vector2i(18, 13), "offset": Vector2(8, 8), "scale": 0.58},
 	{"id": "bench", "grid": Vector2i(21, 13), "offset": Vector2(8, 8), "scale": 0.55},
