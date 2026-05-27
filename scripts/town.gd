@@ -33,6 +33,7 @@ const TILE_RECTS := {
 	"I": Rect2i(Vector2i(80, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"S": Rect2i(Vector2i(96, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"E": Rect2i(Vector2i(112, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"R": Rect2i(Vector2i(112, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 const NPC_RECTS := {
 	"weapon_merchant": Rect2i(Vector2i(0, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -47,33 +48,43 @@ const NPC_RECTS := {
 const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
-	"########################",
-	"#......................#",
-	"#..WW................AA#",
-	"#..WW................AA#",
-	"#..WW......@@........AA#",
-	"#..........@@..........#",
-	"#..........@@..........#",
-	"#..II......@@..........#",
-	"#..II......@@..........#",
-	"#......................#",
-	"#..SS...........EE.....#",
-	"#..SS...........EE.....#",
-	"#......................#",
-	"########################",
+	"########################################",
+	"#......................................#",
+	"#..WWWW......SSSS..........AAAA....RR..#",
+	"#..WWWW......SSSS..........AAAA....RR..#",
+	"#..WWWW....................AAAA........#",
+	"#......................................#",
+	"#..............@@@@@@..................#",
+	"#..............@@@@@@..................#",
+	"#..............@@@@@@..................#",
+	"#......................................#",
+	"#..IIII..........................EEEE..#",
+	"#..IIII..........................EEEE..#",
+	"#..IIII..............@@@@........EEEE..#",
+	"#....................@@@@..............#",
+	"#....................@@@@..............#",
+	"#......................................#",
+	"#......SSSS....................AAAA....#",
+	"#......SSSS....................AAAA....#",
+	"#......................................#",
+	"#..............@@@@@@..................#",
+	"#..............@@@@@@..................#",
+	"#......................................#",
+	"#..................@@..................#",
+	"########################################",
 ]
 
 const COLORS := {
 	"#": Color("8b7355"), ".": Color("c49b56"), "@": Color("a08050"),
 	"W": Color("27ae60"), "A": Color("27ae60"), "I": Color("3498db"),
-	"S": Color("9b59b6"), "E": Color("e67e22"),
+	"S": Color("9b59b6"), "E": Color("e67e22"), "R": Color("e67e22"),
 }
 const BLOCKED := {"#":true}
 const NPC_IDS := ["weapon_merchant", "armor_merchant", "innkeeper", "elder", "tavern_keeper", "healer", "tinkerer", "realtor"]
 var npc_positions: Dictionary = {}
-var _npc_markers: Dictionary = {}  # npc_id → ColorRect
+var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
 
-var pos: Vector2i = Vector2i(12, 12)
+var pos: Vector2i = Vector2i(20, 22)
 var facing: Vector2i = Vector2i.DOWN
 var walking: bool = false
 var walk_timer: float = 0.0
@@ -252,7 +263,7 @@ func _wander_one_npc() -> void:
 				break
 		npc_positions[next] = npc_id
 		if _npc_markers.has(npc_id):
-			_npc_markers[npc_id].position = Vector2(next * TILE_SIZE) + Vector2(2, 2)
+			_npc_markers[npc_id].position = Vector2(next * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 		break
 
 func _update_player() -> void:
