@@ -23,6 +23,28 @@ const NPC_FACTION_MAP := {
 
 const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
+const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
+const TILE_RECTS := {
+	"#": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	".": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"@": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"W": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"A": Rect2i(Vector2i(64, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"I": Rect2i(Vector2i(80, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"S": Rect2i(Vector2i(96, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"E": Rect2i(Vector2i(112, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
+const NPC_RECTS := {
+	"weapon_merchant": Rect2i(Vector2i(0, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"armor_merchant": Rect2i(Vector2i(16, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"innkeeper": Rect2i(Vector2i(32, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"elder": Rect2i(Vector2i(48, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"tavern_keeper": Rect2i(Vector2i(64, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"healer": Rect2i(Vector2i(80, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"tinkerer": Rect2i(Vector2i(96, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"realtor": Rect2i(Vector2i(112, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
+const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
 	"########################",
@@ -62,6 +84,7 @@ var exchange_mode: bool = false
 var exchange_idx: int = 0
 var _wander_timer: float = 0.0
 var _npc_wander_pos: Dictionary = {}
+var _town_atlas: Texture2D
 const WANDER_INTERVAL := 2.5
 const WANDER_RADIUS := 3
 
@@ -70,6 +93,7 @@ const WANDER_RADIUS := 3
 @onready var dialog: RichTextLabel = $Dialog
 
 func _ready() -> void:
+	_load_town_atlas()
 	_draw_map()
 	_build_npc_positions()
 	_draw_npcs()
@@ -88,15 +112,34 @@ func _ready() -> void:
 				m["xp"] += xp
 	_update_player()
 
+func _load_town_atlas() -> void:
+	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
+		push_warning("Town atlas missing: %s" % TOWN_ATLAS_PATH)
+		return
+	var image := Image.new()
+	if image.load(TOWN_ATLAS_PATH) != OK:
+		push_warning("Town atlas could not be loaded: %s" % TOWN_ATLAS_PATH)
+		return
+	_town_atlas = ImageTexture.create_from_image(image)
+
 func _draw_map() -> void:
 	for y in range(MAP.size()):
 		for x in range(MAP[y].length()):
 			var tile: String = MAP[y].substr(x, 1)
-			var rect := ColorRect.new()
-			rect.color = COLORS.get(tile, Color.MAGENTA)
-			rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-			rect.size = Vector2(TILE_SIZE, TILE_SIZE)
-			map_layer.add_child(rect)
+			if _town_atlas:
+				var sprite := Sprite2D.new()
+				sprite.texture = _town_atlas
+				sprite.region_enabled = true
+				sprite.region_rect = TILE_RECTS.get(tile, TILE_RECTS["."])
+				sprite.centered = false
+				sprite.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+				map_layer.add_child(sprite)
+			else:
+				var rect := ColorRect.new()
+				rect.color = COLORS.get(tile, Color.MAGENTA)
+				rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+				rect.size = Vector2(TILE_SIZE, TILE_SIZE)
+				map_layer.add_child(rect)
 
 
 func _build_npc_positions() -> void:
@@ -110,17 +153,27 @@ func _build_npc_positions() -> void:
 
 func _draw_npcs() -> void:
 	for npc_id: String in NPC_IDS:
-		var marker := ColorRect.new()
-		marker.color = NPCDB.get_npc_color(npc_id)
-		marker.size = Vector2(12, 12)
+		var marker := Sprite2D.new()
+		if _town_atlas:
+			marker.texture = _town_atlas
+			marker.region_enabled = true
+			marker.region_rect = NPC_RECTS.get(npc_id, NPC_RECTS["tavern_keeper"])
+		else:
+			marker.texture = _make_solid_texture(Color.WHITE)
+			marker.modulate = NPCDB.get_npc_color(npc_id)
 		var p: Vector2i = _npc_wander_pos.get(npc_id, Vector2i(-1, -1))
 		if p.x >= 0:
-			marker.position = Vector2(p * TILE_SIZE) + Vector2(2, 2)
+			marker.position = Vector2(p * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 			marker.visible = true
 		else:
 			marker.visible = false
 		map_layer.add_child(marker)
 		_npc_markers[npc_id] = marker
+
+func _make_solid_texture(color: Color) -> Texture2D:
+	var image := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(color)
+	return ImageTexture.create_from_image(image)
 
 func _find_npc_pos(npc_id: String) -> Vector2i:
 	for p: Vector2i in npc_positions:
@@ -140,10 +193,10 @@ func _refresh_npcs() -> void:
 	npc_positions["_phase"] = phase
 	for npc_id: String in NPC_IDS:
 		if _npc_markers.has(npc_id):
-			var marker: ColorRect = _npc_markers[npc_id]
+			var marker: Sprite2D = _npc_markers[npc_id]
 			var p: Vector2i = _npc_wander_pos.get(npc_id, Vector2i(-1, -1))
 			if p.x >= 0:
-				marker.position = Vector2(p * TILE_SIZE) + Vector2(2, 2)
+				marker.position = Vector2(p * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 				marker.visible = true
 			else:
 				marker.visible = false
@@ -206,6 +259,15 @@ func _update_player() -> void:
 	_refresh_npcs()
 	_apply_day_tint()
 	player_sprite.position = Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
+	if _town_atlas and not player_sprite.has_node("Sprite"):
+		var sprite := Sprite2D.new()
+		sprite.name = "Sprite"
+		sprite.texture = _town_atlas
+		sprite.region_enabled = true
+		sprite.region_rect = PLAYER_RECT
+		player_sprite.add_child(sprite)
+		if player_sprite.has_node("Body"):
+			player_sprite.get_node("Body").visible = false
 
 func _apply_day_tint() -> void:
 	var phase: String = GameData.get_day_phase()
