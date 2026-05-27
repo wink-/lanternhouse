@@ -24,16 +24,25 @@ const TinkerDB := preload("res://scripts/data/tinkering.gd")
 const TILE_SIZE := 32
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
-# pipoya_combined.png is 256x1728 → 8 cols x 54 rows of 32x32 tiles
-# Row layout: 0-5=water, 6-11=grass, 12-17=sand, 18-23=forest,
-#   24-29=mtn1(rocky), 30-35=mtn2(green/hill), 36-41=mtn3(snow),
-#   42-47=path, 48-53=dirt
-const T_WATER_FULL  := Vector2i(4, 2)   # deep open water
-const T_SAND         := Vector2i(1, 12) # beach sand
-const T_GRASS        := Vector2i(6, 9)  # solid grass field
-const T_FOREST       := Vector2i(0, 18) # tree cluster
-const T_HILL         := Vector2i(0, 30) # green mountain / hill
-const T_MOUNTAIN     := Vector2i(0, 24) # rocky mountain
+const OVERWORLD_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_overworld.png"
+const T_WATER_FULL := Vector2i(0, 0)
+const T_SAND := Vector2i(1, 0)
+const T_GRASS := Vector2i(2, 0)
+const T_FOREST := Vector2i(3, 0)
+const T_HILL := Vector2i(4, 0)
+const T_MOUNTAIN := Vector2i(5, 0)
+const T_SNOW_PEAK := Vector2i(6, 0)
+const T_PATH := Vector2i(7, 0)
+const T_TOWN := Vector2i(0, 1)
+const T_LIGHTHOUSE := Vector2i(1, 1)
+const T_BEACON := Vector2i(2, 1)
+const T_SIGN := Vector2i(3, 1)
+const T_ENCOUNTER := Vector2i(4, 1)
+const T_CAMP := Vector2i(5, 1)
+const T_CAVE := Vector2i(6, 1)
+const T_DOCK := Vector2i(7, 1)
+const T_CLEARING := Vector2i(0, 2)
+const T_RUINS := Vector2i(1, 2)
 
 # ── Island map (40x40) ────────────────────────────────────────────────────
 #  ~ = water    . = sand beach    , = grass
@@ -93,19 +102,19 @@ const TILE_ATLAS := {
 	"T": T_FOREST,
 	"^": T_HILL,
 	"M": T_MOUNTAIN,
-	"#": Vector2i(0, 36),  # snow peak
-	"=": Vector2i(3, 42),  # dirt path
-	"h": Vector2i(0, 6),   # house (grass-adjacent building)
-	"L": Vector2i(1, 30),  # lighthouse
-	"B": Vector2i(2, 30),  # beacon tower
-	"S": Vector2i(4, 42),  # signpost
-	"!": Vector2i(6, 9),   # visible encounter (grass with marker)
-	"C": Vector2i(3, 42),  # campfire
-		"V": Vector2i(2, 24),  # cave entrance
-		"A": Vector2i(1, 6),   # abandoned village
-		"D": Vector2i(5, 42),  # dock
-		"f": Vector2i(2, 6),   # forest clearing
-		"O": Vector2i(1, 30),  # overlook vista
+	"#": T_SNOW_PEAK,
+	"=": T_PATH,
+	"h": T_TOWN,
+	"L": T_LIGHTHOUSE,
+	"B": T_BEACON,
+	"S": T_SIGN,
+	"!": T_ENCOUNTER,
+	"C": T_CAMP,
+	"V": T_CAVE,
+	"A": T_RUINS,
+	"D": T_DOCK,
+	"f": T_CLEARING,
+	"O": T_HILL,
 }
 
 const BLOCKED := {"~": true, "M": true, "#": true, "V": true, "A": true}
@@ -280,15 +289,19 @@ func _ready() -> void:
 		debug_label.hide()
 
 func _build_tileset() -> void:
-	var tex: Texture2D = load("res://assets/sprites/tiles/pipoya_combined.png")
+	var tex: Texture2D
+	if FileAccess.file_exists(OVERWORLD_ATLAS_PATH):
+		var image := Image.new()
+		if image.load(OVERWORLD_ATLAS_PATH) == OK:
+			tex = ImageTexture.create_from_image(image)
 	if not tex:
-		push_error("Failed to load Pipoya terrain atlas!")
-		print("ERROR: pipoya_combined.png not found!")
+		push_error("Failed to load overworld terrain atlas!")
+		print("ERROR: overworld terrain atlas not found: ", OVERWORLD_ATLAS_PATH)
 		# Fallback: render map with colors
 		_fallback_draw()
 		return
 
-	print("terrain_atlas loaded: ", tex.get_width(), "x", tex.get_height())
+	print("overworld_atlas loaded: ", tex.get_width(), "x", tex.get_height())
 
 	var ts := TileSet.new()
 	ts.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
