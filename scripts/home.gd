@@ -3,6 +3,7 @@ extends Node2D
 
 const TILE_SIZE := 16
 const GARDEN_GROW_SECONDS := 60.0
+const HOME_INTERIOR_PATH := "res://assets/sprites/interiors/town/home_interior.png"
 
 const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
@@ -29,6 +30,19 @@ const COLORS := {
 	"R": Color("9b59b6"),
 		"T": Color("f0d46a"),
 	"@" : Color("6a5a4a"),
+}
+const TILE_RECTS := {
+	"#": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	".": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"B": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"K": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"G": Rect2i(Vector2i(64, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"M": Rect2i(Vector2i(80, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"W": Rect2i(Vector2i(96, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"R": Rect2i(Vector2i(112, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"T": Rect2i(Vector2i(0, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"C": Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"@": Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 
 const BLOCKED := {"#": true, "@": true}
@@ -69,34 +83,53 @@ var kitchen_menu: bool = false
 var tinkering_mode: bool = false
 var tinker_idx: int = 0
 var trophy_mode: bool = false
+var _home_interior: Texture2D
 
 @onready var map_layer: Node2D = $MapLayer
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var dialog: RichTextLabel = $Dialog
 
 func _ready() -> void:
+	_load_home_interior()
 	_draw_map()
 	_update_player()
 	_update_hud()
 	garden_timer = GameData.get_meta("home_garden_timer", 0.0)
 
+func _load_home_interior() -> void:
+	if not FileAccess.file_exists(HOME_INTERIOR_PATH):
+		push_warning("Home interior atlas missing: %s" % HOME_INTERIOR_PATH)
+		return
+	var image := Image.new()
+	if image.load(HOME_INTERIOR_PATH) != OK:
+		push_warning("Home interior atlas could not be loaded: %s" % HOME_INTERIOR_PATH)
+		return
+	_home_interior = ImageTexture.create_from_image(image)
+
 func _draw_map() -> void:
 	for y in range(MAP.size()):
 		for x in range(MAP[y].length()):
 			var tile: String = MAP[y].substr(x, 1)
-			var rect := ColorRect.new()
-			rect.color = COLORS.get(tile, Color.MAGENTA)
-			rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
-			rect.size = Vector2(TILE_SIZE, TILE_SIZE)
-			map_layer.add_child(rect)
+			_draw_tile(tile, Vector2i(x, y))
 	# Draw storage chest if installed
 	if GameData.has_upgrade("chest"):
-		var chest_pos := Vector2i(12, 5)
-		var marker := ColorRect.new()
-		marker.color = Color("8b6914")
-		marker.position = Vector2(chest_pos * TILE_SIZE) + Vector2(2, 2)
-		marker.size = Vector2(12, 12)
-		map_layer.add_child(marker)
+		_draw_tile("C", Vector2i(12, 5))
+
+func _draw_tile(tile: String, grid: Vector2i) -> void:
+	if _home_interior and TILE_RECTS.has(tile):
+		var sprite := Sprite2D.new()
+		sprite.texture = _home_interior
+		sprite.region_enabled = true
+		sprite.region_rect = TILE_RECTS.get(tile, TILE_RECTS["."])
+		sprite.centered = false
+		sprite.position = Vector2(grid * TILE_SIZE)
+		map_layer.add_child(sprite)
+	else:
+		var rect := ColorRect.new()
+		rect.color = COLORS.get(tile, Color.MAGENTA)
+		rect.position = Vector2(grid * TILE_SIZE)
+		rect.size = Vector2(TILE_SIZE, TILE_SIZE)
+		map_layer.add_child(rect)
 
 func _update_player() -> void:
 	player_sprite.position = Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)

@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "74e38be1-eaa8-484a-b3e9-6a88bd692606",
+        "name": "Hale Thorngate Realtor",
+        "prompt": "Lanternhouse town realtor NPC, tidy harbor compact property broker with orange waistcoat, ledger book, neat hair, slightly smug but friendly posture, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 52,
+          "height": 52
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T22:04:42.613645+00:00"
+      },
+      "folder": "Hale_Thorngate_Realtor",
+      "frames": {
+        "rotations": {
+          "south": "Hale_Thorngate_Realtor/rotations/south.png",
+          "south-east": "Hale_Thorngate_Realtor/rotations/south-east.png",
+          "east": "Hale_Thorngate_Realtor/rotations/east.png",
+          "north-east": "Hale_Thorngate_Realtor/rotations/north-east.png",
+          "north": "Hale_Thorngate_Realtor/rotations/north.png",
+          "north-west": "Hale_Thorngate_Realtor/rotations/north-west.png",
+          "west": "Hale_Thorngate_Realtor/rotations/west.png",
+          "south-west": "Hale_Thorngate_Realtor/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T22:13:29.314427"
+}

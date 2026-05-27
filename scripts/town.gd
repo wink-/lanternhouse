@@ -27,11 +27,12 @@ const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
 const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
 const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
 const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
+const SHOP_SIGN_PATH := "res://assets/sprites/town/shops/signs/%s.png"
+const SHOP_AWNING_PATH := "res://assets/sprites/town/shops/awnings/%s.png"
+const SHOP_BUILDING_PATH := "res://assets/sprites/town/shops/buildings/%s.png"
+const TOWN_PROP_PATH := "res://assets/sprites/town/props/%s.png"
 const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
-const NPC_ROTATION_PATHS := {
-	"weapon_merchant": "res://assets/sprites/characters/town_npcs/weapon_merchant/rotations/%s.png",
-	"elder": "res://assets/sprites/characters/town_npcs/elder/rotations/%s.png",
-}
+const NPC_ROTATION_PATH := "res://assets/sprites/characters/town_npcs/%s/rotations/%s.png"
 const CAT_ROTATION_PATH := "res://assets/sprites/characters/cat/rotations/%s.png"
 const CAT_WALK_PATH := "res://assets/sprites/characters/cat/walk/%s/%d.png"
 const CAT_HOME := Vector2i(18, 18)
@@ -42,6 +43,14 @@ const GROUND_TILE_RECTS := {
 	"=": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"@": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	",": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	";": Rect2i(Vector2i(64, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"w": Rect2i(Vector2i(80, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"+": Rect2i(Vector2i(96, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"g": Rect2i(Vector2i(112, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"s": Rect2i(Vector2i(0, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"m": Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"b": Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"l": Rect2i(Vector2i(48, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"H": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 const TILE_RECTS := {
@@ -68,36 +77,40 @@ const NPC_RECTS := {
 const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
-	",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,.......,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,lllllll,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,..+++..,,,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
 	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,......,,,,,,,,,==,,,,,,,,,......,,,,,",
+	",,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,,,",
+	",,,..gg..,,,,,,,,,==,,,,,,,,,..gg..,,,,,",
 	",,,HHHHHH,,,,,,,,,==,,,,,,,,,HHHHHH,,,,,",
-	",,,HHHHHH===========@@@@@@@@==HHHHHH,,,,",
-	",,,HHHHHH,,,,,,,,,,@@@@@@@@,,HHHHHH,,,,,",
-	",,,,,,,,,,,,,,,,,,,@@@@@@@@,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,,@@@@@@@@,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,=====,,,,,,,,,,,,,,,,,,",
+	",,,HHHHHH========++@@@@@@@@++==HHHHHH,,,",
+	",,,HHHHHH,,,,,,,,,,@mmmmmm@,,HHHHHH,,,,,",
+	",,,,,,,,,,,,,,,,,,,@mmmmmm@,,,,,,,,,,,,,",
+	",,,,,,;;;;,,,,,,,,,@bbbbbb@,,,,,;;;;,,,,",
+	",,,,,,;;;;,,,,,,,=====,,,,,,,,,,;;;;,,,,",
+	",,,,HHHHHH,,,HHHHHH,wwwHHHHHH,,,HHHHHH,,",
 	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
 	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
-	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
-	",,,,,,,==,,,,,,==,,,,,,==,,,,,,==,,,,,,,",
+	",,,,,++==++,,,,++==++,,,,++==++,,,,==,,,",
 	",,,,,,,================================,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,llll,,,,,,==,,,,,,llll,,,,,,,,",
+	",,,,,,,,,,llll,,,,,,==,,,,,,llll,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
 ]
 
 const COLORS := {
 	"#": Color("8b7355"), ".": Color("c49b56"), "@": Color("a08050"),
 	"W": Color("27ae60"), "A": Color("27ae60"), "I": Color("3498db"),
 	"S": Color("9b59b6"), "E": Color("e67e22"), "R": Color("e67e22"),
+	",": Color("4f9e43"), "=": Color("ad7e48"), "H": Color("4d9e43"),
+	";": Color("65563c"), "w": Color("8f5b34"), "+": Color("807e6e"),
+	"g": Color("754c31"), "s": Color("c2a665"), "m": Color("8b8169"),
+	"b": Color("804e3c"), "l": Color("4a8f3e"),
 }
 const BLOCKED := {"#": true, "H": true}
 const NPC_IDS := ["weapon_merchant", "armor_merchant", "innkeeper", "elder", "tavern_keeper", "healer", "tinkerer", "realtor"]
@@ -119,6 +132,45 @@ const BUILDING_LABELS := [
 	{"grid": Vector2i(22, 14), "text": "Workshop"},
 	{"grid": Vector2i(32, 14), "text": "Chapel"},
 ]
+const TOWN_BUILDINGS := [
+	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
+	{"id": "weapon_shop", "grid": Vector2i(3, 7), "fallback_region": Rect2i(Vector2i(15, 573), Vector2i(117, 72)), "fallback_scale": 0.55},
+	{"id": "armor_shop", "grid": Vector2i(28, 7), "fallback_region": Rect2i(Vector2i(16, 466), Vector2i(116, 72)), "fallback_scale": 0.55},
+	{"id": "inn", "grid": Vector2i(4, 14), "fallback_region": Rect2i(Vector2i(16, 681), Vector2i(116, 72)), "fallback_scale": 0.55},
+	{"id": "tavern", "grid": Vector2i(13, 14), "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
+	{"id": "workshop", "grid": Vector2i(22, 14), "fallback_region": Rect2i(Vector2i(354, 466), Vector2i(129, 72)), "fallback_scale": 0.5},
+	{"id": "chapel", "grid": Vector2i(31, 14), "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
+]
+const SHOP_SIGNS := [
+	{"id": "weapon_shop", "grid": Vector2i(5, 7), "offset": Vector2(8, -5)},
+	{"id": "armor_shop", "grid": Vector2i(30, 7), "offset": Vector2(8, -5)},
+	{"id": "inn", "grid": Vector2i(6, 14), "offset": Vector2(8, -5)},
+	{"id": "tavern", "grid": Vector2i(15, 14), "offset": Vector2(8, -5)},
+	{"id": "workshop", "grid": Vector2i(24, 14), "offset": Vector2(8, -5)},
+	{"id": "chapel", "grid": Vector2i(33, 14), "offset": Vector2(8, -5)},
+]
+const SHOP_AWNINGS := [
+	{"id": "weapon_shop", "grid": Vector2i(4, 8), "offset": Vector2(0, 0)},
+	{"id": "armor_shop", "grid": Vector2i(29, 8), "offset": Vector2(0, 0)},
+	{"id": "inn", "grid": Vector2i(5, 15), "offset": Vector2(0, 0)},
+	{"id": "tavern", "grid": Vector2i(14, 15), "offset": Vector2(0, 0)},
+	{"id": "workshop", "grid": Vector2i(23, 15), "offset": Vector2(0, 0)},
+	{"id": "chapel", "grid": Vector2i(32, 15), "offset": Vector2(0, 0)},
+]
+const TOWN_PROPS := [
+	{"id": "well", "grid": Vector2i(20, 11), "offset": Vector2(8, 8), "scale": 0.62},
+	{"id": "notice_board", "grid": Vector2i(12, 7), "offset": Vector2(8, 4), "scale": 0.65},
+	{"id": "lantern_post", "grid": Vector2i(17, 6), "offset": Vector2(8, -2), "scale": 0.58},
+	{"id": "lantern_post", "grid": Vector2i(22, 13), "offset": Vector2(8, -2), "scale": 0.58},
+	{"id": "bench", "grid": Vector2i(18, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "flower_box", "grid": Vector2i(3, 7), "offset": Vector2(8, 8), "scale": 0.56},
+	{"id": "flower_box", "grid": Vector2i(30, 7), "offset": Vector2(8, 8), "scale": 0.56},
+	{"id": "herb_planter", "grid": Vector2i(33, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "crate_stack", "grid": Vector2i(24, 13), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "barrel_pair", "grid": Vector2i(14, 13), "offset": Vector2(8, 8), "scale": 0.6},
+	{"id": "crate_stack", "grid": Vector2i(8, 19), "offset": Vector2(8, 8), "scale": 0.55},
+	{"id": "barrel_pair", "grid": Vector2i(10, 19), "offset": Vector2(8, 8), "scale": 0.58},
+]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
 
@@ -137,6 +189,10 @@ var _town_atlas: Texture2D
 var _town_ground: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
+var _shop_sign_textures: Dictionary = {}
+var _shop_awning_textures: Dictionary = {}
+var _shop_building_textures: Dictionary = {}
+var _town_prop_textures: Dictionary = {}
 var _player_idle_textures: Dictionary = {}
 var _npc_idle_textures: Dictionary = {}
 var _cat_marker: Sprite2D
@@ -235,16 +291,34 @@ func _draw_map() -> void:
 				map_layer.add_child(rect)
 
 func _draw_buildings() -> void:
-	if not _quiet_buildings:
-		return
-	_add_building(Vector2i(14, 1), Rect2i(Vector2i(219, 16), Vector2i(172, 72)), 0.5)
-	_add_building(Vector2i(3, 7), Rect2i(Vector2i(15, 573), Vector2i(117, 72)), 0.55)
-	_add_building(Vector2i(28, 7), Rect2i(Vector2i(16, 466), Vector2i(116, 72)), 0.55)
-	_add_building(Vector2i(4, 14), Rect2i(Vector2i(16, 681), Vector2i(116, 72)), 0.55)
-	_add_building(Vector2i(13, 14), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
-	_add_building(Vector2i(22, 14), Rect2i(Vector2i(354, 466), Vector2i(129, 72)), 0.5)
-	_add_building(Vector2i(31, 14), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
+	for building_data: Dictionary in TOWN_BUILDINGS:
+		_draw_town_building(building_data)
+	_draw_shop_awnings()
 	_draw_building_labels()
+
+func _draw_town_building(building_data: Dictionary) -> void:
+	var texture: Texture2D = _load_shop_building(building_data["id"])
+	if texture:
+		var sprite := Sprite2D.new()
+		sprite.name = "TownBuilding_%s" % building_data["id"]
+		sprite.texture = texture
+		sprite.centered = false
+		sprite.position = Vector2(building_data["grid"] * TILE_SIZE)
+		sprite.z_index = 2
+		building_layer.add_child(sprite)
+	elif _quiet_buildings:
+		_add_building(building_data["grid"], building_data["fallback_region"], building_data["fallback_scale"])
+
+func _load_shop_building(building_id: String) -> Texture2D:
+	if _shop_building_textures.has(building_id):
+		return _shop_building_textures[building_id]
+	var path: String = SHOP_BUILDING_PATH % building_id
+	if not FileAccess.file_exists(path):
+		_shop_building_textures[building_id] = null
+		return null
+	var texture := _load_png_texture(path)
+	_shop_building_textures[building_id] = texture
+	return texture
 
 func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	var sprite := Sprite2D.new()
@@ -269,13 +343,43 @@ func _draw_building_labels() -> void:
 		label.z_index = 5
 		building_layer.add_child(label)
 
+func _draw_shop_awnings() -> void:
+	for awning_data: Dictionary in SHOP_AWNINGS:
+		var awning_id: String = awning_data["id"]
+		var texture: Texture2D = _load_shop_awning(awning_id)
+		if not texture:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = "ShopAwning_%s" % awning_id
+		sprite.texture = texture
+		sprite.centered = false
+		sprite.position = Vector2(awning_data["grid"] * TILE_SIZE) + awning_data["offset"]
+		sprite.z_index = 4
+		building_layer.add_child(sprite)
+
+func _load_shop_awning(awning_id: String) -> Texture2D:
+	if _shop_awning_textures.has(awning_id):
+		return _shop_awning_textures[awning_id]
+	var path: String = SHOP_AWNING_PATH % awning_id
+	if not FileAccess.file_exists(path):
+		_shop_awning_textures[awning_id] = null
+		return null
+	var texture := _load_png_texture(path)
+	_shop_awning_textures[awning_id] = texture
+	return texture
+
 func _draw_props() -> void:
 	if not _quiet_props:
+		_draw_town_props()
+		_draw_shop_signs()
 		return
-	_add_prop(Vector2i(21, 12), Rect2i(Vector2i(100, 39), Vector2i(36, 36)), 0.55)
-	_add_prop(Vector2i(13, 8), Rect2i(Vector2i(65, 24), Vector2i(28, 17)), 0.7)
-	_add_prop(Vector2i(23, 8), Rect2i(Vector2i(18, 41), Vector2i(26, 27)), 0.6)
-	_add_prop(Vector2i(8, 20), Rect2i(Vector2i(0, 108), Vector2i(38, 10)), 0.8)
+	if _quiet_props:
+		_add_prop(Vector2i(21, 12), Rect2i(Vector2i(100, 39), Vector2i(36, 36)), 0.55)
+		_add_prop(Vector2i(13, 8), Rect2i(Vector2i(65, 24), Vector2i(28, 17)), 0.7)
+		_add_prop(Vector2i(23, 8), Rect2i(Vector2i(18, 41), Vector2i(26, 27)), 0.6)
+		_add_prop(Vector2i(8, 20), Rect2i(Vector2i(0, 108), Vector2i(38, 10)), 0.8)
+	_draw_town_props()
+	_draw_shop_signs()
 
 func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	var sprite := Sprite2D.new()
@@ -286,6 +390,58 @@ func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	sprite.position = Vector2(grid * TILE_SIZE)
 	sprite.scale = Vector2(scale_amount, scale_amount)
 	prop_layer.add_child(sprite)
+
+func _draw_shop_signs() -> void:
+	for sign_data: Dictionary in SHOP_SIGNS:
+		var sign_id: String = sign_data["id"]
+		var texture: Texture2D = _load_shop_sign(sign_id)
+		if not texture:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = "ShopSign_%s" % sign_id
+		sprite.texture = texture
+		sprite.centered = true
+		sprite.position = Vector2(sign_data["grid"] * TILE_SIZE) + sign_data["offset"]
+		sprite.scale = Vector2(0.68, 0.68)
+		sprite.z_index = 5
+		prop_layer.add_child(sprite)
+
+func _load_shop_sign(sign_id: String) -> Texture2D:
+	if _shop_sign_textures.has(sign_id):
+		return _shop_sign_textures[sign_id]
+	var path: String = SHOP_SIGN_PATH % sign_id
+	if not FileAccess.file_exists(path):
+		_shop_sign_textures[sign_id] = null
+		return null
+	var texture := _load_png_texture(path)
+	_shop_sign_textures[sign_id] = texture
+	return texture
+
+func _draw_town_props() -> void:
+	for prop_data: Dictionary in TOWN_PROPS:
+		var prop_id: String = prop_data["id"]
+		var texture: Texture2D = _load_town_prop(prop_id)
+		if not texture:
+			continue
+		var sprite := Sprite2D.new()
+		sprite.name = "TownProp_%s" % prop_id
+		sprite.texture = texture
+		sprite.centered = true
+		sprite.position = Vector2(prop_data["grid"] * TILE_SIZE) + prop_data["offset"]
+		sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
+		sprite.z_index = 3
+		prop_layer.add_child(sprite)
+
+func _load_town_prop(prop_id: String) -> Texture2D:
+	if _town_prop_textures.has(prop_id):
+		return _town_prop_textures[prop_id]
+	var path: String = TOWN_PROP_PATH % prop_id
+	if not FileAccess.file_exists(path):
+		_town_prop_textures[prop_id] = null
+		return null
+	var texture := _load_png_texture(path)
+	_town_prop_textures[prop_id] = texture
+	return texture
 
 
 func _build_npc_positions() -> void:
@@ -324,10 +480,10 @@ func _draw_npcs() -> void:
 		_npc_markers[npc_id] = marker
 
 func _load_npc_textures() -> void:
-	for npc_id: String in NPC_ROTATION_PATHS:
+	for npc_id: String in NPC_IDS:
 		if _npc_idle_textures.has(npc_id):
 			continue
-		var path: String = NPC_ROTATION_PATHS[npc_id] % "south"
+		var path: String = NPC_ROTATION_PATH % [npc_id, "south"]
 		_npc_idle_textures[npc_id] = _load_png_texture(path) if FileAccess.file_exists(path) else null
 
 func _make_solid_texture(color: Color) -> Texture2D:

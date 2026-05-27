@@ -52,7 +52,7 @@ var equipped_body: Array = [-1, -1, -1, -1]      # index into armor_bag (body sl
 var equipped_accessory: Array = [-1, -1, -1, -1] # index into armor_bag (accessory slot)
 
 # ── Overworld state ───────────────────────────────────────────────────────
-var overworld_position: Vector2i = Vector2i(6, 11)
+var overworld_position: Vector2i = Vector2i(15, 21)
 var overworld_facing: Vector2i = Vector2i.DOWN
 
 # ── Flags ─────────────────────────────────────────────────────────────────

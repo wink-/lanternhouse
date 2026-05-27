@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "9f8b9117-bbeb-4d37-be0a-b6605dbf764c",
+        "name": "Rolf Deepbarrel Tavern Keeper",
+        "prompt": "Lanternhouse town tavern keeper NPC, broad cheerful man with brown vest, rolled sleeves, round face, small tankard at belt, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 48,
+          "height": 48
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T22:04:31.730403+00:00"
+      },
+      "folder": "Rolf_Deepbarrel_Tavern_Keeper",
+      "frames": {
+        "rotations": {
+          "south": "Rolf_Deepbarrel_Tavern_Keeper/rotations/south.png",
+          "south-east": "Rolf_Deepbarrel_Tavern_Keeper/rotations/south-east.png",
+          "east": "Rolf_Deepbarrel_Tavern_Keeper/rotations/east.png",
+          "north-east": "Rolf_Deepbarrel_Tavern_Keeper/rotations/north-east.png",
+          "north": "Rolf_Deepbarrel_Tavern_Keeper/rotations/north.png",
+          "north-west": "Rolf_Deepbarrel_Tavern_Keeper/rotations/north-west.png",
+          "west": "Rolf_Deepbarrel_Tavern_Keeper/rotations/west.png",
+          "south-west": "Rolf_Deepbarrel_Tavern_Keeper/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T22:13:25.535298"
+}

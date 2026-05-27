@@ -15,6 +15,7 @@ This document defines shared project terms so design notes, code comments, art r
 | Prop | A non-character object that decorates or clarifies a place. | Barrel, signpost, bed, anvil, crate, pier posts. |
 | Tile | A small repeatable map image used to build terrain or floors. | Water, beach, grass, forest, mountain, path. |
 | Atlas | A single image containing many tiles or sprites arranged in a grid. | `assets/sprites/tiles/lanternhouse_overworld.png`. |
+| Biome | A region of the overworld with a distinct terrain feel and gameplay flavor. | Saltglass Dunes, Windgrass Fields, Reedmire Marsh. |
 
 ## Gameplay Terms
 
@@ -34,7 +35,8 @@ This document defines shared project terms so design notes, code comments, art r
 | Source output | The original file downloaded from PixelLab or another art source. Keep it for provenance and future rebuilds. | `pixellab_source.zip`, PixelLab tileset PNGs and metadata JSON. |
 | Runtime asset | The file the Godot game actually loads during play. | Normalized `rotations/*.png`, `lanternhouse_overworld.png`. |
 | Replacement pass | A focused round of replacing placeholder/prototype art while preserving gameplay. | Player + two NPCs, coastline atlas pass. |
-| Style target | The reference quality and style for new art. | The PixelLab orange tabby cat: cute but grounded, clean outline, readable small silhouette. |
+| Style target | The reference rendering quality and visual finish for new art, not necessarily the subject species. | The PixelLab orange tabby cat: cute but grounded, clean outline, readable small silhouette. |
+| Ancestry | The fantasy/human character type for people-like sprites. Current player and town NPCs default to human. | Human townsfolk now; dwarves, gnomes, and elves later. |
 | Integration | Wiring an asset into scenes/scripts so it appears in the game. | Updating loaders, rebuilding an atlas, adding paths to docs. |
 | Verification | Running Godot checks after an integration. | Headless project load, smoke scenes, direct scene launch. |
 

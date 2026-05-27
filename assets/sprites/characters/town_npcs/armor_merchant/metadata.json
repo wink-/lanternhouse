@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "aed6c118-1b4a-432b-805e-7f952fafa6b2",
+        "name": "Bram Stonecoat Armor Merchant",
+        "prompt": "Lanternhouse town armor merchant NPC, sturdy middle-aged man with blue padded vest, small shield on back, leather gloves, practical harbor-trader look, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 48,
+          "height": 48
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T22:04:31.142148+00:00"
+      },
+      "folder": "Bram_Stonecoat_Armor_Merchant",
+      "frames": {
+        "rotations": {
+          "south": "Bram_Stonecoat_Armor_Merchant/rotations/south.png",
+          "south-east": "Bram_Stonecoat_Armor_Merchant/rotations/south-east.png",
+          "east": "Bram_Stonecoat_Armor_Merchant/rotations/east.png",
+          "north-east": "Bram_Stonecoat_Armor_Merchant/rotations/north-east.png",
+          "north": "Bram_Stonecoat_Armor_Merchant/rotations/north.png",
+          "north-west": "Bram_Stonecoat_Armor_Merchant/rotations/north-west.png",
+          "west": "Bram_Stonecoat_Armor_Merchant/rotations/west.png",
+          "south-west": "Bram_Stonecoat_Armor_Merchant/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T22:12:49.604721"
+}

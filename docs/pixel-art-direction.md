@@ -17,7 +17,7 @@ art source**. The first successful benchmark is the town cat:
 
 `res://assets/sprites/characters/cat/`
 
-The cat sets the current quality target:
+The cat sets the current rendering-quality target:
 
 - Top-down 2D RPG readability
 - Clean single-color dark outline
@@ -26,10 +26,13 @@ The cat sets the current quality target:
 - Transparent PNG output
 - Strong silhouette at the game's zoom level
 
-When generating new art, treat the cat as the style anchor. New player, NPC,
-enemy, prop, and object sprites should feel like they belong in the same world,
-even if their source dimensions differ from the older handmade placeholder
-assets.
+When generating new art, treat the cat as the style anchor for outline quality,
+palette discipline, small-sprite readability, and charm. Do not treat it as a
+species target: the player and current town NPC batches should default to
+humans. Dwarves, gnomes, elves, and other fantasy ancestries are planned for
+later batches when requested. New player, NPC, enemy, prop, and object sprites
+should feel like they belong in the same world, even if their source dimensions
+differ from the older handmade placeholder assets.
 
 ### Generation Workflow
 

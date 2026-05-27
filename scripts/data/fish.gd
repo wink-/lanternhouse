@@ -38,9 +38,9 @@ static func zone_for_tile(tile: String) -> int:
 	match tile:
 		".": return Zone.COAST
 		"~": return Zone.DEEP_WATER
-		"T": return Zone.FOREST_RIVER
+		"T", "m": return Zone.FOREST_RIVER
 		"^", "#": return Zone.MOUNTAIN_LAKE
 		_: return Zone.COAST
 
 static func can_fish(tile: String) -> bool:
-	return tile in [".", "~", "T", "^"]
+	return tile in [".", "~", "T", "^", "m"]

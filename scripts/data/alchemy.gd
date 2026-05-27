@@ -16,11 +16,11 @@ const HERB_INFO := {
 	Herb.SEA_KELP: {"id": "sea_kelp", "name": "Sea Kelp", "color": "#2ecc71", "tiles": ["~", "."]},
 	Herb.FOREST_MOSS: {"id": "forest_moss", "name": "Forest Moss", "color": "#27ae60", "tiles": ["T"]},
 	Herb.MOUNTAIN_ROOT: {"id": "mountain_root", "name": "Mountain Root", "color": "#8b6914", "tiles": ["^", "M"]},
-	Herb.FOG_PETALS: {"id": "fog_petals", "name": "Fog Petals", "color": "#bdc3c7", "tiles": [","]},
-	Herb.SALT_CRYSTAL: {"id": "salt_crystal", "name": "Salt Crystal", "color": "#ecf0f1", "tiles": ["."]},
+	Herb.FOG_PETALS: {"id": "fog_petals", "name": "Fog Petals", "color": "#bdc3c7", "tiles": [",", "*", "m"]},
+	Herb.SALT_CRYSTAL: {"id": "salt_crystal", "name": "Salt Crystal", "color": "#ecf0f1", "tiles": [".", "d", "r"]},
 	Herb.BEACON_ASH: {"id": "beacon_ash", "name": "Beacon Ash", "color": "#f39c12", "tiles": ["B", "L"]},
-	Herb.WILD_SAGE: {"id": "wild_sage", "name": "Wild Sage", "color": "#1abc9c", "tiles": [",", "T"]},
-	Herb.DARK_CAP: {"id": "dark_cap", "name": "Dark Cap", "color": "#8e44ad", "tiles": ["T", "^"]},
+	Herb.WILD_SAGE: {"id": "wild_sage", "name": "Wild Sage", "color": "#1abc9c", "tiles": [",", ";", "T"]},
+	Herb.DARK_CAP: {"id": "dark_cap", "name": "Dark Cap", "color": "#8e44ad", "tiles": ["T", "^", "m"]},
 }
 
 const RECIPES := [

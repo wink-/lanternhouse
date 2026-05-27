@@ -25,6 +25,8 @@ const ItemDB := preload("res://scripts/data/items.gd")
 
 const TILE_SIZE := 16
 const MAX_LEVEL := 40
+const PARTY_SPRITE_PATH := "res://assets/sprites/battle/party/%s.png"
+const ENEMY_SPRITE_PATH := "res://assets/sprites/battle/enemies/%s.png"
 
 # ── Zone backgrounds ──────────────────────────────────────────────────────
 const ZONE_BG := {
@@ -70,6 +72,8 @@ var _screen_flash_timer: float = 0.0
 var _screen_flash_color: Color = Color.WHITE
 var _screen_shake_timer: float = 0.0
 var _screen_shake_intensity: float = 0.0
+var _enemy_sprite_textures: Dictionary = {}
+var _party_sprite_textures: Dictionary = {}
 
 # ── Visual nodes ───────────────────────────────────────────────────────────
 @onready var enemy_area: Node2D = $EnemyArea
@@ -101,6 +105,14 @@ const PARTY_COLORS := {
 	"RedMage":   Color("e74c3c"),
 	"WhiteMage": Color("ecf0f1"),
 	"BlackMage": Color("8e44ad"),
+}
+const PARTY_SPRITE_IDS := {
+	"Fighter": "fighter",
+	"Thief": "thief",
+	"BlackBelt": "blackbelt",
+	"RedMage": "redmage",
+	"WhiteMage": "whitemage",
+	"BlackMage": "blackmage",
 }
 
 # ── Init ───────────────────────────────────────────────────────────────────
@@ -268,7 +280,8 @@ func _draw_sprites() -> void:
 		var base_color: Color = ENEMY_COLORS.get(e["name"], Color.GRAY)
 		if not e["alive"]:
 			base_color = Color("333333")
-		_draw_block(enemy_area, Vector2(_enemy_x, py), base_color, 24)
+		if not _draw_enemy_sprite(enemy_area, e["name"], Vector2(_enemy_x, py), e["alive"]):
+			_draw_block(enemy_area, Vector2(_enemy_x, py), base_color, 24)
 		# Show target indicator
 		if round_phase in ["fight_target", "magic_target"]:
 			var is_selected := false
@@ -289,7 +302,8 @@ func _draw_sprites() -> void:
 		var color: Color = PARTY_COLORS.get(m["class"], Color.GRAY)
 		if not m["alive"]:
 			color = Color("555555")
-		_draw_block(party_area, Vector2(_party_x, py), color, 20)
+		if not _draw_party_sprite(party_area, m["class"], Vector2(_party_x, py), m["alive"]):
+			_draw_block(party_area, Vector2(_party_x, py), color, 20)
 		var info := "%s\nLv%d %s" % [m["name"], m["level"], _hp_text(m["hp"], m["max_hp"])]
 		var status_name: String = m["name"]
 		if _status_effects.has(status_name):
@@ -299,6 +313,68 @@ func _draw_sprites() -> void:
 			var w: Dictionary = GameData.weapons_bag[GameData.equipped_weapon[i]]
 			info += "\n%s" % w["name"]
 		_draw_label(party_area, Vector2(_party_x - 50, py + 24), info, 100)
+
+func _draw_party_sprite(target_parent: Node2D, party_class: String, draw_pos: Vector2, is_alive: bool) -> bool:
+	var texture: Texture2D = _load_party_sprite(party_class)
+	if not texture:
+		return false
+	var sprite := Sprite2D.new()
+	sprite.texture = texture
+	sprite.centered = true
+	sprite.position = draw_pos
+	sprite.scale = Vector2(0.82, 0.82)
+	if not is_alive:
+		sprite.modulate = Color("777777")
+	target_parent.add_child(sprite)
+	return true
+
+func _draw_enemy_sprite(target_parent: Node2D, enemy_name: String, draw_pos: Vector2, is_alive: bool) -> bool:
+	var texture: Texture2D = _load_enemy_sprite(enemy_name)
+	if not texture:
+		return false
+	var sprite := Sprite2D.new()
+	sprite.texture = texture
+	sprite.centered = true
+	sprite.position = draw_pos
+	sprite.scale = Vector2(0.9, 0.9)
+	if not is_alive:
+		sprite.modulate = Color("555555")
+	target_parent.add_child(sprite)
+	return true
+
+func _load_enemy_sprite(enemy_name: String) -> Texture2D:
+	var key: String = enemy_name.to_snake_case()
+	if _enemy_sprite_textures.has(key):
+		return _enemy_sprite_textures[key]
+	var path: String = ENEMY_SPRITE_PATH % key
+	if not FileAccess.file_exists(path):
+		_enemy_sprite_textures[key] = null
+		return null
+	var image := Image.new()
+	if image.load(path) != OK:
+		push_warning("Enemy sprite could not be loaded: %s" % path)
+		_enemy_sprite_textures[key] = null
+		return null
+	var texture := ImageTexture.create_from_image(image)
+	_enemy_sprite_textures[key] = texture
+	return texture
+
+func _load_party_sprite(party_class: String) -> Texture2D:
+	var key: String = PARTY_SPRITE_IDS.get(party_class, party_class.to_snake_case())
+	if _party_sprite_textures.has(key):
+		return _party_sprite_textures[key]
+	var path: String = PARTY_SPRITE_PATH % key
+	if not FileAccess.file_exists(path):
+		_party_sprite_textures[key] = null
+		return null
+	var image := Image.new()
+	if image.load(path) != OK:
+		push_warning("Party sprite could not be loaded: %s" % path)
+		_party_sprite_textures[key] = null
+		return null
+	var texture := ImageTexture.create_from_image(image)
+	_party_sprite_textures[key] = texture
+	return texture
 
 func _draw_target_arrow(parent: Node2D, pos: Vector2) -> void:
 	var arrow := Polygon2D.new()

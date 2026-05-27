@@ -64,7 +64,7 @@ func _select() -> void:
 			GameData.equipped_head = [-1, -1, -1, -1]
 			GameData.equipped_body = [-1, -1, -1, -1]
 			GameData.equipped_accessory = [-1, -1, -1, -1]
-			GameData.overworld_position = Vector2i(14, 19)
+			GameData.overworld_position = Vector2i(15, 21)
 			GameData.overworld_facing = Vector2i.DOWN
 			GameData.cleared_encounters.clear()
 			GameData.visited_town = false

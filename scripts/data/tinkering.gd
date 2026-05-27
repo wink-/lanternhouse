@@ -11,11 +11,11 @@ enum TinkerMaterial {
 }
 
 const MATERIAL_INFO := {
-	TinkerMaterial.SCRAP_METAL: {"id": "scrap_metal", "name": "Scrap Metal", "color": "#95a5a6", "tiles": ["^", "#"]},
-	TinkerMaterial.GLASS_SHARDS: {"id": "glass_shards", "name": "Glass Shards", "color": "#85c1e9", "tiles": [".", "~"]},
+	TinkerMaterial.SCRAP_METAL: {"id": "scrap_metal", "name": "Scrap Metal", "color": "#95a5a6", "tiles": ["^", "#", "r"]},
+	TinkerMaterial.GLASS_SHARDS: {"id": "glass_shards", "name": "Glass Shards", "color": "#85c1e9", "tiles": [".", "~", "d"]},
 	TinkerMaterial.COPPER_WIRE: {"id": "copper_wire", "name": "Copper Wire", "color": "#e67e22", "tiles": ["h", "="]},
-	TinkerMaterial.LEATHER_SCRAP: {"id": "leather_scrap", "name": "Leather Scrap", "color": "#8b6914", "tiles": [",", "T"]},
-	TinkerMaterial.WOOD_CHIP: {"id": "wood_chip", "name": "Wood Chip", "color": "#a0522d", "tiles": ["T", "="]},
+	TinkerMaterial.LEATHER_SCRAP: {"id": "leather_scrap", "name": "Leather Scrap", "color": "#8b6914", "tiles": [",", ";", "T"]},
+	TinkerMaterial.WOOD_CHIP: {"id": "wood_chip", "name": "Wood Chip", "color": "#a0522d", "tiles": ["T", "=", "p"]},
 	TinkerMaterial.OIL_RESIDUE: {"id": "oil_residue", "name": "Oil Residue", "color": "#2c3e50", "tiles": ["B", "L"]},
 }
 

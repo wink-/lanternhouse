@@ -89,7 +89,9 @@ walk_down, walk_up, walk_left, walk_right
 ## Adding PixelLab Art
 
 PixelLab is the preferred source for new production pixel art. Use the cat in
-`assets/sprites/characters/cat/` as the current benchmark for quality and style.
+`assets/sprites/characters/cat/` as the current benchmark for rendering quality,
+outline clarity, palette discipline, and readability. For player and town NPC
+batches, default to humans unless a specific fantasy ancestry is requested.
 
 1. Retrieve or generate the asset with the PixelLab MCP.
 2. Save original PNG output under `assets/sprites/characters/<name>/`,

@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "62d413b9-d325-43c7-b2bf-d0f297464737",
+        "name": "Sister Aldith Healer",
+        "prompt": "Lanternhouse town healer NPC, calm chapel sister in pale grey robe with green sash, small candle or tonic pouch, gentle silhouette, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 40,
+          "height": 40
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T22:04:32.046219+00:00"
+      },
+      "folder": "Sister_Aldith_Healer",
+      "frames": {
+        "rotations": {
+          "south": "Sister_Aldith_Healer/rotations/south.png",
+          "south-east": "Sister_Aldith_Healer/rotations/south-east.png",
+          "east": "Sister_Aldith_Healer/rotations/east.png",
+          "north-east": "Sister_Aldith_Healer/rotations/north-east.png",
+          "north": "Sister_Aldith_Healer/rotations/north.png",
+          "north-west": "Sister_Aldith_Healer/rotations/north-west.png",
+          "west": "Sister_Aldith_Healer/rotations/west.png",
+          "south-west": "Sister_Aldith_Healer/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T22:13:26.757556"
+}
