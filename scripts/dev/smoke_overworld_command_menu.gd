@@ -34,7 +34,7 @@ func _run_command_menu_smoke() -> bool:
 	overworld._unhandled_input(_key_event(KEY_J))
 	if not overworld.quest_journal.active:
 		return false
-	overworld._unhandled_input(_key_event(KEY_J))
+	overworld.quest_journal._input(_key_event(KEY_J))
 	if overworld.quest_journal.active:
 		return false
 

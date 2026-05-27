@@ -535,7 +535,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_J:
 			quest_journal.close()
 			return
-		quest_journal._unhandled_input(event)
 		return
 	if inventory_screen and inventory_screen.active:
 		inventory_screen._unhandled_input(event)
