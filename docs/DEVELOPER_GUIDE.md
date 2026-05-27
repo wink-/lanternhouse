@@ -20,6 +20,10 @@ system interests you. Each section is self-contained.
 
 ## Architecture Overview
 
+For shared project terminology, see [`vocabulary.md`](vocabulary.md). Most
+importantly: **overworld** means the outer travel map, not towns, interiors,
+dungeons, or battle scenes.
+
 Lanternhouse is a **Godot 4.6** project written entirely in **GDScript** (Godot's built-in
 language, similar to Python). There is no C++, no build step — Godot compiles `.gd` files
 automatically when you press Play.

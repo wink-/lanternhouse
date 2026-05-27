@@ -2,6 +2,8 @@
 
 This plan tracks replacement of placeholder and prototype art with PixelLab-generated pixel art. The target style is the existing cat asset: cute but grounded top-down RPG pixel art, clean dark outline, readable silhouette, medium detail, and basic shading.
 
+Created/downloaded PixelLab assets are tracked in `docs/pixellab-art-inventory.md`.
+
 ## Priority 1: Playable Characters In Core Loops
 
 | Need | Current Usage | Target Asset Path | Notes |
@@ -36,6 +38,6 @@ This plan tracks replacement of placeholder and prototype art with PixelLab-gene
 
 | Asset | PixelLab ID | Status |
 |---|---|---|
-| Lanternhouse Player Adventurer | `77ee0770-b5a5-4eb5-a903-13fd7f0eca57` | Processing |
-| Greta Ironforge Weapon Merchant | `4b17b7f2-06b2-4f9a-bc57-af84afb9d31a` | Processing |
-| Old Thatch Elder | `ce3344ff-ab05-421e-8700-a1d7bde0f55c` | Processing |
+| Lanternhouse Player Adventurer | `77ee0770-b5a5-4eb5-a903-13fd7f0eca57` | Downloaded and integrated |
+| Greta Ironforge Weapon Merchant | `4b17b7f2-06b2-4f9a-bc57-af84afb9d31a` | Downloaded and integrated |
+| Old Thatch Elder | `ce3344ff-ab05-421e-8700-a1d7bde0f55c` | Downloaded and integrated |

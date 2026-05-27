@@ -33,6 +33,10 @@ Key differences from Python:
 
 ## The Big Picture
 
+Shared project terms are defined in [`vocabulary.md`](vocabulary.md). In short,
+**overworld** means the outer travel map, while towns, interiors, dungeons, and
+battles are separate focused scenes.
+
 Think of the game as a play with actors and a script:
 
 | Concept | What It Is | Example File |

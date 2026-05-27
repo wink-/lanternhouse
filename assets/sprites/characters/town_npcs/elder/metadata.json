@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "ce3344ff-ab05-421e-8700-a1d7bde0f55c",
+        "name": "Old Thatch Elder",
+        "prompt": "Lanternhouse town elder NPC, small old villager with purple shawl and long grey eyebrows, carrying a candle or walking stick, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 48,
+          "height": 48
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T20:53:02.062964+00:00"
+      },
+      "folder": "Old_Thatch_Elder",
+      "frames": {
+        "rotations": {
+          "south": "Old_Thatch_Elder/rotations/south.png",
+          "south-east": "Old_Thatch_Elder/rotations/south-east.png",
+          "east": "Old_Thatch_Elder/rotations/east.png",
+          "north-east": "Old_Thatch_Elder/rotations/north-east.png",
+          "north": "Old_Thatch_Elder/rotations/north.png",
+          "north-west": "Old_Thatch_Elder/rotations/north-west.png",
+          "west": "Old_Thatch_Elder/rotations/west.png",
+          "south-west": "Old_Thatch_Elder/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T21:21:12.591269"
+}
