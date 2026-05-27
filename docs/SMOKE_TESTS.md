@@ -87,9 +87,13 @@ quest/flag persistence.
 6. Open the quest journal and confirm the beacon objective shows as lit.
 7. Return to the Elder.
 8. Confirm the quest completes once and grants its reward.
+9. Confirm the completion text points you toward Mara Venn and the North Forest
+   beacon.
+10. Speak with the Elder again and accept **The Missing Keeper**.
+11. Confirm the accepted quest text includes an objective and route hint.
 
 **Systems covered:** quest acceptance, quest journal, beacon state, quest
-completion, faction reward, one-time payout.
+completion, faction reward, one-time payout, next-quest breadcrumb.
 
 ---
 

@@ -1481,6 +1481,8 @@ func _check_quest_completions() -> String:
 				if faction_key >= 0:
 					GameData.change_faction_rep(faction_key, rep)
 			var complete_msg: String = quest.get("dialogue_complete", "Quest complete!")
+			if quest.has("next_breadcrumb"):
+				complete_msg += "\n\n[color=#f0d46a]%s[/color]" % quest["next_breadcrumb"]
 			return "[color=cyan]✓ Quest Complete: %s[/color]\n%s\nReward: %s, %d XP" % [quest["name"], complete_msg, _format_reward(reward_copper), reward_xp]
 	return ""
 

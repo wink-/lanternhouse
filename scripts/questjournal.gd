@@ -68,6 +68,8 @@ func _update() -> void:
 					var lit: bool = GameData.beacon_states.get(str(beacon_pos), false)
 					var status: String = "[color=green]Lit[/color]" if lit else "[color=red]Unlit[/color]"
 					lines.append("  Status: %s" % status)
+					if lit and quest.has("objective_done"):
+						lines.append("  [color=#9fc5ff]%s[/color]" % quest["objective_done"])
 					if lit and quest.has("turn_in"):
 						lines.append("  [color=#f0d46a]Next:[/color] %s" % quest["turn_in"])
 				"flag":
@@ -120,7 +122,7 @@ func _update() -> void:
 					var status_ef: String = "[color=green]Complete[/color]" if done_ef else "[color=yellow]Incomplete[/color]"
 					lines.append("  Status: %s" % status_ef)
 			var reward_gold: int = quest.get("reward_gold", 0)
-			lines.append("  Reward: %dg" % (reward_gold / 100))
+			lines.append("  Reward: %s" % _format_reward(reward_gold * 100))
 		lines.append("")
 
 	# Complete quests
@@ -168,3 +170,13 @@ func _progress_bar(current: int, maximum: int, width: int) -> String:
 	for _i in range(width - n): s += "░"
 	s += "[/color]"
 	return s
+
+func _format_reward(copper: int) -> String:
+	var g := copper / 10000
+	var s := (copper % 10000) / 100
+	var c := copper % 100
+	if g > 0:
+		return "%dg %ds" % [g, s]
+	if s > 0:
+		return "%ds %dc" % [s, c]
+	return "%dc" % c

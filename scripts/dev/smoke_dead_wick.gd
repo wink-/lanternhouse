@@ -1,6 +1,7 @@
 extends Node
 
 const TownScene := preload("res://scenes/town/town.tscn")
+const OverworldScene := preload("res://scenes/overworld/overworld.tscn")
 const QuestDB := preload("res://scripts/data/quests.gd")
 const FactionDB := preload("res://scripts/data/factions.gd")
 
@@ -30,10 +31,30 @@ func _run_dead_wick_roundtrip() -> bool:
 		return false
 
 	var lighthouse_pos: Vector2i = QuestDB.BEACON_POS["lighthouse"]
-	GameData.beacon_states[str(lighthouse_pos)] = true
 	var before_gold := GameData.gold
 	var before_rep: int = GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD)
 	var before_xp: int = GameData.party[0]["xp"]
+
+	var overworld := OverworldScene.instantiate()
+	add_child(overworld)
+	await get_tree().process_frame
+	overworld._interact_beacon("lighthouse", lighthouse_pos)
+	if not GameData.beacon_states.get(str(lighthouse_pos), false):
+		return false
+	if not GameData.beacon_lit:
+		return false
+	if not GameData.is_quest_active("the_dead_wick"):
+		return false
+	if GameData.gold != before_gold or GameData.party[0]["xp"] != before_xp:
+		return false
+	if GameData.active_quests["the_dead_wick"].get("progress", 0) != 1:
+		return false
+	if not overworld.hud.text.contains("dead wick") or not overworld.hud.text.contains("Return to Old Thatch"):
+		return false
+	var after_light_rep: int = GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD)
+	overworld._interact_beacon("lighthouse", lighthouse_pos)
+	if GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD) != after_light_rep:
+		return false
 
 	var msg: String = town._check_quest_completions()
 	var reward_gold: int = QuestDB.get_quest("the_dead_wick").get("reward_gold", 0) * 100
@@ -41,10 +62,12 @@ func _run_dead_wick_roundtrip() -> bool:
 
 	return (
 		msg.contains("Quest Complete")
+		and msg.contains("Mara Venn")
 		and GameData.is_quest_complete("the_dead_wick")
+		and QuestDB.get_next_story_quest() == "the_missing_keeper"
 		and GameData.gold == before_gold + reward_gold
 		and GameData.party[0]["xp"] == before_xp + reward_xp
-		and GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD) == before_rep + 10
+		and GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD) == before_rep + 15
 	)
 
 func _reset_state() -> void:

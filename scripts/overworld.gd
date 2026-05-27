@@ -711,7 +711,8 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 		var quest_id := _active_beacon_quest_for(beacon_name)
 		if quest_id != "":
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
-			msg += "\n[color=#f0d46a]%s[/color]" % quest.get("turn_in", "Return to the Elder in Brindlewick.")
+			GameData.active_quests[quest_id]["progress"] = 1
+			msg = "%s\n[color=#f0d46a]%s[/color]" % [quest.get("event_text", msg), quest.get("turn_in", "Return to the Elder in Brindlewick.")]
 		_update_hud_with_msg(msg)
 		_check_all_beacons_event()
 	else:

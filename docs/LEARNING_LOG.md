@@ -352,3 +352,48 @@ Capture anything that should become clearer after future slices.
 - Question: Should the first cottage include a starter chest or kitchen automatically?
 - Why it matters: Buying a home currently feels useful only after upgrades, which may be too slow for a 20-30 minute demo.
 - When to revisit: When pacing the demo economy and first quest rewards.
+
+---
+
+## Slice
+
+- Name: Lighthouse objective event pass
+- Date: 2026-05-27
+- Playable goal: Make the first beacon lighting feel like a completed quest objective and point clearly to the next story step.
+
+## What Changed
+
+- Player-facing change: Lighting the lighthouse now shows Dead Wick event text, the journal explains the lit objective is ready to turn in, and Elder completion points toward Mara Venn.
+- Systems or content added: Beacon objectives now store active quest progress when lit, and The Missing Keeper has objective, hint, and turn-in copy.
+- Bug or design problem solved: The Dead Wick smoke no longer fakes the beacon state; it drives the actual overworld beacon interaction and checks that rewards happen only at Elder turn-in.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - inspect `_interact_beacon()` and `_active_beacon_quest_for()`.
+- `res://scripts/data/quests.gd` - see `event_text`, `objective_done`, and `next_breadcrumb`.
+- `res://scripts/questjournal.gd` - see the lit-beacon journal line.
+- `res://scripts/dev/smoke_dead_wick.gd` - follow the accept, light, repeat-light, turn-in, reward route.
+
+## GDScript Concepts
+
+- Concept: Runtime quest progress in dictionaries
+- Where it appears: `_interact_beacon()` writes `GameData.active_quests[quest_id]["progress"] = 1` for the matching active beacon quest.
+- What to notice: Static quest data lives in `QuestDB`, while mutable runtime state lives in `GameData.active_quests`.
+
+## Why This Pattern
+
+- Problem this pattern solves: A lit beacon affects map fog, faction rep, quest UI, and Elder rewards; separating “objective done” from “quest paid” keeps the story beat clear.
+- Why it fits this slice: The first objective needs immediate confirmation without skipping the return-to-Elder payoff.
+- Tradeoff or thing to watch: The overworld now sets generic beacon quest progress, so future multi-step beacon quests may need richer per-objective state.
+
+## Tiny Exercise
+
+- Task: Change The Dead Wick `event_text` and run the Dead Wick smoke.
+- Expected result in-game: The smoke should still pass because it checks state and reward timing, not exact prose.
+- Hint: The event copy lives in `QuestDB`, while the display happens in `overworld.gd`.
+
+## Questions to Revisit
+
+- Question: Should lighting the lighthouse play a short pause, flash, or chime before the HUD message?
+- Why it matters: A small ceremony could make the first objective memorable without changing quest logic.
+- When to revisit: During the visual effects/audio polish pass.
