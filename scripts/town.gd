@@ -181,6 +181,7 @@ func _ready() -> void:
 			if m["alive"]:
 				m["xp"] += xp
 	_update_player()
+	_show_arrival_hint()
 
 func _load_town_atlas() -> void:
 	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
@@ -753,13 +754,28 @@ func _interact() -> void:
 	if npc == "":
 		npc = _building_door_at(pos)
 	if npc == "":
-		_say("Nothing here.")
+		_say(_nothing_here_text(target))
 		return
 
 	_start_npc_interaction(npc)
 
 func _building_door_at(grid: Vector2i) -> String:
 	return BUILDING_DOORS.get(grid, "")
+
+func _nothing_here_text(target: Vector2i) -> String:
+	if target.y < pos.y:
+		return "Nothing responds here.\n\nFace a villager or a labeled doorway, then press Interact. Elder Hall is at the north end of town."
+	if target.y > pos.y:
+		return "The south road leads back to the overworld. Walk down past the last path tile to leave Brindlewick."
+	return "Nothing here.\n\nFace a villager or a building door, then press Interact."
+
+func _show_arrival_hint() -> void:
+	if GameData.is_quest_complete("the_dead_wick") and QuestDB.get_next_story_quest() == "the_missing_keeper":
+		_say("[color=#f0d46a]The lighthouse burns again.[/color]\n\nReturn to Elder Hall at the north end of town and speak with Old Thatch.")
+	elif GameData.is_quest_active("the_dead_wick"):
+		_say("[color=#f0d46a]Current objective:[/color] Relight the lighthouse wick east of Brindlewick.\n\nLeave by walking south out of town, then follow the overworld path east.")
+	elif QuestDB.get_next_story_quest() == "the_dead_wick":
+		_say("[color=#f0d46a]First stop:[/color] Elder Hall at the north end of town.\n\nFace Old Thatch or the Elder Hall door and press Interact.")
 
 func _start_npc_interaction(npc: String) -> void:
 	talking_to = npc
@@ -1734,7 +1750,7 @@ func _quest_accepted_text(quest: Dictionary, intro: String) -> String:
 		lines.append("\n[color=#f0d46a]Objective:[/color] %s" % quest["objective"])
 	if quest.has("hint"):
 		lines.append("[color=#9fc5ff]Hint:[/color] %s" % quest["hint"])
-	lines.append("[color=#888]Press J on the overworld to review your journal.[/color]")
+	lines.append("[color=#888]Walk south out of town to return to the overworld. Press J on the overworld to review your journal.[/color]")
 	return "\n".join(lines)
 
 func _say(msg: String) -> void:

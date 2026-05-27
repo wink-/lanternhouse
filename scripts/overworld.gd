@@ -153,7 +153,7 @@ const BEACON_POSITIONS := {
 
 # Signpost texts — keyed by position string
 const SIGNPOST_TEXTS := {
-	"(24, 21)": "Brindlewick lies west. The lighthouse beacon stands north of this road.",
+	"(24, 21)": "Brindlewick lies west. To reach the lighthouse, follow the eastern road, then turn north at the Lighthouse marker.",
 	"(15, 21)": "Brindlewick Village. The inn offers rest and healing.",
 	"(14, 12)": "Forest of Mournlight. Tread carefully — the trees here are old and watchful.",
 	"(21, 17)": "Mountain Pass. The beacon on the overlook controls access to the peaks.",
@@ -794,6 +794,8 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
 			GameData.active_quests[quest_id]["progress"] = 1
 			msg = "%s\n[color=#f0d46a]%s[/color]" % [quest.get("event_text", msg), quest.get("turn_in", "Return to the Elder in Brindlewick.")]
+			if beacon_name == "lighthouse":
+				msg += "\n[color=#9fc5ff]Route back:[/color] Follow the path west to Brindlewick."
 		_update_hud_with_msg(msg)
 		_check_all_beacons_event()
 	else:

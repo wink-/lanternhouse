@@ -123,6 +123,12 @@ Run the first quest reward check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_dead_wick.tscn
 ```
 
+Run the first-route guidance check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_first_route_guidance.tscn
+```
+
 Run the second story quest check:
 
 ```powershell
