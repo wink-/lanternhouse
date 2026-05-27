@@ -271,10 +271,6 @@ func _ready() -> void:
 	GameData.wage_failed.connect(_on_wage_failed)
 	GameData.member_departed.connect(_on_member_departed)
 
-	# Auto-accept first story quest if no quests active
-	if GameData.active_quests.is_empty():
-		GameData.accept_quest("the_dead_wick")
-
 	if debug_label:
 		debug_label.hide()
 

@@ -128,10 +128,7 @@ func _update() -> void:
 		lines.append("")
 
 	# Available quests
-	var available: Array = []
-	for qid: String in QuestDB.quest_ids():
-		if not GameData.active_quests.has(qid):
-			available.append(qid)
+	var available: Array = QuestDB.get_available_quests()
 	if not available.is_empty():
 		lines.append("[b][color=yellow]Available[/color][/b] (speak with the Elder)")
 		lines.append("[color=#f0d46a]──────────────────────────────────────────────────────[/color]")

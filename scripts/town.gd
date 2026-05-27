@@ -1194,7 +1194,11 @@ func _copy_magic(src: Dictionary) -> Dictionary:
 
 func _show_elder_dialogue(npc_name: String, npc_line: String) -> void:
 	# Check for quest completion first
-	_check_quest_completions()
+	var completion_msg := _check_quest_completions()
+	if completion_msg != "":
+		_say(completion_msg)
+		talking_to = ""
+		return
 	# Build dialogue
 	var msg := "[color=#9b59b6]%s[/color]: " % npc_name
 	# Find the next story quest to highlight
@@ -1243,7 +1247,7 @@ func _show_elder_dialogue(npc_name: String, npc_line: String) -> void:
 		talking_to = "elder"
 	_say(msg)
 
-func _check_quest_completions() -> void:
+func _check_quest_completions() -> String:
 	for qid: String in GameData.active_quests.keys():
 		if GameData.active_quests[qid]["status"] != "active":
 			continue
@@ -1286,15 +1290,44 @@ func _check_quest_completions() -> void:
 		if completed and not GameData.is_quest_complete(qid):
 			GameData.complete_quest(qid)
 			var reward_gold: int = quest.get("reward_gold", 0)
+			var reward_copper: int = reward_gold * 100
 			var reward_xp: int = quest.get("reward_xp", 0)
-			GameData.add_copper(reward_gold)
-			# XP reward to first alive party member
+			GameData.add_copper(reward_copper)
 			for m: Dictionary in GameData.party:
 				if m["alive"]:
 					m["xp"] += reward_xp
-					break
+			var fac: String = quest.get("reward_faction", "")
+			var rep: int = quest.get("reward_rep", 0)
+			if fac != "" and rep > 0:
+				var faction_key := _quest_reward_faction(fac)
+				if faction_key >= 0:
+					GameData.change_faction_rep(faction_key, rep)
 			var complete_msg: String = quest.get("dialogue_complete", "Quest complete!")
-			_say("[color=cyan]✓ Quest Complete: %s[/color]\n%s\nReward: %dc, %d XP" % [quest["name"], complete_msg, reward_gold, reward_xp])
+			return "[color=cyan]✓ Quest Complete: %s[/color]\n%s\nReward: %s, %d XP" % [quest["name"], complete_msg, _format_reward(reward_copper), reward_xp]
+	return ""
+
+func _quest_reward_faction(faction_id: String) -> int:
+	var faction_map := {
+		"keepers": FactionDB.Faction.KEEPERS_GUILD,
+		"keepers_guild": FactionDB.Faction.KEEPERS_GUILD,
+		"harbor": FactionDB.Faction.HARBOR_COMPACT,
+		"harbor_compact": FactionDB.Faction.HARBOR_COMPACT,
+		"chapel": FactionDB.Faction.GREY_CHAPEL,
+		"grey_chapel": FactionDB.Faction.GREY_CHAPEL,
+		"unlit": FactionDB.Faction.THE_UNLIT,
+		"the_unlit": FactionDB.Faction.THE_UNLIT,
+	}
+	return faction_map.get(faction_id, -1)
+
+func _format_reward(copper: int) -> String:
+	var g: int = copper / 10000
+	var s: int = (copper % 10000) / 100
+	var c: int = copper % 100
+	if g > 0:
+		return "%dg %ds %dc" % [g, s, c]
+	if s > 0:
+		return "%ds %dc" % [s, c]
+	return "%dc" % c
 
 func _accept_next_quest() -> void:
 	var next := QuestDB.get_next_story_quest()

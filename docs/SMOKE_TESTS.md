@@ -70,6 +70,20 @@ scene.
 **Systems covered:** serialization, `Vector2i` conversion, inventory persistence,
 quest/flag persistence.
 
+### Route F - First Quest Arc: The Dead Wick
+
+1. Start a new game.
+2. Interact with the `h` tile to enter Brindlewick.
+3. Speak with the Elder and accept **The Dead Wick**.
+4. Return to the overworld.
+5. Travel to the lighthouse beacon and interact with it.
+6. Open the quest journal and confirm the beacon objective shows as lit.
+7. Return to the Elder.
+8. Confirm the quest completes once and grants its reward.
+
+**Systems covered:** quest acceptance, quest journal, beacon state, quest
+completion, faction reward, one-time payout.
+
 ---
 
 ## Automated Baseline
