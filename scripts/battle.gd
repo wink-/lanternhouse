@@ -42,8 +42,8 @@ const ZONE_BG := {
 
 # ── Damage numbers ────────────────────────────────────────────────────────
 var _floating_labels: Array = []
-var _enemy_x: float = 80.0
-var _party_x: float = 720.0
+var _enemy_x: float = 180.0
+var _party_x: float = 1040.0
 const FLOAT_DURATION := 1.2
 
 # ── Battle state ───────────────────────────────────────────────────────────
@@ -80,6 +80,10 @@ var _party_sprite_textures: Dictionary = {}
 @onready var party_area: Node2D = $PartyArea
 @onready var panel: Panel = $Panel
 @onready var text_display: RichTextLabel = $Panel/TextDisplay
+@onready var enemy_status_panel: Panel = $EnemyStatusPanel
+@onready var enemy_status_text: RichTextLabel = $EnemyStatusPanel/EnemyStatusText
+@onready var party_status_panel: Panel = $PartyStatusPanel
+@onready var party_status_text: RichTextLabel = $PartyStatusPanel/PartyStatusText
 @onready var background: ColorRect = $Background
 
 # ── Enemy color palette ────────────────────────────────────────────────────
@@ -129,6 +133,7 @@ func _ready() -> void:
 		if weather == "rain":
 			bg_color = bg_color.darkened(0.15)
 		background.color = bg_color
+	_style_battle_panels()
 	_init_enemies()
 	for m: Dictionary in GameData.party:
 		_pre_buff_stats[m["name"]] = {"str": m["str"], "def": m["def"], "agi": m["agi"]}
@@ -291,9 +296,6 @@ func _draw_sprites() -> void:
 				is_selected = true
 			if is_selected and e["alive"]:
 				_draw_target_arrow(enemy_area, Vector2(_enemy_x, py - 34))
-		_draw_label(enemy_area, Vector2(_enemy_x - 40, py + 30), e["name"], 80)
-		var hp_bar := _make_hp_bar(e["hp"], e["max_hp"], 8)
-		_draw_label(enemy_area, Vector2(_enemy_x - 40, py + 42), hp_bar, 80)
 
 	# Draw party
 	for i in range(GameData.party.size()):
@@ -304,15 +306,6 @@ func _draw_sprites() -> void:
 			color = Color("555555")
 		if not _draw_party_sprite(party_area, m["class"], Vector2(_party_x, py), m["alive"]):
 			_draw_block(party_area, Vector2(_party_x, py), color, 20)
-		var info := "%s\nLv%d %s" % [m["name"], m["level"], _hp_text(m["hp"], m["max_hp"])]
-		var status_name: String = m["name"]
-		if _status_effects.has(status_name):
-			var eff: Dictionary = _status_effects[status_name]
-			info += " [%s]" % eff["type"]
-		if GameData.equipped_weapon[i] >= 0:
-			var w: Dictionary = GameData.weapons_bag[GameData.equipped_weapon[i]]
-			info += "\n%s" % w["name"]
-		_draw_label(party_area, Vector2(_party_x - 50, py + 24), info, 100)
 
 func _draw_party_sprite(target_parent: Node2D, party_class: String, draw_pos: Vector2, is_alive: bool) -> bool:
 	var texture: Texture2D = _load_party_sprite(party_class)
@@ -407,6 +400,49 @@ func _draw_label(parent: Node2D, pos: Vector2, text: String, width: float) -> vo
 	lbl.size = Vector2(width, 60)
 	lbl.fit_content = true
 	parent.add_child(lbl)
+
+func _style_battle_panels() -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.02, 0.03, 0.05, 0.86)
+	style.border_color = Color("d8d0a0")
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.corner_radius_top_left = 2
+	style.corner_radius_top_right = 2
+	style.corner_radius_bottom_left = 2
+	style.corner_radius_bottom_right = 2
+	for p in [panel, enemy_status_panel, party_status_panel]:
+		p.add_theme_stylebox_override("panel", style)
+
+func _update_status_panels() -> void:
+	var enemy_lines: Array[String] = ["[b][color=#f0d46a]ENEMY[/color][/b]"]
+	for e: Dictionary in enemies:
+		var marker := ">" if e["alive"] and (round_phase == "fight_target" or round_phase == "magic_target") and enemies.find(e) == fight_target_idx else " "
+		var enemy_name := _fixed_cell(e["name"], 11)
+		var status := "[color=#666]DOWN[/color]" if not e["alive"] else "%s HP" % _make_hp_bar(e["hp"], e["max_hp"], 8)
+		enemy_lines.append("%s %s %s" % [marker, enemy_name, status])
+	enemy_status_text.text = "\n".join(enemy_lines)
+
+	var party_lines: Array[String] = ["[b][color=#9fc5ff]PARTY[/color][/b]"]
+	for i in range(GameData.party.size()):
+		var m: Dictionary = GameData.party[i]
+		var marker := ">" if i == selecting_idx and round_phase in ["command", "fight_target", "magic_target"] else " "
+		var hp_status := "[color=#c0392b]KO[/color]" if not m["alive"] else "%d/%d" % [m["hp"], m["max_hp"]]
+		var status := ""
+		if _status_effects.has(m["name"]):
+			status = " [color=#f0d46a]%s[/color]" % String(_status_effects[m["name"]]["type"]).to_upper()
+		party_lines.append("%s %-10s Lv%-2d HP %s%s" % [marker, m["name"], m["level"], hp_status, status])
+	party_status_text.text = "\n".join(party_lines)
+
+func _fixed_cell(value: String, width: int) -> String:
+	var clipped := value
+	if clipped.length() > width:
+		clipped = clipped.substr(0, max(width - 1, 0)) + "…"
+	while clipped.length() < width:
+		clipped += " "
+	return clipped
 
 func _make_hp_bar(hp: int, max_hp: int, width: int) -> String:
 	var n := clampi(int(ceil(float(hp) / max_hp * width)), 0, width)
@@ -1506,11 +1542,9 @@ func _party_summary() -> String:
 # ── Display ────────────────────────────────────────────────────────────────
 func _update_display() -> void:
 	_draw_sprites()
+	_update_status_panels()
 	var lines: Array = []
 	if surprised: lines.append("[color=#c0392b][b]AMBUSH! The enemy has the better ground.[/b][/color]")
-	lines.append("[color=#f0d46a]Enemies:[/color] %s" % _enemy_summary())
-	lines.append("[color=#9fc5ff]Party:[/color] %s" % _party_summary())
-	lines.append("")
 
 	if round_phase == "victory":
 		lines.append("[b][color=#f0d46a]★★ VICTORY ★★[/color][/b]")

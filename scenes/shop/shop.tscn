@@ -7,9 +7,13 @@ script = ExtResource("1_shop")
 
 [node name="Background" type="ColorRect" parent="."]
 color = Color(0.1, 0.08, 0.05, 1)
-size = Vector2(960, 640)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="TextDisplay" type="RichTextLabel" parent="."]
 bbcode_enabled = true
 position = Vector2(40, 40)
-size = Vector2(600, 500)
+size = Vector2(860, 580)

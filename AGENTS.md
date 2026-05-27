@@ -41,6 +41,9 @@ used by the live game.
 
 - PixelLab art is the preferred source for production pixel art.
 - Use `assets/sprites/characters/cat/` as the current quality benchmark.
+- Keep perspective intentional: overworld art is straight-down symbolic map art,
+  while towns, dungeons, and interiors are top-down 3/4 JRPG environments.
+- Do not mix flat top-down town layouts with front-facing building sprites.
 - Preserve useful PixelLab folder structure such as `rotations/` and
   `walk/<direction>/`.
 - Prefer imported texture resources over runtime `Image.load()` paths where

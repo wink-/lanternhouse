@@ -8,7 +8,23 @@ cardinal-direction movement — while establishing its own identity through a
 lantern/firelight motif and slightly warmer tones than the cold NES palette.
 
 Everything is designed to slot directly into the existing Godot 4 codebase
-which renders at **960×640** with **16×16** tiles.
+which renders at **1280×720** with **16×16** tiles.
+
+## Perspective Rules
+
+Lanternhouse uses two deliberate environment perspectives:
+
+- **Overworld:** straight-down 90-degree symbolic map view. Terrain, roads,
+  coastlines, forests, towns, and landmarks should read like a navigable map.
+- **Towns, dungeons, and interiors:** top-down 3/4 JRPG perspective. Buildings,
+  walls, doors, cliffs, furniture, and props should show height/depth with
+  visible front or side faces.
+
+Do not mix flat top-down building footprints with front-facing building sprites.
+Town and dungeon layouts should be composed around readable 3/4 thresholds:
+front walls, doors at the base of buildings, props near walls/roads/plazas, and
+paths that visibly lead to entrances. The overworld can stay flatter and more
+symbolic.
 
 ## Current Art Pipeline
 
@@ -61,7 +77,7 @@ by at least a basic launch check.
 | Battle sprite (enemy) | 48 × 48 px | drawn at scale in battle scene |
 | Battle sprite (party) | 32 × 48 px | side-view front-facing |
 | UI element size | multiples of 8 | buttons, icons, cursors |
-| Canvas resolution | 960 × 640 | set in project.godot |
+| Canvas resolution | 1280 × 720 | set in project.godot |
 | Stretch mode | canvas_items / keep | integer scaling at 2×/3×/4× |
 
 All sprite sheets should use **1:1 pixel ratio** (no sub-pixel rendering).

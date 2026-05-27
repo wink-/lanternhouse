@@ -7,23 +7,61 @@ script = ExtResource("1_battle")
 
 [node name="Background" type="ColorRect" parent="."]
 color = Color(0.08, 0.08, 0.15, 1)
-size = Vector2(960, 640)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="EnemyArea" type="Node2D" parent="."]
 
 [node name="PartyArea" type="Node2D" parent="."]
 
+[node name="EnemyStatusPanel" type="Panel" parent="."]
+z_index = 10
+offset_left = 12.0
+offset_top = 516.0
+offset_right = 318.0
+offset_bottom = 708.0
+
+[node name="EnemyStatusText" type="RichTextLabel" parent="EnemyStatusPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+bbcode_enabled = true
+fit_content = true
+
 [node name="Panel" type="Panel" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
+z_index = 10
+offset_left = 330.0
+offset_top = 516.0
+offset_right = 950.0
+offset_bottom = 708.0
+
+[node name="TextDisplay" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = -192.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -12.0
+offset_bottom = -8.0
+bbcode_enabled = true
 
-[node name="TextDisplay" type="RichTextLabel" parent="Panel"]
+[node name="PartyStatusPanel" type="Panel" parent="."]
+z_index = 10
+offset_left = 962.0
+offset_top = 516.0
+offset_right = 1268.0
+offset_bottom = 708.0
+
+[node name="PartyStatusText" type="RichTextLabel" parent="PartyStatusPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
