@@ -1412,7 +1412,7 @@ func _push_log(msg: String) -> void:
 func _update_display() -> void:
 	_draw_sprites()
 	var lines: Array = []
-	if surprised: lines.append("[color=#c0392b][b]AMBUSH! Enemies strike first![/b][/color]")
+	if surprised: lines.append("[color=#c0392b][b]AMBUSH! The enemy has the better ground.[/b][/color]")
 
 	if round_phase == "victory":
 		lines.append("[b][color=#f0d46a]★★ VICTORY ★★[/color][/b]")

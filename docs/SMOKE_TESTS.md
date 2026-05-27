@@ -86,6 +86,12 @@ Run the overworld boot check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/overworld/overworld.tscn --quit-after 2
 ```
 
+Run the save/load round-trip check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_save_load.tscn
+```
+
 Run every scene:
 
 ```powershell
@@ -95,4 +101,3 @@ foreach ($scene in $scenes) {
   godot_console --headless --path "I:\code\lanternhouse" $res --quit-after 2
 }
 ```
-
