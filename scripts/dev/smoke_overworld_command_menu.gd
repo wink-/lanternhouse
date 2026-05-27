@@ -31,6 +31,13 @@ func _run_command_menu_smoke() -> bool:
 		return false
 	overworld.quest_journal.close()
 
+	overworld._unhandled_input(_key_event(KEY_J))
+	if not overworld.quest_journal.active:
+		return false
+	overworld._unhandled_input(_key_event(KEY_J))
+	if overworld.quest_journal.active:
+		return false
+
 	overworld._open_command_menu()
 	overworld._activate_command_menu_option(2)
 	if not overworld.inventory_screen.active:
@@ -72,3 +79,10 @@ func _reset_state() -> void:
 	GameData.owned_home = ""
 	GameData.home_upgrades.clear()
 	GameData.home_storage.clear()
+
+func _key_event(keycode: int) -> InputEventKey:
+	var event := InputEventKey.new()
+	event.keycode = keycode
+	event.physical_keycode = keycode
+	event.pressed = true
+	return event
