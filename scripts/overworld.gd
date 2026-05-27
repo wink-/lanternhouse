@@ -196,8 +196,8 @@ var _rain_particles: GPUParticles2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var player_body: Polygon2D = $PlayerSprite/Body
 @onready var player_face: ColorRect = $PlayerSprite/Face
-@onready var hud: RichTextLabel = $HUD
-@onready var debug_label: Label = $DebugLabel
+@onready var hud: RichTextLabel = $UILayer/HUD
+@onready var debug_label: Label = $UILayer/DebugLabel
 @onready var char_sheet: CanvasLayer = $CharacterSheet
 @onready var quest_journal: CanvasLayer = $QuestJournal
 @onready var minimap: CanvasLayer = $Minimap

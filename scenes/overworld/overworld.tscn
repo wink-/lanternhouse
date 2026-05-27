@@ -29,12 +29,14 @@ color = Color(0.2, 0.2, 0.2, 1)
 size = Vector2(8, 6)
 position = Vector2(-4, -10)
 
-[node name="HUD" type="RichTextLabel" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="RichTextLabel" parent="UILayer"]
 bbcode_enabled = true
 position = Vector2(6, 4)
 size = Vector2(500, 200)
 
-[node name="DebugLabel" type="Label" parent="."]
+[node name="DebugLabel" type="Label" parent="UILayer"]
 visible = false
 position = Vector2(6, 4)
 size = Vector2(300, 180)
