@@ -82,6 +82,10 @@ as real runtime art, not just parked in the asset folder. Future art passes shou
 follow the same pattern: download the asset, put it under `assets/sprites/`, wire
 it into the scene, and verify that the scene still launches.
 
+For parallel work, see `docs/worktree-workflow.md`. It explains how the gameplay,
+art, docs, and main integration folders fit together and how to merge a finished
+lane back into `main`.
+
 ### Coding Concept: Singletons
 
 A **singleton** is a single shared instance of an object. In Godot, autoloads are
