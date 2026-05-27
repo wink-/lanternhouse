@@ -125,6 +125,12 @@ Run the basic battle victory check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_battle_basic.tscn
 ```
 
+Run the shop/inventory round-trip check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_shop_inventory.tscn
+```
+
 Run every scene:
 
 ```powershell

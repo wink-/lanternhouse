@@ -23,6 +23,7 @@ var selecting_character: bool = false
 var char_idx: int = 0
 var sell_mode: bool = false
 var sell_list: Array = []
+var last_message: String = ""
 
 @onready var text_display: RichTextLabel = $TextDisplay
 
@@ -63,6 +64,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_build_sell_list()
 			if sell_list.is_empty():
 				shop_type = prev_type
+				last_message = "[color=gray]Nothing to sell right now.[/color]"
 			_update_display()
 		KEY_ESCAPE:
 			if shop_type == "sell":
@@ -80,9 +82,12 @@ func _try_buy() -> void:
 	if shop_type == "sell":
 		_do_sell(selected_idx)
 		return
+	if selected_idx < 0 or selected_idx >= shop_list.size():
+		return
 	var item: Dictionary = shop_list[selected_idx]
 	var price: int = _get_price(item["price"])
 	if price > GameData.gold:
+		last_message = "[color=#c0392b]Not enough coin for %s. Need %s, you have %s.[/color]" % [item["name"], _format_price(price), _format_price(GameData.gold)]
 		return
 
 	if shop_type in ["weapons", "armor"]:
@@ -92,32 +97,39 @@ func _try_buy() -> void:
 		return
 
 	if item.get("trade", false) and GameData.bag_full("trade"):
+		last_message = "[color=#c0392b]Trade bag is full. Sell something before buying %s.[/color]" % item["name"]
 		_update_display()
 		return
 	if GameData.spend_copper(price):
 		if item.get("trade", false):
 			GameData.trade_goods.append(item.duplicate(true))
+			last_message = "[color=green]Bought %s.[/color]" % item["name"]
 		else:
 			match item["id"]:
 				"tonic":
 					GameData.tonics += 1
+					last_message = "[color=green]Bought Tonic. Tonics: %d[/color]" % GameData.tonics
 				"ether":
 					GameData.ethers += 1
 					_apply_ether()
+					last_message = "[color=green]Bought Ether. Party magic charges restored. Ethers: %d[/color]" % GameData.ethers
 	_update_display()
 
 func _buy_for_character(ci: int) -> void:
 	var item: Dictionary = shop_list[selected_idx]
 	var price: int = _get_price(item["price"])
 	if shop_type == "weapons" and _needs_new_weapon(item) and GameData.bag_full("weapons"):
+		last_message = "[color=#c0392b]Weapon bag is full. Sell a spare weapon first.[/color]"
 		selecting_character = false
 		_update_display()
 		return
 	if shop_type == "armor" and _needs_new_armor(item) and GameData.bag_full("armor"):
+		last_message = "[color=#c0392b]Armor bag is full. Sell spare armor first.[/color]"
 		selecting_character = false
 		_update_display()
 		return
 	if not GameData.spend_copper(price):
+		last_message = "[color=#c0392b]Not enough coin for %s. Need %s, you have %s.[/color]" % [item["name"], _format_price(price), _format_price(GameData.gold)]
 		selecting_character = false
 		_update_display()
 		return
@@ -152,6 +164,7 @@ func _buy_for_character(ci: int) -> void:
 			_:
 				GameData.equipped_body[ci] = existing
 
+	last_message = "[color=green]Equipped %s on %s.[/color]" % [item["name"], GameData.party[ci]["name"]]
 	selecting_character = false
 	_update_display()
 
@@ -208,6 +221,7 @@ func _do_sell(idx: int) -> void:
 	var entry: Dictionary = sell_list[idx]
 	var price: int = entry["sell_price"]
 	GameData.add_copper(price)
+	last_message = "[color=green]Sold %s for %s.[/color]" % [entry["name"], _format_price(price)]
 	if entry["type"] == "weapon":
 		GameData.weapons_bag.remove_at(entry["idx"])
 		for i in range(GameData.equipped_weapon.size()):
@@ -249,6 +263,8 @@ func _update_display() -> void:
 		elif rep <= -20:
 			greeting = " [color=red]Prices are firm. Take it or leave it.[/color]"
 	lines.append("[b]%s[/b]    %s%s" % [title, GameData.format_money_short(), greeting])
+	if last_message != "":
+		lines.append(last_message)
 	lines.append("")
 
 	if selecting_character:
@@ -275,10 +291,12 @@ func _update_display() -> void:
 		for i in range(shop_list.size()):
 			var item: Dictionary = shop_list[i]
 			var marker: String = "▶" if i == selected_idx else " "
-			var can_afford: bool = _get_price(item["price"]) <= GameData.gold
+			var can_afford: bool = true if shop_type == "sell" else _get_price(item["price"]) <= GameData.gold
 			var color_start: String = "" if can_afford else "[color=#666]"
 			var color_end: String = "" if can_afford else "[/color]"
-			if shop_type in ["weapons", "armor"]:
+			if shop_type == "sell":
+				lines.append("%s %-18s Sell: %s" % [marker, item["name"], _format_price(item["sell_price"])])
+			elif shop_type in ["weapons", "armor"]:
 				var stat: int = item.get("atk", item.get("def", 0))
 				var stat_name: String = "ATK" if shop_type == "weapons" else "DEF"
 				var slot_tag: String = (" [%s]" % item["slot"]) if shop_type == "armor" else ""
@@ -286,7 +304,7 @@ func _update_display() -> void:
 			else:
 				lines.append("%s%s %-16s %s  %s%s" % [color_start, marker, item["name"], _format_price(_get_price(item["price"])), item.get("desc",""), color_end])
 		lines.append("")
-		lines.append("[1]/Enter to buy, arrows to browse, [Esc] leave")
+		lines.append("[1]/Enter to %s, arrows to browse, [S] Sell, [Esc] leave" % ("sell" if shop_type == "sell" else "buy"))
 
 	text_display.text = "\n".join(lines)
 

@@ -13,10 +13,13 @@
 # would share the same Dictionary object, and modifying one would change them all.
 extends CanvasLayer
 
+const ItemDB := preload("res://scripts/data/items.gd")
+
 @onready var content: RichTextLabel = $Panel/Content
 var active: bool = false
 var tab: int = 0  # 0=consumables, 1=weapons, 2=armor, 3=trade
 var selected_idx: int = 0
+var last_message: String = ""
 
 # Sub-states for equip/use flow
 var equip_selecting: bool = false  # picking party member to equip
@@ -34,6 +37,7 @@ func open() -> void:
 	selected_idx = 0
 	equip_selecting = false
 	use_confirm = false
+	last_message = ""
 	_update()
 	show()
 
@@ -88,6 +92,8 @@ func _update() -> void:
 			tab_bar += "[color=gray]%s[/color]  " % TAB_NAMES[i]
 	lines.append(tab_bar)
 	lines.append("%s" % GameData.format_money_short())
+	if last_message != "":
+		lines.append(last_message)
 	lines.append("")
 
 	match tab:
@@ -105,8 +111,8 @@ func _update() -> void:
 
 func _draw_consumables(lines: Array) -> void:
 	var items := [
-		{"name": "Tonic", "count": GameData.tonics, "desc": "Restores 20 HP to one ally"},
-		{"name": "Ether", "count": GameData.ethers, "desc": "Restores all magic charges to one ally"},
+		{"name": "Tonic", "count": GameData.tonics, "desc": "Restores up to %d HP to the lowest-HP ally" % ItemDB.TONIC_HEAL},
+		{"name": "Ether", "count": GameData.ethers, "desc": "Restores all magic charges to the ally missing the most"},
 	]
 	for crafted: Dictionary in _crafted_consumables():
 		items.append({"name": crafted["name"], "count": _crafted_count(crafted["id"], "consumable"), "desc": crafted.get("desc", ""), "crafted_id": crafted["id"]})
@@ -220,25 +226,39 @@ func _use_consumable() -> void:
 	# Tonic
 	if selected_idx == 0:
 		if GameData.tonics <= 0:
+			last_message = "[color=gray]No Tonics in the bag.[/color]"
+			_update()
 			return
 		var tg: Variant = _lowest_hp_alive()
 		if tg == null:
+			last_message = "[color=gray]No one can use a Tonic right now.[/color]"
+			_update()
+			return
+		if tg["hp"] >= tg["max_hp"]:
+			last_message = "[color=gray]Everyone is already at full HP.[/color]"
+			_update()
 			return
 		GameData.tonics -= 1
-		var heal: int = mini(20, tg["max_hp"] - tg["hp"])
+		var heal: int = mini(ItemDB.TONIC_HEAL, tg["max_hp"] - tg["hp"])
 		tg["hp"] += heal
+		last_message = "[color=green]Used Tonic on %s. Restored %d HP.[/color]" % [tg["name"], heal]
 		_update()
 		return
 	# Ether
 	if selected_idx == 1:
 		if GameData.ethers <= 0:
+			last_message = "[color=gray]No Ethers in the bag.[/color]"
+			_update()
 			return
 		var tg: Variant = _lowest_mp_alive()
 		if tg == null:
+			last_message = "[color=gray]No one needs an Ether right now.[/color]"
+			_update()
 			return
 		GameData.ethers -= 1
 		for lvl: int in tg["magic_levels"]:
 			tg["magic_levels"][lvl]["charges"] = tg["magic_levels"][lvl]["max"]
+		last_message = "[color=green]Used Ether on %s. Magic charges restored.[/color]" % tg["name"]
 		_update()
 		return
 	# Crafted consumable

@@ -702,6 +702,10 @@ func _select_topic(idx: int) -> void:
 			var npc_color: String = color_map.get(topic_npc, "white")
 			_say("[color=%s]%s[/color]: %s\n\n[color=green][Restored all HP and magic!][/color]\n\n[Any key] Continue" % [npc_color, npc_name, NPCDB.get_dialogue(topic_npc, "default")])
 			talking_to = ""
+		"item_shop":
+			topic_mode = false
+			GameData.set_meta("shop_type", "items")
+			SceneTransition.change_scene("res://scenes/shop/shop.tscn")
 		"cook":
 			topic_mode = false
 			talking_to = ""

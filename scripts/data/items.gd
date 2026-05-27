@@ -14,6 +14,8 @@
 # It's a concise way to pull a subset from a larger dataset.
 class_name ItemDB
 
+const TONIC_HEAL := 20
+
 # ── Weapons ───────────────────────────────────────────────────────────────
 # Each tier is +2-3 ATK over the previous. Prices scale to require grinding.
 static func weapon_list() -> Array:
@@ -56,8 +58,8 @@ static func armor_list() -> Array:
 # ── Shop items ────────────────────────────────────────────────────────────
 static func item_shop_list() -> Array:
 	return [
-		{"id":"tonic",   "name":"Tonic",    "price":8,  "desc":"Heals ~20 HP to one ally"},
-		{"id":"ether",   "name":"Ether",    "price":60, "desc":"Restores 1 magic charge to all levels"},
+		{"id":"tonic",   "name":"Tonic",    "price":8,  "desc":"Restores up to %d HP to the lowest-HP ally" % TONIC_HEAL},
+		{"id":"ether",   "name":"Ether",    "price":60, "desc":"Restores all magic charges to the ally missing the most"},
 		{"id":"oil_jar", "name":"Beacon Oil",  "price":15, "desc":"Trade good — sells for more near beacons", "trade":true, "sell_base":20},
 		{"id":"salt_bag","name":"Salt Pouch",   "price":25, "desc":"Trade good — Harbor Compact values these", "trade":true, "sell_base":35},
 		{"id":"herb_bun","name":"Chapel Herb",   "price":30, "desc":"Trade good — healers pay well for fresh herbs", "trade":true, "sell_base":45},

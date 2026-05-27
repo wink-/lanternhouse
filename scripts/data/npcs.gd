@@ -267,6 +267,7 @@ static func all_npcs() -> Dictionary:
 			"color": Color("ecf0f1"),
 			"topics": [
 				{"label": "Healing", "key": "heal"},
+				{"label": "Buy Tonics & Ethers", "key": "item_shop"},
 				{"label": "The Fog", "key": "fog_lore", "lore": [
 					"The fog is not natural. It has a will, a hunger. It seeks out the unwary and drains their memory.",
 					"I've treated people who wandered too long in the fog. They forget their names, their pasts. Light is the only cure.",

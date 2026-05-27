@@ -21,6 +21,7 @@ extends Node2D
 const EnemyDB := preload("res://scripts/data/enemies.gd")
 const CharDB := preload("res://scripts/data/classes.gd")
 const FactionDB := preload("res://scripts/data/factions.gd")
+const ItemDB := preload("res://scripts/data/items.gd")
 
 const TILE_SIZE := 16
 const MAX_LEVEL := 40
@@ -395,7 +396,7 @@ func _handle_command(keycode: int) -> void:
 				var tg := _lowest_hp_party()
 				if tg["hp"] < tg["max_hp"]:
 					GameData.tonics -= 1
-					var heal: int = min(20, tg["max_hp"] - tg["hp"])
+					var heal: int = min(ItemDB.TONIC_HEAL, tg["max_hp"] - tg["hp"])
 					tg["hp"] += heal
 					m["command"] = "item_used"
 					m["command_label"] = "Tonic → %s" % tg["name"]

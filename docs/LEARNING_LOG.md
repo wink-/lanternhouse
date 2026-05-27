@@ -261,3 +261,49 @@ Capture anything that should become clearer after future slices.
 - Question: Which specific encounters should define "fair" for the 20-30 minute demo?
 - Why it matters: Balance should be anchored to expected player route and level, not just individual enemy numbers.
 - When to revisit: After the lighthouse objective and return-to-Elder reward are fully paced.
+
+---
+
+## Slice
+
+- Name: Item shop and tonic loop pass
+- Date: 2026-05-27
+- Playable goal: Let a fresh player buy supplies, see clear shop feedback, use Tonics without waste, and trust save/load to preserve purchases.
+
+## What Changed
+
+- Player-facing change: Sister Aldith can now open the item shop, shop actions show success/failure messages, and Tonics do not get consumed when everyone is already at full HP.
+- Systems or content added: Tonic healing uses a shared `ItemDB.TONIC_HEAL` constant, and `smoke_shop_inventory` verifies buy, save/load, and use behavior.
+- Bug or design problem solved: The item shop existed in code but had no town entry point for demo players.
+
+## Files to Read
+
+- `res://scripts/data/npcs.gd` - see the new healer topic that routes to supplies.
+- `res://scripts/town.gd` - inspect the `item_shop` topic handler.
+- `res://scripts/shop.gd` - look for `last_message` and buy/sell feedback.
+- `res://scripts/inventory.gd` - see the guard that prevents wasted Tonics.
+- `res://scripts/dev/smoke_shop_inventory.gd` - follow the automated buy/use/save-load route.
+
+## GDScript Concepts
+
+- Concept: Shared constants
+- Where it appears: `ItemDB.TONIC_HEAL` is used by item data, inventory use, and battle item use.
+- What to notice: A single number now controls both behavior and player-facing descriptions, which prevents drift.
+
+## Why This Pattern
+
+- Problem this pattern solves: Item behavior, shop copy, inventory copy, and battle use can quietly disagree if they each hardcode their own value.
+- Why it fits this slice: Tonics are the first demo's main safety valve, so their behavior should be obvious and consistent.
+- Tradeoff or thing to watch: If item effects grow more complex, constants may give way to fully data-driven effect dictionaries.
+
+## Tiny Exercise
+
+- Task: Change `ItemDB.TONIC_HEAL` from `20` to `24` and run the shop/inventory smoke.
+- Expected result in-game: Tonic descriptions and healing amount should both update.
+- Hint: Search for `TONIC_HEAL` to see every place the constant is used.
+
+## Questions to Revisit
+
+- Question: Should Ethers restore one charge or all charges?
+- Why it matters: The current shop description and behavior are close, but magic economy balance will matter once longer routes arrive.
+- When to revisit: During the next content expansion or cave route pass.
