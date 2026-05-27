@@ -129,6 +129,12 @@ Run the first-route guidance check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_first_route_guidance.tscn
 ```
 
+Run the overworld command menu check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_overworld_command_menu.tscn
+```
+
 Run the second story quest check:
 
 ```powershell
