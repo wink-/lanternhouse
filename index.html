@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lanternhouse — Story Bible</title>
+<title>Lanternhouse — Story Bible &amp; Game Systems</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 
@@ -390,7 +390,7 @@
     <div class="lantern-icon">🏮</div>
     <h1>Lanternhouse</h1>
     <p class="tagline">The light that protects us was never meant to keep the dark out.</p>
-    <p class="subtitle">Story Bible</p>
+    <p class="subtitle">Story Bible &amp; Game Systems</p>
   </div>
 </header>
 
@@ -407,6 +407,17 @@
   <a href="#theme">Theme</a>
   <a href="#opening">Opening</a>
   <a href="#chapters">Chapters</a>
+  <span style="color:#2a2218;margin:0 0.3rem;">|</span>
+  <a href="#overworld">Overworld</a>
+  <a href="#battle">Battle</a>
+  <a href="#equipment">Equipment</a>
+  <a href="#economy">Economy</a>
+  <a href="#crafting">Crafting</a>
+  <a href="#fishing">Fishing</a>
+  <a href="#housing">Housing</a>
+  <a href="#companions">Companions</a>
+  <a href="#progression">Progression</a>
+  <a href="#reference">Reference</a>
 </nav>
 
 <!-- ═══════════ Content ═══════════ -->
@@ -965,15 +976,830 @@
   </blockquote>
 </section>
 
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════ GAME SYSTEMS DOCUMENTATION ══════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div style="text-align:center;padding:2rem 0 1rem;margin-top:2rem;border-top:2px solid var(--panel-border);">
+  <p style="font-family:'IM Fell English',Georgia,serif;font-size:1.8rem;color:var(--heading);letter-spacing:0.06em;">Game Systems</p>
+  <p style="color:var(--dim-amber);font-size:0.95rem;margin-top:0.5rem;">Documented mechanics of the implemented game</p>
+</div>
+
+<!-- ───────────── Overworld ───────────── -->
+<section id="overworld">
+  <h2><span class="num">12</span> Overworld &amp; Exploration</h2>
+
+  <p>
+    The main exploration mode is a <strong>40&#215;40 tile grid</strong> built from an ASCII map.
+    Each character in the map array represents a terrain type, rendered as 32&#215;32 pixel tiles
+    using the Pipoya RPG World Tileset.
+  </p>
+
+  <div class="panel">
+    <div class="panel-title">Tile Types</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 2rem;font-size:0.95rem;">
+      <span><code style="color:var(--accent-blue);">~</code> Water (blocked)</span>
+      <span><code style="color:var(--accent-green);">,</code> Grassland</span>
+      <span><code style="color:var(--gold);">.</code> Sand / Beach</span>
+      <span><code style="color:var(--accent-green);">T</code> Forest (encounter zone)</span>
+      <span><code style="color:var(--dim-amber);">^</code> Hills</span>
+      <span><code style="color:var(--accent-red);">M</code> Mountain (blocked)</span>
+      <span><code style="color:var(--text);">#</code> Peak (blocked)</span>
+      <span><code style="color:var(--dim-amber);">=</code> Path (dirt road)</span>
+      <span><code style="color:var(--heading);">L</code> Lighthouse</span>
+      <span><code style="color:var(--amber);">B</code> Beacon</span>
+      <span><code style="color:var(--accent-teal);">D</code> Dock</span>
+      <span><code style="color:var(--accent-purple);">V</code> Cave (blocked until opened)</span>
+      <span><code style="color:var(--dim-amber);">h</code> House (town entrance)</span>
+      <span><code style="color:var(--accent-green);">C</code> Campfire</span>
+      <span><code style="color:var(--accent-purple);">A</code> Abandoned Village</span>
+      <span><code style="color:var(--gold);">O</code> Overlook (reveals map)</span>
+      <span><code style="color:var(--accent-red);">!</code> Guaranteed Encounter (one-time)</span>
+      <span><code style="color:var(--dim-amber);">f</code> Forest Clearing</span>
+    </div>
+  </div>
+
+  <h3>Movement &amp; Controls</h3>
+  <p>
+    Four-direction grid movement at <strong>0.15 seconds per tile</strong>. Supports WASD, arrow keys,
+    and gamepad. Sprinting is available on some terrain, which reduces the encounter step divisor by 2
+    (minimum 3), meaning more frequent encounters while running.
+  </p>
+
+  <h3>Fog of War</h3>
+  <p>
+    The map starts shrouded. Tiles within a <strong>3-tile radius</strong> of the player are revealed
+    as they move. Lit beacons permanently reveal a <strong>6-tile radius</strong> around their position.
+    The fog overlay dynamically adjusts alpha based on distance to the nearest lit beacon.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="border-color:var(--accent-teal);">
+      <div class="panel-title">Day/Night Cycle</div>
+      <p style="font-size:0.92rem;">A full cycle lasts <strong>300 seconds</strong> (5 minutes). Four phases tint the screen:</p>
+      <ul style="font-size:0.9rem;margin-top:0.5rem;padding-left:1rem;">
+        <li><strong>Night</strong> &mdash; deep blue overlay</li>
+        <li><strong>Dawn</strong> &mdash; warm amber tint</li>
+        <li><strong>Day</strong> &mdash; clear (no tint)</li>
+        <li><strong>Dusk</strong> &mdash; orange-pink fade</li>
+      </ul>
+      <p style="font-size:0.9rem;margin-top:0.5rem;">NPCs change position by phase. Wandering radius shrinks at night.</p>
+    </div>
+    <div class="panel" style="border-color:var(--accent-blue);">
+      <div class="panel-title">Weather</div>
+      <p style="font-size:0.92rem;">Rain rolls in every <strong>40&ndash;120 seconds</strong> (25% chance per check) and lasts
+      <strong>20&ndash;60 seconds</strong>.</p>
+      <p style="font-size:0.9rem;margin-top:0.5rem;"><strong>Gameplay effect:</strong> +8% miss chance in battle during rain.</p>
+      <p style="font-size:0.9rem;margin-top:0.5rem;">Rain darkens the day/night overlay and adds visual atmosphere.</p>
+    </div>
+  </div>
+
+  <h3>Random Encounters</h3>
+  <p>
+    Encounters are checked every N steps based on terrain type:
+  </p>
+  <div class="panel" style="max-width:500px;">
+    <table style="width:100%;font-size:0.95rem;">
+      <tr><td><strong>Forest</strong></td><td>1 in 6 steps</td></tr>
+      <tr><td><strong>Mountain</strong></td><td>1 in 5 steps</td></tr>
+      <tr><td><strong>Grassland</strong></td><td>1 in 8 steps</td></tr>
+      <tr><td><strong>Beach</strong></td><td>1 in 10 steps</td></tr>
+      <tr><td><strong>Post-Seal</strong></td><td>1 in 5 steps</td></tr>
+    </table>
+  </div>
+  <p>
+    <code style="color:var(--accent-red);">!</code> tiles are guaranteed encounters (one-time, replaced with grass after).
+    Cleared encounters have a <strong>30% chance to respawn</strong> every 120 seconds.
+    There is a <strong>1-in-10 surprise chance</strong> at the start of any battle.
+    <strong>Fog in a Bottle</strong> blocks all encounters for 60 seconds.
+  </p>
+
+  <h3>The Five Beacons</h3>
+  <p>
+    Scattered across the map are five beacon towers. Lighting each one:
+  </p>
+  <ul style="margin:0.5rem 0 0 1.5rem;">
+    <li>Reveals a 6-tile radius permanently</li>
+    <li>Grants +5 Keepers Guild reputation</li>
+    <li>Increases all shop prices by 5% (the beacon modifier)</li>
+    <li>Opens gated routes (Hill Overlook beacon unlocks the eastern pass)</li>
+  </ul>
+  <p>
+    Lighting all five grants +25 Keepers Guild reputation and cracks the cave seal,
+    unlocking deeper exploration. The beacon network is central to both the story and the economy.
+  </p>
+
+  <h3>Gathering</h3>
+  <p>
+    Walking over herb-bearing tiles triggers a gathering check: <strong>40% base + 10% per alchemy skill
+    bonus</strong>, with a chance at bonus yields. Materials follow the same pattern using the tinkering
+    skill. Different terrain types yield different herbs and materials.
+  </p>
+</section>
+
+<!-- ───────────── Battle ───────────── -->
+<section id="battle">
+  <h2><span class="num">13</span> Battle System</h2>
+
+  <p>
+    <strong>FF1-style turn-based combat</strong> using a state machine. The round flows through
+    phases: <em>command &rarr; resolution &rarr; between</em>, cycling until all enemies are defeated
+    or the party flees/falls.
+  </p>
+
+  <div class="panel">
+    <div class="panel-title">Turn Order</div>
+    <p>Each combatant rolls <code>AGI + random(0, 20)</code>. All participants (party + enemies) are
+    sorted by this roll, descending. Ties go to the party. Turns resolve one at a time in this order.</p>
+  </div>
+
+  <h3>Commands</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin:1.5rem 0;">
+    <div class="panel">
+      <div class="panel-title">1 &mdash; Fight</div>
+      <p style="font-size:0.92rem;">Physical attack. Damage = <code>ATK - DEF + rand(0,2)</code>, minimum 1.
+      <strong>Critical hit</strong> on roll &ge; 0.90 (10% chance): 2&times; damage with gold flash.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">2 &mdash; Guard</div>
+      <p style="font-size:0.92rem;">Doubles effective defense for the round. The character takes roughly half
+      damage from all incoming attacks until their next turn.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">3 &mdash; Magic</div>
+      <p style="font-size:0.92rem;">Cast a spell from an unlocked spell level. Each level has a fixed number
+      of charges that recharge at inns. Spells target a single enemy or ally.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">4 &mdash; Item</div>
+      <p style="font-size:0.92rem;">Use a <strong>Tonic</strong> (heals 20 HP to lowest-HP ally) or
+      <strong>Ether</strong> (restores full magic charges to lowest-MP caster).</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">5 &mdash; Run</div>
+      <p style="font-size:0.92rem;">Escape chance: <code>20% + (leader AGI - avg enemy AGI) &times; 6%</code>,
+      clamped 5&ndash;85%. Failure = free enemy attack at -2 DEF penalty.
+      <strong>Smoke Bomb</strong> guarantees escape.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Tab &mdash; Skip</div>
+      <p style="font-size:0.92rem;">Pass this character&rsquo;s turn. They do nothing and take no special stance.</p>
+    </div>
+  </div>
+
+  <h3>Damage &amp; Accuracy</h3>
+  <div class="panel">
+    <ul style="list-style:none;padding:0;font-size:0.95rem;">
+      <li><strong>Base damage:</strong> <code>max(1, ATK - DEF + rand(0,2))</code></li>
+      <li><strong>Critical:</strong> 10% chance, 2&times; damage, gold screen flash, shake effect</li>
+      <li><strong>Miss:</strong> 5% base + 30% if blind + 8% if raining</li>
+      <li><strong>Guard:</strong> Doubles effective DEF for the round</li>
+      <li><strong>Loyalty modifier:</strong> &ge;80 loyalty: +2 STR/DEF; &le;20: -2 STR/DEF</li>
+    </ul>
+  </div>
+
+  <h3>Status Effects</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">☠️</div>
+      <div class="panel-title" style="text-align:center;">Poison</div>
+      <p style="font-size:0.9rem;">2&ndash;3 damage per turn for 3 turns</p>
+    </div>
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">👁️</div>
+      <div class="panel-title" style="text-align:center;">Blind</div>
+      <p style="font-size:0.9rem;">+30% miss chance for 2 turns</p>
+    </div>
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">🤐</div>
+      <div class="panel-title" style="text-align:center;">Silence</div>
+      <p style="font-size:0.9rem;">Cannot cast spells for 2 turns</p>
+    </div>
+  </div>
+
+  <h3>Enemy AI</h3>
+  <p>Five AI behavior types determine how enemies pick targets:</p>
+  <div class="panel" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 2rem;">
+    <div><strong>Attack</strong> &mdash; random target</div>
+    <div><strong>Smart</strong> &mdash; lowest HP party member</div>
+    <div><strong>Pack</strong> &mdash; same target as pack leader</div>
+    <div><strong>Cunning</strong> &mdash; lowest DEF party member</div>
+    <div><strong>Boss</strong> &mdash; cycles special abilities</div>
+    <div>&nbsp;</div>
+  </div>
+
+  <h3>Boss Encounters</h3>
+  <p>
+    Bosses cycle through powerful special abilities every other turn:
+  </p>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 2rem;font-size:0.95rem;">
+      <div><strong>Shadow Bolt</strong> &mdash; ATK+4, variance 3</div>
+      <div><strong>Life Drain</strong> &mdash; ATK damage, heals 50%</div>
+      <div><strong>Summon Shadows</strong> &mdash; adds up to 2 DarkShade minions</div>
+      <div><strong>Sorrow Wave</strong> &mdash; AoE ATK-2 to all</div>
+      <div><strong>Entomb</strong> &mdash; ATK+6 + blind</div>
+      <div><strong>Wail</strong> &mdash; 40% silence chance to all</div>
+    </div>
+  </div>
+  <p>
+    <strong>DarkShade</strong> minions: 8 HP, 7 ATK, 2 DEF &mdash; weak individually but dangerous in groups.
+  </p>
+
+  <h3>Victory &amp; Defeat</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="border-color:var(--accent-green);">
+      <div class="panel-title">Victory Rewards</div>
+      <ul style="font-size:0.92rem;list-style:none;padding:0;">
+        <li>Gold &times; 100 copper</li>
+        <li>XP to all alive party members</li>
+        <li>+1 loyalty for hired companions</li>
+        <li>Quest progress (kill counts)</li>
+      </ul>
+    </div>
+    <div class="panel" style="border-color:var(--accent-red);">
+      <div class="panel-title">Defeat Penalty</div>
+      <ul style="font-size:0.92rem;list-style:none;padding:0;">
+        <li>All HP set to 1</li>
+        <li>Lose 20% of gold</li>
+        <li>Lose all trade goods</li>
+        <li>-5 loyalty for hired companions</li>
+        <li>Return to starting position</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Leveling Up</h3>
+  <p>
+    XP needed for next level scales at <code>next_xp &times; 1.4</code> per level.
+    Maximum level is <strong>40</strong>. Beyond that, diminishing returns grant only 1&ndash;3 bonus
+    to a random stat. Each class has its own level-up stat gain ranges (Fighters gain 3&ndash;6 HP, Thieves
+    gain 0&ndash;1 AGI, etc.).
+  </p>
+
+  <h3>The Endgame Choice</h3>
+  <p>
+    After the final boss, the player faces a three-way choice with lasting faction consequences:
+  </p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="text-align:center;border-color:var(--gold);">
+      <div class="panel-title" style="text-align:center;">Restore the Seal</div>
+      <p style="font-size:0.9rem;">+20 Keepers<br>-15 Unlit</p>
+      <p style="font-size:0.85rem;font-style:italic;opacity:0.8;margin-top:0.5rem;">Preserve the old order</p>
+    </div>
+    <div class="panel" style="text-align:center;border-color:var(--accent-red);">
+      <div class="panel-title" style="text-align:center;">Break the Seal</div>
+      <p style="font-size:0.9rem;">+20 Unlit<br>-10 Keepers, -10 Chapel</p>
+      <p style="font-size:0.85rem;font-style:italic;opacity:0.8;margin-top:0.5rem;">Risk the unknown</p>
+    </div>
+    <div class="panel" style="text-align:center;border-color:var(--accent-teal);">
+      <div class="panel-title" style="text-align:center;">Rebuild the Line</div>
+      <p style="font-size:0.9rem;">+10 to all factions</p>
+      <p style="font-size:0.85rem;font-style:italic;opacity:0.8;margin-top:0.5rem;">A new compromise</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Equipment ───────────── -->
+<section id="equipment">
+  <h2><span class="num">14</span> Equipment &amp; Inventory</h2>
+
+  <p>
+    Each party member has <strong>three equipment slots</strong>: Head, Body, and Accessory.
+    Weapons are equipped separately and tracked per character. Equipment is stored in shared bags
+    with capacity limits.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">⚔️</div>
+      <div class="panel-title" style="text-align:center;">Weapon Bag</div>
+      <p style="font-size:0.9rem;">Max 12 items</p>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">7 weapons, ATK 1&ndash;17</p>
+    </div>
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">🛡️</div>
+      <div class="panel-title" style="text-align:center;">Armor Bag</div>
+      <p style="font-size:0.9rem;">Max 12 items</p>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">17 pieces: 7 body, 5 head, 5 accessory</p>
+    </div>
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:1.5rem;">📦</div>
+      <div class="panel-title" style="text-align:center;">Trade Goods</div>
+      <p style="font-size:0.9rem;">Max 8 items</p>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">Zone-priced, includes fish &amp; crafted goods</p>
+    </div>
+  </div>
+
+  <h3>Equipment Slots</h3>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center;">
+      <div>
+        <div style="font-size:1.3rem;">🗡️</div>
+        <div style="color:var(--gold);font-size:0.95rem;"><strong>Weapon</strong></div>
+        <div style="font-size:0.85rem;margin-top:0.3rem;">Adds to STR</div>
+      </div>
+      <div>
+        <div style="font-size:1.3rem;">⛑️</div>
+        <div style="color:var(--gold);font-size:0.95rem;"><strong>Head</strong></div>
+        <div style="font-size:0.85rem;margin-top:0.3rem;">Adds to DEF</div>
+      </div>
+      <div>
+        <div style="font-size:1.3rem;">🦺</div>
+        <div style="color:var(--gold);font-size:0.95rem;"><strong>Body</strong></div>
+        <div style="font-size:0.85rem;margin-top:0.3rem;">Adds to DEF</div>
+      </div>
+      <div>
+        <div style="font-size:1.3rem;">💍</div>
+        <div style="color:var(--gold);font-size:0.95rem;"><strong>Accessory</strong></div>
+        <div style="font-size:0.85rem;margin-top:0.3rem;">Adds to DEF</div>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    <strong>Effective stats</strong> combine base stats + weapon ATK + armor DEF + loyalty bonuses.
+    At 80+ loyalty, companions get a 1.1&times; multiplier to STR and DEF. Equipping a new item
+    automatically swaps the old one back to the bag.
+  </p>
+
+  <h3>Inventory Tabs</h3>
+  <p>
+    The inventory screen has four tabs, cycled with Tab key:
+    <strong>Consumables</strong> (tonics, ethers, crafted items),
+    <strong>Weapons</strong> (ATK + equipped indicator),
+    <strong>Armor</strong> (DEF + slot tag + equipped indicator),
+    <strong>Trade Goods</strong> (base value + zone modifiers).
+    Press Enter on an item to equip it to a chosen party member.
+  </p>
+</section>
+
+<!-- ───────────── Economy ───────────── -->
+<section id="economy">
+  <h2><span class="num">15</span> Economy &amp; Trading</h2>
+
+  <h3>Currency</h3>
+  <p>
+    All money is stored internally as <strong>copper</strong> and displayed in the classic
+    gold/silver/copper format:
+  </p>
+  <div class="panel" style="max-width:400px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;font-size:0.95rem;">
+      <div><strong style="color:var(--gold);">100 copper</strong><br>= 1 silver</div>
+      <div><strong style="color:var(--heading);">100 silver</strong><br>= 1 gold</div>
+      <div><strong style="color:var(--accent-red);">Starting</strong><br>500 copper</div>
+    </div>
+  </div>
+
+  <h3>Faction Currencies</h3>
+  <p>
+    Three factions issue their own currencies for specialized transactions:
+  </p>
+  <div class="panel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+    <div style="text-align:center;">
+      <div style="color:var(--gold);">🪙 Keeper Marks</div>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">Keepers Guild</p>
+    </div>
+    <div style="text-align:center;">
+      <div style="color:var(--accent-blue);">🪙 Harbor Tokens</div>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">Harbor Compact</p>
+    </div>
+    <div style="text-align:center;">
+      <div style="color:var(--accent-purple);">🪙 Chapel Script</div>
+      <p style="font-size:0.85rem;margin-top:0.3rem;">Grey Chapel</p>
+    </div>
+  </div>
+  <p>
+    Exchange rates are affected by beacon count: Keepers currency rises +8% per lit beacon,
+    Harbor drops -2% per beacon. Currencies are bought and sold at the dock and town.
+  </p>
+
+  <h3>Shop Pricing</h3>
+  <p>
+    Final price = <code>base &times; beacon_modifier &times; faction_modifier</code> (minimum 1):
+  </p>
+  <div class="panel">
+    <ul style="list-style:none;padding:0;font-size:0.95rem;">
+      <li><strong>Beacon modifier:</strong> <code>1.0 + (lit_beacons &times; 0.05)</code> &mdash; more beacons means higher prices</li>
+      <li><strong>Faction modifier:</strong> <code>1.0 - (reputation &times; 0.05)</code> &mdash; better reputation means lower prices</li>
+      <li><strong>Sell price:</strong> 50% of base for weapons/armor; trade goods use zone modifiers</li>
+    </ul>
+  </div>
+
+  <h3>Trade Goods &amp; Zone Pricing</h3>
+  <p>
+    Trade goods have different values depending on where you sell them:
+  </p>
+  <div class="panel" style="max-width:500px;">
+    <table style="width:100%;font-size:0.92rem;">
+      <tr><th style="text-align:left;color:var(--gold);">Good</th><th style="text-align:left;color:var(--gold);">Best Zone</th><th style="text-align:left;color:var(--gold);">Worst Zone</th></tr>
+      <tr><td>Beacon Oil</td><td>Docks (1.5&times;)</td><td>Beacon (0.5&times;)</td></tr>
+      <tr><td>Salt Pouch</td><td>Docks (1.4&times;)</td><td>Base</td></tr>
+      <tr><td>Herb Bun</td><td>Forest (1.5&times;)</td><td>Base</td></tr>
+      <tr><td>Shadow Oil</td><td>Forest (1.2&times;)</td><td>Beacon (0.5&times;)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ───────────── Crafting ───────────── -->
+<section id="crafting">
+  <h2><span class="num">16</span> Crafting &amp; Skills</h2>
+
+  <p>
+    Two crafting disciplines, both driven by a <strong>use-based skill progression</strong> system.
+    Skills improve by doing &mdash; each use increments a counter, and crossing thresholds unlocks
+    new tiers.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0;">
+    <div class="panel" style="border-left:3px solid var(--accent-green);">
+      <div class="panel-title">🌿 Alchemy</div>
+      <p style="font-size:0.92rem;">Gather herbs from terrain tiles. Craft potions and elixirs at an alchemy
+      workbench (town or home kitchen).</p>
+      <p style="font-size:0.9rem;margin-top:0.5rem;"><strong>8 recipes</strong> across 4 skill levels:</p>
+      <ul style="font-size:0.88rem;margin-top:0.3rem;padding-left:1rem;">
+        <li><strong>Novice:</strong> Minor Tonic (15 HP)</li>
+        <li><strong>Adept:</strong> Tonic (30 HP), Antidote</li>
+        <li><strong>Expert:</strong> Greater Tonic (60 HP), Ether Brew</li>
+        <li><strong>Master:</strong> Strength Elixir, Defense Elixir, Panacea</li>
+      </ul>
+    </div>
+    <div class="panel" style="border-left:3px solid var(--dim-amber);">
+      <div class="panel-title">🔧 Tinkering</div>
+      <p style="font-size:0.92rem;">Scavenge materials from terrain tiles. Craft tools and trade goods at a
+      workbench (home).</p>
+      <p style="font-size:0.9rem;margin-top:0.5rem;"><strong>7 recipes</strong> across 4 skill levels:</p>
+      <ul style="font-size:0.88rem;margin-top:0.3rem;padding-left:1rem;">
+        <li><strong>Novice:</strong> Repair Kit</li>
+        <li><strong>Adept:</strong> Lantern Lens, Simple Lockpick</li>
+        <li><strong>Expert:</strong> Beacon Lens, Oil Lantern</li>
+        <li><strong>Master:</strong> Master Repair Kit, Trap Kit</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Skill Tiers</h3>
+  <p>
+    Every skill in the game (combat, trade, and gathering) uses the same tier system:
+  </p>
+  <div class="panel" style="max-width:500px;">
+    <table style="width:100%;font-size:0.95rem;">
+      <tr><th style="text-align:left;color:var(--gold);">Tier</th><th style="text-align:left;color:var(--gold);">Uses Required</th><th style="text-align:left;color:var(--gold);">Bonus</th></tr>
+      <tr><td>Novice</td><td>0</td><td>+0</td></tr>
+      <tr><td>Adept</td><td>10+</td><td>+1</td></tr>
+      <tr><td>Expert</td><td>30+</td><td>+2</td></tr>
+      <tr><td>Master</td><td>60+</td><td>+3</td></tr>
+    </table>
+  </div>
+  <p>
+    Skill bonuses improve gathering success rates, unlock higher-tier recipes, and grant access
+    to rarer fish. There are <strong>11 trackable skills</strong>: weapon, magic, healing, alchemy,
+    tinkering, cooking, fishing, herbalism, exploration, trading, and gathering.
+  </p>
+</section>
+
+<!-- ───────────── Fishing ───────────── -->
+<section id="fishing">
+  <h2><span class="num">17</span> Fishing &amp; Cooking</h2>
+
+  <p>
+    Fishing is available at specific tiles (coast, deep water, forest river, mountain lake) and at
+    the dock. The mechanic is a <strong>timing mini-game</strong>: cast, wait for a bite (2&ndash;6 seconds),
+    then reel by pressing the action key repeatedly within a 2.5-second window.
+  </p>
+
+  <h3>Fish by Zone</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0;">
+    <div class="panel">
+      <div class="panel-title">🌊 Coast &amp; Beach</div>
+      <ul style="font-size:0.9rem;padding-left:1rem;">
+        <li>Shrimp (common, 3c)</li>
+        <li>Mackerel (common, 8c)</li>
+        <li>Sea Bass (uncommon, 25c)</li>
+        <li>Flounder (uncommon, 35c)</li>
+        <li>Red Snapper (rare, 80c)</li>
+        <li>Swordfish (very rare, 250c)</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="panel-title">🌲 Forest River</div>
+      <ul style="font-size:0.9rem;padding-left:1rem;">
+        <li>Minnow (common, 3c)</li>
+        <li>Trout (common, 12c)</li>
+        <li>Catfish (uncommon, 30c)</li>
+        <li>River Eel (rare, 60c)</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="panel-title">⛰️ Mountain Lake</div>
+      <ul style="font-size:0.9rem;padding-left:1rem;">
+        <li>Perch (common, 10c)</li>
+        <li>Char (uncommon, 40c)</li>
+        <li>Mountain Trout (rare, 90c)</li>
+        <li>Glacial Salmon (very rare, 200c)</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <div class="panel-title">🌊 Deep Water (Dock)</div>
+      <ul style="font-size:0.9rem;padding-left:1rem;">
+        <li>Tuna (uncommon, 120c)</li>
+        <li>Anglerfish (rare, 200c)</li>
+        <li>Ghost Leviathan (very rare, 500c)</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    <strong>Rarity</strong> ranges from 0.01 to 0.40. Higher fishing skill unlocks rarer catches
+    (skill level thresholds: 0, 5+, 15+, 40+, 80+ uses). The reel target is
+    <code>min(3 + rarity &times; 20, 12)</code> presses &mdash; rarer fish require more presses.
+  </p>
+
+  <h3>Cooking</h3>
+  <p>
+    Fish with cooking value can be cooked at a home kitchen (requires upgrade) or with the tavern
+    keeper. Cooking heals all alive party members by the fish&rsquo;s HP value (8&ndash;200 HP) and
+    tracks cooking skill progress. Cooked fish are consumed in the process.
+  </p>
+</section>
+
+<!-- ───────────── Housing ───────────── -->
+<section id="housing">
+  <h2><span class="num">18</span> Housing &amp; Home</h2>
+
+  <p>
+    Players can purchase a home in Brindlewick. Homes provide healing, crafting stations,
+    storage, and passive income from rent. Four property tiers are available.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0;">
+    <div class="class-card">
+      <div class="name"><span class="emoji">🏠</span> Cottage</div>
+      <div class="stats">
+        <span>Price: 2,000c</span>
+        <span>Rent: 15c/cycle</span>
+      </div>
+      <div class="desc" style="font-size:0.9rem;">Modest starting home. Basic bed rest (20% HP heal).</div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🏘️</span> Townhouse</div>
+      <div class="stats">
+        <span>Price: 8,000c</span>
+        <span>Rent: 50c/cycle</span>
+      </div>
+      <div class="desc" style="font-size:0.9rem;">Spacious town home. More upgrade slots available.</div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🏰</span> Manor</div>
+      <div class="stats">
+        <span>Price: 25,000c</span>
+        <span>Rent: 150c/cycle</span>
+      </div>
+      <div class="desc" style="font-size:0.9rem;">Grand estate. Highest rent income and all upgrade slots.</div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🏮</span> Keeper&rsquo;s Quarters</div>
+      <div class="stats">
+        <span>Price: 5,000c</span>
+        <span>Rent: 30c/cycle</span>
+      </div>
+      <div class="desc" style="font-size:0.9rem;">Former Keeper&rsquo;s residence. Includes beacon map station.</div>
+    </div>
+  </div>
+
+  <h3>Upgrades</h3>
+  <p>Six upgrades can be added to your home:</p>
+  <div class="panel" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 2rem;">
+    <div><strong>Quality Bed</strong> &mdash; Full heal on rest (+3 loyalty with guest room)</div>
+    <div><strong>Kitchen</strong> &mdash; Cook fish &amp; craft alchemy recipes</div>
+    <div><strong>Workbench</strong> &mdash; Craft tinkering recipes</div>
+    <div><strong>Garden</strong> &mdash; Harvests 1&ndash;3 herbs every 60 seconds</div>
+    <div><strong>Storage Chest</strong> &mdash; 10 extra slots for tonics</div>
+    <div><strong>Beacon Map</strong> &mdash; Shows all beacon status at a glance</div>
+    <div><strong>Guest Room</strong> &mdash; View companion loyalty and tiers</div>
+    <div><strong>Trophy Case</strong> &mdash; Bestiary, gathering stats, exploration %</div>
+  </div>
+
+  <h3>Rent &amp; Tax</h3>
+  <p>
+    Properties generate passive income each cycle. When more than one beacon is lit, a
+    <strong>10% property tax</strong> is applied to rent income. The property market fluctuates
+    (modifier 0.6&ndash;1.6) with a 5% chance of rare market events per cycle.
+  </p>
+</section>
+
+<!-- ───────────── Companions ───────────── -->
+<section id="companions">
+  <h2><span class="num">19</span> Companions &amp; Loyalty</h2>
+
+  <p>
+    Up to <strong>5 recruitable companions</strong> can join your party (max 4 active at once).
+    Each has an upfront hiring cost and a recurring wage. Companions are not mindless followers &mdash;
+    they have a loyalty system that affects their combat performance and willingness to follow orders.
+  </p>
+
+  <div class="class-grid">
+    <div class="class-card">
+      <div class="name"><span class="emoji">🗡️</span> Kael</div>
+      <div class="role">Thief &middot; Level 3 &middot; 50c/week</div>
+      <div class="stats"><span>The Unlit</span></div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🌿</span> Lyra</div>
+      <div class="role">White Mage &middot; Level 2 &middot; 75c/week</div>
+      <div class="stats"><span>Grey Chapel</span></div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🛡️</span> Brok</div>
+      <div class="role">Fighter &middot; Level 5 &middot; 100c/week</div>
+      <div class="stats"><span>Keepers Guild</span></div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🔮</span> Selene</div>
+      <div class="role">Black Mage &middot; Level 4 &middot; 80c/week</div>
+      <div class="stats"><span>Grey Chapel</span></div>
+    </div>
+    <div class="class-card">
+      <div class="name"><span class="emoji">🗝️</span> Kira Shadowstep</div>
+      <div class="role">Thief &middot; Level 3 &middot; 60c/week</div>
+      <div class="stats"><span>The Unlit (Abandoned Village)</span></div>
+    </div>
+  </div>
+
+  <h3>Loyalty System</h3>
+  <p>
+    Loyalty ranges from <strong>0&ndash;100</strong>. It changes based on events:
+  </p>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 2rem;font-size:0.95rem;">
+      <div><strong style="color:var(--accent-green);">+2</strong> &mdash; wage paid on time</div>
+      <div><strong style="color:var(--accent-red);">-10</strong> &mdash; wage missed</div>
+      <div><strong style="color:var(--accent-green);">+1</strong> &mdash; winning a battle</div>
+      <div><strong style="color:var(--accent-red);">-5</strong> &mdash; party wipe (defeat)</div>
+      <div><strong style="color:var(--accent-green);">+1</strong> &mdash; resting at campfire</div>
+      <div><strong style="color:var(--accent-red);">Depart</strong> at 0 &mdash; companion leaves permanently</div>
+    </div>
+  </div>
+
+  <h3>Loyalty Combat Effects</h3>
+  <div class="panel" style="max-width:500px;">
+    <table style="width:100%;font-size:0.95rem;">
+      <tr><th style="text-align:left;color:var(--gold);">Loyalty</th><th style="text-align:left;color:var(--gold);">Effect</th></tr>
+      <tr><td>&ge; 80</td><td>+2 STR, +2 DEF</td></tr>
+      <tr><td>&ge; 60</td><td>+1 STR, +1 DEF</td></tr>
+      <tr><td>&le; 40</td><td>-1 STR, -1 DEF</td></tr>
+      <tr><td>&le; 20</td><td>-2 STR, -2 DEF</td></tr>
+      <tr><td>&le; 10</td><td>Always refuse orders</td></tr>
+      <tr><td>&le; 35</td><td>15% chance to refuse</td></tr>
+    </table>
+  </div>
+
+  <h3>Wages</h3>
+  <p>
+    Wages are deducted every <strong>120 seconds</strong>. If you cannot pay, the companion&rsquo;s
+    loyalty drops. At loyalty 0, they depart permanently. Wages scale with the companion&rsquo;s
+    class and level.
+  </p>
+</section>
+
+<!-- ───────────── Progression ───────────── -->
+<section id="progression">
+  <h2><span class="num">20</span> Quests &amp; Progression</h2>
+
+  <p>
+    <strong>20 quests</strong> span three acts with prerequisite chains. Quests are offered by
+    the Elder in town and tracked in a journal with per-type progress bars.
+  </p>
+
+  <h3>Quest Types</h3>
+  <div class="panel" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;font-size:0.92rem;">
+    <div><strong>beacon</strong> &mdash; Light a specific beacon</div>
+    <div><strong>kill</strong> &mdash; Defeat N of an enemy type</div>
+    <div><strong>gather</strong> &mdash; Collect N herbs/materials</div>
+    <div><strong>flag</strong> &mdash; Reach a story milestone</div>
+    <div><strong>faction</strong> &mdash; Reach a reputation threshold</div>
+    <div><strong>trade</strong> &mdash; Earn N profit from trading</div>
+    <div><strong>upgrade</strong> &mdash; Install N home upgrades</div>
+    <div><strong>explore</strong> &mdash; Discover a location</div>
+    <div><strong>member_quest</strong> &mdash; Companion-specific quest</div>
+  </div>
+
+  <h3>Quest Structure</h3>
+  <div class="act">
+    <h4>Act I &mdash; The Local Light (6 quests)</h4>
+    <p>Relight the Lanternhouse beacon, find the missing Keeper, secure oil supplies,
+    light the first beacons, explore the cave, and confront the Mournlight Shade.</p>
+  </div>
+  <div class="act">
+    <h4>Act II &mdash; The Broken Line (9 quests)</h4>
+    <p>Travel to other towns, light remaining beacons, navigate faction politics, and
+    complete personal quests for your companions (Kael, Lyra, Brok, Selene).</p>
+  </div>
+  <div class="act">
+    <h4>Act III &mdash; The Thing Beneath (1 quest + endgame)</h4>
+    <p>The final descent. Face what the Lantern Line imprisons and make the endgame choice.</p>
+  </div>
+
+  <h3>Companion Quests</h3>
+  <p>
+    Four member-specific quests unlock in Act II, each requiring the companion to be in your
+    active party with loyalty &ge; 50&ndash;70:
+  </p>
+  <div class="panel" style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 2rem;font-size:0.92rem;">
+    <div><strong>Kael&rsquo;s Shadow</strong> &mdash; 50 loyalty required</div>
+    <div><strong>Lyra&rsquo;s Vow</strong> &mdash; 60 loyalty required</div>
+    <div><strong>Brok&rsquo;s Honor</strong> &mdash; 70 loyalty required</div>
+    <div><strong>Selene&rsquo;s Elemental</strong> &mdash; 60 loyalty required</div>
+  </div>
+
+  <h3>Quest Rewards</h3>
+  <p>
+    Gold rewards range from <strong>50 to 1,000 copper</strong>. XP rewards range from
+    <strong>5 to 80</strong>. The final quest grants 80 XP and 1,000 copper.
+  </p>
+</section>
+
+<!-- ───────────── Reference ───────────── -->
+<section id="reference">
+  <h2><span class="num">21</span> Quick Reference</h2>
+
+  <div class="panel">
+    <div class="panel-title">Key Numbers</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 2rem;font-size:0.92rem;">
+      <div><strong>Overworld:</strong> 40&times;40 grid, 32px tiles</div>
+      <div><strong>Sub-scenes:</strong> 16&times;16 grid, 16px tiles</div>
+      <div><strong>Party size:</strong> Max 4 active</div>
+      <div><strong>Max level:</strong> 40</div>
+      <div><strong>Starting gold:</strong> 500 copper</div>
+      <div><strong>Day/night cycle:</strong> 300 seconds</div>
+      <div><strong>Wage interval:</strong> 120 seconds</div>
+      <div><strong>Auto-save:</strong> Every 60 seconds</div>
+      <div><strong>Weapon bag:</strong> 12 max</div>
+      <div><strong>Armor bag:</strong> 12 max</div>
+      <div><strong>Trade goods:</strong> 8 max</div>
+      <div><strong>Home storage:</strong> 10 slots</div>
+      <div><strong>Fog of war:</strong> 3-tile player, 6-tile beacon</div>
+      <div><strong>Beacons:</strong> 5 total</div>
+      <div><strong>Factions:</strong> 4</div>
+      <div><strong>Quests:</strong> 20 across 3 acts</div>
+      <div><strong>Enemy types:</strong> 12</div>
+      <div><strong>Fish species:</strong> 16 across 4 zones</div>
+      <div><strong>Weapons:</strong> 7 (ATK 1&ndash;17)</div>
+      <div><strong>Armor:</strong> 17 pieces (DEF 1&ndash;21)</div>
+      <div><strong>Alchemy recipes:</strong> 8</div>
+      <div><strong>Tinkering recipes:</strong> 7</div>
+      <div><strong>Recruitable companions:</strong> 5</div>
+      <div><strong>Spells:</strong> 8 across 3 levels</div>
+      <div><strong>XP scaling:</strong> &times;1.4 per level</div>
+      <div><strong>Level-up HP gain:</strong> 2&ndash;6 (class-dependent)</div>
+      <div><strong>Skills:</strong> 11 trackable</div>
+      <div><strong>Skill tiers:</strong> Novice/Adept/Expert/Master</div>
+    </div>
+  </div>
+
+  <h3>Keyboard Controls</h3>
+  <div class="panel" style="max-width:500px;">
+    <table style="width:100%;font-size:0.92rem;">
+      <tr><th style="text-align:left;color:var(--gold);">Action</th><th style="text-align:left;color:var(--gold);">Keys</th></tr>
+      <tr><td>Move</td><td>WASD / Arrows / Gamepad</td></tr>
+      <tr><td>Interact</td><td>E / Space / A button</td></tr>
+      <tr><td>Cancel / Menu</td><td>Escape / B button</td></tr>
+      <tr><td>Select party member</td><td>1 / 2 / 3 / 4</td></tr>
+      <tr><td>Tab cycle</td><td>Tab</td></tr>
+      <tr><td>Character sheet</td><td>C</td></tr>
+      <tr><td>Quest journal</td><td>J</td></tr>
+      <tr><td>Minimap</td><td>Tab (overworld only)</td></tr>
+      <tr><td>Debug overlay</td><td>F3</td></tr>
+      <tr><td>Quick save / load</td><td>F5 / F7</td></tr>
+    </table>
+  </div>
+
+  <h3>Game Flow</h3>
+  <div class="panel" style="text-align:center;font-size:0.95rem;">
+    <p>
+      Title Screen &rarr; Overworld &rarr; Town (NPCs, Shop, Crafting) &rarr; Battle (Encounters) &rarr; Sub-scenes (Cave, Dock, Village, Clearing) &rarr; Home (Rest, Craft, Store)
+    </p>
+  </div>
+
+  <h3>Auto-Save &amp; Manual Save</h3>
+  <p>
+    The game auto-saves every <strong>60 seconds</strong> to a single slot (<code>user://saves/save_slot1.json</code>).
+    Press <strong>F5</strong> for manual save, <strong>F7</strong> to load. Saves store 35+ data fields
+    including all party state, equipment, overworld position, quest flags, faction reputations,
+    and skill use counts. The save format includes version tracking for backward compatibility.
+  </p>
+</section>
+
 </div>
 
 <footer>
   <p>🏮 <strong>Lanternhouse</strong> — an original retro JRPG</p>
-  <p style="margin-top:0.5rem;">Built with Godot 4 · Mournlight Sound awaits</p>
+  <p style="margin-top:0.5rem;">Built with Godot 4.6 · Mournlight Sound awaits</p>
   <p style="margin-top:1rem;font-size:0.75rem;">
     <a href="https://github.com/wink-/lanternhouse">GitHub</a> ·
-    <a href="https://github.com/wink-/lanternhouse/blob/main/docs/pixel-art-direction.md">Art Direction</a> ·
-    <a href="https://github.com/wink-/lanternhouse/blob/main/docs/SYSTEMS.md">Systems Design</a>
+    <a href="https://github.com/wink-/lanternhouse/blob/main/docs/DEVELOPER_GUIDE.md">Developer Guide</a> ·
+    <a href="https://github.com/wink-/lanternhouse/blob/main/docs/QUICK_START.md">Quick Start</a>
   </p>
 </footer>
 
