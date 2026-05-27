@@ -131,6 +131,12 @@ Run the shop/inventory round-trip check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_shop_inventory.tscn
 ```
 
+Run the home-base rest/storage/cooking/garden check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_home_base.tscn
+```
+
 Run every scene:
 
 ```powershell

@@ -307,3 +307,48 @@ Capture anything that should become clearer after future slices.
 - Question: Should Ethers restore one charge or all charges?
 - Why it matters: The current shop description and behavior are close, but magic economy balance will matter once longer routes arrive.
 - When to revisit: During the next content expansion or cave route pass.
+
+---
+
+## Slice
+
+- Name: Home base utility pass
+- Date: 2026-05-27
+- Playable goal: Make the home useful as a reliable rest, storage, cooking, garden, and crafting hub without breaking save/load.
+
+## What Changed
+
+- Player-facing change: Basic bed text now matches what happens, the herb garden only harvests when the timer is ready, and the realtor can sell the Workbench upgrade used by the home scene.
+- Systems or content added: `smoke_home_base` verifies rest, storage, cooking, garden harvest gating, and home save/load persistence.
+- Bug or design problem solved: Garden harvesting could be repeated immediately, the Workbench existed in the home but could not be purchased, and property browsing displayed the wallet instead of each property price.
+
+## Files to Read
+
+- `res://scripts/home.gd` - look for `GARDEN_GROW_SECONDS`, `_garden_ready()`, `_harvest_garden()`, and `_interact_bed()`.
+- `res://scripts/town.gd` - inspect the realtor `HOME_UPGRADES` and property browse display.
+- `res://scripts/dev/smoke_home_base.gd` - see how the home scene is driven directly for an automated gameplay check.
+- `res://scripts/dev/smoke_save_load.gd` - see the broader persistence assertions for home state.
+
+## GDScript Concepts
+
+- Concept: Scene-level smoke tests
+- Where it appears: `smoke_home_base.gd` instantiates the real home scene, calls focused interaction methods, and exits Godot with a success or failure code.
+- What to notice: The test uses real autoload state (`GameData` and `SaveManager`) instead of mocking, so it catches wiring problems between systems.
+
+## Why This Pattern
+
+- Problem this pattern solves: Home features touch inventory, healing, crafting ingredients, timers, and saves, so regressions can be subtle.
+- Why it fits this slice: The home is a hub; proving the hub loop gives us confidence before adding more demo content around it.
+- Tradeoff or thing to watch: Directly calling underscored methods is fine for smoke coverage, but future UI-heavy flows may need input-driven tests too.
+
+## Tiny Exercise
+
+- Task: Change `GARDEN_GROW_SECONDS` to `10.0` and run the home-base smoke.
+- Expected result in-game: The garden should become ready faster, and the smoke should still pass because it uses the constant from the scene.
+- Hint: Search for `GARDEN_GROW_SECONDS` to see both timer display and harvest gating.
+
+## Questions to Revisit
+
+- Question: Should the first cottage include a starter chest or kitchen automatically?
+- Why it matters: Buying a home currently feels useful only after upgrades, which may be too slow for a 20-30 minute demo.
+- When to revisit: When pacing the demo economy and first quest rewards.

@@ -645,6 +645,7 @@ const HOME_UPGRADES := [
 	{"id": "garden", "name": "Herb Garden", "desc": "Grow herbs for alchemy", "price": 600},
 	{"id": "guest_room", "name": "Guest Room", "desc": "Housing party members improves loyalty", "price": 1200},
 	{"id": "beacon_map", "name": "Beacon Map", "desc": "Wall map showing all beacon tower states", "price": 200},
+	{"id": "workbench", "name": "Workbench", "desc": "Craft tools and repair equipment", "price": 700},
 ]
 
 func _show_topics() -> void:
@@ -826,7 +827,8 @@ func _show_home_browse() -> void:
 		var can_afford := GameData.gold >= price
 		var color_start := "" if can_afford else "[color=#666]"
 		var color_end := "" if can_afford else "[/color]"
-		lines.append("%s%s %-20s %s%s" % [color_start, marker, h["name"], GameData.format_money_short() if price > 100 else "%dc" % price, color_end])
+		var price_text := "%dg %ds" % [price / 10000, (price % 10000) / 100] if price >= 10000 else ("%ds %dc" % [price / 100, price % 100] if price >= 100 else "%dc" % price)
+		lines.append("%s%s %-20s %s%s" % [color_start, marker, h["name"], price_text, color_end])
 		lines.append("    %s%s" % [color_start, h["desc"], color_end])
 	lines.append("")
 	lines.append("[1]/Enter to buy, arrows to browse, [Esc] back")

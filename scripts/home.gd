@@ -2,6 +2,7 @@
 extends Node2D
 
 const TILE_SIZE := 16
+const GARDEN_GROW_SECONDS := 60.0
 
 const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
@@ -108,10 +109,7 @@ func _process(delta: float) -> void:
 		_update_player()
 	# Garden growth timer
 	if GameData.has_upgrade("garden"):
-		garden_timer += delta
-		if garden_timer >= 60.0:
-			garden_timer -= 60.0
-			_grow_herbs()
+		garden_timer = minf(garden_timer + delta, GARDEN_GROW_SECONDS)
 		GameData.set_meta("home_garden_timer", garden_timer)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -228,11 +226,10 @@ func _interact_bed() -> void:
 				if m.get("wage", 0) > 0:
 					m["loyalty"] = mini(m.get("loyalty", 50) + 3, 100)
 	else:
-		_say("A basic bed. Upgrade to a Quality Bed for full party healing.\n[current: Restores 20% HP]\n\n[1] Rest anyway")
-		# Simple rest
 		for m: Dictionary in GameData.party:
 			if m["alive"]:
 				m["hp"] = mini(m["hp"] + int(m["max_hp"] * 0.2), m["max_hp"])
+		_say("A basic bed. Upgrade to a Quality Bed for full party healing.\n\n[color=green]You rest briefly. The party recovered 20% HP.[/color]")
 
 # ── Kitchen ──────────────────────────────────────────────────────────────
 func _interact_kitchen() -> void:
@@ -327,8 +324,11 @@ func _show_garden() -> void:
 		lines.append("No herbs in bag.")
 	lines.append("")
 	# Show growth timer
-	var time_left := 60.0 - garden_timer
-	lines.append("Next harvest in: %ds" % int(time_left))
+	if _garden_ready():
+		lines.append("[color=green]Harvest ready.[/color]")
+	else:
+		var time_left := GARDEN_GROW_SECONDS - garden_timer
+		lines.append("Next harvest in: %ds" % int(ceilf(time_left)))
 	lines.append("")
 	lines.append("[1] Harvest available herbs  [Esc] Back")
 	_say("\n".join(lines))
@@ -342,8 +342,12 @@ func _handle_garden_input(keycode: int) -> void:
 			_update_hud()
 
 func _harvest_garden() -> void:
+	if not _garden_ready():
+		_say("The herb garden is still growing.\n\nNext harvest in: %ds" % int(ceilf(GARDEN_GROW_SECONDS - garden_timer)))
+		return
 	# Garden grows 1-2 random herbs per cycle
 	var rng := RandomNumberGenerator.new()
+	rng.randomize()
 	var harvested: Array = []
 	var herbs := ["sea_kelp", "forest_moss", "wild_sage", "fog_petals"]
 	var skill_bonus := GameData.get_skill_bonus("alchemy")
@@ -352,13 +356,14 @@ func _harvest_garden() -> void:
 		var herb: String = herbs[rng.randi() % herbs.size()]
 		GameData.add_herb(herb, 1)
 		harvested.append(herb.replace("_", " ").capitalize())
+	garden_timer = 0.0
+	GameData.set_meta("home_garden_timer", garden_timer)
 	GameData.track_skill_use("alchemy", 1)
 	_say("[color=green]Harvested: %s[/color]" % ", ".join(harvested))
 	garden_mode = false
 
-func _grow_herbs() -> void:
-	# Passive growth — timer-based, auto-harvests to bag
-	pass
+func _garden_ready() -> bool:
+	return garden_timer >= GARDEN_GROW_SECONDS
 
 # ── Storage Chest ────────────────────────────────────────────────────────
 func _interact_chest() -> void:

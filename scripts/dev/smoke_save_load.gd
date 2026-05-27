@@ -25,12 +25,18 @@ func _run_save_load_roundtrip() -> bool:
 	GameData.overworld_position = Vector2i(14, 19)
 	GameData.overworld_facing = Vector2i.DOWN
 	GameData.faction_reputation = {1: 15}
+	GameData.owned_home = "cottage"
+	GameData.home_upgrades = {"bed": true, "chest": true, "garden": true}
+	GameData.home_storage = [{"id": "tonic", "name": "Tonic", "type": "tonic", "count": 1}]
+	GameData.trade_goods = [{"id": "test_fish", "name": "Test Fish", "type": "trade", "cooking": {"hp": 5}}]
 	GameData.herb_bag = {"mournmint": 2}
 	GameData.material_bag = {"driftwood": 3}
 	GameData.crafted_items = [{"id": "test_lantern_oil", "name": "Test Lantern Oil"}]
+	GameData.skill_uses = {"alchemy": 2}
 	GameData.gather_counts = {"herb": 2}
 	GameData.set_meta("fog_active", true)
 	GameData.set_meta("fog_timer", 42.0)
+	GameData.set_meta("home_garden_timer", 17.5)
 
 	if GameData.party.size() > 0:
 		GameData.party[0]["magic_levels"] = {1: {"charges": 1, "max": 2}}
@@ -44,12 +50,18 @@ func _run_save_load_roundtrip() -> bool:
 	GameData.overworld_position = Vector2i.ZERO
 	GameData.overworld_facing = Vector2i.LEFT
 	GameData.faction_reputation = {}
+	GameData.owned_home = ""
+	GameData.home_upgrades = {}
+	GameData.home_storage = []
+	GameData.trade_goods = []
 	GameData.herb_bag = {}
 	GameData.material_bag = {}
 	GameData.crafted_items = []
+	GameData.skill_uses = {}
 	GameData.gather_counts = {}
 	GameData.set_meta("fog_active", false)
 	GameData.set_meta("fog_timer", 0.0)
+	GameData.set_meta("home_garden_timer", 0.0)
 	if GameData.party.size() > 0:
 		GameData.party[0]["magic_levels"] = {}
 
@@ -63,12 +75,18 @@ func _run_save_load_roundtrip() -> bool:
 		and GameData.overworld_position == Vector2i(14, 19)
 		and GameData.overworld_facing == Vector2i.DOWN
 		and GameData.faction_reputation.get(1, 0) == 15
+		and GameData.owned_home == "cottage"
+		and GameData.home_upgrades.get("garden", false)
+		and GameData.home_storage.size() == 1
+		and GameData.trade_goods.size() == 1
 		and GameData.herb_bag.get("mournmint", 0) == 2
 		and GameData.material_bag.get("driftwood", 0) == 3
 		and GameData.crafted_items.size() == 1
+		and GameData.skill_uses.get("alchemy", 0) == 2
 		and GameData.gather_counts.get("herb", 0) == 2
 		and GameData.get_meta("fog_active", false)
 		and is_equal_approx(GameData.get_meta("fog_timer", 0.0), 42.0)
+		and is_equal_approx(GameData.get_meta("home_garden_timer", 0.0), 17.5)
 		and GameData.party[0]["magic_levels"].has(1)
 	)
 
