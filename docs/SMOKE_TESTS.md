@@ -77,6 +77,8 @@ quest/flag persistence.
 3. Speak with the Elder and accept **The Dead Wick**.
 4. Return to the overworld.
 5. Travel to the lighthouse beacon and interact with it.
+   From the new-game spawn area, one direct route is roughly **east 11 tiles,
+   north 5 tiles**, then face north and interact with the beacon.
 6. Open the quest journal and confirm the beacon objective shows as lit.
 7. Return to the Elder.
 8. Confirm the quest completes once and grants its reward.
@@ -104,6 +106,12 @@ Run the save/load round-trip check:
 
 ```powershell
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_save_load.tscn
+```
+
+Run the first quest reward check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_dead_wick.tscn
 ```
 
 Run every scene:

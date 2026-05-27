@@ -130,7 +130,7 @@ func _is_gate_blocked(grid: Vector2i) -> bool:
 
 # Beacon positions on the map (col, row) — keyed by name
 const BEACON_POSITIONS := {
-	"lighthouse": Vector2i(25, 13),  # L tile in the forest
+	"lighthouse": Vector2i(25, 13),  # beacon near the old lighthouse
 	"north_forest": Vector2i(17, 13),  # B in forest
 	"hill_overlook": Vector2i(24, 19),  # B in hills
 	"south_shore": Vector2i(24, 23),  # B on south shore
