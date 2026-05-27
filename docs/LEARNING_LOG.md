@@ -659,3 +659,46 @@ Capture anything that should become clearer after future slices.
 - Question: Should Brindlewick use 32x32 tiles like the overworld?
 - Why it matters: The current 16x16 town scale shows more area but can make people and props feel tiny.
 - When to revisit: During the town interaction and NPC readability pass.
+
+---
+
+## Slice
+
+- Name: Brindlewick building pass
+- Date: 2026-05-27
+- Playable goal: Make town buildings look whole and make their doors usable.
+
+## What Changed
+
+- Player-facing change: Brindlewick has a clearer civic layout with whole buildings, labels, visible paths, and interactable front doors.
+- Systems or content added: Building doors now map to existing NPC/service interactions, so shops, inn, tavern, workshop, chapel, and Elder Hall can be used from the street.
+- Bug or design problem solved: Several buildings were clipped or visually half-present, and door tiles did nothing when the player interacted with them.
+
+## Files to Read
+
+- `res://scripts/town.gd` - inspect `BUILDING_DOORS`, `BUILDING_LABELS`, `_draw_buildings()`, and `_interact()`.
+- `res://scripts/data/npcs.gd` - inspect the Brindlewick schedules that place NPCs by the new storefront doors.
+
+## GDScript Concepts
+
+- Concept: Data-driven interaction lookup
+- Where it appears: `BUILDING_DOORS` maps a `Vector2i` tile coordinate to an NPC id, and `_interact()` routes that id into the same dialogue/service code used by NPCs.
+- What to notice: The town can add more doors by changing data instead of adding a new branch for every building.
+
+## Why This Pattern
+
+- Problem this pattern solves: Doors and NPCs should feel like different ways into the same service, not separate implementations.
+- Why it fits this slice: The town already had reliable merchant, inn, healer, and elder behavior, so doors can reuse it.
+- Tradeoff or thing to watch: When true interiors arrive, these door ids may become scene transition targets instead of direct service ids.
+
+## Tiny Exercise
+
+- Task: Change the workshop door in `BUILDING_DOORS` from `"tinkerer"` to `"realtor"` and boot town.
+- Expected result in-game: Interacting with that doorway opens the realtor flow instead of the tinkerer flow.
+- Hint: The tile coordinate is the doorway, while the string decides which existing interaction starts.
+
+## Questions to Revisit
+
+- Question: Should major buildings get interior scenes or compact service menus first?
+- Why it matters: Interiors add immersion, while service menus get the demo loop playable faster.
+- When to revisit: After the first quest, save/load, and battle loop are stable.

@@ -25,7 +25,6 @@ const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
 const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
 const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
-const QUIET_TILES_PATH := "res://assets/sprites/vendor/quiet_village/Tiles.png"
 const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
 const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
 const GROUND_TILE_RECTS := {
@@ -60,29 +59,29 @@ const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
 	",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
-	",,......,,,,,.......,,,,,,,......,,,,,,,",
-	",,.HHHHHH,,,,HHHHHHH,,,,,,,HHHHHHH,,,,,",
-	",,.HHHHHH====HHHHHHH=======HHHHHHH,,,,,",
-	",,.HHHHHH,,,,HHHHHHH,,,,,,,,,,,,,,,,,,,",
-	",,.HHHHHH,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,==============================,,,,,,",
-	",,,==,,,,,,,,,,====,,,,,,,,,,==,,,,,,,,",
-	",,,==,,,,,,,,@@@@@@@@,,,,,,,,==,,,,,,,,",
-	",,,HHHHHH,,,,@@@@@@@@,,,,,,HHHHHH,,,,,,",
-	",,,HHHHHH====@@@@@@@@======HHHHHH,,,,,,",
-	",,,HHHHHH,,,,@@@@@@@@,,,,,,HHHHHH,,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,HHHHHH,,====,,,,,,,,,HHHHHH,,,,,",
-	",,,,,,,HHHHHH,,====,,,,,,,,,HHHHHH,,,,,",
-	",,,,,,,HHHHHH==========,,,,,HHHHHH,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
-	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,.......,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,HHHHHHH,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,......,,,,,,,,,==,,,,,,,,,......,,,,,",
+	",,,HHHHHH,,,,,,,,,==,,,,,,,,,HHHHHH,,,,,",
+	",,,HHHHHH===========@@@@@@@@==HHHHHH,,,,",
+	",,,HHHHHH,,,,,,,,,,@@@@@@@@,,HHHHHH,,,,,",
+	",,,,,,,,,,,,,,,,,,,@@@@@@@@,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,,@@@@@@@@,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,=====,,,,,,,,,,,,,,,,,,",
+	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
+	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
+	",,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,HHHHHH,,,",
+	",,,,,,,==,,,,,,==,,,,,,==,,,,,,==,,,,,,,",
+	",,,,,,,================================,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,",
 ]
 
 const COLORS := {
@@ -92,6 +91,24 @@ const COLORS := {
 }
 const BLOCKED := {"#": true, "H": true}
 const NPC_IDS := ["weapon_merchant", "armor_merchant", "innkeeper", "elder", "tavern_keeper", "healer", "tinkerer", "realtor"]
+const BUILDING_DOORS := {
+	Vector2i(18, 5): "elder",
+	Vector2i(6, 11): "weapon_merchant",
+	Vector2i(31, 11): "armor_merchant",
+	Vector2i(7, 17): "innkeeper",
+	Vector2i(16, 17): "tavern_keeper",
+	Vector2i(25, 17): "tinkerer",
+	Vector2i(34, 17): "healer",
+}
+const BUILDING_LABELS := [
+	{"grid": Vector2i(15, 1), "text": "Elder Hall"},
+	{"grid": Vector2i(3, 7), "text": "Weapons"},
+	{"grid": Vector2i(28, 7), "text": "Armor"},
+	{"grid": Vector2i(4, 14), "text": "Inn"},
+	{"grid": Vector2i(12, 14), "text": "Tavern"},
+	{"grid": Vector2i(22, 14), "text": "Workshop"},
+	{"grid": Vector2i(32, 14), "text": "Chapel"},
+]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
 
@@ -199,13 +216,14 @@ func _draw_map() -> void:
 func _draw_buildings() -> void:
 	if not _quiet_buildings:
 		return
-	_add_building(Vector2i(3, 2), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
-	_add_building(Vector2i(15, 2), Rect2i(Vector2i(219, 16), Vector2i(172, 72)), 0.48)
-	_add_building(Vector2i(28, 2), Rect2i(Vector2i(354, 466), Vector2i(129, 72)), 0.52)
-	_add_building(Vector2i(3, 10), Rect2i(Vector2i(15, 573), Vector2i(117, 72)), 0.55)
-	_add_building(Vector2i(26, 10), Rect2i(Vector2i(610, 2), Vector2i(193, 83)), 0.42)
-	_add_building(Vector2i(7, 15), Rect2i(Vector2i(16, 681), Vector2i(116, 72)), 0.55)
-	_add_building(Vector2i(30, 15), Rect2i(Vector2i(791, 609), Vector2i(84, 92)), 0.55)
+	_add_building(Vector2i(14, 1), Rect2i(Vector2i(219, 16), Vector2i(172, 72)), 0.5)
+	_add_building(Vector2i(3, 7), Rect2i(Vector2i(15, 573), Vector2i(117, 72)), 0.55)
+	_add_building(Vector2i(28, 7), Rect2i(Vector2i(16, 466), Vector2i(116, 72)), 0.55)
+	_add_building(Vector2i(4, 14), Rect2i(Vector2i(16, 681), Vector2i(116, 72)), 0.55)
+	_add_building(Vector2i(13, 14), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
+	_add_building(Vector2i(22, 14), Rect2i(Vector2i(354, 466), Vector2i(129, 72)), 0.5)
+	_add_building(Vector2i(31, 14), Rect2i(Vector2i(14, 16), Vector2i(118, 72)), 0.55)
+	_draw_building_labels()
 
 func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	var sprite := Sprite2D.new()
@@ -215,7 +233,20 @@ func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	sprite.centered = false
 	sprite.position = Vector2(grid * TILE_SIZE)
 	sprite.scale = Vector2(scale_amount, scale_amount)
+	sprite.z_index = 2
 	building_layer.add_child(sprite)
+
+func _draw_building_labels() -> void:
+	for label_data: Dictionary in BUILDING_LABELS:
+		var label := Label.new()
+		label.text = label_data["text"]
+		label.position = Vector2(label_data["grid"] * TILE_SIZE) + Vector2(0, -14)
+		label.add_theme_color_override("font_color", Color("f6df79"))
+		label.add_theme_color_override("font_shadow_color", Color("1a1612"))
+		label.add_theme_constant_override("shadow_offset_x", 1)
+		label.add_theme_constant_override("shadow_offset_y", 1)
+		label.z_index = 5
+		building_layer.add_child(label)
 
 func _draw_props() -> void:
 	if not _quiet_props:
@@ -562,13 +593,23 @@ func _exit_to_overworld() -> void:
 func _interact() -> void:
 	var target := pos + facing
 	var npc: String = npc_positions.get(target, "")
-	talking_to = npc
-	recruit_mode = false
 
 	if npc == "":
+		npc = _building_door_at(target)
+	if npc == "":
+		npc = _building_door_at(pos)
+	if npc == "":
 		_say("Nothing here.")
-		talking_to = ""
 		return
+
+	_start_npc_interaction(npc)
+
+func _building_door_at(grid: Vector2i) -> String:
+	return BUILDING_DOORS.get(grid, "")
+
+func _start_npc_interaction(npc: String) -> void:
+	talking_to = npc
+	recruit_mode = false
 
 	var context := "default"
 	var npc_data: Dictionary = NPCDB.all_npcs().get(npc, {})
