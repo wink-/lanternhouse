@@ -1,0 +1,411 @@
+# QuestDB — static quest definitions
+class_name QuestDB
+
+# Beacon positions (name → grid pos) — mirrors overworld.gd BEACON_POSITIONS
+const BEACON_POS := {
+	"lighthouse": Vector2i(25, 13),
+	"north_forest": Vector2i(17, 13),
+	"hill_overlook": Vector2i(24, 19),
+	"south_shore": Vector2i(24, 23),
+	"west_point": Vector2i(10, 26),
+}
+
+# Quest prerequisites — quest_id → array of quest_ids that must be completed
+const PREREQUISITES := {
+	"the_missing_keeper": ["the_dead_wick"],
+	"oil_for_the_line": ["the_missing_keeper"],
+	"light_all_beacons": ["oil_for_the_line"],
+	"cave_exploration": ["light_all_beacons"],
+	"the_unlit_rising": ["cave_exploration"],
+	"keepers_journal": ["cave_exploration"],
+	"harbor_tensions": ["cave_exploration"],
+	"shadow_remnants": ["the_unlit_rising"],
+	"the_chapels_secret": ["keepers_journal", "harbor_tensions"],
+	"what_the_line_imprisons": ["shadow_remnants", "the_chapels_secret"],
+}
+
+static func all_quests() -> Dictionary:
+	return {
+		"the_dead_wick": {
+			"name": "The Dead Wick",
+			"description": "The lighthouse beacon has gone dark. The elder asks you to relight it and push back the fog.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "beacon",
+			"target": "lighthouse",
+			"reward_gold": 200,
+			"reward_xp": 15,
+			"dialogue_start": "The lighthouse beacon went out three nights ago. The fog creeps closer each day. Will you relight it?",
+			"dialogue_complete": "The light returns! You have done what few would dare. But there is more work ahead...",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 10,
+		},
+		"visit_brindlewick": {
+			"name": "Visit Brindlewick",
+			"description": "Enter Brindlewick village and speak with the Elder.",
+			"giver": "elder",
+			"type": "flag",
+			"target": "visited_town",
+			"reward_gold": 50,
+			"reward_xp": 5,
+			"dialogue_start": "Welcome, stranger. You look like you can handle yourself.",
+			"dialogue_complete": "Good to see you again. The island needs people like you.",
+		},
+		"the_missing_keeper": {
+			"name": "The Missing Keeper",
+			"description": "Mara Venn, keeper of the North Forest beacon, has not returned. Find her — or what remains of her.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "beacon",
+			"target": "north_forest",
+			"reward_gold": 300,
+			"reward_xp": 25,
+			"dialogue_start": "Mara Venn tended the North Forest beacon. She went to check the line and never came back. The beacon is dark now too. Find her trail in the deep forest.",
+			"dialogue_complete": "You found the beacon, but no sign of Mara. Only her journal, half-buried in roots. It mentions 'oil' — the Line is failing because the oil has run dry.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 15,
+		},
+		"oil_for_the_line": {
+			"name": "Oil for the Line",
+			"description": "The beacon line needs oil to burn. The Harbor Compact sells it — but The Unlit may offer another way.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "beacon",
+			"target": "south_shore",
+			"reward_gold": 400,
+			"reward_xp": 30,
+			"dialogue_start": "Mara's journal says the Line needs special oil. The Harbor Compact controls the supply, but they charge dearly. The Unlit village to the west... they may have their own source. Choose wisely — every deal has consequences.",
+			"dialogue_complete": "Another beacon lit. The oil burns brighter than I expected. You've bought us time, keeper. But the mountain pass still calls...",
+			"reward_faction": "harbor_compact",
+			"reward_rep": 15,
+		},
+		"defeat_5_slimes": {
+			"name": "Pest Control",
+			"description": "Clear out 5 Slimes from the grasslands around town.",
+			"giver": "elder",
+			"type": "kill",
+			"target": "Slime",
+			"target_count": 5,
+			"reward_gold": 100,
+			"reward_xp": 20,
+			"dialogue_start": "The grasslands are overrun with Slimes. Clear out at least 5 of them and I will pay you.",
+			"dialogue_complete": "Good work. The fields are safer now.",
+		},
+		"light_all_beacons": {
+			"name": "The Lantern Line",
+			"description": "Relight all beacon towers across the island and restore the Lantern Line.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "all_beacons",
+			"target": "all",
+			"reward_gold": 500,
+			"reward_xp": 50,
+			"dialogue_start": "The full Lantern Line must be restored. Light every beacon on the island.",
+			"dialogue_complete": "The Line blazes! For the first time in years, the fog retreats from the island. But something stirs in the sealed cave...",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 25,
+		},
+		"herb_gathering": {
+			"name": "The Herbalist's Request",
+			"description": "Gather herbs from the forest clearing for the town apothecary.",
+			"giver": "herbalist",
+			"type": "gather",
+			"target": "herb",
+			"target_count": 5,
+			"reward_gold": 150,
+			"reward_xp": 15,
+			"dialogue_start": "My herb supplies are running low. Could you gather 5 bundles from the forest clearing? The hermit tends a garden there.",
+			"dialogue_complete": "Excellent herbs! These will keep the village supplied for weeks. Here's your payment.",
+		},
+		"forest_purge": {
+			"name": "Forest Purge",
+			"description": "Defeat 8 enemies in the deep forest to make the trails safe again.",
+			"giver": "elder",
+			"type": "kill",
+			"target": "Wolf",
+			"target_count": 8,
+			"reward_gold": 250,
+			"reward_xp": 30,
+			"dialogue_start": "Wolves have been prowling the forest trails, blocking trade routes. Thin them out — 8 should do it.",
+			"dialogue_complete": "The forest trails are safer now. Merchants will be relieved.",
+		},
+		"keepers_favor": {
+			"name": "Keeper's Favor",
+			"description": "Earn Trusted standing with the Keepers Guild.",
+			"giver": "hermit",
+			"type": "faction",
+			"target": "keepers_guild",
+			"target_count": 20,
+			"reward_gold": 300,
+			"reward_xp": 25,
+			"dialogue_start": "The Keepers Guild values those who protect the wild places. Prove yourself worthy — earn our trust, and we'll share our secrets.",
+			"dialogue_complete": "You've proven yourself a true friend of the Keepers. The forest remembers your deeds.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 20,
+		},
+		"fish_for_the_dock": {
+			"name": "Fish for the Dock",
+			"description": "Catch fish at the dock to feed the village during hard times.",
+			"giver": "dockmaster",
+			"type": "gather",
+			"target": "fish",
+			"target_count": 3,
+			"reward_gold": 100,
+			"reward_xp": 10,
+			"dialogue_start": "The fishing boats can't go out in this fog. We need fish — catch 3 from the dock to keep the village fed.",
+			"dialogue_complete": "Good catch! The villagers will eat well tonight. Here's something for your trouble.",
+		},
+		"mountain_expedition": {
+			"name": "Mountain Expedition",
+			"description": "Light the Hill Overlook beacon to secure the mountain passage.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "beacon",
+			"target": "hill_overlook",
+			"reward_gold": 350,
+			"reward_xp": 35,
+			"dialogue_start": "The hill beacon watches over the mountain pass. Without it, travelers are lost to the fog. Light it when you're ready.",
+			"dialogue_complete": "The hill beacon burns again! The mountain pass is open — but watch yourself up there. The fog plays tricks.",
+		},
+		"cave_exploration": {
+			"name": "Into the Dark",
+			"description": "Explore the sealed cave and discover what lurks within.",
+			"story_act": 1,
+			"giver": "elder",
+			"type": "flag",
+			"target": "boss_defeated",
+			"reward_gold": 600,
+			"reward_xp": 50,
+			"dialogue_start": "Something stirs in the sealed cave beneath the lighthouse. Only a fully lit Lantern Line can break the seal. Will you face it?",
+			"dialogue_complete": "The darkness is driven back! The cave is clear, and the island is safe... for now. You have the gratitude of everyone.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 30,
+		},
+		"trade_route": {
+			"name": "Trade Route",
+			"description": "Sell trade goods worth at least 200c at a profit to establish a trade route.",
+			"giver": "merchant",
+			"type": "trade",
+			"target": "trade_profit",
+			"target_count": 200,
+			"reward_gold": 200,
+			"reward_xp": 20,
+			"dialogue_start": "I need someone to move goods between villages. Buy trade goods here and sell them elsewhere for profit — move at least 200c worth.",
+			"dialogue_complete": "A tidy profit! You've got a head for commerce. Come back anytime — there's always goods to move.",
+			"reward_faction": "harbor_compact",
+			"reward_rep": 10,
+		},
+		"home_improvement": {
+			"name": "Home Improvement",
+			"description": "Purchase a home and install at least 2 upgrades.",
+			"giver": "realtor",
+			"type": "upgrade",
+			"target": "home_upgrades",
+			"target_count": 2,
+			"reward_gold": 300,
+			"reward_xp": 15,
+			"dialogue_start": "Every keeper needs a proper base. Buy a home and fix it up — install at least 2 upgrades. I'll make it worth your while.",
+			"dialogue_complete": "Now that's a proper home! You've earned a finder's fee. Take care of the place.",
+		},
+		# ── Act 2: The Broken Seal ──
+		"the_unlit_rising": {
+			"name": "The Unlit Rising",
+			"description": "Since the seal broke, the Unlit have grown bolder. Investigate their activity near the western beacon.",
+			"story_act": 2,
+			"giver": "elder",
+			"type": "flag",
+			"target": "visited_unlit_post_seal",
+			"reward_gold": 500,
+			"reward_xp": 40,
+			"dialogue_start": "The seal is broken, and with it, the old boundaries. The Unlit have been seen near the west beacon — they never came this far east before. Find out what they want. But be careful — not everything that hides in shadow is an enemy.",
+			"dialogue_complete": "The Unlit say the seal was holding back more than darkness — that it was a cage for something ancient. I don't know if I believe them, but the Chapel elders seem nervous.",
+			"reward_faction": "the_unlit",
+			"reward_rep": 10,
+		},
+		"keepers_journal": {
+			"name": "The Keeper's Journal",
+			"description": "Mara Venn's complete journal may hold clues about the Lantern Line's true purpose. Search the forest clearing.",
+			"story_act": 2,
+			"giver": "elder",
+			"type": "flag",
+			"target": "found_maras_journal",
+			"reward_gold": 400,
+			"reward_xp": 35,
+			"dialogue_start": "When you found the North Forest beacon, you recovered pages from Mara's journal. But the hermit in the forest clearing told me she kept a second volume — hidden. Find it. The Line was built for a reason, and that reason may not be what we were taught.",
+			"dialogue_complete": "Mara's journal is damning. The first Keepers didn't build the Line to protect the island from the fog — they built it to imprison something beneath the mountain. The fog was a side effect, not the enemy.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 15,
+		},
+		"harbor_tensions": {
+			"name": "Harbor Tensions",
+			"description": "The Harbor Compact and Keepers Guild are feuding over beacon oil. Choose a side before the conflict escalates.",
+			"story_act": 2,
+			"giver": "elder",
+			"type": "flag",
+			"target": "resolved_oil_dispute",
+			"reward_gold": 600,
+			"reward_xp": 40,
+			"dialogue_start": "The Harbor Compact controls the beacon oil. Now that the Line is active again, they want to raise prices. The Keepers say the oil belongs to the island. This feud could tear Brindlewick apart. Speak with both factions — the Compact at the docks, the Keepers in town — and find a resolution.",
+			"dialogue_complete": "You've bought us time, but the root cause remains. The factions each control a piece of what this island needs to survive. If they can't cooperate, the Line may fail again.",
+		},
+		"shadow_remnants": {
+			"name": "Shadow Remnants",
+			"description": "Fragments of the broken seal linger across the island. Clear shadow wisps from 3 locations.",
+			"story_act": 2,
+			"giver": "elder",
+			"type": "kill",
+			"target": "ShadowWisp",
+			"target_count": 3,
+			"reward_gold": 500,
+			"reward_xp": 45,
+			"dialogue_start": "The seal didn't just break — it shattered. Fragments of shadow energy are leaking across the island. Travelers report wisps in the forests, on the hill paths, even near town. Defeat at least 3 of these Shadow Wisps before they coalesce into something worse.",
+			"dialogue_complete": "The wisps are fading. Whatever was sealed beneath the mountain is still weak, but it's stirring. We need to understand what we're dealing with before it fully awakens.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 10,
+		},
+		"the_chapels_secret": {
+			"name": "The Chapel's Secret",
+			"description": "The Grey Chapel has guarded knowledge about the Lantern Line for centuries. Earn their trust and learn the truth.",
+			"story_act": 2,
+			"giver": "elder",
+			"type": "faction",
+			"target": "chapel",
+			"target_count": 30,
+			"reward_gold": 700,
+			"reward_xp": 50,
+			"dialogue_start": "The Grey Chapel was here before the village — before the lighthouse, even. Sister Aldith knows more than she's told us. Earn the Chapel's trust and ask her what the first Keepers were so afraid of.",
+			"dialogue_complete": "The Chapel's records confirm what Mara's journal suggested. The Lantern Line was a prison — and what it held was not a creature, but a memory. An ancient grief so deep it could swallow the light itself. The question is no longer how to restore the seal. It is whether we should.",
+			"reward_faction": "chapel",
+			"reward_rep": 20,
+		},
+		# ── Party Member Personal Quests ──
+		"kaels_shadow": {
+			"name": "Kael's Shadow",
+			"description": "Kael owes a debt to a shadow broker in the abandoned village. Help him settle the score by finding his stolen ledger.",
+			"story_act": 2,
+			"giver": "kael",
+			"type": "member_quest",
+			"member": "Kael",
+			"required_loyalty": 60,
+			"sub_type": "flag",
+			"target": "kaels_ledger_found",
+			"reward_gold": 300,
+			"reward_xp": 30,
+			"dialogue_start": "I never told you why I came to Brindlewick. There's a broker in the old village - someone I owed money to. They took my ledger as collateral. If I don't get it back, my past catches up to me. Help me, and I'll cut my wage by ten percent.",
+			"dialogue_complete": "The ledger is mine again. You didn't have to do that - but you did. I won't forget it. The wage stays where it is - you've earned the loyalty.",
+			"reward_faction": "the_unlit",
+			"reward_rep": 10,
+		},
+		"lyras_vow": {
+			"name": "Lyra's Vow",
+			"description": "Lyra made a vow at the Chapel to heal 5 people in need. Help her fulfill it by using healing magic in battle.",
+			"story_act": 2,
+			"giver": "lyra",
+			"type": "member_quest",
+			"member": "Lyra",
+			"required_loyalty": 50,
+			"sub_type": "skill",
+			"target": "heal_casts",
+			"target_count": 5,
+			"reward_gold": 250,
+			"reward_xp": 25,
+			"dialogue_start": "When the Chapel sent me here, I swore an oath - to heal five souls before I return. The wounded, the sick, the dying... combat will provide opportunities. Will you help me keep my vow?",
+			"dialogue_complete": "Five souls healed. My vow is fulfilled. The Chapel will hear of your kindness, and so will everyone in Brindlewick.",
+			"reward_faction": "chapel",
+			"reward_rep": 15,
+		},
+		"broks_honor": {
+			"name": "Brok's Honor",
+			"description": "Brok lost his regiment's banner in the mountain pass. Recover it and restore his pride.",
+			"story_act": 2,
+			"giver": "brok",
+			"type": "member_quest",
+			"member": "Brok",
+			"required_loyalty": 70,
+			"sub_type": "flag",
+			"target": "broks_banner_found",
+			"reward_gold": 500,
+			"reward_xp": 40,
+			"dialogue_start": "I told you about the Fog March. What I didn't say is that we ran. I dropped the regiment's banner in the mountain pass. Every day I carry that shame. If you help me find it... I'll fight twice as hard for you.",
+			"dialogue_complete": "The banner. It's tattered, stained, but it's ours. You gave me back more than cloth - you gave me back my name. From now on, my shield is yours.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 15,
+		},
+		"selenes_elemental": {
+			"name": "Selene's Mastery",
+			"description": "Selene seeks to master all elements. Help her cast 10 offensive spells to prove her power.",
+			"story_act": 2,
+			"giver": "selene",
+			"type": "member_quest",
+			"member": "Selene",
+			"required_loyalty": 55,
+			"sub_type": "skill",
+			"target": "offensive_casts",
+			"target_count": 10,
+			"reward_gold": 350,
+			"reward_xp": 35,
+			"dialogue_start": "The elements don't obey - they negotiate. Every spell is a conversation. I need to prove to myself that I've truly mastered them. Help me cast ten offensive spells in combat, and I'll teach you something about real power.",
+			"dialogue_complete": "The elements sang today. Fire, ice, thunder - each one answered when I called. You gave me the battlefield to prove myself. Here - let me show you a trick I've been saving.",
+			"reward_faction": "harbor_compact",
+			"reward_rep": 10,
+		},
+		# ── Act 3: The Choice ──
+		"what_the_line_imprisons": {
+			"name": "What the Line Imprisons",
+			"description": "Descend into the mountain and face what the Lantern Line was built to contain. Then choose: restore the seal, break it forever, or rebuild the Line stronger.",
+			"story_act": 3,
+			"giver": "elder",
+			"type": "flag",
+			"target": "endgame_choice_made",
+			"reward_gold": 1000,
+			"reward_xp": 80,
+			"dialogue_start": "You've uncovered the truth. The Line was a cage — the fog, its shadow. Now you must decide what to do with that knowledge. Return to the sealed cave. This time, go deeper. Face what waits beneath the mountain, and choose the island's fate.",
+			"dialogue_complete": "The choice is made. Whatever comes next, Brindlewick will face it. You have changed this island forever, keeper. Whether for better or worse... only time will tell.",
+			"reward_faction": "keepers_guild",
+			"reward_rep": 30,
+		},
+	}
+
+static func quest_ids() -> Array:
+	return all_quests().keys()
+
+static func get_quest(qid: String) -> Dictionary:
+	return all_quests().get(qid, {})
+
+static func prerequisites_met(qid: String) -> bool:
+	# Check explicit prerequisites
+	if PREREQUISITES.has(qid):
+		for prereq: String in PREREQUISITES[qid]:
+			if not GameData.is_quest_complete(prereq):
+				return false
+	# Member quests require the member in party
+	var quest: Dictionary = all_quests().get(qid, {})
+	if quest.get("type", "") == "member_quest":
+		var member_name: String = quest.get("member", "")
+		var found := false
+		for pm in GameData.party:
+			if pm["name"] == member_name:
+				found = true
+				break
+		if not found:
+			return false
+	return true
+
+static func get_available_quests() -> Array:
+	var available: Array = []
+	for qid: String in quest_ids():
+		if not GameData.active_quests.has(qid) and prerequisites_met(qid):
+			available.append(qid)
+	return available
+
+static func get_next_story_quest() -> String:
+	var story_order := [
+		"the_dead_wick", "the_missing_keeper", "oil_for_the_line", "light_all_beacons", "cave_exploration",
+		"the_unlit_rising", "keepers_journal", "harbor_tensions", "shadow_remnants", "the_chapels_secret",
+		"what_the_line_imprisons",
+	]
+	for qid: String in story_order:
+		if not GameData.is_quest_complete(qid) and not GameData.is_quest_active(qid):
+			if prerequisites_met(qid):
+				return qid
+	return ""

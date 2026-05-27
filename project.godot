@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Lanternhouse"
 config/description="Lanternhouse — a retro 8-bit JRPG prototype built with Godot 4. Overworld exploration, turn-based combat, town shops, and a warm lanternlit aesthetic. See docs/ for pixel-art direction and asset conventions."
-run/main_scene="res://scenes/overworld/overworld.tscn"
+run/main_scene="res://scenes/title/title.tscn"
 config/features=PackedStringArray("4.6")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,9 @@ config/icon="res://icon.svg"
 
 GameData="*res://scripts/game_data.gd"
 SpriteCache="*res://scripts/sprite_cache.gd"
+SaveManager="*res://scripts/save_manager.gd"
+SceneTransition="*res://scripts/scene_transition.gd"
+AudioManager="*res://scripts/audio_manager.gd"
 
 [display]
 

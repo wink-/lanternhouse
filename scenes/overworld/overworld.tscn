@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/overworld.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/charactersheet/charactersheet.tscn" id="2_charsheet"]
+[ext_resource type="PackedScene" path="res://scenes/questjournal/questjournal.tscn" id="3_journal"]
+[ext_resource type="PackedScene" path="res://scenes/minimap/minimap.tscn" id="4_minimap"]
+[ext_resource type="PackedScene" path="res://scenes/inventory/inventory.tscn" id="5_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/settings/settings.tscn" id="6_settings"]
+[ext_resource type="PackedScene" path="res://scenes/fishing/fishing.tscn" id="7_fishing"]
 
 [node name="Overworld" type="Node2D"]
+script = ExtResource("1_main")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 enabled = true
@@ -33,3 +40,28 @@ position = Vector2(6, 4)
 size = Vector2(300, 180)
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_constants/line_spacing = -2
+
+[node name="DayNightOverlay" type="ColorRect" parent="."]
+z_index = 50
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="FogOverlay" type="ColorRect" parent="."]
+z_index = 49
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="FogOfWar" type="Node2D" parent="."]
+z_index = 48
+
+[node name="CharacterSheet" parent="." instance=ExtResource("2_charsheet")]
+
+[node name="QuestJournal" parent="." instance=ExtResource("3_journal")]
+
+[node name="Minimap" parent="." instance=ExtResource("4_minimap")]
+
+[node name="Inventory" parent="." instance=ExtResource("5_inventory")]
+
+[node name="SettingsScreen" parent="." instance=ExtResource("6_settings")]
+
+[node name="FishingScreen" parent="." instance=ExtResource("7_fishing")]

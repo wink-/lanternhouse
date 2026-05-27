@@ -1,4 +1,19 @@
 # CharDB — static class templates, spell definitions, level-up tables
+#
+# [CODING CONCEPT: Static / Lookup Tables]
+# This file uses "static func" — functions you call on the class itself,
+# not on an instance. Think of it like a dictionary that also has functions.
+# No "new" needed: you just write CharDB.get_template("Fighter").
+#
+# The match statement (lines 8-15) is GDScript's version of switch/case.
+# Each class gets a Dictionary with base stats. These are *templates* —
+# the actual party members get copies (.duplicate(true)) so they can
+# change independently (gain HP, level up, etc.)
+#
+# [CODING CONCEPT: Dictionaries as Records]
+# {"str":12, "def":9, "hp":38} is a dictionary — a bag of named values.
+# In other languages you'd use a class or struct for this. In GDScript,
+# plain dictionaries are the common pattern for simple data like game stats.
 class_name CharDB
 
 static func get_classes() -> Array:

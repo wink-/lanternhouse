@@ -1,13 +1,28 @@
 # Shop — buy weapons, armor, and items
+#
+# [CODING CONCEPT: Sub-Screens / Multi-Phase UI]
+# The shop has two phases: browsing (selecting an item) and selecting_character
+# (picking which party member gets the weapon/armor). A boolean (selecting_character)
+# toggles between them, changing what keys do and what's displayed. This is a
+# mini state machine — simpler than battle.gd's string-based one, but the same idea.
+#
+# [CODING CONCEPT: Price Modifiers]
+# _get_price() doesn't just return the base price. It applies two modifiers:
+# 1) beacon modifier (more beacons lit = higher prices) and 2) faction reputation
+# (higher reputation with that faction = better prices). This creates an economy
+# that responds to the player's progress through the world.
 extends Node2D
 
 const ItemDB := preload("res://scripts/data/items.gd")
+const FactionDB := preload("res://scripts/data/factions.gd")
 
-var shop_type: String = "weapons"   # "weapons", "armor", "items"
+var shop_type: String = "weapons"   # "weapons", "armor", "items", "sell"
 var shop_list: Array = []
 var selected_idx: int = 0
 var selecting_character: bool = false
 var char_idx: int = 0
+var sell_mode: bool = false
+var sell_list: Array = []
 
 @onready var text_display: RichTextLabel = $TextDisplay
 
@@ -17,6 +32,7 @@ func _ready() -> void:
 		"weapons": shop_list = ItemDB.weapon_list()
 		"armor":   shop_list = ItemDB.armor_list()
 		"items":   shop_list = ItemDB.item_shop_list()
+		"sell":    _build_sell_list()
 		_:         shop_list = ItemDB.weapon_list()
 	_update_display()
 
@@ -41,32 +57,59 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_DOWN:  selected_idx = min(shop_list.size() - 1, selected_idx + 1)
 		KEY_1, KEY_ENTER, KEY_SPACE:
 			_try_buy()
+		KEY_S:
+			var prev_type := shop_type
+			shop_type = "sell"
+			_build_sell_list()
+			if sell_list.is_empty():
+				shop_type = prev_type
+			_update_display()
 		KEY_ESCAPE:
-			get_tree().change_scene_to_file("res://scenes/town/town.tscn")
+			if shop_type == "sell":
+				shop_type = GameData.get_meta("shop_type", "weapons")
+				match shop_type:
+					"weapons": shop_list = ItemDB.weapon_list()
+					"armor":   shop_list = ItemDB.armor_list()
+					"items":   shop_list = ItemDB.item_shop_list()
+				_update_display()
+			else:
+				SceneTransition.change_scene("res://scenes/town/town.tscn")
 	_update_display()
 
 func _try_buy() -> void:
+	if shop_type == "sell":
+		_do_sell(selected_idx)
+		return
 	var item: Dictionary = shop_list[selected_idx]
-	if item["price"] > GameData.gold:
-		return  # can't afford, silently ignored (shown in display)
+	var price := _get_price(item["price"])
+	if price > GameData.gold:
+		return
 
-	# For weapons/armor, ask which character to equip
 	if shop_type in ["weapons", "armor"]:
 		selecting_character = true
 		char_idx = 0
 		_update_display()
 		return
 
-	# For items, buy directly
-	GameData.gold -= item["price"]
-	match item["id"]:
-		"tonic":   GameData.tonics += 1
-		"ether":   _apply_ether()
+	if GameData.spend_copper(price):
+		if item.get("trade", false):
+		if GameData.bag_full("trade"):
+			_update_display()
+			return
+			GameData.trade_goods.append(item.duplicate(true))
+		else:
+			match item["id"]:
+				"tonic":   GameData.tonics += 1
+				"ether":   GameData.ethers += 1
 	_update_display()
 
 func _buy_for_character(ci: int) -> void:
 	var item: Dictionary = shop_list[selected_idx]
-	GameData.gold -= item["price"]
+	var price := _get_price(item["price"])
+	if not GameData.spend_copper(price):
+		selecting_character = false
+		_update_display()
+		return
 
 	if shop_type == "weapons":
 		# Check if already owned
@@ -76,7 +119,10 @@ func _buy_for_character(ci: int) -> void:
 				existing = i
 				break
 		if existing < 0:
-			GameData.weapons_bag.append(item.duplicate(true))
+						if GameData.bag_full("weapons"):
+				_update_display()
+				return
+GameData.weapons_bag.append(item.duplicate(true))
 			existing = GameData.weapons_bag.size() - 1
 		GameData.equipped_weapon[ci] = existing
 
@@ -87,9 +133,19 @@ func _buy_for_character(ci: int) -> void:
 				existing = i
 				break
 		if existing < 0:
-			GameData.armor_bag.append(item.duplicate(true))
+						if GameData.bag_full("armor"):
+				_update_display()
+				return
+GameData.armor_bag.append(item.duplicate(true))
 			existing = GameData.armor_bag.size() - 1
-		GameData.equipped_armor[ci] = existing
+		var slot: String = item.get("slot", "body")
+		match slot:
+			"head":
+				GameData.equipped_head[ci] = existing
+			"accessory":
+				GameData.equipped_accessory[ci] = existing
+			_:
+				GameData.equipped_body[ci] = existing
 
 	selecting_character = false
 	_update_display()
@@ -101,10 +157,79 @@ func _apply_ether() -> void:
 			if entry["charges"] < entry["max"]:
 				entry["charges"] = entry["max"]
 
+func _build_sell_list() -> void:
+	sell_list.clear()
+	for i in range(GameData.weapons_bag.size()):
+		var w: Dictionary = GameData.weapons_bag[i]
+		var equipped := false
+		for ew in GameData.equipped_weapon:
+			if ew == i: equipped = true
+		if not equipped:
+				sell_list.append({"type": "weapon", "idx": i, "id": w["id"], "name": w["name"], "sell_price": ItemDB.get_sell_price(w["id"])})
+	for i in range(GameData.armor_bag.size()):
+		var a: Dictionary = GameData.armor_bag[i]
+		var equipped := false
+		for ea in GameData.equipped_head:
+			if ea == i: equipped = true
+		if not equipped:
+			for ea in GameData.equipped_body:
+				if ea == i: equipped = true
+		if not equipped:
+			for ea in GameData.equipped_accessory:
+				if ea == i: equipped = true
+		if not equipped:
+				sell_list.append({"type": "armor", "idx": i, "id": a["id"], "name": a["name"], "sell_price": ItemDB.get_sell_price(a["id"])})
+	for i in range(GameData.trade_goods.size()):
+		var tg: Dictionary = GameData.trade_goods[i]
+		var base_sell: int = tg.get("sell_base", tg.get("price", 0))
+		var sell_price: int = _get_sell_price_for_good(tg, base_sell)
+		sell_list.append({"type": "trade", "idx": i, "id": tg["id"], "name": tg["name"], "sell_price": sell_price})
+	shop_list = sell_list
+
+func _do_sell(idx: int) -> void:
+	if idx >= sell_list.size(): return
+	var entry: Dictionary = sell_list[idx]
+	var price: int = entry["sell_price"]
+	GameData.add_copper(price)
+	if entry["type"] == "weapon":
+		GameData.weapons_bag.remove_at(entry["idx"])
+		for i in range(GameData.equipped_weapon.size()):
+			if GameData.equipped_weapon[i] == entry["idx"]:
+				GameData.equipped_weapon[i] = -1
+			elif GameData.equipped_weapon[i] > entry["idx"]:
+				GameData.equipped_weapon[i] -= 1
+	elif entry["type"] == "armor":
+		GameData.armor_bag.remove_at(entry["idx"])
+		for slot_arr in [GameData.equipped_head, GameData.equipped_body, GameData.equipped_accessory]:
+			for i in range(slot_arr.size()):
+				if slot_arr[i] == entry["idx"]:
+					slot_arr[i] = -1
+				elif slot_arr[i] > entry["idx"]:
+					slot_arr[i] -= 1
+	elif entry["type"] == "trade":
+		var profit: int = price
+		var buy_price: int = 0
+		for item in ItemDB.trade_goods():
+			if item["id"] == entry["id"]:
+				buy_price = item["price"]
+				break
+		if price > buy_price:
+			var gain: int = price - buy_price
+			GameData.gather_counts["trade_profit"] = GameData.gather_counts.get("trade_profit", 0) + gain
+		GameData.trade_goods.remove_at(entry["idx"])
+	_build_sell_list()
+	_update_display()
+
 func _update_display() -> void:
 	var lines: Array = []
-	var title := "Weapon Shop" if shop_type == "weapons" else ("Armor Shop" if shop_type == "armor" else "Item Shop")
-	lines.append("[b]%s[/b]    Gold: %d" % [title, GameData.gold])
+	var title := "Sell Items" if shop_type == "sell" else ("Weapon Shop" if shop_type == "weapons" else ("Armor Shop" if shop_type == "armor" else "Item Shop"))
+	var faction: int = SHOP_FACTION.get(shop_type, -1)
+	var greeting := ""
+	if faction >= 0:
+		var rep := GameData.get_faction_rep(faction)
+		if rep >= 20: greeting = " [color=green]"Pleasure doing business, friend."[/color]"
+		elif rep <= -20: greeting = " [color=red]"Prices are firm. Take it or leave it."[/color]"
+	lines.append("[b]%s[/b]    %s%s" % [title, GameData.format_money_short(), greeting])
 	lines.append("")
 
 	if selecting_character:
@@ -113,28 +238,78 @@ func _update_display() -> void:
 			var m: Dictionary = GameData.party[i]
 			var marker := "▶" if i == char_idx else " "
 			var wep := "(none)"
-			var arm := "(none)"
 			if GameData.equipped_weapon[i] >= 0:
 				wep = GameData.weapons_bag[GameData.equipped_weapon[i]]["name"]
-			if GameData.equipped_armor[i] >= 0:
-				arm = GameData.armor_bag[GameData.equipped_armor[i]]["name"]
-			lines.append("%s Lv%d %s  [%s / %s]" % [marker, m["level"], m["name"], wep, arm])
+			var head := "" 
+			if GameData.equipped_head[i] >= 0:
+				head = GameData.armor_bag[GameData.equipped_head[i]]["name"]
+			var body := ""
+			if GameData.equipped_body[i] >= 0:
+				body = GameData.armor_bag[GameData.equipped_body[i]]["name"]
+			var acc := ""
+			if GameData.equipped_accessory[i] >= 0:
+				acc = GameData.armor_bag[GameData.equipped_accessory[i]]["name"]
+			lines.append("%s Lv%d %s  W:%s H:%s B:%s A:%s" % [marker, m["level"], m["name"], wep, head, body, acc])
 		lines.append("")
 		lines.append("[1]/Enter to confirm, arrows to choose, [Esc] cancel")
 	else:
 		for i in range(shop_list.size()):
 			var item: Dictionary = shop_list[i]
 			var marker := "▶" if i == selected_idx else " "
-			var can_afford := item["price"] <= GameData.gold
+			var can_afford := _get_price(item["price"]) <= GameData.gold
 			var color_start := "" if can_afford else "[color=#666]"
 			var color_end := "" if can_afford else "[/color]"
 			if shop_type in ["weapons", "armor"]:
 				var stat := item.get("atk", item.get("def", 0))
 				var stat_name := "ATK" if shop_type == "weapons" else "DEF"
-				lines.append("%s%s %-16s %s+%d  %dg%s" % [color_start, marker, item["name"], stat_name, stat, item["price"], color_end])
+				var slot_tag := (" [%s]" % item["slot"]) if shop_type == "armor" else ""
+				lines.append("%s%s %-16s %s+%d%s  %s%s" % [color_start, marker, item["name"], stat_name, stat, slot_tag, _format_price(_get_price(item["price"])), color_end])
 			else:
-				lines.append("%s%s %-16s %dg  %s%s" % [color_start, marker, item["name"], item["price"], item.get("desc",""), color_end])
+				lines.append("%s%s %-16s %s  %s%s" % [color_start, marker, item["name"], _format_price(_get_price(item["price"])), item.get("desc",""), color_end])
 		lines.append("")
 		lines.append("[1]/Enter to buy, arrows to browse, [Esc] leave")
 
 	text_display.text = "\n".join(lines)
+
+const SHOP_FACTION := {
+	"weapons": FactionDB.Faction.KEEPERS_GUILD,
+	"armor": FactionDB.Faction.HARBOR_COMPACT,
+	"items": FactionDB.Faction.HARBOR_COMPACT,
+}
+
+func _get_price(base_price: int) -> int:
+	var modified := GameData.get_price_with_beacon_modifier(base_price)
+	var faction: int = SHOP_FACTION.get(shop_type, -1)
+	if faction >= 0:
+		modified = int(modified * GameData.get_faction_price_mod(faction))
+	return maxi(modified, 1)
+
+func _format_price(copper: int) -> String:
+	var g := copper / 10000
+	var s := (copper % 10000) / 100
+	var c := copper % 100
+	if g > 0:
+		return "%dg%ds" % [g, s]
+	elif s > 0:
+		return "%ds%dc" % [s, c]
+	return "%dc" % c
+
+# Zone-based sell price modifier for trade goods
+const ZONE_PRICE_MOD := {
+	"oil_jar": {"docks": 1.5, "town": 1.0, "forest": 0.8, "beacon": 1.3, "default": 1.0},
+	"salt_bag": {"docks": 1.4, "town": 1.0, "forest": 0.9, "beacon": 1.0, "default": 1.0},
+	"herb_bun": {"docks": 0.8, "town": 1.2, "forest": 1.5, "beacon": 1.0, "default": 1.0},
+	"shadow_oil": {"docks": 0.6, "town": 1.0, "forest": 1.2, "beacon": 0.5, "default": 1.0},
+}
+
+func _get_sell_price_for_good(good: Dictionary, base_sell: int) -> int:
+	var good_id: String = good.get("id", "")
+	var zone_prices: Dictionary = ZONE_PRICE_MOD.get(good_id, {})
+	var mod: float = zone_prices.get("town", zone_prices.get("default", 1.0))
+	# Beacon modifier: lit beacons boost sell prices
+	var lit_count: int = GameData.beacon_states.values().filter(func(v): return v == true).size()
+	mod *= 1.0 + lit_count * 0.03
+	# Harbor Compact reputation helps sell prices
+	var harbor_rep: int = GameData.get_faction_rep(FactionDB.Faction.HARBOR_COMPACT)
+	mod *= 1.0 + harbor_rep * 0.005
+	return maxi(int(base_sell * mod), 1)
