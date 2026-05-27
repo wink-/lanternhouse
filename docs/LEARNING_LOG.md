@@ -616,3 +616,46 @@ Capture anything that should become clearer after future slices.
 - Question: Should all overlays use the same title style?
 - Why it matters: Consistent menu chrome will make the game feel more intentional.
 - When to revisit: During the UI theme pass.
+
+---
+
+## Slice
+
+- Name: Town readability ground pass
+- Date: 2026-05-27
+- Playable goal: Make Brindlewick read like a village instead of buildings stamped onto noisy grass.
+
+## What Changed
+
+- Player-facing change: The town now uses calmer custom ground tiles and a visible road/plaza layout connecting houses, shops, NPCs, and the exit.
+- Systems or content added: `lanternhouse_town_readable.png` provides compact grass, path, plaza, and flower-grass tiles for the town base layer.
+- Bug or design problem solved: The Quiet Village grass tile created a harsh repeating pattern and the old map lacked a clear movement/landmark structure.
+
+## Files to Read
+
+- `res://scripts/town.gd` - inspect `TOWN_GROUND_PATH`, `GROUND_TILE_RECTS`, and `MAP`.
+- `res://assets/sprites/tiles/lanternhouse_town_readable.png` - the generated town ground sheet.
+
+## GDScript Concepts
+
+- Concept: Tile symbol reuse with different textures
+- Where it appears: `MAP` still uses symbols like `.`, `=`, `@`, and `H`, but `GROUND_TILE_RECTS` now maps them to a calmer town-specific sheet.
+- What to notice: The collision and interaction map can stay text-based while the art source changes.
+
+## Why This Pattern
+
+- Problem this pattern solves: Imported tilesets may not always contain a tile that reads well at the game's zoom level.
+- Why it fits this slice: A tiny local tile sheet gives us control over readability without throwing away the Quiet Village buildings.
+- Tradeoff or thing to watch: This is still a hand-authored layout; a future art pass should align building entrances and interiors more deliberately.
+
+## Tiny Exercise
+
+- Task: Change one `,` in the town `MAP` to `=` and boot town.
+- Expected result in-game: One grass tile becomes a path tile without changing movement code.
+- Hint: Symbols in `MAP` are both layout data and art lookup keys.
+
+## Questions to Revisit
+
+- Question: Should Brindlewick use 32x32 tiles like the overworld?
+- Why it matters: The current 16x16 town scale shows more area but can make people and props feel tiny.
+- When to revisit: During the town interaction and NPC readability pass.

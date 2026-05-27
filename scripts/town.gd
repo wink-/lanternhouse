@@ -24,14 +24,16 @@ const NPC_FACTION_MAP := {
 const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
 const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
+const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
 const QUIET_TILES_PATH := "res://assets/sprites/vendor/quiet_village/Tiles.png"
 const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
 const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
-const QUIET_TILE_RECTS := {
-	".": Rect2i(Vector2i(0, 162), Vector2i(TILE_SIZE, TILE_SIZE)),
-	"=": Rect2i(Vector2i(6, 8), Vector2i(TILE_SIZE, TILE_SIZE)),
-	"@": Rect2i(Vector2i(272, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
-	"H": Rect2i(Vector2i(0, 162), Vector2i(TILE_SIZE, TILE_SIZE)),
+const GROUND_TILE_RECTS := {
+	".": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"=": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"@": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	",": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"H": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 const TILE_RECTS := {
 	"#": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -57,30 +59,30 @@ const NPC_RECTS := {
 const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
 
 const MAP := [
-	"........................................",
-	"........................................",
-	"...HHHHHH.......HHHHHHH......HHHHHHH....",
-	"...HHHHHH.......HHHHHHH......HHHHHHH....",
-	"...HHHHHH.......HHHHHHH......HHHHHHH....",
-	"...HHHHHH...............................",
-	"..............======....................",
-	"..............======....................",
-	"...======.....======......======........",
-	"...======.....======......======........",
-	"...HHHHHH..................HHHHHH.......",
-	"...HHHHHH.......@@@@......HHHHHH........",
-	"...HHHHHH.......@@@@......HHHHHH........",
-	"................@@@@....................",
-	"........................................",
-	".......HHHHHH.................HHHHHH....",
-	".......HHHHHH.................HHHHHH....",
-	".......HHHHHH.................HHHHHH....",
-	"..............======....................",
-	"..............======....................",
-	"..............======....................",
-	".................==.....................",
-	".................==.....................",
-	"........................................",
+	",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+	",,......,,,,,.......,,,,,,,......,,,,,,,",
+	",,.HHHHHH,,,,HHHHHHH,,,,,,,HHHHHHH,,,,,",
+	",,.HHHHHH====HHHHHHH=======HHHHHHH,,,,,",
+	",,.HHHHHH,,,,HHHHHHH,,,,,,,,,,,,,,,,,,,",
+	",,.HHHHHH,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,==============================,,,,,,",
+	",,,==,,,,,,,,,,====,,,,,,,,,,==,,,,,,,,",
+	",,,==,,,,,,,,@@@@@@@@,,,,,,,,==,,,,,,,,",
+	",,,HHHHHH,,,,@@@@@@@@,,,,,,HHHHHH,,,,,,",
+	",,,HHHHHH====@@@@@@@@======HHHHHH,,,,,,",
+	",,,HHHHHH,,,,@@@@@@@@,,,,,,HHHHHH,,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,HHHHHH,,====,,,,,,,,,HHHHHH,,,,,",
+	",,,,,,,HHHHHH,,====,,,,,,,,,HHHHHH,,,,,",
+	",,,,,,,HHHHHH==========,,,,,HHHHHH,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
+	",,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,,,",
 ]
 
 const COLORS := {
@@ -105,7 +107,7 @@ var exchange_idx: int = 0
 var _wander_timer: float = 0.0
 var _npc_wander_pos: Dictionary = {}
 var _town_atlas: Texture2D
-var _quiet_tiles: Texture2D
+var _town_ground: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
 const WANDER_INTERVAL := 2.5
@@ -153,7 +155,7 @@ func _load_town_atlas() -> void:
 	_town_atlas = ImageTexture.create_from_image(image)
 
 func _load_quiet_village_assets() -> void:
-	_quiet_tiles = _load_png_texture(QUIET_TILES_PATH)
+	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
 	_quiet_buildings = _load_png_texture(QUIET_BUILDINGS_PATH)
 	_quiet_props = _load_png_texture(QUIET_PROPS_PATH)
 
@@ -171,11 +173,11 @@ func _draw_map() -> void:
 	for y in range(MAP.size()):
 		for x in range(MAP[y].length()):
 			var tile: String = MAP[y].substr(x, 1)
-			if _quiet_tiles and QUIET_TILE_RECTS.has(tile):
+			if _town_ground and GROUND_TILE_RECTS.has(tile):
 				var sprite := Sprite2D.new()
-				sprite.texture = _quiet_tiles
+				sprite.texture = _town_ground
 				sprite.region_enabled = true
-				sprite.region_rect = QUIET_TILE_RECTS.get(tile, QUIET_TILE_RECTS["."])
+				sprite.region_rect = GROUND_TILE_RECTS.get(tile, GROUND_TILE_RECTS["."])
 				sprite.centered = false
 				sprite.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
 				map_layer.add_child(sprite)
