@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/dev/smoke_missing_keeper.gd" id="1_smoke_missing_keeper"]
+
+[node name="SmokeMissingKeeper" type="Node"]
+script = ExtResource("1_smoke_missing_keeper")

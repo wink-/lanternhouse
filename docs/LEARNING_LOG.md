@@ -397,3 +397,47 @@ Capture anything that should become clearer after future slices.
 - Question: Should lighting the lighthouse play a short pause, flash, or chime before the HUD message?
 - Why it matters: A small ceremony could make the first objective memorable without changing quest logic.
 - When to revisit: During the visual effects/audio polish pass.
+
+---
+
+## Slice
+
+- Name: Missing Keeper story pass
+- Date: 2026-05-27
+- Playable goal: Make the second story quest readable, payable, and smoke-tested after The Dead Wick.
+
+## What Changed
+
+- Player-facing change: The North Forest beacon now has Mara-specific event text, journal completion copy, and Elder breadcrumbing toward beacon oil.
+- Systems or content added: `smoke_missing_keeper` verifies Dead Wick completion, Missing Keeper acceptance, North Forest beacon lighting, Elder turn-in, and the next story quest unlock.
+- Bug or design problem solved: The second quest had a route hint, but no event text or automated coverage proving the chain from first quest to second quest.
+
+## Files to Read
+
+- `res://scripts/data/quests.gd` - inspect `the_missing_keeper` and `oil_for_the_line`.
+- `res://scripts/dev/smoke_missing_keeper.gd` - follow the two-quest automated route.
+- `res://scenes/dev/smoke_missing_keeper.tscn` - the tiny executable wrapper scene.
+
+## GDScript Concepts
+
+- Concept: Reusing generic systems through data
+- Where it appears: The Missing Keeper uses the same beacon quest path as The Dead Wick, but different `event_text`, `objective_done`, and reward data.
+- What to notice: No new quest engine code was needed; the quest feels different because its data is richer.
+
+## Why This Pattern
+
+- Problem this pattern solves: Story quests should be cheap to add once the generic quest type works.
+- Why it fits this slice: The demo needs momentum after the first lighthouse beat, and data-driven copy is the fastest safe way to get there.
+- Tradeoff or thing to watch: Beacon quests are still single-objective; multi-step investigations will need a richer quest model later.
+
+## Tiny Exercise
+
+- Task: Change the Missing Keeper reward from `125` to `150` and rerun `smoke_missing_keeper`.
+- Expected result in-game: The smoke should adapt because it reads the reward from `QuestDB`.
+- Hint: The reward field is converted to copper at Elder turn-in.
+
+## Questions to Revisit
+
+- Question: Should Mara's journal pages become an inventory key item?
+- Why it matters: A key item would make the investigation feel more tangible, but it adds UI and save/load surface.
+- When to revisit: When building the item/key-item pass for the first demo.

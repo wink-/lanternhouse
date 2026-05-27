@@ -123,6 +123,12 @@ Run the first quest reward check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_dead_wick.tscn
 ```
 
+Run the second story quest check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_missing_keeper.tscn
+```
+
 Run the basic battle victory check:
 
 ```powershell
