@@ -23,6 +23,9 @@ z_index = 20
 
 [node name="PlayerSprite" type="Node2D" parent="."]
 
+[node name="Sprite" type="Sprite2D" parent="PlayerSprite"]
+z_index = 4
+
 [node name="Body" type="Polygon2D" parent="PlayerSprite"]
 color = Color(0.941, 0.831, 0.416, 1)
 polygon = PackedVector2Array(-12, -16, 12, -16, 16, 12, 0, 20, -16, 12)

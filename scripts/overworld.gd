@@ -23,6 +23,7 @@ const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
 
 const TILE_SIZE := 32
+const PLAYER_SPRITE_PATH := "res://assets/sprites/overworld/player.png"
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
 const OVERWORLD_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_overworld.png"
@@ -223,6 +224,7 @@ var _rain_particles: GPUParticles2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var player_body: Polygon2D = $PlayerSprite/Body
 @onready var player_face: ColorRect = $PlayerSprite/Face
+@onready var player_texture: Sprite2D = $PlayerSprite/Sprite
 @onready var hud: RichTextLabel = $UILayer/HUD
 @onready var debug_label: Label = $UILayer/DebugLabel
 @onready var char_sheet: CanvasLayer = $CharacterSheet
@@ -264,6 +266,7 @@ var admin_mode: bool = false
 # ── Init ───────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	rng.seed = hash("lanternhouse_overworld")
+	_init_player_sprite()
 	_warn_bad_map_rows()
 	_build_tileset()
 	_draw_map()
@@ -419,10 +422,31 @@ func _fallback_draw() -> void:
 func _update_player_visual() -> void:
 	var target := Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 	player_sprite.position = target
-	var base_color := Color("f0d46a") if not sprinting else Color("f0a46a")
-	player_body.color = base_color
+	if player_body:
+		var base_color := Color("f0d46a") if not sprinting else Color("f0a46a")
+		player_body.color = base_color
 	if walking:
 		player_sprite.position.y -= 2
+	if player_texture:
+		player_texture.flip_h = facing == Vector2i.LEFT
+		player_texture.modulate = Color(1.08, 1.06, 0.95) if sprinting else Color.WHITE
+
+func _init_player_sprite() -> void:
+	if not player_texture:
+		return
+	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
+		return
+	var image := Image.new()
+	if image.load(PLAYER_SPRITE_PATH) != OK:
+		return
+	player_texture.texture = ImageTexture.create_from_image(image)
+	player_texture.centered = true
+	player_texture.position = Vector2.ZERO
+	player_texture.z_index = 4
+	if player_body:
+		player_body.hide()
+	if player_face:
+		player_face.hide()
 
 func _update_camera() -> void:
 	if camera:

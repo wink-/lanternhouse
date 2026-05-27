@@ -485,3 +485,47 @@ Capture anything that should become clearer after future slices.
 - Question: Should early story beacons show the name of the Elder explicitly or use local landmark hints?
 - Why it matters: Too much direction can feel gamey, but too little direction can strand a new player.
 - When to revisit: During manual playthrough pacing.
+
+---
+
+## Slice
+
+- Name: Overworld avatar readability pass
+- Date: 2026-05-27
+- Playable goal: Replace the placeholder overworld player marker with a clearer 32x32 pixel adventurer sprite.
+
+## What Changed
+
+- Player-facing change: The overworld avatar is now a small cloaked adventurer with a lantern instead of a flat polygon marker.
+- Systems or content added: The overworld scene loads `res://assets/sprites/overworld/player.png` at runtime and keeps the old polygon as a fallback.
+- Bug or design problem solved: The previous avatar was readable as a cursor, but did not look like a character in the improved overworld art pass.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - inspect `PLAYER_SPRITE_PATH`, `_init_player_sprite()`, and `_update_player_visual()`.
+- `res://scenes/overworld/overworld.tscn` - see the new `Sprite2D` child under `PlayerSprite`.
+- `res://assets/sprites/overworld/player.png` - the 32x32 overworld avatar.
+
+## GDScript Concepts
+
+- Concept: Runtime sprite fallback
+- Where it appears: `_init_player_sprite()` loads the texture if it exists, hides the polygon body, and otherwise leaves the old marker visible.
+- What to notice: This keeps the scene resilient if an art asset is missing or still importing.
+
+## Why This Pattern
+
+- Problem this pattern solves: Visual assets can churn quickly during prototype art passes, but the game should still boot.
+- Why it fits this slice: The avatar is purely visual, so a graceful fallback is safer than making the scene depend hard on the new file.
+- Tradeoff or thing to watch: Runtime image loading is simple, but later we may prefer editor-assigned textures or an animated spritesheet.
+
+## Tiny Exercise
+
+- Task: Temporarily rename `player.png` and boot the overworld.
+- Expected result in-game: The old polygon marker should appear instead of a script error.
+- Hint: The fallback works because the `Body` and `Face` nodes remain in the scene.
+
+## Questions to Revisit
+
+- Question: Should the avatar get four directional frames?
+- Why it matters: Directional frames would make exploration feel more polished, but a single readable sprite is enough for the current demo loop.
+- When to revisit: During animation and character-art polish.
