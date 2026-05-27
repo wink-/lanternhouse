@@ -482,6 +482,7 @@ func _update_player_texture() -> bool:
 	if texture:
 		player_texture.texture = texture
 		player_texture.flip_h = false
+		player_texture.scale = Vector2(0.58, 0.58)
 		return true
 	return false
 

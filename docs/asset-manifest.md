@@ -12,6 +12,14 @@ and frame counts.
 | `assets/sprites/overworld/npc_elder.png` | 64×64 | 16 | Quest NPC |
 | `assets/sprites/overworld/npc_innkeeper.png` | 64×64 | 16 | Inn NPC |
 
+## PixelLab Character Rotations
+
+| File | Size | Frames | Notes |
+|---|---|---|---|
+| `assets/sprites/characters/player/rotations/*.png` | 56×56 | 8 directions | Player used by overworld and town |
+| `assets/sprites/characters/town_npcs/weapon_merchant/rotations/*.png` | 52×52 | 8 directions | Greta Ironforge town NPC |
+| `assets/sprites/characters/town_npcs/elder/rotations/*.png` | 48×48 | 8 directions | Old Thatch town NPC |
+
 ## PixelLab Character Assets
 
 These assets may use original PixelLab frame folders instead of legacy sheets.
@@ -58,6 +66,15 @@ They are integrated by scene scripts that scale or animate the frames directly.
 | `assets/sprites/tiles/cave.png` | 16×16 | 1 | Dark entrance |
 | `assets/sprites/tiles/bridge.png` | 16×16 | 1 | Wooden bridge |
 | `assets/sprites/tiles/lighthouse.png` | 16×16 | 1 | Coastal beacon |
+
+## PixelLab Coastline Sources
+
+| File | Size | Frames | Notes |
+|---|---|---|---|
+| `assets/sprites/tiles/pixellab/coastline/ocean_to_beach.png` | 32×32 tiles | 16 | PixelLab Wang tileset source for water/beach coastline |
+| `assets/sprites/tiles/pixellab/coastline/beach_to_grass.png` | 32×32 tiles | 16 | PixelLab Wang tileset source for beach/grass coastline |
+| `assets/sprites/tiles/pixellab/coastline/coastal_dock.png` | 64×64 | 1 | PixelLab source object composed into overworld dock tile |
+| `assets/sprites/tiles/pixellab/coastline/coastal_cave.png` | 64×64 | 1 | PixelLab source object composed into overworld cave tile |
 
 ## UI (Future)
 

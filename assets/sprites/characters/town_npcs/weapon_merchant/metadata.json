@@ -1,0 +1,36 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "4b17b7f2-06b2-4f9a-bc57-af84afb9d31a",
+        "name": "Greta Ironforge Weapon Merchant",
+        "prompt": "Lanternhouse town weapon merchant NPC, stout friendly blacksmith woman, red-brown apron, rolled sleeves, tiny hammer at belt, top-down 2D pixel RPG sprite, cute but grounded, clean dark outline, readable at 16 to 32 pixels, medium detail, basic shading, style consistent with a small orange tabby cat pixel art asset",
+        "size": {
+          "width": 52,
+          "height": 52
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-05-27T20:53:01.660887+00:00"
+      },
+      "folder": "Greta_Ironforge_Weapon_Merchant",
+      "frames": {
+        "rotations": {
+          "south": "Greta_Ironforge_Weapon_Merchant/rotations/south.png",
+          "south-east": "Greta_Ironforge_Weapon_Merchant/rotations/south-east.png",
+          "east": "Greta_Ironforge_Weapon_Merchant/rotations/east.png",
+          "north-east": "Greta_Ironforge_Weapon_Merchant/rotations/north-east.png",
+          "north": "Greta_Ironforge_Weapon_Merchant/rotations/north.png",
+          "north-west": "Greta_Ironforge_Weapon_Merchant/rotations/north-west.png",
+          "west": "Greta_Ironforge_Weapon_Merchant/rotations/west.png",
+          "south-west": "Greta_Ironforge_Weapon_Merchant/rotations/south-west.png"
+        },
+        "animations": {}
+      }
+    }
+  ],
+  "export_version": "3.0",
+  "export_date": "2026-05-27T21:21:11.367609"
+}
