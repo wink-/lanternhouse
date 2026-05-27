@@ -153,6 +153,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _try_move(dir: Vector2i) -> void:
 	facing = dir
+	if _is_exit_step(dir):
+		GameData.set_meta("cave_deep", false)
+		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		return
 	var next := pos + dir
 	if _is_blocked(next):
 		return
@@ -179,6 +183,9 @@ func _check_exit() -> void:
 		var deep: bool = GameData.get_meta("cave_deep", false)
 		GameData.set_meta("cave_deep", false)
 		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+
+func _is_exit_step(dir: Vector2i) -> bool:
+	return dir == Vector2i.DOWN and pos.y >= MAP.size() - 2
 
 func _check_tile() -> void:
 	var deep: bool = GameData.get_meta("cave_deep", false)
@@ -261,14 +268,16 @@ func _show_victory_text() -> void:
 	_say(VICTORY_TEXT[victory_phase])
 
 func _start_encounter() -> void:
-	GameData.overworld_position = Vector2i(2, 24)  # Cave overworld position
+	GameData.overworld_position = Vector2i(26, 17)  # Standing tile beside the overworld cave entrance
+	GameData.overworld_facing = Vector2i.RIGHT
 	GameData.overworld_facing = Vector2i.UP
 	GameData.set_meta("battle_zone", "cave")
 	GameData.set_meta("battle_surprise", false)
 	SceneTransition.change_scene("res://scenes/battle/battle.tscn")
 
 func _start_boss_fight() -> void:
-	GameData.overworld_position = Vector2i(2, 24)
+	GameData.overworld_position = Vector2i(26, 17)
+	GameData.overworld_facing = Vector2i.RIGHT
 	GameData.overworld_facing = Vector2i.UP
 	GameData.set_meta("battle_zone", "cave_boss")
 	GameData.set_meta("battle_surprise", false)
@@ -277,7 +286,8 @@ func _start_boss_fight() -> void:
 func _start_deep_boss() -> void:
 	_say("[color=yellow]The darkness coalesces before you. Ancient grief given form — a monument of sorrow older than the island itself.[/color]")
 	await get_tree().create_timer(1.5).timeout
-	GameData.overworld_position = Vector2i(2, 24)
+	GameData.overworld_position = Vector2i(26, 17)
+	GameData.overworld_facing = Vector2i.RIGHT
 	GameData.overworld_facing = Vector2i.UP
 	GameData.set_meta("battle_zone", "cave_deep")
 	GameData.set_meta("battle_surprise", false)

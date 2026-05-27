@@ -478,6 +478,8 @@ func _is_blocked(grid: Vector2i) -> bool:
 	return false
 
 func _tile(grid: Vector2i) -> String:
+	if grid.x < 0 or grid.x >= MAP_W or grid.y < 0 or grid.y >= MAP_H:
+		return "~"
 	return MAP[grid.y].substr(grid.x, 1)
 
 func _step_effects() -> void:

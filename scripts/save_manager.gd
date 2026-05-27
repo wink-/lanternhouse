@@ -65,6 +65,12 @@ func save_game() -> bool:
 			"owned_home": GameData.owned_home,
 			"home_upgrades": GameData.home_upgrades,
 			"home_storage": GameData.home_storage,
+			"herb_bag": GameData.herb_bag,
+			"material_bag": GameData.material_bag,
+			"crafted_items": GameData.crafted_items,
+			"gather_counts": GameData.gather_counts,
+			"property_market_mod": GameData.property_market_mod,
+			"market_cycle": GameData.market_cycle,
 		"quest_flags": {
 			"cave_opened": GameData.get_meta("cave_opened", false),
 			"victory_shown": GameData.get_meta("victory_shown", false),
@@ -81,6 +87,12 @@ func save_game() -> bool:
 			"offensive_casts": GameData.get_meta("offensive_casts", 0),
 			"heal_casts": GameData.get_meta("heal_casts", 0),
 			"roster_pool": GameData.get_meta("roster_pool", []),
+			"cave_deep": GameData.get_meta("cave_deep", false),
+			"deep_boss_active": GameData.get_meta("deep_boss_active", false),
+			"endgame_choice": GameData.get_meta("endgame_choice", ""),
+			"fog_active": GameData.get_meta("fog_active", false),
+			"fog_timer": GameData.get_meta("fog_timer", 0.0),
+			"home_garden_timer": GameData.get_meta("home_garden_timer", 0.0),
 		},
 		"timestamp": Time.get_datetime_string_from_system(),
 	}
@@ -110,7 +122,7 @@ func load_game() -> bool:
 
 	var data: Dictionary = result
 
-	GameData.party = data.get("party", [])
+	GameData.party = _normalize_party(data.get("party", []))
 	GameData.gold = data.get("gold", 0)
 	GameData.keeper_marks = data.get("keeper_marks", 0)
 	GameData.harbor_tokens = data.get("harbor_tokens", 0)
@@ -125,7 +137,7 @@ func load_game() -> bool:
 		GameData.equipped_body = data.get("equipped_body", [-1, -1, -1, -1])
 		GameData.equipped_accessory = data.get("equipped_accessory", [-1, -1, -1, -1])
 	elif data.has("equipped_armor"):
-		var old_armor = data["equipped_armor"]
+		var old_armor: Array = data["equipped_armor"]
 		GameData.equipped_body = old_armor
 		GameData.equipped_head = [-1, -1, -1, -1]
 		GameData.equipped_accessory = [-1, -1, -1, -1]
@@ -138,10 +150,13 @@ func load_game() -> bool:
 		GameData.equipped_body = [-1, -1, -1, -1]
 		GameData.equipped_accessory = [-1, -1, -1, -1]
 
-	var pos: Dictionary = data.get("overworld_position", {"x": 6, "y": 11})
-	GameData.overworld_position = Vector2i(pos["x"], pos["y"])
-	var fac: Dictionary = data.get("overworld_facing", {"x": 0, "y": 1})
-	GameData.overworld_facing = Vector2i(fac["x"], fac["y"])
+	GameData.equipped_weapon = _normalize_index_array(GameData.equipped_weapon, GameData.party.size())
+	GameData.equipped_head = _normalize_index_array(GameData.equipped_head, GameData.party.size())
+	GameData.equipped_body = _normalize_index_array(GameData.equipped_body, GameData.party.size())
+	GameData.equipped_accessory = _normalize_index_array(GameData.equipped_accessory, GameData.party.size())
+
+	GameData.overworld_position = _dict_to_vector2i(data.get("overworld_position", {}), Vector2i(14, 19))
+	GameData.overworld_facing = _dict_to_vector2i(data.get("overworld_facing", {}), Vector2i.DOWN)
 
 	GameData.cleared_encounters = data.get("cleared_encounters", {})
 	GameData.visited_town = data.get("visited_town", false)
@@ -153,7 +168,7 @@ func load_game() -> bool:
 	GameData.wage_timer = data.get("wage_timer", 0.0)
 	GameData.beacon_lit = data.get("beacon_lit", false)
 	GameData.pending_departures = data.get("pending_departures", [])
-	GameData.faction_reputation = data.get("faction_reputation", {})
+	GameData.faction_reputation = _normalize_int_keyed_dictionary(data.get("faction_reputation", {}))
 	GameData.play_time = data.get("play_time", 0.0)
 	GameData.skill_uses = data.get("skill_uses", {})
 	GameData.owned_home = data.get("owned_home", "")
@@ -183,6 +198,12 @@ func load_game() -> bool:
 	GameData.set_meta("offensive_casts", quest_flags.get("offensive_casts", 0))
 	GameData.set_meta("heal_casts", quest_flags.get("heal_casts", 0))
 	GameData.set_meta("roster_pool", quest_flags.get("roster_pool", []))
+	GameData.set_meta("cave_deep", quest_flags.get("cave_deep", false))
+	GameData.set_meta("deep_boss_active", quest_flags.get("deep_boss_active", false))
+	GameData.set_meta("endgame_choice", quest_flags.get("endgame_choice", ""))
+	GameData.set_meta("fog_active", quest_flags.get("fog_active", false))
+	GameData.set_meta("fog_timer", quest_flags.get("fog_timer", 0.0))
+	GameData.set_meta("home_garden_timer", quest_flags.get("home_garden_timer", 0.0))
 
 	print("Game loaded: ", SAVE_DIR + SAVE_FILE)
 	return true
@@ -191,3 +212,39 @@ func delete_save() -> void:
 	if has_save():
 		DirAccess.remove_absolute(SAVE_DIR + SAVE_FILE)
 		print("Save deleted")
+
+func _dict_to_vector2i(value: Variant, fallback: Vector2i) -> Vector2i:
+	if not value is Dictionary:
+		return fallback
+	var dict: Dictionary = value
+	return Vector2i(int(dict.get("x", fallback.x)), int(dict.get("y", fallback.y)))
+
+func _normalize_int_keyed_dictionary(value: Variant) -> Dictionary:
+	var out: Dictionary = {}
+	if not value is Dictionary:
+		return out
+	var dict: Dictionary = value
+	for key: Variant in dict:
+		out[int(key)] = dict[key]
+	return out
+
+func _normalize_party(value: Variant) -> Array:
+	if not value is Array:
+		return []
+	var normalized: Array = []
+	for entry: Variant in value:
+		if entry is Dictionary:
+			var member: Dictionary = entry
+			member["magic_levels"] = _normalize_int_keyed_dictionary(member.get("magic_levels", {}))
+			normalized.append(member)
+	return normalized
+
+func _normalize_index_array(value: Variant, target_size: int) -> Array:
+	var out: Array = []
+	if value is Array:
+		out = value.duplicate()
+	while out.size() < target_size:
+		out.append(-1)
+	if out.size() > target_size:
+		out.resize(target_size)
+	return out

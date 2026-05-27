@@ -177,6 +177,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _try_move(dir: Vector2i) -> void:
 	facing = dir
+	if _is_exit_step(dir):
+		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		return
 	var next := pos + dir
 	if _is_blocked(next):
 		return
@@ -194,6 +197,9 @@ func _is_blocked(grid: Vector2i) -> bool:
 func _check_exit() -> void:
 	if pos.y >= MAP.size() - 1:
 		SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+
+func _is_exit_step(dir: Vector2i) -> bool:
+	return dir == Vector2i.DOWN and pos.y >= MAP.size() - 2
 
 func _interact() -> void:
 	var target := pos + facing
