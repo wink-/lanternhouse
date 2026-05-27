@@ -151,13 +151,27 @@ const BEACON_POSITIONS := {
 
 # Signpost texts — keyed by position string
 const SIGNPOST_TEXTS := {
-	"(24, 21)": "Brindlewick — west toward town. Forest to the north holds old beacons.",
+	"(24, 21)": "Brindlewick lies west. The lighthouse beacon stands north of this road.",
 	"(15, 21)": "Brindlewick Village. The inn offers rest and healing.",
 	"(14, 12)": "Forest of Mournlight. Tread carefully — the trees here are old and watchful.",
 	"(21, 17)": "Mountain Pass. The beacon on the overlook controls access to the peaks.",
 	"(26, 22)": "South Shore Beacon. The sea grows restless when the light fades.",
 	"(17, 26)": "West Point. On clear nights you can see the mainland — or what remains of it.",
 }
+
+const LANDMARK_MARKERS := [
+	{"pos": BRINDLEWICK_POS, "label": "Brindlewick", "color": Color(1.0, 0.86, 0.24, 0.95), "offset": Vector2(-44, -31)},
+	{"pos": Vector2i(25, 13), "label": "Lighthouse", "color": Color(1.0, 0.95, 0.62, 0.95), "offset": Vector2(-46, -34)},
+	{"pos": Vector2i(17, 13), "label": "North Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-54, -34)},
+	{"pos": Vector2i(24, 19), "label": "Hill Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-48, -34)},
+	{"pos": Vector2i(24, 23), "label": "South Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-54, 10)},
+	{"pos": Vector2i(10, 26), "label": "West Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-50, -34)},
+	{"pos": Vector2i(23, 24), "label": "Dock", "color": Color(0.55, 0.9, 1.0, 0.9), "offset": Vector2(-24, 10)},
+	{"pos": Vector2i(21, 15), "label": "Camp", "color": Color(1.0, 0.55, 0.3, 0.9), "offset": Vector2(-24, -34)},
+	{"pos": Vector2i(26, 17), "label": "Cave", "color": Color(0.78, 0.72, 1.0, 0.9), "offset": Vector2(-24, -34)},
+	{"pos": Vector2i(18, 13), "label": "Clearing", "color": Color(0.6, 1.0, 0.65, 0.9), "offset": Vector2(-36, 10)},
+	{"pos": Vector2i(10, 25), "label": "Ruins", "color": Color(1.0, 0.55, 0.75, 0.9), "offset": Vector2(-28, -34)},
+]
 
 # ── Day/Night cycle (real-time seconds) ────────────────────────────────────
 const DAY_CYCLE_SECONDS := 300.0  # 5-minute full cycle
@@ -338,14 +352,20 @@ func _draw_location_markers() -> void:
 		return
 	for child in location_markers.get_children():
 		child.queue_free()
-	_add_location_marker(BRINDLEWICK_POS, "Brindlewick")
+	for marker: Dictionary in LANDMARK_MARKERS:
+		_add_location_marker(
+			marker["pos"],
+			marker["label"],
+			marker.get("color", Color(1.0, 0.86, 0.24, 0.9)),
+			marker.get("offset", Vector2(-44, -31))
+		)
 
-func _add_location_marker(grid: Vector2i, label_text: String) -> void:
+func _add_location_marker(grid: Vector2i, label_text: String, marker_color: Color, label_offset: Vector2) -> void:
 	var marker := Node2D.new()
 	marker.position = Vector2(grid * TILE_SIZE) + Vector2(TILE_SIZE / 2, 2)
 
 	var pin := Polygon2D.new()
-	pin.color = Color(1.0, 0.86, 0.24, 0.9)
+	pin.color = marker_color
 	pin.polygon = PackedVector2Array([
 		Vector2(0, -10),
 		Vector2(8, -2),
@@ -359,10 +379,11 @@ func _add_location_marker(grid: Vector2i, label_text: String) -> void:
 
 	var label := Label.new()
 	label.text = label_text
-	label.position = Vector2(-44, -31)
-	label.size = Vector2(88, 20)
+	label.position = label_offset
+	label.size = Vector2(108, 20)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.62, 1.0))
+	label.add_theme_font_size_override("font_size", 13)
+	label.add_theme_color_override("font_color", Color(marker_color.r, marker_color.g, marker_color.b, 1.0))
 	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
 	label.add_theme_constant_override("shadow_offset_x", 1)
 	label.add_theme_constant_override("shadow_offset_y", 1)
@@ -509,7 +530,7 @@ func _try_move(dir: Vector2i) -> void:
 	if _is_blocked(next):
 		if _is_gate_blocked(next):
 			var beacon_name: String = GATED_ROUTES.get(next, "unknown")
-			_update_hud_with_msg("The path is sealed. Light the %s beacon to pass." % beacon_name.replace("_", " "))
+			_update_hud_with_msg("The path is sealed. Light the %s beacon east of the mountain pass to pass." % beacon_name.replace("_", " "))
 		else:
 			_update_hud_with_msg("Can't go that way.")
 		return
@@ -572,6 +593,8 @@ func _step_effects() -> void:
 
 	if tile == "L":
 		_interact_beacon("lighthouse", pos)
+	elif tile == "B":
+		_interact_beacon(_beacon_name_at(pos), pos)
 	elif tile == "h":
 		_enter_brindlewick()
 		return
@@ -610,6 +633,8 @@ func _step_effects() -> void:
 # the interaction database. Adding a new interaction is just: add a tile
 # symbol to MAP, add a handler in this match statement.
 func _interact() -> void:
+	if _interact_current_tile():
+		return
 	var target := pos + facing
 	var tile := _tile(target)
 	if tile == "L":
@@ -644,6 +669,16 @@ func _interact() -> void:
 		_try_gather_materials(target)
 	else:
 		_update_hud_with_msg("Nothing here.")
+
+func _interact_current_tile() -> bool:
+	var tile := _tile(pos)
+	if tile == "L":
+		_interact_beacon("lighthouse", pos)
+		return true
+	if tile == "B":
+		_interact_beacon(_beacon_name_at(pos), pos)
+		return true
+	return false
 
 func _enter_brindlewick() -> void:
 	GameData.overworld_position = pos

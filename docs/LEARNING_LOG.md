@@ -174,3 +174,45 @@ Capture anything that should become clearer after future slices.
 - Question: Should quest guidance eventually support map markers or compass arrows?
 - Why it matters: Text hints work for a small demo, but larger maps may need stronger navigation help.
 - When to revisit: After the lighthouse route and remaining overworld landmarks are polished.
+
+---
+
+## Slice
+
+- Name: Overworld landmark readability pass
+- Date: 2026-05-27
+- Playable goal: Make the major overworld destinations easier to recognize while exploring the first demo route.
+
+## What Changed
+
+- Player-facing change: Brindlewick, the lighthouse, beacons, dock, cave, camp, clearing, and ruins now have readable world labels and pins under fog-of-war.
+- Systems or content added: A `LANDMARK_MARKERS` data list feeds the existing location marker drawing code.
+- Bug or design problem solved: Important locations relied mostly on small icon art, which made the lighthouse objective and optional landmarks too easy to miss.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - look at `LANDMARK_MARKERS`, `_draw_location_markers()`, and `_add_location_marker()`.
+
+## GDScript Concepts
+
+- Concept: Arrays of dictionaries as lightweight content data
+- Where it appears: `LANDMARK_MARKERS` stores each marker's grid position, label, color, and label offset.
+- What to notice: The drawing function does not need to know which landmark is which; it just loops through data and renders each entry the same way.
+
+## Why This Pattern
+
+- Problem this pattern solves: Adding labels one by one in code would create repeated marker setup logic.
+- Why it fits this slice: The overworld still uses a simple ASCII map, so a simple parallel data list is enough to make landmarks readable.
+- Tradeoff or thing to watch: If landmarks gain quest rules, discovery states, or custom icons, this data should probably move into a dedicated landmark database.
+
+## Tiny Exercise
+
+- Task: Change one landmark label color in `LANDMARK_MARKERS`.
+- Expected result in-game: That destination's pin and label tint changes on the overworld.
+- Hint: Colors are `Color(red, green, blue, alpha)` floats from `0.0` to `1.0`.
+
+## Questions to Revisit
+
+- Question: Should unexplored landmarks hide their labels until discovered?
+- Why it matters: Always-visible labels help the demo, but discovery can make exploration feel more rewarding later.
+- When to revisit: After the first quest arc has map markers or journal tracking.
