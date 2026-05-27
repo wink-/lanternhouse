@@ -35,7 +35,7 @@ func close() -> void:
 	active = false
 	hide()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not active:
 		return
 	if not (event is InputEventKey and event.pressed and not event.echo):
@@ -44,15 +44,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_UP:
 			selected_idx = maxi(0, selected_idx - 1)
 			_update()
+			get_viewport().set_input_as_handled()
 		KEY_DOWN:
 			selected_idx = mini(OPTIONS.size() - 1, selected_idx + 1)
 			_update()
+			get_viewport().set_input_as_handled()
 		KEY_LEFT:
 			_adjust(-1)
+			get_viewport().set_input_as_handled()
 		KEY_RIGHT:
 			_adjust(1)
+			get_viewport().set_input_as_handled()
 		KEY_ESCAPE:
 			close()
+			get_viewport().set_input_as_handled()
 
 func _adjust(dir: int) -> void:
 	var opt: Dictionary = OPTIONS[selected_idx]
