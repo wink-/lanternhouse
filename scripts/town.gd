@@ -121,6 +121,7 @@ const BUILDING_LABELS := [
 ]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
+var _npc_positions_phase: String = ""
 
 var pos: Vector2i = Vector2i(20, 22)
 var facing: Vector2i = Vector2i.DOWN
@@ -181,16 +182,15 @@ func _ready() -> void:
 			if m["alive"]:
 				m["xp"] += xp
 	_update_player()
+	_show_arrival_hint()
 
 func _load_town_atlas() -> void:
 	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
 		push_warning("Town atlas missing: %s" % TOWN_ATLAS_PATH)
 		return
-	var image := Image.new()
-	if image.load(TOWN_ATLAS_PATH) != OK:
+	_town_atlas = _load_png_texture(TOWN_ATLAS_PATH)
+	if not _town_atlas:
 		push_warning("Town atlas could not be loaded: %s" % TOWN_ATLAS_PATH)
-		return
-	_town_atlas = ImageTexture.create_from_image(image)
 
 func _load_quiet_village_assets() -> void:
 	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
@@ -201,6 +201,10 @@ func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
 		push_warning("Image missing: %s" % path)
 		return null
+	if ResourceLoader.exists(path):
+		var texture: Texture2D = load(path)
+		if texture:
+			return texture
 	var image := Image.new()
 	if image.load(path) != OK:
 		push_warning("Image could not be loaded: %s" % path)
@@ -291,6 +295,7 @@ func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 func _build_npc_positions() -> void:
 	npc_positions.clear()
 	var phase: String = GameData.get_day_phase()
+	_npc_positions_phase = phase
 	for npc_id: String in NPC_IDS:
 		var home: Vector2i = NPCDB.get_npc_position(npc_id, phase)
 		if home.x >= 0:
@@ -342,15 +347,13 @@ func _find_npc_pos(npc_id: String) -> Vector2i:
 	return Vector2i(-1, -1)
 
 func _refresh_npcs() -> void:
-	var old_phase: String = npc_positions.get("_phase", "")
 	var phase: String = GameData.get_day_phase()
-	if phase == old_phase:
+	if phase == _npc_positions_phase:
 		return
 	for npc_id: String in NPC_IDS:
 		var home: Vector2i = NPCDB.get_npc_position(npc_id, phase)
 		_npc_wander_pos[npc_id] = home
 	_build_npc_positions()
-	npc_positions["_phase"] = phase
 	for npc_id: String in NPC_IDS:
 		if _npc_markers.has(npc_id):
 			var marker: Sprite2D = _npc_markers[npc_id]
@@ -753,13 +756,28 @@ func _interact() -> void:
 	if npc == "":
 		npc = _building_door_at(pos)
 	if npc == "":
-		_say("Nothing here.")
+		_say(_nothing_here_text(target))
 		return
 
 	_start_npc_interaction(npc)
 
 func _building_door_at(grid: Vector2i) -> String:
 	return BUILDING_DOORS.get(grid, "")
+
+func _nothing_here_text(target: Vector2i) -> String:
+	if target.y < pos.y:
+		return "Nothing responds here.\n\nFace a villager or a labeled doorway, then press Interact. Elder Hall is at the north end of town."
+	if target.y > pos.y:
+		return "The south road leads back to the overworld. Walk down past the last path tile to leave Brindlewick."
+	return "Nothing here.\n\nFace a villager or a building door, then press Interact."
+
+func _show_arrival_hint() -> void:
+	if GameData.is_quest_complete("the_dead_wick") and QuestDB.get_next_story_quest() == "the_missing_keeper":
+		_say("[color=#f0d46a]The lighthouse burns again.[/color]\n\nReturn to Elder Hall at the north end of town and speak with Old Thatch.")
+	elif GameData.is_quest_active("the_dead_wick"):
+		_say("[color=#f0d46a]Current objective:[/color] Relight the lighthouse wick east of Brindlewick.\n\nLeave by walking south out of town, then follow the overworld path east.")
+	elif QuestDB.get_next_story_quest() == "the_dead_wick":
+		_say("[color=#f0d46a]First stop:[/color] Elder Hall at the north end of town.\n\nFace Old Thatch or the Elder Hall door and press Interact.")
 
 func _start_npc_interaction(npc: String) -> void:
 	talking_to = npc
@@ -1734,7 +1752,7 @@ func _quest_accepted_text(quest: Dictionary, intro: String) -> String:
 		lines.append("\n[color=#f0d46a]Objective:[/color] %s" % quest["objective"])
 	if quest.has("hint"):
 		lines.append("[color=#9fc5ff]Hint:[/color] %s" % quest["hint"])
-	lines.append("[color=#888]Press J on the overworld to review your journal.[/color]")
+	lines.append("[color=#888]Walk south out of town to return to the overworld. Press J on the overworld to review your journal.[/color]")
 	return "\n".join(lines)
 
 func _say(msg: String) -> void:
