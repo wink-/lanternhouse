@@ -556,6 +556,9 @@ func _step_effects() -> void:
 
 	if tile == "L":
 		_interact_beacon("lighthouse", pos)
+	elif tile == "h":
+		_enter_brindlewick()
+		return
 	# Admin mode and Fog in a Bottle block encounters.
 	if admin_mode or GameData.get_meta("fog_active", false):
 		return
@@ -614,12 +617,7 @@ func _interact() -> void:
 	elif tile == "f":
 		_interact_forest_clearing()
 	elif tile == "h":
-		GameData.overworld_position = pos
-		GameData.overworld_facing = facing
-		if GameData.owns_home():
-			SceneTransition.change_scene("res://scenes/home/home.tscn")
-		else:
-			SceneTransition.change_scene("res://scenes/town/town.tscn")
+		_enter_brindlewick()
 	elif FishDB.can_fish(tile):
 		var zone := FishDB.zone_for_tile(tile)
 		if fishing_screen:
@@ -631,6 +629,13 @@ func _interact() -> void:
 	else:
 		_update_hud_with_msg("Nothing here.")
 
+func _enter_brindlewick() -> void:
+	GameData.overworld_position = pos
+	GameData.overworld_facing = facing
+	if GameData.owns_home():
+		SceneTransition.change_scene("res://scenes/home/home.tscn")
+	else:
+		SceneTransition.change_scene("res://scenes/town/town.tscn")
 
 func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 	var key := str(beacon_pos)
