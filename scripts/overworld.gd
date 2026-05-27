@@ -467,14 +467,19 @@ func _configure_camera_limits() -> void:
 # ── Input ──────────────────────────────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
 	if char_sheet and char_sheet.active:
+		char_sheet._unhandled_input(event)
 		return
 	if quest_journal and quest_journal.active:
+		quest_journal._unhandled_input(event)
 		return
 	if inventory_screen and inventory_screen.active:
+		inventory_screen._unhandled_input(event)
 		return
 	if settings_screen and settings_screen.active:
+		settings_screen._unhandled_input(event)
 		return
 	if fishing_screen and fishing_screen.active:
+		fishing_screen._unhandled_input(event)
 		return
 	if minimap and minimap.visible:
 		return
@@ -515,7 +520,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.keycode == KEY_F4:
 		_toggle_admin_mode()
 		return
-	elif event.keycode == KEY_C:
+	elif event.keycode == KEY_C or event.keycode == KEY_M:
 		if char_sheet:
 			if char_sheet.active:
 				char_sheet.close()

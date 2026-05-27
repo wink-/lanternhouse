@@ -30,9 +30,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _update() -> void:
 	var lines: Array = []
-	lines.append("[b][color=#f0d46a]╔══════════════════════════════════════════════════════╗[/color][/b]")
-	lines.append("[b][color=#f0d46a]║              Q U E S T   J O U R N A L              ║[/color][/b]")
-	lines.append("[b][color=#f0d46a]╚══════════════════════════════════════════════════════╝[/color][/b]")
+	lines.append("[b][color=#f0d46a]Q U E S T   J O U R N A L[/color][/b]")
+	lines.append("[color=#f0d46a]──────────────────────────────────────────────────────[/color]")
 	lines.append("")
 
 	# Active quests

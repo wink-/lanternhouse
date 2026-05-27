@@ -573,3 +573,46 @@ Capture anything that should become clearer after future slices.
 - Question: Should `M` open a broader command menu instead of directly opening party status?
 - Why it matters: Final Fantasy-style menus usually gather Items, Status, Save, and Settings in one place.
 - When to revisit: During the overworld command-menu slice.
+
+---
+
+## Slice
+
+- Name: Journal input polish
+- Date: 2026-05-27
+- Playable goal: Make the quest journal close with the same key that opens it and avoid broken text-box chrome.
+
+## What Changed
+
+- Player-facing change: Pressing `J` now toggles the quest journal closed, and the journal title uses a clean divider instead of a misaligned box border.
+- Systems or content added: The overworld forwards input to active overlay screens before returning.
+- Bug or design problem solved: Active overlays were blocking their own close hotkeys because overworld returned before the child UI could handle input.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - inspect the first checks in `_unhandled_input()`.
+- `res://scripts/questjournal.gd` - see the simplified journal heading.
+
+## GDScript Concepts
+
+- Concept: Input routing between parent and overlay nodes
+- Where it appears: The overworld explicitly forwards input events to active overlays.
+- What to notice: Modal overlays need first chance to consume their own close keys before map movement or other overworld hotkeys run.
+
+## Why This Pattern
+
+- Problem this pattern solves: A modal UI can become sticky if its parent blocks input propagation.
+- Why it fits this slice: The game already has separate overlay scenes, so routing input to the active overlay keeps responsibilities clear.
+- Tradeoff or thing to watch: If overlays become more complex, a shared overlay manager may be cleaner than manual forwarding.
+
+## Tiny Exercise
+
+- Task: Open the journal with `J`, close it with `J`, then open the party screen with `M` and close it with `M`.
+- Expected result in-game: Both overlays should toggle without moving the player.
+- Hint: The toggle keys are handled once by the active overlay branch and once by the overworld open branch.
+
+## Questions to Revisit
+
+- Question: Should all overlays use the same title style?
+- Why it matters: Consistent menu chrome will make the game feel more intentional.
+- When to revisit: During the UI theme pass.
