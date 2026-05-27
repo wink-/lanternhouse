@@ -26,6 +26,81 @@ front walls, doors at the base of buildings, props near walls/roads/plazas, and
 paths that visibly lead to entrances. The overworld can stay flatter and more
 symbolic.
 
+## Prompt Architecture
+
+Use these fragments when generating new art. Keep the core aesthetic in every
+prompt, then add the module that matches the asset type.
+
+### Global Core Aesthetic
+
+Modern 16-bit JRPG pixel art, high-fidelity retro remaster, crisp pixel-perfect
+asset. Hand-placed pixel feel, sharp 1-pixel outlines, clear color definition,
+cluster shading for textures, controlled texture clusters readable at gameplay
+zoom. No automatic anti-aliasing.
+
+Negative prompt baseline: 3D render, smooth gradients, blurry textures, modern
+lighting effects, photorealistic, 8-bit, NES style, vector art, smooth lines,
+baked-in text or unreadable fake lettering unless explicitly requested.
+
+### Town And Dungeon Exploration
+
+Use for walkable maps, village interiors, castle halls, caves, ruins, and
+dungeons.
+
+Perspective: top-down 2D, 3/4 overhead view, grid-based tiling. Buildings and
+walls show visible vertical depth. Roofs/facades, doors, cliffs, stairs, and
+wall faces must read as 3/4 JRPG environment art. Doors should align to a 16x16
+grid threshold at the base/front facade.
+
+Prompt fragment:
+
+```text
+[Environment Type] in a modern 16-bit JRPG pixel art style, top-down 3/4 perspective, grid-aligned modular design, crisp pixel-perfect details, visible vertical depth on walls and structures, defined 1-pixel borders, cluster-shaded stone/wood/grass details, shadows directly beneath structures, readable at gameplay zoom, transparent background for modular objects.
+```
+
+### Overworld Map
+
+Use for the world navigation map and major map icons.
+
+Perspective: true top-down, 90-degree flat orthogonal view, macro miniature
+scale. Terrain uses muted, low-detail repeating textures so towns, forests,
+mountains, roads, coastlines, and landmarks remain readable as map symbols. Do
+not use full 3/4 buildings here.
+
+Prompt fragment:
+
+```text
+[World Map Feature] in a modern 16-bit JRPG overworld style, true top-down flat orthogonal view, macro miniature scale, crisp pixel-perfect icon designed for a flat repeating world map tileset grid, readable silhouette, limited texture noise.
+```
+
+### Turn-Based Battle Scenes
+
+Use for combat backgrounds and arenas.
+
+Perspective: side-view profile, 2D horizontal layout, theatrical stage
+presentation. Include a flat foreground combat floor plane and an atmospheric
+panoramic pixel-art background. No grid restriction for character placement.
+
+Prompt fragment:
+
+```text
+[Battle Arena Background] for a turn-based JRPG combat scene, side-view profile 2D layout, cinematic stage framing, flat foreground combat floor plane, atmospheric detailed panoramic pixel-art background, crisp dramatic lighting, deep readable shadows, no photorealism.
+```
+
+### Characters And NPCs
+
+Use for player, NPC, townsfolk, and small interactive character sprites.
+
+Proportions: chibi JRPG, super-deformed, about 2.5 to 3 heads tall, oversized
+head, expressive eyes, readable silhouette. Use bold 1px outlines and simple,
+clear shadow clusters under hair, chin, and garments.
+
+Prompt fragment:
+
+```text
+Character sprite of [Character Description], modern 16-bit JRPG pixel art style, chibi proportions, about 3 heads tall, distinct 1-pixel outline, crisp pixel-perfect asset, readable silhouette at small gameplay scale, transparent background.
+```
+
 ## Current Art Pipeline
 
 Lanternhouse now uses **PixelLab-generated pixel art as the primary production

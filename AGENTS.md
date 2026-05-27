@@ -41,9 +41,19 @@ used by the live game.
 
 - PixelLab art is the preferred source for production pixel art.
 - Use `assets/sprites/characters/cat/` as the current quality benchmark.
+- Target art style is modern 16-bit JRPG pixel art: crisp pixel-perfect assets,
+  hand-placed pixel feel, 1px outlines, clear color clusters, and no automatic
+  anti-aliasing.
+- Default negative prompt: no 3D render, photorealism, vector art, smooth
+  gradients, blurry textures, modern bloom, smooth lines, NES/8-bit style, or
+  baked-in text unless explicitly requested.
 - Keep perspective intentional: overworld art is straight-down symbolic map art,
   while towns, dungeons, and interiors are top-down 3/4 JRPG environments.
 - Do not mix flat top-down town layouts with front-facing building sprites.
+- Battle backgrounds use side-view profile stage framing with a flat combat
+  floor and atmospheric panoramic backdrop.
+- Buildings need visible 3/4 roofs/facades and grid-aligned entrance thresholds.
+- Props and character/entity sprites should usually have transparent backgrounds.
 - Preserve useful PixelLab folder structure such as `rotations/` and
   `walk/<direction>/`.
 - Prefer imported texture resources over runtime `Image.load()` paths where
