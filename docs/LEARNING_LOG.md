@@ -702,3 +702,48 @@ Capture anything that should become clearer after future slices.
 - Question: Should major buildings get interior scenes or compact service menus first?
 - Why it matters: Interiors add immersion, while service menus get the demo loop playable faster.
 - When to revisit: After the first quest, save/load, and battle loop are stable.
+
+---
+
+## Slice
+
+- Name: PixelLab cat integration
+- Date: 2026-05-27
+- Playable goal: Prove that PixelLab-generated art can be downloaded, organized, and used as live in-game art.
+
+## What Changed
+
+- Player-facing change: Brindlewick now has a roaming orange tabby cat with directional PixelLab animation frames.
+- Systems or content added: PixelLab character output is stored under `res://assets/sprites/characters/cat/` and `town.gd` loads the directional stills and walk frames directly.
+- Bug or design problem solved: The art pipeline now has a successful benchmark asset and a documented pattern for moving beyond placeholders.
+
+## Files to Read
+
+- `res://scripts/town.gd` - inspect the `CAT_*` constants, `_draw_cat()`, `_wander_cat()`, and `_update_cat_animation()`.
+- `res://assets/sprites/characters/cat/` - see the PixelLab folder layout for rotations and walking frames.
+- `docs/pixel-art-direction.md` - read the updated PixelLab style benchmark and generation workflow.
+- `docs/godot-asset-conventions.md` - see how generated assets can use folders instead of legacy sheets.
+
+## GDScript Concepts
+
+- Concept: Adapting external asset dimensions at runtime
+- Where it appears: `town.gd` displays 68x68 PixelLab cat frames at a smaller scale on the 16x16 town grid.
+- What to notice: The source art stays intact while the scene controls how it fits the current map scale.
+
+## Why This Pattern
+
+- Problem this pattern solves: Generated art will not always match the older placeholder dimensions or sheet layouts.
+- Why it fits this slice: Keeping original PixelLab frames avoids destructive resizing and lets us learn what frame layouts are useful before standardizing.
+- Tradeoff or thing to watch: Per-asset loading code is fine for the first benchmark, but repeated characters should eventually share a small character-art helper.
+
+## Tiny Exercise
+
+- Task: Change `CAT_WANDER_RADIUS` in `res://scripts/town.gd` and boot Brindlewick.
+- Expected result in-game: The cat should roam a smaller or larger area around the tavern.
+- Hint: The cat still obeys blocked tiles, NPC positions, and the player's current tile.
+
+## Questions to Revisit
+
+- Question: Should PixelLab characters get a shared loader for rotations, walking frames, and scale?
+- Why it matters: The cat is the first generated character; the player and NPCs will likely need the same pattern.
+- When to revisit: After the next two or three PixelLab character integrations.

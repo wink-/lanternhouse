@@ -63,6 +63,21 @@ Data survives scene switches because it lives in **autoload singletons**.
 └─────────────────────────────────────────────────────┘
 ```
 
+### Build Philosophy
+
+Lanternhouse is being built in playable slices. The usual order is:
+
+1. Make the loop work with simple data, maps, and placeholders.
+2. Add smoke coverage or a quick headless launch check for risky changes.
+3. Replace the roughest placeholder art with PixelLab-generated sprites.
+4. Keep the game bootable by preserving cheap fallbacks where they already exist.
+5. Document the local pattern after it proves useful in-game.
+
+The town cat is the first PixelLab benchmark asset. It is intentionally integrated
+as real runtime art, not just parked in the asset folder. Future art passes should
+follow the same pattern: download the asset, put it under `assets/sprites/`, wire
+it into the scene, and verify that the scene still launches.
+
 ### Coding Concept: Singletons
 
 A **singleton** is a single shared instance of an object. In Godot, autoloads are

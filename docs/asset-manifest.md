@@ -12,6 +12,16 @@ and frame counts.
 | `assets/sprites/overworld/npc_elder.png` | 64×64 | 16 | Quest NPC |
 | `assets/sprites/overworld/npc_innkeeper.png` | 64×64 | 16 | Inn NPC |
 
+## PixelLab Character Assets
+
+These assets may use original PixelLab frame folders instead of legacy sheets.
+They are integrated by scene scripts that scale or animate the frames directly.
+
+| File or folder | Size | Frames | Notes |
+|---|---|---|---|
+| `assets/sprites/characters/cat/rotations/` | 68×68 each | 8 directional stills | Current style benchmark |
+| `assets/sprites/characters/cat/walk/` | 68×68 each | 4 directions × 6 frames | Used by `town.gd` roaming cat |
+
 ## Battle Sprites — Party
 
 | File | Size | Frames | Notes |
@@ -69,8 +79,9 @@ and frame counts.
 | Category | Count |
 |---|---|
 | Overworld sprites | 4 |
+| PixelLab characters | 1 |
 | Battle party | 4 |
 | Battle enemies | 9 |
 | Terrain tiles | 8 |
 | UI (future) | 10 |
-| **Total** | **35** |
+| **Total** | **36 tracked groups** |

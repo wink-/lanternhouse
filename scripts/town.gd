@@ -27,6 +27,16 @@ const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
 const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
 const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
 const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
+const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
+const NPC_ROTATION_PATHS := {
+	"weapon_merchant": "res://assets/sprites/characters/town_npcs/weapon_merchant/rotations/%s.png",
+	"elder": "res://assets/sprites/characters/town_npcs/elder/rotations/%s.png",
+}
+const CAT_ROTATION_PATH := "res://assets/sprites/characters/cat/rotations/%s.png"
+const CAT_WALK_PATH := "res://assets/sprites/characters/cat/walk/%s/%d.png"
+const CAT_HOME := Vector2i(18, 18)
+const CAT_WANDER_RADIUS := 5
+const CAT_FRAME_TIME := 0.12
 const GROUND_TILE_RECTS := {
 	".": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"=": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -127,6 +137,16 @@ var _town_atlas: Texture2D
 var _town_ground: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
+var _player_idle_textures: Dictionary = {}
+var _npc_idle_textures: Dictionary = {}
+var _cat_marker: Sprite2D
+var _cat_pos: Vector2i = CAT_HOME
+var _cat_home: Vector2i = CAT_HOME
+var _cat_facing: Vector2i = Vector2i.DOWN
+var _cat_walk_frames: Dictionary = {}
+var _cat_idle_textures: Dictionary = {}
+var _cat_anim_timer: float = 0.0
+var _cat_frame: int = 0
 const WANDER_INTERVAL := 2.5
 const WANDER_RADIUS := 3
 
@@ -145,6 +165,7 @@ func _ready() -> void:
 	_draw_props()
 	_build_npc_positions()
 	_draw_npcs()
+	_draw_cat()
 	_configure_camera()
 	GameData.visited_town = true
 	# Auto-accept and complete Visit Brindlewick quest
@@ -277,9 +298,16 @@ func _build_npc_positions() -> void:
 			_npc_wander_pos[npc_id] = home
 
 func _draw_npcs() -> void:
+	_load_npc_textures()
 	for npc_id: String in NPC_IDS:
 		var marker := Sprite2D.new()
-		if _town_atlas:
+		var pixel_art_texture: Texture2D = _npc_idle_textures.get(npc_id, null)
+		if pixel_art_texture:
+			marker.texture = pixel_art_texture
+			marker.centered = true
+			marker.scale = Vector2(0.42, 0.42)
+			marker.z_index = 4
+		elif _town_atlas:
 			marker.texture = _town_atlas
 			marker.region_enabled = true
 			marker.region_rect = NPC_RECTS.get(npc_id, NPC_RECTS["tavern_keeper"])
@@ -294,6 +322,13 @@ func _draw_npcs() -> void:
 			marker.visible = false
 		map_layer.add_child(marker)
 		_npc_markers[npc_id] = marker
+
+func _load_npc_textures() -> void:
+	for npc_id: String in NPC_ROTATION_PATHS:
+		if _npc_idle_textures.has(npc_id):
+			continue
+		var path: String = NPC_ROTATION_PATHS[npc_id] % "south"
+		_npc_idle_textures[npc_id] = _load_png_texture(path) if FileAccess.file_exists(path) else null
 
 func _make_solid_texture(color: Color) -> Texture2D:
 	var image := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
@@ -328,10 +363,12 @@ func _refresh_npcs() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_cat_animation(delta)
 	_wander_timer += delta
 	if _wander_timer >= WANDER_INTERVAL:
 		_wander_timer -= WANDER_INTERVAL
 		_wander_one_npc()
+		_wander_cat()
 
 func _wander_one_npc() -> void:
 	var phase: String = GameData.get_day_phase()
@@ -363,6 +400,8 @@ func _wander_one_npc() -> void:
 			continue
 		if next == pos:
 			continue
+		if next == _cat_pos:
+			continue
 		var occupied := false
 		for other_id: String in _npc_wander_pos:
 			if other_id != npc_id and _npc_wander_pos[other_id] == next:
@@ -380,11 +419,99 @@ func _wander_one_npc() -> void:
 			_npc_markers[npc_id].position = Vector2(next * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 		break
 
+func _draw_cat() -> void:
+	_load_cat_textures()
+	_cat_marker = Sprite2D.new()
+	_cat_marker.name = "PixelLabCat"
+	_cat_marker.centered = true
+	_cat_marker.scale = Vector2(0.32, 0.32)
+	_cat_marker.z_index = 4
+	_cat_marker.texture = _cat_idle_textures.get("south", null)
+	_cat_marker.position = _grid_center(_cat_pos) + Vector2(0, -6)
+	map_layer.add_child(_cat_marker)
+
+func _load_cat_textures() -> void:
+	for dir_name in ["south", "east", "north", "west"]:
+		_cat_idle_textures[dir_name] = _load_png_texture(CAT_ROTATION_PATH % dir_name)
+		var frames: Array = []
+		for i in range(6):
+			var frame_tex := _load_png_texture(CAT_WALK_PATH % [dir_name, i])
+			if frame_tex:
+				frames.append(frame_tex)
+		_cat_walk_frames[dir_name] = frames
+
+func _wander_cat() -> void:
+	if not _cat_marker:
+		return
+	if randf() > 0.85:
+		return
+	var dirs := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+	dirs.shuffle()
+	for dir: Vector2i in dirs:
+		var next := _cat_pos + dir
+		if _is_blocked(next):
+			continue
+		if next == pos:
+			continue
+		if abs(next.x - _cat_home.x) + abs(next.y - _cat_home.y) > CAT_WANDER_RADIUS:
+			continue
+		var occupied := false
+		for npc_id: String in _npc_wander_pos:
+			if _npc_wander_pos[npc_id] == next:
+				occupied = true
+				break
+		if occupied:
+			continue
+		_cat_pos = next
+		_cat_facing = dir
+		_cat_frame = 0
+		_cat_marker.position = _grid_center(_cat_pos) + Vector2(0, -6)
+		_set_cat_texture()
+		return
+
+func _update_cat_animation(delta: float) -> void:
+	if not _cat_marker:
+		return
+	_cat_anim_timer += delta
+	if _cat_anim_timer < CAT_FRAME_TIME:
+		return
+	_cat_anim_timer = 0.0
+	var dir_name := _cat_direction_name(_cat_facing)
+	var frames: Array = _cat_walk_frames.get(dir_name, [])
+	if frames.is_empty():
+		return
+	_cat_frame = (_cat_frame + 1) % frames.size()
+	_cat_marker.texture = frames[_cat_frame]
+
+func _set_cat_texture() -> void:
+	var dir_name := _cat_direction_name(_cat_facing)
+	var frames: Array = _cat_walk_frames.get(dir_name, [])
+	if not frames.is_empty():
+		_cat_marker.texture = frames[_cat_frame]
+	else:
+		_cat_marker.texture = _cat_idle_textures.get(dir_name, _cat_idle_textures.get("south", null))
+
+func _cat_direction_name(dir: Vector2i) -> String:
+	match dir:
+		Vector2i.UP:
+			return "north"
+		Vector2i.DOWN:
+			return "south"
+		Vector2i.LEFT:
+			return "west"
+		Vector2i.RIGHT:
+			return "east"
+	return "south"
+
+func _grid_center(grid: Vector2i) -> Vector2:
+	return Vector2(grid * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
+
 func _update_player() -> void:
 	_refresh_npcs()
 	_apply_day_tint()
 	player_sprite.position = Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
 	_update_camera()
+	_update_player_texture()
 	if _town_atlas and not player_sprite.has_node("Sprite"):
 		var sprite := Sprite2D.new()
 		sprite.name = "Sprite"
@@ -394,6 +521,28 @@ func _update_player() -> void:
 		player_sprite.add_child(sprite)
 		if player_sprite.has_node("Body"):
 			player_sprite.get_node("Body").visible = false
+	_update_player_texture()
+
+func _update_player_texture() -> void:
+	if player_sprite.has_node("Sprite"):
+		var sprite: Sprite2D = player_sprite.get_node("Sprite")
+		var dir_name := _cat_direction_name(facing)
+		if _player_idle_textures.is_empty():
+			_load_player_textures()
+		var texture: Texture2D = _player_idle_textures.get(dir_name, _player_idle_textures.get("south", null))
+		if texture:
+			sprite.texture = texture
+			sprite.region_enabled = false
+			sprite.centered = true
+			sprite.scale = Vector2(0.42, 0.42)
+			sprite.z_index = 4
+			if player_sprite.has_node("Body"):
+				player_sprite.get_node("Body").visible = false
+
+func _load_player_textures() -> void:
+	for dir_name in ["south", "east", "north", "west"]:
+		var path: String = PLAYER_ROTATION_PATH % dir_name
+		_player_idle_textures[dir_name] = _load_png_texture(path) if FileAccess.file_exists(path) else null
 
 func _configure_camera() -> void:
 	if not camera:
@@ -576,6 +725,8 @@ func _try_move(dir: Vector2i) -> void:
 func _is_blocked(grid: Vector2i) -> bool:
 	if grid.x < 0 or grid.x >= MAP[0].length() or grid.y < 0 or grid.y >= MAP.size():
 		return true
+	if grid == _cat_pos:
+		return true
 	return BLOCKED.has(MAP[grid.y].substr(grid.x, 1))
 
 func _check_exit() -> void:
@@ -592,6 +743,9 @@ func _exit_to_overworld() -> void:
 
 func _interact() -> void:
 	var target := pos + facing
+	if target == _cat_pos:
+		_say("[color=#f0a46a]Tabby[/color]: Mrrp.\n\nThe little cat winds around your boots, then pads back toward the tavern.")
+		return
 	var npc: String = npc_positions.get(target, "")
 
 	if npc == "":

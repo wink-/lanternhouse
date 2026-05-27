@@ -24,6 +24,7 @@ const TinkerDB := preload("res://scripts/data/tinkering.gd")
 
 const TILE_SIZE := 32
 const PLAYER_SPRITE_PATH := "res://assets/sprites/overworld/player.png"
+const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
 const OVERWORLD_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_overworld.png"
@@ -207,6 +208,7 @@ var step_count: int = 0
 var steps_since_encounter: int = 0
 var _auto_save_timer: float = 0.0
 const AUTO_SAVE_INTERVAL := 60.0
+var _player_idle_textures: Dictionary = {}
 
 # Weather
 var _raining: bool = false
@@ -428,11 +430,23 @@ func _update_player_visual() -> void:
 	if walking:
 		player_sprite.position.y -= 2
 	if player_texture:
-		player_texture.flip_h = facing == Vector2i.LEFT
+		if not _update_player_texture():
+			player_texture.flip_h = facing == Vector2i.LEFT
 		player_texture.modulate = Color(1.08, 1.06, 0.95) if sprinting else Color.WHITE
 
 func _init_player_sprite() -> void:
 	if not player_texture:
+		return
+	_load_player_textures()
+	_update_player_texture()
+	if player_texture.texture:
+		player_texture.centered = true
+		player_texture.position = Vector2.ZERO
+		player_texture.z_index = 4
+		if player_body:
+			player_body.hide()
+		if player_face:
+			player_face.hide()
 		return
 	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
 		return
@@ -447,6 +461,41 @@ func _init_player_sprite() -> void:
 		player_body.hide()
 	if player_face:
 		player_face.hide()
+
+func _load_player_textures() -> void:
+	for dir_name in ["south", "east", "north", "west"]:
+		_player_idle_textures[dir_name] = _load_png_texture(PLAYER_ROTATION_PATH % dir_name)
+
+func _load_png_texture(path: String) -> Texture2D:
+	if not FileAccess.file_exists(path):
+		return null
+	var image := Image.new()
+	if image.load(path) != OK:
+		push_warning("Image could not be loaded: %s" % path)
+		return null
+	return ImageTexture.create_from_image(image)
+
+func _update_player_texture() -> bool:
+	if _player_idle_textures.is_empty():
+		return false
+	var texture: Texture2D = _player_idle_textures.get(_direction_name(facing), _player_idle_textures.get("south", null))
+	if texture:
+		player_texture.texture = texture
+		player_texture.flip_h = false
+		return true
+	return false
+
+func _direction_name(dir: Vector2i) -> String:
+	match dir:
+		Vector2i.UP:
+			return "north"
+		Vector2i.DOWN:
+			return "south"
+		Vector2i.LEFT:
+			return "west"
+		Vector2i.RIGHT:
+			return "east"
+	return "south"
 
 func _update_camera() -> void:
 	if camera:

@@ -10,6 +10,43 @@ lantern/firelight motif and slightly warmer tones than the cold NES palette.
 Everything is designed to slot directly into the existing Godot 4 codebase
 which renders at **960×640** with **16×16** tiles.
 
+## Current Art Pipeline
+
+Lanternhouse now uses **PixelLab-generated pixel art as the primary production
+art source**. The first successful benchmark is the town cat:
+
+`res://assets/sprites/characters/cat/`
+
+The cat sets the current quality target:
+
+- Top-down 2D RPG readability
+- Clean single-color dark outline
+- Medium detail with basic shading
+- Cute but grounded character design
+- Transparent PNG output
+- Strong silhouette at the game's zoom level
+
+When generating new art, treat the cat as the style anchor. New player, NPC,
+enemy, prop, and object sprites should feel like they belong in the same world,
+even if their source dimensions differ from the older handmade placeholder
+assets.
+
+### Generation Workflow
+
+1. Use the PixelLab MCP to create or retrieve an asset.
+2. Download the source output into `assets/sprites/` under a clear category.
+3. Keep original PixelLab frames when useful instead of immediately flattening
+   everything into legacy sheets.
+4. Integrate the asset into the actual scene or script.
+5. Keep the old polygon/color fallback when it is cheap and helps the game boot
+   if an asset is missing.
+6. Run a Godot headless check after integration.
+
+This project is intentionally moving from playable placeholders toward final art
+incrementally. A sprite is not considered "in the game" just because it exists on
+disk; it should be wired into the relevant scene, visible at runtime, and covered
+by at least a basic launch check.
+
 ---
 
 ## Core Constants
