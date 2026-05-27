@@ -441,3 +441,47 @@ Capture anything that should become clearer after future slices.
 - Question: Should Mara's journal pages become an inventory key item?
 - Why it matters: A key item would make the investigation feel more tangible, but it adds UI and save/load surface.
 - When to revisit: When building the item/key-item pass for the first demo.
+
+---
+
+## Slice
+
+- Name: Story beacon guard pass
+- Date: 2026-05-27
+- Playable goal: Prevent story beacons from silently completing before the player has accepted their quest.
+
+## What Changed
+
+- Player-facing change: Dark story beacons now give a short clue when approached too early instead of lighting without context.
+- Systems or content added: The Dead Wick and Missing Keeper smokes both verify their story beacon stays unlit before the matching quest is active.
+- Bug or design problem solved: A player could previously light the North Forest beacon before accepting The Missing Keeper, then later complete the quest without seeing Mara's clue.
+
+## Files to Read
+
+- `res://scripts/overworld.gd` - inspect `_beacon_has_story_quest()` and `_inactive_story_beacon_msg()`.
+- `res://scripts/dev/smoke_dead_wick.gd` - see the pre-accept lighthouse guard assertion.
+- `res://scripts/dev/smoke_missing_keeper.gd` - see the pre-accept North Forest guard assertion.
+
+## GDScript Concepts
+
+- Concept: Data-driven gating
+- Where it appears: `_beacon_has_story_quest()` checks quest definitions for beacon quests with `event_text`.
+- What to notice: The guard is keyed from quest data instead of hardcoding only one quest id, so future story beacons can opt in by adding event copy.
+
+## Why This Pattern
+
+- Problem this pattern solves: The map lets players wander freely, but story objectives need their clue text to fire in the right order.
+- Why it fits this slice: It preserves exploration while avoiding confusing quest auto-completions.
+- Tradeoff or thing to watch: Later all-beacon quests may need a “free lighting” mode after their setup quest is active.
+
+## Tiny Exercise
+
+- Task: Temporarily remove `event_text` from The Missing Keeper and run `smoke_missing_keeper`.
+- Expected result in-game: The guard should no longer treat North Forest as a story beacon, and the smoke should catch that regression.
+- Hint: The guard looks for beacon quests that have `event_text`.
+
+## Questions to Revisit
+
+- Question: Should early story beacons show the name of the Elder explicitly or use local landmark hints?
+- Why it matters: Too much direction can feel gamey, but too little direction can strand a new player.
+- When to revisit: During manual playthrough pacing.

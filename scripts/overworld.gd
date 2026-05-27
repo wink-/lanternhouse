@@ -693,6 +693,10 @@ func _enter_brindlewick() -> void:
 func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 	var key := str(beacon_pos)
 	if not GameData.beacon_states.get(key, false):
+		var quest_id := _active_beacon_quest_for(beacon_name)
+		if _beacon_has_story_quest(beacon_name) and quest_id == "":
+			_update_hud_with_msg(_inactive_story_beacon_msg(beacon_name))
+			return
 		GameData.beacon_states[key] = true
 		GameData.beacon_lit = true
 		GameData.change_faction_rep(FactionDB.Faction.KEEPERS_GUILD, 5)
@@ -708,7 +712,6 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 						if not _fog_tiles.is_empty():
 							_fog_tiles[ty][tx].visible = false
 		var msg := "You light the %s beacon! The surrounding darkness recedes." % beacon_name.replace("_", " ")
-		var quest_id := _active_beacon_quest_for(beacon_name)
 		if quest_id != "":
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
 			GameData.active_quests[quest_id]["progress"] = 1
@@ -726,6 +729,22 @@ func _active_beacon_quest_for(beacon_name: String) -> String:
 		if quest.get("type", "") == "beacon" and quest.get("target", "") == beacon_name:
 			return qid
 	return ""
+
+func _beacon_has_story_quest(beacon_name: String) -> bool:
+	for qid: String in QuestDB.quest_ids():
+		var quest: Dictionary = QuestDB.get_quest(qid)
+		if quest.get("type", "") == "beacon" and quest.get("target", "") == beacon_name and quest.has("event_text"):
+			return true
+	return false
+
+func _inactive_story_beacon_msg(beacon_name: String) -> String:
+	match beacon_name:
+		"lighthouse":
+			return "The lighthouse wick is cold and stubborn. Old Thatch may know how to relight it."
+		"north_forest":
+			return "The North Forest beacon is dark. Something has been hidden here, but you need Old Thatch's story to know what to seek."
+		_:
+			return "This beacon is dark. Someone in Brindlewick may know why."
 
 func _beacon_name_at(grid: Vector2i) -> String:
 	for name: String in BEACON_POSITIONS:

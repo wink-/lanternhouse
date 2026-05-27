@@ -29,6 +29,11 @@ func _run_missing_keeper_roundtrip() -> bool:
 	if QuestDB.get_next_story_quest() != "the_missing_keeper":
 		return false
 
+	var north_pos: Vector2i = QuestDB.BEACON_POS["north_forest"]
+	overworld._interact_beacon("north_forest", north_pos)
+	if GameData.beacon_states.get(str(north_pos), false):
+		return false
+
 	GameData.accept_quest("the_missing_keeper")
 	if not GameData.is_quest_active("the_missing_keeper"):
 		return false
@@ -36,7 +41,6 @@ func _run_missing_keeper_roundtrip() -> bool:
 	if not missing_quest.has("objective") or not missing_quest.has("hint"):
 		return false
 
-	var north_pos: Vector2i = QuestDB.BEACON_POS["north_forest"]
 	var before_gold: int = GameData.gold
 	var before_xp: int = GameData.party[0]["xp"]
 	var before_rep: int = GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD)

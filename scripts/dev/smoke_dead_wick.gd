@@ -26,11 +26,18 @@ func _run_dead_wick_roundtrip() -> bool:
 	if QuestDB.get_next_story_quest() != "the_dead_wick":
 		return false
 
+	var blocked_overworld := OverworldScene.instantiate()
+	add_child(blocked_overworld)
+	await get_tree().process_frame
+	var lighthouse_pos: Vector2i = QuestDB.BEACON_POS["lighthouse"]
+	blocked_overworld._interact_beacon("lighthouse", lighthouse_pos)
+	if GameData.beacon_states.get(str(lighthouse_pos), false):
+		return false
+
 	GameData.accept_quest("the_dead_wick")
 	if not GameData.is_quest_active("the_dead_wick"):
 		return false
 
-	var lighthouse_pos: Vector2i = QuestDB.BEACON_POS["lighthouse"]
 	var before_gold := GameData.gold
 	var before_rep: int = GameData.get_faction_rep(FactionDB.Faction.KEEPERS_GUILD)
 	var before_xp: int = GameData.party[0]["xp"]
