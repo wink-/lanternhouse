@@ -22,6 +22,7 @@ const NPC_FACTION_MAP := {
 }
 
 const CharDB := preload("res://scripts/data/classes.gd")
+const TOWN_LAYOUT_PATH := "res://assets/world/towns/brindlewick.layout.json"
 const TILE_SIZE := 16
 const CAT_HOME := Vector2i(18, 18)
 const CAT_WANDER_RADIUS := 5
@@ -233,6 +234,14 @@ var _town_ground: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
 var _modular_building_atlas: Texture2D
+var _town_map: Array = MAP.duplicate()
+var _town_buildings: Array = TOWN_BUILDINGS.duplicate(true)
+var _shop_signs: Array = SHOP_SIGNS.duplicate(true)
+var _shop_awnings: Array = SHOP_AWNINGS.duplicate(true)
+var _town_props: Array = TOWN_PROPS.duplicate(true)
+var _building_doors: Dictionary = BUILDING_DOORS.duplicate(true)
+var _building_interactions: Dictionary = BUILDING_INTERACTIONS.duplicate(true)
+var _cat_wander_radius: int = CAT_WANDER_RADIUS
 var _shop_sign_textures: Dictionary = {}
 var _shop_awning_textures: Dictionary = {}
 var _shop_building_textures: Dictionary = {}
@@ -260,6 +269,7 @@ const WANDER_RADIUS := 3
 func _ready() -> void:
 	_load_town_atlas()
 	_load_quiet_village_assets()
+	_load_town_layout()
 	_apply_return_spawn()
 	_draw_map()
 	_draw_buildings()
@@ -295,6 +305,102 @@ func _load_quiet_village_assets() -> void:
 	_quiet_props = SpriteCache.get_asset("town.vendor.props")
 	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
 
+func _load_town_layout() -> void:
+	if not FileAccess.file_exists(TOWN_LAYOUT_PATH):
+		push_warning("Town layout missing: %s" % TOWN_LAYOUT_PATH)
+		return
+	var file := FileAccess.open(TOWN_LAYOUT_PATH, FileAccess.READ)
+	if not file:
+		push_warning("Town layout could not be opened: %s" % TOWN_LAYOUT_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	if not (parsed is Dictionary):
+		push_warning("Town layout is not valid JSON object: %s" % TOWN_LAYOUT_PATH)
+		return
+	var layout: Dictionary = parsed
+	_town_map = layout.get("map", MAP).duplicate()
+	_town_buildings = _parse_layout_list(layout.get("buildings", TOWN_BUILDINGS))
+	_shop_signs = _parse_layout_list(layout.get("shop_signs", SHOP_SIGNS))
+	_shop_awnings = _parse_layout_list(layout.get("shop_awnings", SHOP_AWNINGS))
+	_town_props = _parse_layout_list(layout.get("props", TOWN_PROPS))
+	_building_doors = _parse_layout_doors(layout.get("doors", []))
+	if _building_doors.is_empty():
+		_building_doors = BUILDING_DOORS.duplicate(true)
+	_building_interactions = _parse_layout_interactions(layout.get("building_interactions", BUILDING_INTERACTIONS))
+	var cat_data: Dictionary = layout.get("cat", {})
+	_cat_home = _array_to_vector2i(cat_data.get("home", [CAT_HOME.x, CAT_HOME.y]), CAT_HOME)
+	_cat_pos = _cat_home
+	_cat_wander_radius = int(cat_data.get("wander_radius", CAT_WANDER_RADIUS))
+
+func _parse_layout_list(entries: Variant) -> Array:
+	var result: Array = []
+	if not (entries is Array):
+		return result
+	for entry: Variant in entries:
+		if entry is Dictionary:
+			result.append(_parse_layout_entry(entry))
+	return result
+
+func _parse_layout_entry(entry: Dictionary) -> Dictionary:
+	var parsed := entry.duplicate(true)
+	if parsed.has("grid"):
+		parsed["grid"] = _array_to_vector2i(parsed["grid"], Vector2i.ZERO)
+	if parsed.has("size"):
+		parsed["size"] = _array_to_vector2i(parsed["size"], Vector2i(1, 1))
+	if parsed.has("offset"):
+		parsed["offset"] = _array_to_vector2(parsed["offset"], Vector2.ZERO)
+	if parsed.has("fallback_region"):
+		parsed["fallback_region"] = _array_to_rect2i(parsed["fallback_region"], Rect2i())
+	return parsed
+
+func _parse_layout_doors(entries: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not (entries is Array):
+		return result
+	for entry: Variant in entries:
+		if not (entry is Dictionary):
+			continue
+		var door_data: Dictionary = entry
+		if not door_data.has("grid") or not door_data.has("npc"):
+			continue
+		result[_array_to_vector2i(door_data["grid"], Vector2i.ZERO)] = String(door_data["npc"])
+	return result
+
+func _parse_layout_interactions(entries: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not (entries is Dictionary):
+		return BUILDING_INTERACTIONS.duplicate(true)
+	for building_id: String in entries:
+		var data: Variant = entries[building_id]
+		if not (data is Dictionary):
+			continue
+		var parsed: Dictionary = data.duplicate(true)
+		if parsed.has("door_offset"):
+			parsed["door_offset"] = _array_to_vector2i(parsed["door_offset"], Vector2i.ZERO)
+		result[building_id] = parsed
+	return result
+
+func _array_to_vector2i(value: Variant, fallback: Vector2i) -> Vector2i:
+	if value is Vector2i:
+		return value
+	if value is Array and value.size() >= 2:
+		return Vector2i(int(value[0]), int(value[1]))
+	return fallback
+
+func _array_to_vector2(value: Variant, fallback: Vector2) -> Vector2:
+	if value is Vector2:
+		return value
+	if value is Array and value.size() >= 2:
+		return Vector2(float(value[0]), float(value[1]))
+	return fallback
+
+func _array_to_rect2i(value: Variant, fallback: Rect2i) -> Rect2i:
+	if value is Rect2i:
+		return value
+	if value is Array and value.size() >= 4:
+		return Rect2i(Vector2i(int(value[0]), int(value[1])), Vector2i(int(value[2]), int(value[3])))
+	return fallback
+
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
 		push_warning("Image missing: %s" % path)
@@ -310,9 +416,9 @@ func _load_png_texture(path: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 func _draw_map() -> void:
-	for y in range(MAP.size()):
-		for x in range(MAP[y].length()):
-			var tile: String = MAP[y].substr(x, 1)
+	for y in range(_town_map.size()):
+		for x in range(_town_map[y].length()):
+			var tile: String = _town_map[y].substr(x, 1)
 			if _town_ground and GROUND_TILE_RECTS.has(tile):
 				var sprite := Sprite2D.new()
 				sprite.texture = _town_ground
@@ -337,7 +443,7 @@ func _draw_map() -> void:
 				map_layer.add_child(rect)
 
 func _draw_buildings() -> void:
-	for building_data: Dictionary in TOWN_BUILDINGS:
+	for building_data: Dictionary in _town_buildings:
 		_draw_town_building(building_data)
 	_draw_building_labels()
 
@@ -467,7 +573,7 @@ func _draw_building_labels() -> void:
 		building_layer.add_child(label)
 
 func _draw_shop_awnings() -> void:
-	for awning_data: Dictionary in SHOP_AWNINGS:
+	for awning_data: Dictionary in _shop_awnings:
 		var awning_id: String = awning_data["id"]
 		var texture: Texture2D = _load_shop_awning(awning_id)
 		if not texture:
@@ -506,7 +612,7 @@ func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
 	prop_layer.add_child(sprite)
 
 func _draw_shop_signs() -> void:
-	for sign_data: Dictionary in SHOP_SIGNS:
+	for sign_data: Dictionary in _shop_signs:
 		var sign_id: String = sign_data["id"]
 		var texture: Texture2D = _load_shop_sign(sign_id)
 		if not texture:
@@ -528,7 +634,7 @@ func _load_shop_sign(sign_id: String) -> Texture2D:
 	return texture
 
 func _draw_town_props() -> void:
-	for prop_data: Dictionary in TOWN_PROPS:
+	for prop_data: Dictionary in _town_props:
 		var prop_id: String = prop_data["id"]
 		var texture: Texture2D = _load_town_prop(prop_id)
 		if not texture:
@@ -647,9 +753,9 @@ func _wander_one_npc() -> void:
 	dirs.shuffle()
 	for d: Vector2i in dirs:
 		var next := current + d
-		if next.x < 0 or next.x >= MAP[0].length() or next.y < 0 or next.y >= MAP.size():
+		if next.x < 0 or next.x >= _town_map[0].length() or next.y < 0 or next.y >= _town_map.size():
 			continue
-		if BLOCKED.has(MAP[next.y].substr(next.x, 1)):
+		if BLOCKED.has(_town_map[next.y].substr(next.x, 1)):
 			continue
 		var max_radius := WANDER_RADIUS
 		if GameData.beacon_lit:
@@ -713,7 +819,7 @@ func _wander_cat() -> void:
 			continue
 		if next == pos:
 			continue
-		if abs(next.x - _cat_home.x) + abs(next.y - _cat_home.y) > CAT_WANDER_RADIUS:
+		if abs(next.x - _cat_home.x) + abs(next.y - _cat_home.y) > _cat_wander_radius:
 			continue
 		var occupied := false
 		for npc_id: String in _npc_wander_pos:
@@ -810,8 +916,8 @@ func _configure_camera() -> void:
 	camera.limit_enabled = true
 	camera.limit_left = 0
 	camera.limit_top = 0
-	camera.limit_right = MAP[0].length() * TILE_SIZE
-	camera.limit_bottom = MAP.size() * TILE_SIZE
+	camera.limit_right = _town_map[0].length() * TILE_SIZE
+	camera.limit_bottom = _town_map.size() * TILE_SIZE
 	_update_camera()
 
 func _update_camera() -> void:
@@ -984,18 +1090,18 @@ func _try_move(dir: Vector2i) -> void:
 	_update_hud()
 
 func _is_blocked(grid: Vector2i) -> bool:
-	if grid.x < 0 or grid.x >= MAP[0].length() or grid.y < 0 or grid.y >= MAP.size():
+	if grid.x < 0 or grid.x >= _town_map[0].length() or grid.y < 0 or grid.y >= _town_map.size():
 		return true
 	if grid == _cat_pos:
 		return true
-	return BLOCKED.has(MAP[grid.y].substr(grid.x, 1))
+	return BLOCKED.has(_town_map[grid.y].substr(grid.x, 1))
 
 func _check_exit() -> void:
-	if pos.y >= MAP.size() - 1:
+	if pos.y >= _town_map.size() - 1:
 		_exit_to_overworld()
 
 func _is_exit_step(dir: Vector2i) -> bool:
-	return dir == Vector2i.DOWN and pos.y >= MAP.size() - 2
+	return dir == Vector2i.DOWN and pos.y >= _town_map.size() - 2
 
 func _exit_to_overworld() -> void:
 	GameData.overworld_position = GameData.get_meta("overworld_return_position", GameData.overworld_position)
@@ -1031,12 +1137,12 @@ func _apply_return_spawn() -> void:
 		GameData.remove_meta("town_spawn_facing")
 
 func _building_door_at(grid: Vector2i) -> String:
-	var exact: String = BUILDING_DOORS.get(grid, "")
+	var exact: String = _building_doors.get(grid, "")
 	if exact != "":
 		return exact
-	for building_data: Dictionary in TOWN_BUILDINGS:
+	for building_data: Dictionary in _town_buildings:
 		var building_id: String = building_data["id"]
-		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		var interaction: Dictionary = _building_interactions.get(building_id, {})
 		if interaction.is_empty():
 			continue
 		var door_offset: Vector2i = interaction["door_offset"]
@@ -1048,9 +1154,9 @@ func _building_door_at(grid: Vector2i) -> String:
 	return ""
 
 func _door_label_at(grid: Vector2i) -> String:
-	for building_data: Dictionary in TOWN_BUILDINGS:
+	for building_data: Dictionary in _town_buildings:
 		var building_id: String = building_data["id"]
-		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		var interaction: Dictionary = _building_interactions.get(building_id, {})
 		if interaction.is_empty():
 			continue
 		var door_offset: Vector2i = interaction["door_offset"]
@@ -2079,6 +2185,6 @@ func _interaction_prompt() -> String:
 	var npc: String = npc_positions.get(target, "")
 	if npc != "":
 		return "[color=#f0d46a]Interact:[/color] Talk to %s" % NPCDB.get_npc_name(npc)
-	if target.y >= MAP.size() - 1 or pos.y >= MAP.size() - 2:
+	if target.y >= _town_map.size() - 1 or pos.y >= _town_map.size() - 2:
 		return "[color=#f0d46a]Move south:[/color] Leave town"
 	return ""

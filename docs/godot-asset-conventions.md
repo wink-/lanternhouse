@@ -160,6 +160,34 @@ the base/front facade. Doors should align to walkable 16x16 entrance thresholds.
 Props should hug building fronts, roads, walls, or plazas rather than appearing
 as scattered decoration.
 
+### World-Building Tools
+
+Runtime town-building tiles are assembled from a recipe instead of manually
+cropping a finished atlas. The current recipe lives at:
+
+`assets/sprites/town/buildings/modular_building_atlas.recipe.json`
+
+Use this workflow when promoting PixelLab outputs into the playable town kit:
+
+1. Save original PixelLab outputs under `assets/sprites/town/`.
+2. Add or adjust recipe entries for the chosen source sheet, cell/crop, and tile
+   id.
+3. Run `python scripts/dev/build_world_art.py`.
+4. Keep the generated atlas, sidecar JSON, Markdown manifest, and recipe in the
+   same commit.
+5. Run the relevant Godot smoke scene after wiring the art into gameplay.
+
+Town layouts are also data-driven. Brindlewick currently lives at:
+
+`assets/world/towns/brindlewick.layout.json`
+
+That file defines the town map rows, building placements, door targets, shop
+signs, awnings, props, and cat home/wander radius. `scripts/town.gd` loads it at
+startup and falls back to the older constants if the file is missing or invalid.
+Run `python scripts/dev/build_world_art.py` after edits; it validates the
+runtime art atlas and every `assets/world/towns/*.layout.json`, then renders
+matching `*.preview.png` files for quick placement review.
+
 ## Adding New Enemy Types
 
 1. Add template to `scripts/data/enemies.gd` → `template()`.

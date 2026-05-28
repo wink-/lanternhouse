@@ -28,6 +28,8 @@ var last_message: String = ""
 @onready var text_display: RichTextLabel = $TextDisplay
 
 func _ready() -> void:
+	_layout_shop_panel()
+	get_viewport().size_changed.connect(_layout_shop_panel)
 	shop_type = GameData.get_meta("shop_type", "weapons")
 	match shop_type:
 		"weapons": shop_list = ItemDB.weapon_list()
@@ -36,6 +38,17 @@ func _ready() -> void:
 		"sell":    _build_sell_list()
 		_:         shop_list = ItemDB.weapon_list()
 	_update_display()
+
+func _layout_shop_panel() -> void:
+	var viewport_size := get_viewport_rect().size
+	var preferred_size := Vector2(860, 580)
+	var margin := Vector2(40, 40)
+	var panel_size := Vector2(
+		minf(preferred_size.x, maxf(320.0, viewport_size.x - margin.x * 2.0)),
+		minf(preferred_size.y, maxf(240.0, viewport_size.y - margin.y * 2.0))
+	)
+	text_display.size = panel_size
+	text_display.position = ((viewport_size - panel_size) * 0.5).floor()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):

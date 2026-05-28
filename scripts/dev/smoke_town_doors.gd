@@ -16,6 +16,12 @@ func _run_town_door_checks() -> bool:
 	var town := TownScene.instantiate()
 	add_child(town)
 	await get_tree().process_frame
+	if town._town_buildings.size() != 7:
+		return false
+	if town._town_props.size() < 10:
+		return false
+	if town._cat_home != Vector2i(18, 18):
+		return false
 
 	var checks := {
 		Vector2i(18, 5): "elder",

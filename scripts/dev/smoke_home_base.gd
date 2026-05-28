@@ -22,6 +22,10 @@ func _run_home_base_roundtrip() -> bool:
 	var home := HomeScene.instantiate()
 	add_child(home)
 	await get_tree().process_frame
+	if not _interior_layout_ok(home):
+		return false
+	if not _player_sprite_ok(home):
+		return false
 
 	var fighter: Dictionary = GameData.party[0]
 	fighter["hp"] = fighter["max_hp"] - 10
@@ -106,6 +110,23 @@ func _herb_total() -> int:
 	for herb_id: String in GameData.herb_bag:
 		total += int(GameData.herb_bag[herb_id])
 	return total
+
+func _interior_layout_ok(interior: Node) -> bool:
+	var map_size := Vector2(interior.MAP[0].length() * interior.TILE_SIZE, interior.MAP.size() * interior.TILE_SIZE)
+	var expected_origin := ((get_viewport().get_visible_rect().size - map_size) * 0.5).floor()
+	expected_origin.x = maxf(0.0, expected_origin.x)
+	expected_origin.y = maxf(0.0, expected_origin.y)
+	return interior.map_layer.position.is_equal_approx(expected_origin)
+
+func _player_sprite_ok(interior: Node) -> bool:
+	var sprite := interior.player_sprite.get_node_or_null("Sprite") as Sprite2D
+	if not sprite or not sprite.texture:
+		return false
+	if interior.player_sprite.has_node("Body") and interior.player_sprite.get_node("Body").visible:
+		return false
+	if interior.player_sprite.has_node("Face") and interior.player_sprite.get_node("Face").visible:
+		return false
+	return true
 
 func _backup_existing_save() -> void:
 	var save_path := SaveManager.SAVE_DIR + SaveManager.SAVE_FILE

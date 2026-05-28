@@ -374,6 +374,35 @@ Rebuild the modular Brindlewick building atlas used by `scripts/town.gd` with:
 python scripts/dev/build_town_modular_building_atlas.py
 ```
 
+The modular atlas is recipe-driven. Edit the source/cell/crop choices in:
+
+```text
+assets/sprites/town/buildings/modular_building_atlas.recipe.json
+```
+
+Then run the world-art pipeline:
+
+```powershell
+python scripts/dev/build_world_art.py
+```
+
+That command rebuilds the runtime atlas and validates the atlas sidecar against
+the tile ids consumed by `scripts/town.gd`.
+
+Town layout data lives in:
+
+```text
+assets/world/towns/brindlewick.layout.json
+```
+
+The same world-art pipeline validates map dimensions, building footprints, door
+targets, props, and cat placement for every `assets/world/towns/*.layout.json`
+file. It also renders quick placement previews such as:
+
+```text
+assets/world/towns/brindlewick.preview.png
+```
+
 ## Town Ground Kit
 
 | File | Size | Frames | Notes |

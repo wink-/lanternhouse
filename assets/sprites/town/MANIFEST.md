@@ -8,6 +8,10 @@ Note: the first PixelLab building batch is integrated as a useful quality pass, 
 
 Reference direction: classic SNES/PS1 JRPG towns with blue-gray cobblestone streets, raised grass plaza islands, red clay roofs, white plaster/stone facades, balconies, arched windows, flower boxes, curbs, and small stair/threshold connectors. Use these as modular town building blocks rather than one-off set pieces.
 
+Runtime Brindlewick placement data lives in `assets/world/towns/brindlewick.layout.json`.
+Update that file when changing building positions, door targets, signs, awnings,
+props, or cat placement; then run `python scripts/dev/build_world_art.py`.
+
 ## Buildings
 
 | Asset | PixelLab ID | Runtime Path | Footprint | Entrance Offset | Intended Scale | Notes |
@@ -111,7 +115,7 @@ Reference direction: classic SNES/PS1 JRPG towns with blue-gray cobblestone stre
 | Runtime Shop Split Sheet | `a33b2294-d8cd-48e5-9c2e-5286b4eeca2c` | `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Runtime shop candidate sheet: weapon, armor, tavern, and workshop buildings with no-text plaques. |
 | Runtime Home Split Sheet | `9980b46a-a3e4-4f5b-b462-72de4786d965` | `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Runtime home candidate sheet: cottage, larger house, old house, and mossy home/storage variants. |
 | Runtime Public Split Sheet | `5765a752-b7fa-4d36-88b3-a2808f4f8cb5` | `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Runtime public candidate sheet: hall/inn/chapel-style buildings with aligned doors. |
-| Modular Building Atlas | Local curated script | `assets/sprites/town/buildings/modular_building_atlas.png` | 8x4 16px atlas | Centered per composed building | 1.0 | Runtime atlas used by `scripts/town.gd` to assemble Brindlewick buildings from curated PixelLab roof, wall, foundation, door, window, plaque, trim, and lantern pieces. Rebuild with `scripts/dev/build_town_modular_building_atlas.py`. |
+| Modular Building Atlas | Local recipe-driven script | `assets/sprites/town/buildings/modular_building_atlas.png` | 8x4 16px atlas | Centered per composed building | 1.0 | Runtime atlas used by `scripts/town.gd` to assemble Brindlewick buildings from curated PixelLab roof, wall, foundation, door, window, plaque, trim, and lantern pieces. Edit `assets/sprites/town/buildings/modular_building_atlas.recipe.json`, then rebuild with `scripts/dev/build_world_art.py`. |
 | Modular Facade Construction Atlas PixelLab | `8e3f6ced-4699-45e1-a9ae-5208ef2fb650` | `assets/sprites/town/buildings/modular_facade_construction_atlas_pixellab.png` | 16x16 reference sheet | N/A | 1.0 | PixelLab modular facade prompt drifted into many assembled facade references; useful source/reference for future modular atlas refinement. |
 | Modular Roof Wall Atlas PixelLab | `519a8fcc-d4dc-4018-b22c-09a7f51b17b5` | `assets/sprites/town/buildings/modular_roof_wall_atlas_pixellab.png` | 16x16 reference sheet | N/A | 1.0 | Sparse PixelLab roof/wall atlas candidate; output contains one small assembled house reference. |
 | Modular Shop Sign Awning Atlas PixelLab | `6a4db61e-c7b9-4a37-8bc3-ad9cf9bf7a66` | `assets/sprites/town/buildings/modular_shop_sign_awning_atlas_pixellab.png` | 8x8 reference sheet | N/A | 1.0 | Sparse PixelLab shop sign/awning candidate; output contains one awning-like object. |

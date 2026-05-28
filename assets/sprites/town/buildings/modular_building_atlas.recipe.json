@@ -1,0 +1,51 @@
+{
+  "asset_name": "Curated Modular Building Atlas",
+  "output": "assets/sprites/town/buildings/modular_building_atlas.png",
+  "tile_size": 16,
+  "columns": 8,
+  "notes": "Recipe-driven runtime atlas for 3/4 Brindlewick buildings. Tile ids are consumed by scripts/town.gd.",
+  "inputs": {
+    "roof": "assets/sprites/town/buildings/pure_roof_swatches_retry.png",
+    "roof_edges": "assets/sprites/town/buildings/roof_corner_edge_variants.png",
+    "cohesion": "assets/sprites/town/buildings/final_building_tile_cohesion.png",
+    "windows": "assets/sprites/town/buildings/window_door_tiles_expanded.png",
+    "accessories": "assets/sprites/town/buildings/roof_accessories.png",
+    "symbols": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png",
+    "signs": "assets/sprites/town/buildings/blank_sign_boards.png"
+  },
+  "tiles": [
+    {"id": "roof_left", "op": "cell", "source": "roof", "cell": [1, 2]},
+    {"id": "roof_mid", "op": "cell", "source": "roof", "cell": [2, 2]},
+    {"id": "roof_right", "op": "cell", "source": "roof", "cell": [4, 2]},
+    {"id": "roof_ridge", "op": "cell", "source": "roof", "cell": [3, 2]},
+    {"id": "roof_eave", "op": "cell", "source": "roof_edges", "cell": [2, 3]},
+    {"id": "roof_moss", "op": "cell", "source": "roof", "cell": [2, 4]},
+    {"id": "chimney", "op": "crop", "source": "accessories", "box": [0, 64, 32, 112]},
+    {"id": "blank", "op": "blank"},
+
+    {"id": "wall", "op": "cell", "source": "cohesion", "cell": [4, 3]},
+    {"id": "wall_timber", "op": "cell", "source": "cohesion", "cell": [5, 3]},
+    {"id": "wall_brace", "op": "cell", "source": "cohesion", "cell": [3, 3]},
+    {"id": "wall_shadow", "op": "shadow", "source": "cohesion", "cell": [4, 3], "alpha": 110},
+    {"id": "foundation", "op": "cell", "source": "cohesion", "cell": [3, 5]},
+    {"id": "foundation_moss", "op": "cell", "source": "cohesion", "cell": [4, 5]},
+    {"id": "foundation_shadow", "op": "shadow", "source": "cohesion", "cell": [3, 5], "alpha": 150},
+    {"id": "threshold", "op": "cell", "source": "cohesion", "cell": [5, 5]},
+
+    {"id": "door", "op": "door", "opened": false, "palette_source": "windows"},
+    {"id": "door_open", "op": "door", "opened": true, "palette_source": "windows"},
+    {"id": "window", "op": "window", "arched": false, "palette_source": "windows"},
+    {"id": "window_arch", "op": "window", "arched": true, "palette_source": "windows"},
+    {"id": "window_flower", "op": "window", "arched": true, "palette_source": "windows"},
+    {"id": "plaque_blank", "op": "plaque", "palette_source": "signs"},
+    {"id": "lantern", "op": "lantern"},
+    {"id": "flower_box", "op": "flower_box", "palette_source": "windows"},
+
+    {"id": "plaque_sword", "op": "plaque", "symbol_source": "symbols", "symbol_box": [0, 0, 32, 32]},
+    {"id": "plaque_shield", "op": "plaque", "symbol_source": "symbols", "symbol_box": [64, 0, 96, 32]},
+    {"id": "plaque_tankard", "op": "plaque", "symbol_source": "symbols", "symbol_box": [32, 0, 64, 32]},
+    {"id": "plaque_gear", "op": "plaque", "symbol_source": "symbols", "symbol_box": [32, 32, 64, 64]},
+    {"id": "plaque_bed", "op": "plaque", "symbol_source": "symbols", "symbol_box": [0, 32, 32, 64]},
+    {"id": "plaque_candle", "op": "plaque", "symbol_source": "symbols", "symbol_box": [64, 32, 96, 64]}
+  ]
+}

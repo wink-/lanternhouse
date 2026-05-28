@@ -8,7 +8,7 @@ var _original_save_text: String = ""
 
 func _ready() -> void:
 	_backup_existing_save()
-	var ok := _run_shop_inventory_roundtrip()
+	var ok := await _run_shop_inventory_roundtrip()
 	_restore_existing_save()
 	if ok:
 		print("SMOKE_SHOP_INVENTORY_OK")
@@ -23,6 +23,9 @@ func _run_shop_inventory_roundtrip() -> bool:
 	GameData.set_meta("shop_type", "items")
 	var shop := ShopScene.instantiate()
 	add_child(shop)
+	await get_tree().process_frame
+	if not _shop_layout_ok(shop):
+		return false
 	shop.selected_idx = 0
 	var before_gold: int = GameData.gold
 	var before_tonics: int = GameData.tonics
@@ -56,6 +59,11 @@ func _run_shop_inventory_roundtrip() -> bool:
 
 	inventory._use_consumable()
 	return GameData.tonics == before_tonics
+
+func _shop_layout_ok(shop: Node) -> bool:
+	var text_display := shop.text_display as RichTextLabel
+	var expected_position := ((get_viewport().get_visible_rect().size - text_display.size) * 0.5).floor()
+	return text_display.position.is_equal_approx(expected_position)
 
 func _reset_state() -> void:
 	GameData.party.clear()

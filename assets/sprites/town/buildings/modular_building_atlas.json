@@ -1,9 +1,10 @@
 {
   "asset_name": "Curated Modular Building Atlas",
   "runtime_path": "assets/sprites/town/buildings/modular_building_atlas.png",
+  "recipe_path": "assets/sprites/town/buildings/modular_building_atlas.recipe.json",
   "tile_size": 16,
   "status": "integrated",
-  "notes": "Runtime atlas used by scripts/town.gd. Curated from PixelLab sheets and references while preserving existing tile IDs.",
+  "notes": "Recipe-driven runtime atlas for 3/4 Brindlewick buildings. Tile ids are consumed by scripts/town.gd.",
   "tiles": [
     {
       "tile": "roof_left",
@@ -293,7 +294,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed/leaf on curated plaque"
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed on curated plaque"
     },
     {
       "tile": "plaque_candle",
@@ -303,7 +304,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle/boot on curated plaque"
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle on curated plaque"
     }
   ]
 }

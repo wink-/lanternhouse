@@ -83,6 +83,8 @@ var tinkering_mode: bool = false
 var tinker_idx: int = 0
 var trophy_mode: bool = false
 var _home_interior: Texture2D
+var _world_origin: Vector2 = Vector2.ZERO
+var _player_idle_textures: Dictionary = {}
 
 @onready var map_layer: Node2D = $MapLayer
 @onready var player_sprite: Node2D = $PlayerSprite
@@ -90,10 +92,13 @@ var _home_interior: Texture2D
 
 func _ready() -> void:
 	_load_home_interior()
+	_init_player_sprite()
 	_draw_map()
+	_layout_interior()
 	_update_player()
 	_update_hud()
 	garden_timer = GameData.get_meta("home_garden_timer", 0.0)
+	get_viewport().size_changed.connect(_layout_interior)
 
 func _load_home_interior() -> void:
 	_home_interior = SpriteCache.get_asset("town.home.interior")
@@ -125,8 +130,59 @@ func _draw_tile(tile: String, grid: Vector2i) -> void:
 		rect.size = Vector2(TILE_SIZE, TILE_SIZE)
 		map_layer.add_child(rect)
 
+func _layout_interior() -> void:
+	var viewport_size := get_viewport_rect().size
+	var map_size := Vector2(MAP[0].length() * TILE_SIZE, MAP.size() * TILE_SIZE)
+	_world_origin = ((viewport_size - map_size) * 0.5).floor()
+	_world_origin.x = maxf(0.0, _world_origin.x)
+	_world_origin.y = maxf(0.0, _world_origin.y)
+	map_layer.position = _world_origin
+	_update_player()
+
 func _update_player() -> void:
-	player_sprite.position = Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
+	player_sprite.position = _world_origin + Vector2(pos * TILE_SIZE) + Vector2(TILE_SIZE / 2, TILE_SIZE / 2)
+	_update_player_texture()
+
+func _init_player_sprite() -> void:
+	if not player_sprite.has_node("Sprite"):
+		var sprite := Sprite2D.new()
+		sprite.name = "Sprite"
+		player_sprite.add_child(sprite)
+	_load_player_textures()
+	_update_player_texture()
+
+func _load_player_textures() -> void:
+	for dir_name in ["south", "east", "north", "west"]:
+		_player_idle_textures[dir_name] = SpriteCache.character_rotation("player", dir_name)
+
+func _update_player_texture() -> void:
+	var sprite := player_sprite.get_node_or_null("Sprite") as Sprite2D
+	if not sprite:
+		return
+	var texture: Texture2D = _player_idle_textures.get(_direction_name(facing), _player_idle_textures.get("south", null))
+	if not texture:
+		return
+	sprite.texture = texture
+	sprite.centered = true
+	sprite.region_enabled = false
+	sprite.scale = Vector2(0.42, 0.42)
+	sprite.z_index = 4
+	if player_sprite.has_node("Body"):
+		player_sprite.get_node("Body").hide()
+	if player_sprite.has_node("Face"):
+		player_sprite.get_node("Face").hide()
+
+func _direction_name(dir: Vector2i) -> String:
+	match dir:
+		Vector2i.UP:
+			return "north"
+		Vector2i.DOWN:
+			return "south"
+		Vector2i.LEFT:
+			return "west"
+		Vector2i.RIGHT:
+			return "east"
+	return "south"
 
 func _process(delta: float) -> void:
 	if walking:
@@ -186,6 +242,7 @@ func _try_move(dir: Vector2i) -> void:
 		return
 	var next := pos + dir
 	if _is_blocked(next):
+		_update_player()
 		return
 	pos = next
 	walking = true

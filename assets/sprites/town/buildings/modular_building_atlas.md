@@ -32,5 +32,5 @@ Curated from PixelLab town construction outputs. Tile IDs match `scripts/town.gd
 | `plaque_shield` | `16,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png shield on curated plaque |
 | `plaque_tankard` | `32,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png tankard on curated plaque |
 | `plaque_gear` | `48,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png gear on curated plaque |
-| `plaque_bed` | `64,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed/leaf on curated plaque |
-| `plaque_candle` | `80,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle/boot on curated plaque |
+| `plaque_bed` | `64,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed on curated plaque |
+| `plaque_candle` | `80,48,16,16` | assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle on curated plaque |
