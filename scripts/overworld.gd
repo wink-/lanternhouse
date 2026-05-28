@@ -921,16 +921,19 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 		GameData.change_faction_rep(FactionDB.Faction.KEEPERS_GUILD, 5)
 		AudioManager.play_beacon_light()
 		# Reveal fog of war around newly lit beacon
-		for dy in range(-FOG_BEACON_RADIUS, FOG_BEACON_RADIUS + 1):
-			for dx in range(-FOG_BEACON_RADIUS, FOG_BEACON_RADIUS + 1):
+		var reveal_radius := _consume_beacon_lens_radius()
+		for dy in range(-reveal_radius, reveal_radius + 1):
+			for dx in range(-reveal_radius, reveal_radius + 1):
 				var tx := beacon_pos.x + dx
 				var ty := beacon_pos.y + dy
 				if tx >= 0 and tx < MAP_W and ty >= 0 and ty < MAP_H:
-					if Vector2(dx, dy).length() <= FOG_BEACON_RADIUS:
+					if Vector2(dx, dy).length() <= reveal_radius:
 						GameData.explored_tiles[str(Vector2i(tx, ty))] = true
 						if not _fog_tiles.is_empty():
 							_fog_tiles[ty][tx].visible = false
 		var msg := "You light the %s beacon! The surrounding darkness recedes." % beacon_name.replace("_", " ")
+		if reveal_radius > FOG_BEACON_RADIUS:
+			msg += "\n[color=#9fc5ff]The tuned Beacon Lens widens the light.[/color]"
 		if quest_id != "":
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
 			GameData.active_quests[quest_id]["progress"] = 1
@@ -941,6 +944,13 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 		_check_all_beacons_event()
 	else:
 		_update_hud_with_msg("The %s beacon burns bright against the dark." % beacon_name.replace("_", " "))
+
+func _consume_beacon_lens_radius() -> int:
+	var charges: int = GameData.get_meta("beacon_lens_charges", 0)
+	if charges <= 0:
+		return FOG_BEACON_RADIUS
+	GameData.set_meta("beacon_lens_charges", charges - 1)
+	return FOG_BEACON_RADIUS + 2
 
 func _active_beacon_quest_for(beacon_name: String) -> String:
 	for qid: String in GameData.active_quests:
