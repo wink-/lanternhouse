@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e0bde6e7-d22c-4848-a2aa-cb7dc3200d98",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_plaza_decoration_pack.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse plaza decoration candidate; output contains a small wooden bench-like object.",
+  "downloaded_at": "2026-05-27T23:07:04"
+}

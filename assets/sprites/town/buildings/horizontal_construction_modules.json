@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4bb1c069-7522-4188-84f0-bbbccc39f221",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/horizontal_construction_modules.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction modules, not isometric",
+  "downloaded_at": "2026-05-27T21:42:11"
+}

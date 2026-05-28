@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "24ab565f-2d3d-49c4-80f4-db466dffa955",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_street_furniture_pack.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Street furniture prompt drifted into a single larger white/stone object with small details; keep as candidate/reference.",
+  "downloaded_at": "2026-05-27T23:10:55"
+}

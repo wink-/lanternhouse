@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3fcd573b-c44c-46d2-9d01-16310398f53f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/waterfront_well_side_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse waterfront/well-side prop candidate; output contains a small post-like prop.",
+  "downloaded_at": "2026-05-27T22:41:04"
+}

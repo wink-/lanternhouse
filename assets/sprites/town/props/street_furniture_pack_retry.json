@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "9a23ec64-2b4d-40d3-b27a-fe7643e56153",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/street_furniture_pack_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good street furniture sheet: benches, baskets, carts, posts, lanterns, wall blocks, flower pots, and bucket-like pieces.",
+  "downloaded_at": "2026-05-27T23:12:51"
+}

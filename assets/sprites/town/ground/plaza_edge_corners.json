@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2a45efe5-66a1-48bb-aecb-2dd229e9452e",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/plaza_edge_corners.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:05:07"
+}

@@ -58,7 +58,7 @@ func resolve_asset_path(asset_key: String) -> String:
 				return "characters/%s/walk/%s/%s.png" % [parts[1], parts[3], parts[4]]
 		"town":
 			if parts.size() == 3 and parts[1] == "building":
-				return "town/shops/buildings/%s.png" % parts[2]
+				return "town/buildings/%s.png" % parts[2]
 			if parts.size() == 3 and parts[1] == "awning":
 				return "town/shops/awnings/%s.png" % parts[2]
 			if parts.size() == 3 and parts[1] == "sign":

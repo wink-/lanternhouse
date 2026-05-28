@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "ab42a024-da22-4351-9e04-fdf80a1f7c25",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/market_props.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:06:19"
+}

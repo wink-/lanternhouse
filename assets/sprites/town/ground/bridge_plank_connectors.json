@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5115436b-5001-43b6-9795-bba3eb16d51c",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/bridge_plank_connectors.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:11:37"
+}

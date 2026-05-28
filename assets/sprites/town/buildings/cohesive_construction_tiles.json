@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "cbbc2ee0-b0d5-4877-844b-ef0db1362728",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/cohesive_construction_tiles.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Reference/candidate sheet for cohesive wall, roof, and threshold construction language; output includes small assembled pieces.",
+  "downloaded_at": "2026-05-27T22:19:00"
+}

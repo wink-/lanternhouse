@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "18898165-9f0f-4f66-bf30-db812f41afac",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/weapon_shop.png",
+  "size": "80x80",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T19:58:41"
+}

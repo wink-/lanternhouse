@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7fe71d66-d778-456a-b459-7fd0e77cf8fc",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/armor_shop.png",
+  "size": "80x80",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T19:53:27"
+}

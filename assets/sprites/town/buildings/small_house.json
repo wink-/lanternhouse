@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6e52103f-f9f8-4fa4-9fa6-4d13df8a73c6",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/small_house.png",
+  "size": "64x64",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T20:03:32"
+}

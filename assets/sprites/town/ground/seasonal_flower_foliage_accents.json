@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7f6477bb-4bbe-4c15-8bbb-cb962ff0c65d",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/seasonal_flower_foliage_accents.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good foliage accent sheet: flowers, grasses, shrubs, hedge/ivy pieces, mushrooms, weeds, and ground sprigs.",
+  "downloaded_at": "2026-05-27T23:36:35"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4942941a-43c1-4fe9-94ba-f4538e30c3ae",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/residential_building_modules.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Reference/candidate sheet for residential facades, cottage doors, windows, roofs, and exterior details.",
+  "downloaded_at": "2026-05-27T22:19:01"
+}

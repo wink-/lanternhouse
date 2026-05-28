@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "10a788df-6254-4c1b-884b-8ba587b5e383",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/roof_blocks.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T20:03:30"
+}

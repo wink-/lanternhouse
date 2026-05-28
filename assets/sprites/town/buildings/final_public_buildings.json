@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e97d5544-57f0-436b-886a-bf1189d4dd66",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_public_buildings.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG; review output before direct runtime split",
+  "notes": "Runtime candidate/reference for public buildings: elder hall, chapel/healer, inn style language with centered doors.",
+  "downloaded_at": "2026-05-27T22:35:21"
+}

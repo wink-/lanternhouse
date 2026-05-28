@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "0e622a0b-88cb-43b9-9380-89470a66ece2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/town_sign_shop_icon_kit_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Improved no-text sign and shop icon plaque sheet; includes weapons, shields, blank signs, torches, and barrels.",
+  "downloaded_at": "2026-05-27T22:41:04"
+}

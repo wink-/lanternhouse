@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "240a3a07-2a5b-4507-85df-2364b9e65919",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/inn.png",
+  "size": "96x96",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T20:03:31"
+}

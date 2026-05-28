@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3d38ca49-b426-46cf-968a-c9e0814ec3b7",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/door_window_variant_modules.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction modules, not isometric",
+  "downloaded_at": "2026-05-27T21:43:50"
+}

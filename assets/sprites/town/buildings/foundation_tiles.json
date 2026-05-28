@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6ac29418-7b16-42f6-8b6c-6df15fab3d8a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/foundation_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG building construction tiles, not isometric",
+  "downloaded_at": "2026-05-27T21:13:43"
+}

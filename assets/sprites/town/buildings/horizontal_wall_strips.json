@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3379e1a2-d9c3-41bd-8a00-ffa226f17d74",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/horizontal_wall_strips.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction strips, not isometric",
+  "downloaded_at": "2026-05-27T21:40:04"
+}

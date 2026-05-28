@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "0100b2b9-077d-46f5-848f-b712d46a66b4",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_residential_buildings.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG; review output before direct runtime split",
+  "notes": "Runtime candidate/reference for residential homes: small cottage, larger house, old house, mossy home.",
+  "downloaded_at": "2026-05-27T22:35:23"
+}

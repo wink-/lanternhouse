@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "fe22e352-5fee-40a3-843a-9e271f59a219",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/upper_floor_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG building construction candidates, not isometric",
+  "downloaded_at": "2026-05-27T21:16:51"
+}

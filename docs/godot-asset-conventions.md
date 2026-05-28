@@ -104,7 +104,7 @@ Common lookup patterns:
 
 | Asset type | Registry key | File path |
 |---|---|---|
-| Town building | `town.building.<id>` | `town/shops/buildings/<id>.png` |
+| Town building | `town.building.<id>` | `town/buildings/<id>.png` |
 | Town awning | `town.awning.<id>` | `town/shops/awnings/<id>.png` |
 | Town sign | `town.sign.<id>` | `town/shops/signs/<id>.png` |
 | Town prop | `town.prop.<id>` | `town/props/<id>.png` |

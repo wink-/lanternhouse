@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "23bf6fcc-9989-4eb8-9aab-0e005821fe95",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/raised_grass_plaza.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:00:27"
+}

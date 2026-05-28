@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "176c7e6c-d8f2-4ef4-af7e-1813b81fc30f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/elder_hall.png",
+  "size": "96x96",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T19:53:26"
+}

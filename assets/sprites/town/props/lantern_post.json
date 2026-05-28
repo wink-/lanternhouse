@@ -1,5 +1,8 @@
 {
-  "status": "downloaded",
-  "source": "https://api.pixellab.ai/mcp/map-objects/47f315c5-931a-4930-bbeb-6bf1533c3280/download",
-  "id": "47f315c5-931a-4930-bbeb-6bf1533c3280"
+  "source": "PixelLab MCP",
+  "id": "eaf6821f-601f-45e1-a9ee-b3409b971398",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/lantern_post.png",
+  "size": "32x32",
+  "downloaded_at": "2026-05-27T19:47:45"
 }

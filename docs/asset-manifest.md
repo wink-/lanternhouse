@@ -145,6 +145,123 @@ python scripts/dev/build_town_ground_atlas.py
 
 | File | Size | Frames | Notes |
 |---|---|---|---|
+| `assets/sprites/town/buildings/elder_hall.png` | 96x96 | 1 | PixelLab 3/4 Elder Hall building |
+| `assets/sprites/town/buildings/weapon_shop.png` | 80x80 | 1 | PixelLab 3/4 weapon shop building |
+| `assets/sprites/town/buildings/armor_shop.png` | 80x80 | 1 | PixelLab 3/4 armor shop building |
+| `assets/sprites/town/buildings/inn.png` | 96x96 | 1 | PixelLab 3/4 inn building |
+| `assets/sprites/town/buildings/tavern.png` | 96x96 | 1 | PixelLab 3/4 tavern building |
+| `assets/sprites/town/buildings/workshop.png` | 96x96 | 1 | PixelLab 3/4 tinkerer workshop building |
+| `assets/sprites/town/buildings/chapel.png` | 80x80 | 1 | PixelLab 3/4 chapel/healer building |
+| `assets/sprites/town/buildings/small_house.png` | 64x64 | 1 | PixelLab 3/4 reusable small house |
+| `assets/sprites/town/buildings/large_house.png` | 96x96 | 1 | PixelLab 3/4 reusable larger house |
+| `assets/sprites/town/buildings/door_stoop_pieces.png` | 96x96 | 1 | PixelLab modular doors and stoops |
+| `assets/sprites/town/buildings/facade_blocks.png` | 128x128 | 1 | Pending PixelLab plaster, stone, balcony, window, and flower-box modules |
+| `assets/sprites/town/buildings/wall_construction_tiles.png` | 128x128 | 1 | PixelLab wall, stone, timber, post, trim, and balcony construction sheet |
+| `assets/sprites/town/buildings/warm_wall_construction_tiles.png` | 128x128 | 1 | PixelLab warm wall construction candidate sheet |
+| `assets/sprites/town/buildings/roof_blocks.png` | 128x128 | 1 | Pending corrected PixelLab red clay roof, dormer, eave, and chimney modules |
+| `assets/sprites/town/buildings/roof_construction_tiles.png` | 128x128 | 1 | PixelLab roof center, ridge, eave, edge, corner, and trim construction sheet |
+| `assets/sprites/town/buildings/roof_texture_tiles.png` | 128x128 | 1 | PixelLab red clay roof-only 16x16 tile sheet |
+| `assets/sprites/town/buildings/roof_accessories.png` | 128x128 | 1 | Pending PixelLab roof accessory module sheet |
+| `assets/sprites/town/buildings/window_door_tiles.png` | 128x128 | 1 | PixelLab window, shutter, flower box, door, frame, and stoop construction sheet |
+| `assets/sprites/town/buildings/window_door_tiles_expanded.png` | 128x128 | 1 | PixelLab expanded window, door, shutter, flower box, frame, and stoop sheet |
+| `assets/sprites/town/buildings/foundation_tiles.png` | 128x128 | 1 | PixelLab foundation, moss strip, threshold, shadow, corner, and vent construction sheet |
+| `assets/sprites/town/buildings/assembled_facade_tests.png` | 192x128 | 1 | PixelLab reference-only assembled facade test sheet |
+| `assets/sprites/town/buildings/upper_floor_tiles.png` | 128x128 | 1 | PixelLab upper-floor wall, balcony, window, flower box, and eave-shadow candidate sheet |
+| `assets/sprites/town/buildings/shopfront_tiles.png` | 128x128 | 1 | PixelLab shopfront counter, display, blank sign, awning, post, and icon plaque sheet |
+| `assets/sprites/town/buildings/mechanical_facade_tiles.png` | 128x128 | 1 | PixelLab stricter flat facade construction chunk sheet |
+| `assets/sprites/town/buildings/mechanical_roof_tiles.png` | 128x128 | 1 | PixelLab stricter flat roof tile module sheet |
+| `assets/sprites/town/buildings/horizontal_wall_strips.png` | 128x128 | 1 | PixelLab horizontal wall strip texture candidate |
+| `assets/sprites/town/buildings/vertical_wall_strips.png` | 128x128 | 1 | PixelLab straight vertical wall strip sheet |
+| `assets/sprites/town/buildings/horizontal_construction_modules.png` | 128x128 | 1 | PixelLab separated horizontal construction module sheet |
+| `assets/sprites/town/buildings/roof_trim_modules.png` | 128x128 | 1 | PixelLab roof trim, eave, cap, corner, and fascia modules |
+| `assets/sprites/town/buildings/chimney_dormer_modules.png` | 128x128 | 1 | PixelLab chimney, dormer, vent, cap, and roof lantern modules |
+| `assets/sprites/town/buildings/wall_fill_tiles.png` | 128x128 | 1 | PixelLab plaster and stone fill tile variants |
+| `assets/sprites/town/buildings/modular_building_previews.png` | 192x192 | 1 | PixelLab modular building preview/reference sheet |
+| `assets/sprites/town/buildings/door_window_variant_modules.png` | 128x128 | 1 | PixelLab extra door/window module sheet |
+| `assets/sprites/town/buildings/timber_trim_modules.png` | 128x128 | 1 | PixelLab timber post, beam, brace, rail, lintel, cap, and bracket sheet |
+| `assets/sprites/town/buildings/stone_foundation_variants.png` | 128x128 | 1 | PixelLab stone foundation variant module sheet |
+| `assets/sprites/town/buildings/roof_corner_edge_variants.png` | 128x128 | 1 | PixelLab roof corner and edge variant module sheet |
+| `assets/sprites/town/buildings/facade_ornament_modules.png` | 128x128 | 1 | PixelLab facade ornament module candidate sheet |
+| `assets/sprites/town/buildings/coherent_inn_preview.png` | 96x96 | 1 | PixelLab reference-only coherent inn preview |
+| `assets/sprites/town/buildings/coherent_shop_preview.png` | 80x80 | 1 | PixelLab reference-only coherent shop preview |
+| `assets/sprites/town/buildings/facade_ornament_modules_retry.png` | 128x128 | 1 | PixelLab facade ornament module retry sheet |
+| `assets/sprites/town/buildings/gable_roof_front_modules.png` | 128x128 | 1 | PixelLab gable roof front module candidate sheet |
+| `assets/sprites/town/buildings/wall_lantern_sign_modules.png` | 128x128 | 1 | PixelLab wall lantern and sign bracket module sheet |
+| `assets/sprites/town/buildings/modular_construction_previews_2.png` | 192x192 | 1 | PixelLab modular building construction preview sheet |
+| `assets/sprites/town/buildings/final_building_tile_cohesion.png` | 128x128 | 1 | PixelLab final building tile cohesion candidate sheet |
+| `assets/sprites/town/buildings/roof_color_variants.png` | 128x128 | 1 | PixelLab roof color variant module candidate sheet |
+| `assets/sprites/town/buildings/shop_identity_modules.png` | 128x128 | 1 | PixelLab no-text shop identity facade candidate sheet |
+| `assets/sprites/town/buildings/shop_plaque_modules.png` | 128x128 | 1 | PixelLab no-text shop plaque candidate sheet |
+| `assets/sprites/town/buildings/modular_wall_kit.png` | 128x128 | 1 | PixelLab modular wall kit candidate |
+| `assets/sprites/town/buildings/modular_roof_kit.png` | 128x128 | 1 | PixelLab modular roof kit candidate |
+| `assets/sprites/town/buildings/isolated_shop_symbols.png` | 128x128 | 1 | PixelLab isolated no-text shop symbol candidate |
+| `assets/sprites/town/buildings/isolated_wall_swatches.png` | 128x128 | 1 | PixelLab isolated wall material swatches |
+| `assets/sprites/town/buildings/isolated_roof_swatches.png` | 128x128 | 1 | PixelLab isolated roof material swatch candidate |
+| `assets/sprites/town/buildings/isolated_shop_symbols_retry.png` | 96x96 | 1 | PixelLab isolated no-text shop symbol retry |
+| `assets/sprites/town/buildings/pure_roof_swatches_retry.png` | 96x96 | 1 | PixelLab pure red roof swatch retry |
+| `assets/sprites/town/buildings/facade_test_strip.png` | 128x128 | 1 | PixelLab reusable facade test strip |
+| `assets/sprites/town/buildings/door_hardware_trim.png` | 96x96 | 1 | PixelLab door hardware and trim module sheet |
+| `assets/sprites/town/buildings/window_trim_modules.png` | 96x96 | 1 | PixelLab window trim candidate sheet |
+| `assets/sprites/town/buildings/roof_weathering_decals.png` | 96x96 | 1 | PixelLab roof weathering candidate sheet |
+| `assets/sprites/town/buildings/outline_mask_modules.png` | 96x96 | 1 | PixelLab black outline helper module sheet |
+| `assets/sprites/town/buildings/wood_construction_swatches.png` | 96x96 | 1 | PixelLab isolated wood construction swatches |
+| `assets/sprites/town/buildings/stone_construction_swatches.png` | 96x96 | 1 | PixelLab isolated stone construction swatches |
+| `assets/sprites/town/buildings/tiny_construction_accents.png` | 96x96 | 1 | PixelLab tiny construction accent candidate sheet |
+| `assets/sprites/town/buildings/blank_sign_boards.png` | 96x96 | 1 | PixelLab blank sign board sheet |
+| `assets/sprites/town/buildings/facade_strip_pack.png` | 128x128 | 1 | PixelLab assembled facade strip pack |
+| `assets/sprites/town/buildings/roof_strip_pack.png` | 128x128 | 1 | PixelLab assembled roof strip pack |
+| `assets/sprites/town/buildings/practical_building_assembly_reference.png` | 128x128 | 1 | PixelLab final practical building assembly reference |
+| `assets/sprites/town/buildings/tile_helper_icon_swatches.png` | 96x96 | 1 | PixelLab no-text construction helper swatch candidate |
+| `assets/sprites/town/buildings/wide_facade_variations.png` | 192x192 | 1 | PixelLab wide reusable facade variation reference |
+| `assets/sprites/town/buildings/narrow_facade_variations.png` | 192x192 | 1 | PixelLab narrow reusable facade variation reference |
+| `assets/sprites/town/buildings/wide_facade_variations_2.png` | 192x192 | 1 | PixelLab wide reusable facade variation reference v2 |
+| `assets/sprites/town/buildings/public_facade_variations.png` | 192x192 | 1 | PixelLab public facade variation reference |
+| `assets/sprites/town/buildings/service_facade_reference.png` | 192x192 | 1 | PixelLab service facade reference sheet |
+| `assets/sprites/town/buildings/residential_facade_reference.png` | 192x192 | 1 | PixelLab residential facade reference sheet |
+| `assets/sprites/town/buildings/final_facade_polish_reference.png` | 192x192 | 1 | PixelLab final facade polish reference |
+| `assets/sprites/town/buildings/final_roof_polish_reference.png` | 128x128 | 1 | PixelLab final roof polish reference |
+| `assets/sprites/town/buildings/runtime_building_variants.png` | 256x256 | 1 | PixelLab runtime-ready building variant sheet |
+| `assets/sprites/town/buildings/runtime_compact_building_variants.png` | 256x256 | 1 | PixelLab runtime-ready compact building variant sheet |
+| `assets/sprites/town/buildings/cohesive_construction_tiles.png` | 256x256 | 1 | PixelLab cohesive building construction reference/candidate sheet |
+| `assets/sprites/town/buildings/shopfront_facade_modules.png` | 256x256 | 1 | PixelLab shopfront facade reference/candidate strip |
+| `assets/sprites/town/buildings/residential_building_modules.png` | 256x256 | 1 | PixelLab residential building reference/candidate sheet |
+| `assets/sprites/town/buildings/isolated_wall_tiles.png` | 128x128 | 1 | PixelLab isolated wall/foundation tile grid |
+| `assets/sprites/town/buildings/isolated_roof_tiles.png` | 128x128 | 1 | PixelLab isolated roof tile candidate |
+| `assets/sprites/town/buildings/isolated_door_window_tiles.png` | 128x128 | 1 | PixelLab isolated door/window tile candidate |
+| `assets/sprites/town/buildings/final_public_buildings.png` | 256x256 | 1 | PixelLab final public building candidate sheet |
+| `assets/sprites/town/buildings/final_shop_buildings.png` | 256x256 | 1 | PixelLab final shop building candidate sheet |
+| `assets/sprites/town/buildings/final_residential_buildings.png` | 256x256 | 1 | PixelLab final residential building candidate sheet |
+| `assets/sprites/town/buildings/final_shop_buildings_retry.png` | 256x256 | 1 | PixelLab stricter south-facing shop building candidate |
+| `assets/sprites/town/buildings/entrance_storefront_details.png` | 128x128 | 1 | PixelLab entrance and storefront detail candidate modules |
+| `assets/sprites/town/buildings/exterior_prop_details.png` | 128x128 | 1 | PixelLab building exterior dressing modules |
+| `assets/sprites/town/props/market_stall_shop_exterior_kit.png` | 128x128 | 1 | PixelLab market stall and shop exterior kit |
+| `assets/sprites/town/ground/road_edge_building_helpers.png` | 128x128 | 1 | PixelLab road edge and building placement helper candidate |
+| `assets/sprites/town/props/town_sign_shop_icon_kit.png` | 128x128 | 1 | PixelLab no-text town sign and shop icon candidate |
+| `assets/sprites/town/props/town_sign_shop_icon_kit_retry.png` | 128x128 | 1 | PixelLab improved no-text shop icon and sign sheet |
+| `assets/sprites/town/ground/road_edge_tile_grid_retry.png` | 128x128 | 1 | PixelLab improved road edge tile candidate |
+| `assets/sprites/town/props/waterfront_well_side_props.png` | 128x128 | 1 | PixelLab waterfront and well-side prop candidate |
+| `assets/sprites/town/props/final_plaza_decoration_pack.png` | 128x128 | 1 | PixelLab final town plaza decoration candidate |
+| `assets/sprites/town/ground/final_building_shadow_threshold_tiles.png` | 128x128 | 1 | PixelLab building shadow/threshold reference candidate |
+| `assets/sprites/town/buildings/final_roof_chimney_accessories.png` | 128x128 | 1 | PixelLab final roof and chimney accessory sheet |
+| `assets/sprites/town/props/plaza_small_props_retry.png` | 128x128 | 1 | PixelLab stricter plaza small props sheet |
+| `assets/sprites/town/ground/building_threshold_tiles_retry.png` | 128x128 | 1 | PixelLab stricter building threshold tile sheet |
+| `assets/sprites/town/props/cohesive_town_tile_preview_mockup.png` | 192x192 | 1 | PixelLab cohesive town tile preview mockup |
+| `assets/sprites/town/props/final_street_furniture_pack.png` | 128x128 | 1 | PixelLab final street furniture candidate |
+| `assets/sprites/town/ground/final_cobblestone_plaza_transitions.png` | 128x128 | 1 | PixelLab final cobblestone plaza transition candidate |
+| `assets/sprites/town/props/final_house_garden_props.png` | 128x128 | 1 | PixelLab final house garden prop sheet |
+| `assets/sprites/town/props/street_furniture_pack_retry.png` | 128x128 | 1 | PixelLab stricter street furniture sprite sheet |
+| `assets/sprites/town/props/town_entry_gate_fence_kit.png` | 128x128 | 1 | PixelLab town entry gate and fence kit |
+| `assets/sprites/town/ground/town_path_clutter_decals.png` | 128x128 | 1 | PixelLab town path clutter candidate |
+| `assets/sprites/town/ground/tiny_path_decal_grid_retry.png` | 128x128 | 1 | PixelLab stricter tiny path decal grid |
+| `assets/sprites/town/props/lamplight_evening_accents.png` | 128x128 | 1 | PixelLab lamplight and evening town accent sheet |
+| `assets/sprites/town/props/final_town_assembly_reference.png` | 192x192 | 1 | PixelLab final town assembly reference |
+| `assets/sprites/town/buildings/doorway_exterior_transitions.png` | 128x128 | 1 | PixelLab doorway/exterior transition candidate |
+| `assets/sprites/town/ground/seasonal_flower_foliage_accents.png` | 128x128 | 1 | PixelLab seasonal flower and foliage accents |
+| `assets/sprites/town/props/coastal_town_crossover_props.png` | 128x128 | 1 | PixelLab coastal-town crossover prop sheet |
+| `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 320x192 | 1 | Pending PixelLab runtime shop sprite split sheet |
+| `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 320x192 | 1 | Pending PixelLab runtime home sprite split sheet |
+| `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 320x192 | 1 | Pending PixelLab runtime public building split sheet |
+| `assets/sprites/town/buildings/roof_blocks_candidate.png` | 128x128 | 1 | PixelLab roof/building style reference; not final modular sheet |
 | `assets/sprites/town/shops/buildings/elder_hall.png` | 96×64 | 1 | Project-owned elder hall facade |
 | `assets/sprites/town/shops/buildings/weapon_shop.png` | 96×64 | 1 | Project-owned weapon shop facade |
 | `assets/sprites/town/shops/buildings/armor_shop.png` | 96×64 | 1 | Project-owned armor shop facade |
@@ -159,11 +276,36 @@ Rebuild town shop facades with:
 python scripts/dev/build_town_shop_buildings.py
 ```
 
+## Town Ground Kit
+
+| File | Size | Frames | Notes |
+|---|---|---|---|
+| `assets/sprites/town/ground/cobblestone_plaza.png` | 96x96 | 1 | PixelLab cobblestone plaza tile variants |
+| `assets/sprites/town/ground/packed_dirt_road.png` | 96x96 | 1 | PixelLab packed dirt road tile variants |
+| `assets/sprites/town/ground/stone_path_border.png` | 128x128 | 1 | PixelLab stone path border and corner sheet |
+| `assets/sprites/town/ground/stone_street_blocks.png` | 128x128 | 1 | PixelLab blue-gray street, curb, cracked stone, and plaza edge modules |
+| `assets/sprites/town/ground/raised_grass_plaza.png` | 128x128 | 1 | PixelLab raised grass island, curb, shrub, and connector modules |
+| `assets/sprites/town/ground/plaza_edge_corners.png` | 128x128 | 1 | PixelLab blue-gray plaza edge, corner, curb, and crack modules |
+| `assets/sprites/town/ground/stairs_curb_connectors.png` | 128x128 | 1 | Pending PixelLab stone stairs, curb breaks, plank thresholds, and connector pieces |
+| `assets/sprites/town/ground/canal_stone_edges.png` | 128x128 | 1 | PixelLab town canal water and stone embankment edge sheet |
+| `assets/sprites/town/ground/bridge_plank_connectors.png` | 128x128 | 1 | PixelLab wooden bridge, stone lip, rail, end cap, and shadow sheet |
+| `assets/sprites/town/ground/foundation_shadows.png` | 128x128 | 1 | PixelLab building foundation, moss trim, and shadow modules |
+| `assets/sprites/town/ground/street_clutter_decals.png` | 128x128 | 1 | Pending PixelLab street clutter decal sheet |
+
 ## Town Props
 
 | File | Size | Frames | Notes |
 |---|---|---|---|
 | `assets/sprites/town/props/lantern_post.png` | 32×32 | 1 | PixelLab brass lantern post |
+| `assets/sprites/town/props/signpost.png` | 32x32 | 1 | PixelLab blank wooden signpost |
+| `assets/sprites/town/props/fence_pieces.png` | 128x128 | 1 | PixelLab modular wooden fence sheet |
+| `assets/sprites/town/props/market_props.png` | 128x128 | 1 | PixelLab market props sheet |
+| `assets/sprites/town/props/shrub_planters.png` | 128x128 | 1 | PixelLab shrub and planter sheet |
+| `assets/sprites/town/props/lantern_details.png` | 128x128 | 1 | PixelLab lantern and street detail sheet |
+| `assets/sprites/town/props/shop_awning_banners.png` | 128x128 | 1 | Pending PixelLab awning, blank sign, and icon plaque sheet |
+| `assets/sprites/town/props/plaza_centerpieces.png` | 128x128 | 1 | PixelLab plaza centerpiece prop sheet |
+| `assets/sprites/town/buildings/doorway_shop_details.png` | 128x128 | 1 | PixelLab doorway, stoop, blank sign, and icon plaque sheet |
+| `assets/sprites/town/props/plaza_layout_mockup.png` | 192x192 | 1 | Pending PixelLab reference-only plaza composition mockup |
 | `assets/sprites/town/props/well.png` | 48×48 | 1 | PixelLab stone well |
 | `assets/sprites/town/props/notice_board.png` | 32×32 | 1 | PixelLab notice board |
 | `assets/sprites/town/props/crate_stack.png` | 32×32 | 1 | PixelLab crate stack |

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "08236cb4-9f3d-4a40-a6df-0588ebc84809",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/town_entry_gate_fence_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good town entry/fence kit: fence segments, gate pieces, arch, blank sign, lantern post, stone post, and hedge/stone block.",
+  "downloaded_at": "2026-05-27T23:12:51"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "355bdb01-93fc-46de-84b7-4ec9e07314f2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/runtime_building_variants.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Four runtime-ready south-facing building variants: small house, shop, inn, hall.",
+  "downloaded_at": "2026-05-27T22:17:01"
+}

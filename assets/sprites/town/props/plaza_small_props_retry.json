@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "9f35a3fb-399d-4cff-96b9-917b76c2b989",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/plaza_small_props_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good isolated plaza prop sheet: planters, buckets, barrels, bench, broom, lantern stand, pots, and small clutter.",
+  "downloaded_at": "2026-05-27T23:08:59"
+}

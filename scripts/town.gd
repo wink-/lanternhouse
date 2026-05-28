@@ -163,6 +163,7 @@ const SHOP_AWNINGS := [
 const TOWN_PROPS := [
 	{"id": "lantern_post", "grid": Vector2i(16, 6), "offset": Vector2(8, -2), "scale": 0.56},
 	{"id": "lantern_post", "grid": Vector2i(20, 6), "offset": Vector2(8, -2), "scale": 0.56},
+	{"id": "signpost", "grid": Vector2i(15, 6), "offset": Vector2(8, 8), "scale": 0.62},
 	{"id": "notice_board", "grid": Vector2i(11, 10), "offset": Vector2(8, 6), "scale": 0.58},
 	{"id": "well", "grid": Vector2i(20, 12), "offset": Vector2(8, 8), "scale": 0.58},
 	{"id": "bench", "grid": Vector2i(17, 12), "offset": Vector2(8, 8), "scale": 0.52},
@@ -307,7 +308,6 @@ func _draw_map() -> void:
 func _draw_buildings() -> void:
 	for building_data: Dictionary in TOWN_BUILDINGS:
 		_draw_town_building(building_data)
-	_draw_shop_awnings()
 	_draw_building_labels()
 
 func _draw_town_building(building_data: Dictionary) -> void:

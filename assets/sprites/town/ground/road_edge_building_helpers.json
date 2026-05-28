@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c45acf6f-5029-4fca-b71b-aa0b5affa45a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/road_edge_building_helpers.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse road edge/building helper candidate with one usable grass/stone corner cluster.",
+  "downloaded_at": "2026-05-27T22:39:31"
+}

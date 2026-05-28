@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2488b432-9006-485c-9a58-e8f2418dd414",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/building_threshold_tiles_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good modular threshold/foundation candidate: grass blocks, stone blocks, stair/foundation pieces, and base tiles.",
+  "downloaded_at": "2026-05-27T23:09:00"
+}

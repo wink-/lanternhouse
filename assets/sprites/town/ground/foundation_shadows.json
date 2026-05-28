@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "ece5574d-961b-44f6-90bc-b5a683f240c2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/foundation_shadows.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:11:38"
+}

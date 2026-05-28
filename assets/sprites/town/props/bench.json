@@ -1,5 +1,8 @@
 {
-  "status": "downloaded",
-  "source": "https://api.pixellab.ai/mcp/map-objects/737e9293-6529-4e59-bda5-f2353b0c81d5/download",
-  "id": "737e9293-6529-4e59-bda5-f2353b0c81d5"
+  "source": "PixelLab MCP",
+  "id": "99daf25c-541e-47dd-92d0-4c45d11f4311",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/bench.png",
+  "size": "48x48",
+  "downloaded_at": "2026-05-27T19:51:56"
 }

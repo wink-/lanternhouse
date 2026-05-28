@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "f46f35c3-2d9c-4fc1-94a1-6cccf74f031b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/coastal_town_crossover_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good harbor crossover prop sheet: rope, crate, posts, anchor, buoys, blank sign, bucket, barrel, and dock-like details.",
+  "downloaded_at": "2026-05-27T23:36:36"
+}

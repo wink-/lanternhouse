@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8576b30d-a6fd-417a-b5b5-60b01ba8aae9",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/lamplight_evening_accents.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good lamplight/evening accent sheet: lit windows, lantern flames, warm dithered glow pools, and candlelight overlays.",
+  "downloaded_at": "2026-05-27T23:14:38"
+}

@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "536db16c-a28d-4e7d-afe4-26e7cd5f2a67",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/mechanical_facade_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG flat facade construction chunks, not isometric",
+  "downloaded_at": "2026-05-27T21:19:01"
+}

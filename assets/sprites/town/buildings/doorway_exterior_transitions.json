@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "42a352ea-b881-4434-98a9-a451670cdd9a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/doorway_exterior_transitions.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse doorway/exterior candidate; output contains a small stone doorway/threshold object with foliage.",
+  "downloaded_at": "2026-05-27T23:36:35"
+}
