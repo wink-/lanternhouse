@@ -173,19 +173,28 @@ const SHOP_AWNINGS := [
 	{"id": "chapel", "grid": Vector2i(32, 15), "offset": Vector2(0, 0)},
 ]
 const TOWN_PROPS := [
-	{"id": "well", "grid": Vector2i(20, 11), "offset": Vector2(8, 8), "scale": 0.62},
-	{"id": "notice_board", "grid": Vector2i(12, 10), "offset": Vector2(8, 4), "scale": 0.62},
-	{"id": "lantern_post", "grid": Vector2i(17, 6), "offset": Vector2(8, -2), "scale": 0.58},
-	{"id": "lantern_post", "grid": Vector2i(22, 12), "offset": Vector2(8, -2), "scale": 0.58},
-	{"id": "lantern_post", "grid": Vector2i(19, 16), "offset": Vector2(8, -2), "scale": 0.54},
-	{"id": "bench", "grid": Vector2i(18, 13), "offset": Vector2(8, 8), "scale": 0.58},
-	{"id": "bench", "grid": Vector2i(21, 13), "offset": Vector2(8, 8), "scale": 0.55},
-	{"id": "herb_planter", "grid": Vector2i(17, 20), "offset": Vector2(8, 8), "scale": 0.54},
-	{"id": "herb_planter", "grid": Vector2i(21, 20), "offset": Vector2(8, 8), "scale": 0.54},
-	{"id": "crate_stack", "grid": Vector2i(24, 13), "offset": Vector2(8, 8), "scale": 0.58},
-	{"id": "barrel_pair", "grid": Vector2i(14, 13), "offset": Vector2(8, 8), "scale": 0.6},
-	{"id": "crate_stack", "grid": Vector2i(8, 19), "offset": Vector2(8, 8), "scale": 0.55},
-	{"id": "barrel_pair", "grid": Vector2i(10, 19), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "lantern_post", "grid": Vector2i(16, 6), "offset": Vector2(8, -2), "scale": 0.56},
+	{"id": "lantern_post", "grid": Vector2i(20, 6), "offset": Vector2(8, -2), "scale": 0.56},
+	{"id": "notice_board", "grid": Vector2i(11, 10), "offset": Vector2(8, 6), "scale": 0.58},
+	{"id": "well", "grid": Vector2i(20, 12), "offset": Vector2(8, 8), "scale": 0.58},
+	{"id": "bench", "grid": Vector2i(17, 12), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "bench", "grid": Vector2i(23, 12), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "flower_box", "grid": Vector2i(2, 10), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "crate_stack", "grid": Vector2i(9, 11), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "barrel_pair", "grid": Vector2i(27, 11), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "flower_box", "grid": Vector2i(36, 10), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "herb_planter", "grid": Vector2i(3, 17), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "herb_planter", "grid": Vector2i(9, 17), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "barrel_pair", "grid": Vector2i(12, 17), "offset": Vector2(8, 8), "scale": 0.54},
+	{"id": "bench", "grid": Vector2i(19, 17), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "crate_stack", "grid": Vector2i(21, 17), "offset": Vector2(8, 8), "scale": 0.52},
+	{"id": "lantern_post", "grid": Vector2i(28, 18), "offset": Vector2(8, -2), "scale": 0.52},
+	{"id": "flower_box", "grid": Vector2i(30, 17), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "flower_box", "grid": Vector2i(36, 17), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "crate_stack", "grid": Vector2i(8, 19), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "barrel_pair", "grid": Vector2i(10, 19), "offset": Vector2(8, 8), "scale": 0.5},
+	{"id": "herb_planter", "grid": Vector2i(17, 20), "offset": Vector2(8, 8), "scale": 0.48},
+	{"id": "herb_planter", "grid": Vector2i(21, 20), "offset": Vector2(8, 8), "scale": 0.48},
 ]
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
@@ -393,11 +402,6 @@ func _draw_props() -> void:
 		_draw_town_props()
 		_draw_shop_signs()
 		return
-	if _quiet_props:
-		_add_prop(Vector2i(21, 12), Rect2i(Vector2i(100, 39), Vector2i(36, 36)), 0.55)
-		_add_prop(Vector2i(13, 8), Rect2i(Vector2i(65, 24), Vector2i(28, 17)), 0.7)
-		_add_prop(Vector2i(23, 8), Rect2i(Vector2i(18, 41), Vector2i(26, 27)), 0.6)
-		_add_prop(Vector2i(8, 20), Rect2i(Vector2i(0, 108), Vector2i(38, 10)), 0.8)
 	_draw_town_props()
 	_draw_shop_signs()
 
