@@ -237,6 +237,7 @@ const WANDER_RADIUS := 3
 func _ready() -> void:
 	_load_town_atlas()
 	_load_quiet_village_assets()
+	_apply_return_spawn()
 	_draw_map()
 	_draw_buildings()
 	_draw_props()
@@ -913,8 +914,19 @@ func _interact() -> void:
 	if npc == "":
 		_say(_nothing_here_text(target))
 		return
+	if npc == "tinkerer" and (_building_door_at(target) == "tinkerer" or _building_door_at(pos) == "tinkerer"):
+		SceneTransition.change_scene("res://scenes/workshop/workshop.tscn")
+		return
 
 	_start_npc_interaction(npc)
+
+func _apply_return_spawn() -> void:
+	if GameData.has_meta("town_spawn_pos"):
+		pos = GameData.get_meta("town_spawn_pos", pos)
+		GameData.remove_meta("town_spawn_pos")
+	if GameData.has_meta("town_spawn_facing"):
+		facing = GameData.get_meta("town_spawn_facing", facing)
+		GameData.remove_meta("town_spawn_facing")
 
 func _building_door_at(grid: Vector2i) -> String:
 	var exact: String = BUILDING_DOORS.get(grid, "")
