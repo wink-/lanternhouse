@@ -133,6 +133,7 @@ func _ready() -> void:
 		background.color = bg_color
 	_style_battle_panels()
 	_init_enemies()
+	_apply_prebattle_tools()
 	for m: Dictionary in GameData.party:
 		_pre_buff_stats[m["name"]] = {"str": m["str"], "def": m["def"], "agi": m["agi"]}
 	round_phase = "command"
@@ -269,6 +270,20 @@ func _init_enemies() -> void:
 			"xp": e["xp"], "gold": e["gold"],
 			"alive": true, "command": "",
 		})
+
+func _apply_prebattle_tools() -> void:
+	if not GameData.get_meta("trap_kit_active", false):
+		return
+	GameData.set_meta("trap_kit_active", false)
+	var target_idx := _first_alive_enemy()
+	if target_idx < 0:
+		return
+	var target: Dictionary = enemies[target_idx]
+	var damage: int = maxi(6, int(ceil(float(target.get("max_hp", 1)) * 0.25)))
+	target["hp"] = maxi(0, target["hp"] - damage)
+	if target["hp"] <= 0:
+		target["alive"] = false
+	_push_log("[color=#f0d46a]A set Trap Kit snaps shut on %s for %d damage![/color]" % [target["name"], damage])
 
 func _draw_sprites() -> void:
 	_clear_children(enemy_area)

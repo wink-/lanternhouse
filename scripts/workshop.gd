@@ -236,9 +236,8 @@ func _try_tinker() -> void:
 		var mat_str: String = TinkerDB.get_material_info(mat_id)["id"]
 		GameData.remove_material(mat_str, needed)
 	var count: int = recipe.get("output_count", 1)
-	var value: int = recipe.get("value", 0)
 	for _i in range(count):
-		GameData.crafted_items.append({"id": recipe["id"], "name": recipe["name"], "type": "trade", "sell_base": value})
+		GameData.add_crafted_item(TinkerDB.create_crafted_item(recipe))
 	GameData.track_skill_use("tinkering", 1)
 	_say("[color=green]Crafted %s x%d![/color] %s" % [recipe["name"], count, recipe["desc"]])
 	tinkering_mode = false
