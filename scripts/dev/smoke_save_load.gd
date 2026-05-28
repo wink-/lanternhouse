@@ -50,6 +50,12 @@ func _run_save_load_roundtrip() -> bool:
 	}
 	GameData.set_meta("fog_active", true)
 	GameData.set_meta("fog_timer", 42.0)
+	GameData.set_meta("trap_kit_active", true)
+	GameData.set_meta("beacon_lens_charges", 2)
+	GameData.set_meta("cave_claimed_chests", [str(Vector2i(14, 12))])
+	GameData.set_meta("meal_buff_name", "Test Chowder")
+	GameData.set_meta("meal_buff_def", 3)
+	GameData.set_meta("meal_buff_battles", 2)
 	GameData.set_meta("home_garden_timer", 17.5)
 
 	if GameData.party.size() > 0:
@@ -76,6 +82,12 @@ func _run_save_load_roundtrip() -> bool:
 	GameData.gather_sites = {}
 	GameData.set_meta("fog_active", false)
 	GameData.set_meta("fog_timer", 0.0)
+	GameData.set_meta("trap_kit_active", false)
+	GameData.set_meta("beacon_lens_charges", 0)
+	GameData.set_meta("cave_claimed_chests", [])
+	GameData.set_meta("meal_buff_name", "")
+	GameData.set_meta("meal_buff_def", 0)
+	GameData.set_meta("meal_buff_battles", 0)
 	GameData.set_meta("home_garden_timer", 0.0)
 	if GameData.party.size() > 0:
 		GameData.party[0]["magic_levels"] = {}
@@ -103,6 +115,12 @@ func _run_save_load_roundtrip() -> bool:
 		and GameData.gather_sites.get("material:8,22", {}).get("depleted", false)
 		and GameData.get_meta("fog_active", false)
 		and is_equal_approx(GameData.get_meta("fog_timer", 0.0), 42.0)
+		and GameData.get_meta("trap_kit_active", false)
+		and GameData.get_meta("beacon_lens_charges", 0) == 2
+		and str(Vector2i(14, 12)) in GameData.get_meta("cave_claimed_chests", [])
+		and GameData.get_meta("meal_buff_name", "") == "Test Chowder"
+		and GameData.get_meta("meal_buff_def", 0) == 3
+		and GameData.get_meta("meal_buff_battles", 0) == 2
 		and is_equal_approx(GameData.get_meta("home_garden_timer", 0.0), 17.5)
 		and GameData.party[0]["magic_levels"].has(1)
 	)
