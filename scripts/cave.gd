@@ -31,8 +31,8 @@ const COLORS := {
 const BLOCKED := {"#": true}
 
 const CHESTS := {
-	Vector2i(14, 12): {"type": "weapon", "id": "mythril_blade", "name": "Mythril Blade", "atk": 18, "price": 3000, "claimed": false},
-	Vector2i(5, 2): {"type": "item", "id": "ether", "name": "Ether", "count": 3, "claimed": false},
+	Vector2i(14, 12): {"type": "weapon", "id": "mythril_blade", "name": "Mythril Blade", "atk": 18, "price": 3000, "locked": true},
+	Vector2i(5, 2): {"type": "item", "id": "ether", "name": "Ether", "count": 3},
 }
 
 const BOSS_POS := Vector2i(13, 13)
@@ -76,6 +76,8 @@ func _ready() -> void:
 		_update_hud()
 
 func _draw_map() -> void:
+	for child in map_layer.get_children():
+		child.queue_free()
 	for y in range(MAP.size()):
 		for x in range(MAP[y].length()):
 			var tile: String = MAP[y].substr(x, 1)
@@ -87,9 +89,9 @@ func _draw_map() -> void:
 	# Draw chest markers
 	for cpos in CHESTS:
 		var chest: Dictionary = CHESTS[cpos]
-		if not chest.get("claimed", false):
+		if not _is_chest_claimed(cpos):
 			var marker := ColorRect.new()
-			marker.color = Color("daa520")
+			marker.color = Color("c78625") if chest.get("locked", false) else Color("daa520")
 			marker.position = Vector2(cpos * TILE_SIZE) + Vector2(2, 2)
 			marker.size = Vector2(12, 12)
 			map_layer.add_child(marker)
@@ -231,10 +233,13 @@ func _interact() -> void:
 
 func _open_chest(cpos: Vector2i) -> void:
 	var chest: Dictionary = CHESTS[cpos]
-	if chest.get("claimed", false):
+	if _is_chest_claimed(cpos):
 		_say("An empty chest.")
 		return
-	chest["claimed"] = true
+	if chest.get("locked", false) and not _consume_lockpick():
+		_say("The chest is locked. A Simple Lockpick could open it.")
+		return
+	_mark_chest_claimed(cpos)
 	match chest["type"]:
 		"weapon":
 			GameData.weapons_bag.append({
@@ -252,6 +257,26 @@ func _open_chest(cpos: Vector2i) -> void:
 			_say("[color=green]Found %s x%d![/color]" % [chest["name"], count])
 		_:
 			_say("[color=green]Found %s![/color]" % chest["name"])
+	_draw_map()
+
+func _is_chest_claimed(cpos: Vector2i) -> bool:
+	var claimed: Array = GameData.get_meta("cave_claimed_chests", [])
+	return str(cpos) in claimed
+
+func _mark_chest_claimed(cpos: Vector2i) -> void:
+	var claimed: Array = GameData.get_meta("cave_claimed_chests", [])
+	var key := str(cpos)
+	if not key in claimed:
+		claimed.append(key)
+	GameData.set_meta("cave_claimed_chests", claimed)
+
+func _consume_lockpick() -> bool:
+	for i in range(GameData.crafted_items.size()):
+		var item: Dictionary = GameData.crafted_items[i]
+		if item.get("id", "") == "simple_lockpick" and item.get("type", "") == "tool":
+			GameData.crafted_items.remove_at(i)
+			return true
+	return false
 
 const VICTORY_TEXT := [
 	"[color=cyan]The Mournlight Shade dissolves into wisps of fading shadow...[/color]",

@@ -89,6 +89,7 @@ func save_game() -> bool:
 			"heal_casts": GameData.get_meta("heal_casts", 0),
 			"roster_pool": GameData.get_meta("roster_pool", []),
 			"cave_deep": GameData.get_meta("cave_deep", false),
+			"cave_claimed_chests": GameData.get_meta("cave_claimed_chests", []),
 			"deep_boss_active": GameData.get_meta("deep_boss_active", false),
 			"endgame_choice": GameData.get_meta("endgame_choice", ""),
 			"fog_active": GameData.get_meta("fog_active", false),
@@ -203,6 +204,7 @@ func load_game() -> bool:
 	GameData.set_meta("heal_casts", quest_flags.get("heal_casts", 0))
 	GameData.set_meta("roster_pool", quest_flags.get("roster_pool", []))
 	GameData.set_meta("cave_deep", quest_flags.get("cave_deep", false))
+	GameData.set_meta("cave_claimed_chests", quest_flags.get("cave_claimed_chests", []))
 	GameData.set_meta("deep_boss_active", quest_flags.get("deep_boss_active", false))
 	GameData.set_meta("endgame_choice", quest_flags.get("endgame_choice", ""))
 	GameData.set_meta("fog_active", quest_flags.get("fog_active", false))
