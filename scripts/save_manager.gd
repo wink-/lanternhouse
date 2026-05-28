@@ -69,6 +69,7 @@ func save_game() -> bool:
 			"material_bag": GameData.material_bag,
 			"crafted_items": GameData.crafted_items,
 			"gather_counts": GameData.gather_counts,
+			"gather_sites": GameData.gather_sites,
 			"property_market_mod": GameData.property_market_mod,
 			"market_cycle": GameData.market_cycle,
 		"quest_flags": {
@@ -179,6 +180,7 @@ func load_game() -> bool:
 	GameData.material_bag = data.get("material_bag", {})
 	GameData.crafted_items = data.get("crafted_items", [])
 	GameData.gather_counts = data.get("gather_counts", {})
+	GameData.gather_sites = data.get("gather_sites", {})
 	GameData.property_market_mod = data.get("property_market_mod", 1.0)
 	GameData.market_cycle = data.get("market_cycle", 0)
 

@@ -207,6 +207,7 @@ const TINT_NIGHT := Color(0.15, 0.18, 0.35, 0.38)
 
 # ── Fog ───────────────────────────────────────────────────────────────────
 const FOG_BEACON_RADIUS := 6    # tiles cleared by a lit beacon
+const HERB_REGROW_DAYS := 30
 const FOG_MAX_ALPHA := 0.55
 const FOG_DARKEN_COLOR := Color(0.02, 0.04, 0.12)
 
@@ -1064,6 +1065,16 @@ func _try_gather_herbs(target: Vector2i) -> void:
 	if herbs.is_empty():
 		_update_hud_with_msg("Nothing to gather here.")
 		return
+	var site_key := _gather_site_key("herb", target)
+	var site: Dictionary = GameData.gather_sites.get(site_key, {})
+	var next_available: float = site.get("next_available", 0.0)
+	if GameData.play_time < next_available:
+		var days_left := ceili((next_available - GameData.play_time) / GameData.DAY_CYCLE_SECONDS)
+		_update_hud_with_msg("This patch has been picked clean. Try again in %d day%s." % [days_left, "" if days_left == 1 else "s"])
+		return
+	if not GameData.is_growing_season():
+		_update_hud_with_msg("Nothing is growing here in %s." % GameData.get_season_name())
+		return
 	var skill_bonus := GameData.get_skill_bonus("alchemy")
 	var chance := 0.4 + skill_bonus * 0.1
 	if rng.randf() > chance:
@@ -1073,6 +1084,12 @@ func _try_gather_herbs(target: Vector2i) -> void:
 	var info: Dictionary = AlchemyDB.HERB_INFO[herb_id]
 	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
 	GameData.add_herb(info["id"], count)
+	GameData.gather_sites[site_key] = {
+		"kind": "herb",
+		"last_gathered": GameData.play_time,
+		"next_available": GameData.play_time + HERB_REGROW_DAYS * GameData.DAY_CYCLE_SECONDS,
+		"item": info["id"],
+	}
 	GameData.track_skill_use("alchemy", 1)
 	_update_hud_with_msg("Gathered %s x%d!" % [info["name"], count])
 
@@ -1081,6 +1098,10 @@ func _try_gather_materials(target: Vector2i) -> void:
 	var materials := TinkerDB.materials_for_tile(tile)
 	if materials.is_empty():
 		_update_hud_with_msg("Nothing to scavenge here.")
+		return
+	var site_key := _gather_site_key("material", target)
+	if GameData.gather_sites.get(site_key, {}).get("depleted", false):
+		_update_hud_with_msg("You already picked this spot clean.")
 		return
 	var skill_bonus := GameData.get_skill_bonus("tinkering")
 	var chance := 0.4 + skill_bonus * 0.1
@@ -1091,8 +1112,17 @@ func _try_gather_materials(target: Vector2i) -> void:
 	var info: Dictionary = TinkerDB.get_material_info(mat_id)
 	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
 	GameData.add_material(info["id"], count)
+	GameData.gather_sites[site_key] = {
+		"kind": "material",
+		"depleted": true,
+		"last_gathered": GameData.play_time,
+		"item": info["id"],
+	}
 	GameData.track_skill_use("tinkering", 1)
 	_update_hud_with_msg("Scavenged %s x%d!" % [info["name"], count])
+
+func _gather_site_key(kind: String, target: Vector2i) -> String:
+	return "%s:%d,%d" % [kind, target.x, target.y]
 
 
 # ── Process ────────────────────────────────────────────────────────────────

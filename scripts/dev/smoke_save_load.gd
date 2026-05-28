@@ -34,6 +34,20 @@ func _run_save_load_roundtrip() -> bool:
 	GameData.crafted_items = [{"id": "test_lantern_oil", "name": "Test Lantern Oil"}]
 	GameData.skill_uses = {"alchemy": 2}
 	GameData.gather_counts = {"herb": 2}
+	GameData.gather_sites = {
+		"herb:12,18": {
+			"kind": "herb",
+			"last_gathered": 15.0,
+			"next_available": 9015.0,
+			"item": "forest_moss",
+		},
+		"material:8,22": {
+			"kind": "material",
+			"depleted": true,
+			"last_gathered": 30.0,
+			"item": "scrap_metal",
+		},
+	}
 	GameData.set_meta("fog_active", true)
 	GameData.set_meta("fog_timer", 42.0)
 	GameData.set_meta("home_garden_timer", 17.5)
@@ -59,6 +73,7 @@ func _run_save_load_roundtrip() -> bool:
 	GameData.crafted_items = []
 	GameData.skill_uses = {}
 	GameData.gather_counts = {}
+	GameData.gather_sites = {}
 	GameData.set_meta("fog_active", false)
 	GameData.set_meta("fog_timer", 0.0)
 	GameData.set_meta("home_garden_timer", 0.0)
@@ -84,6 +99,8 @@ func _run_save_load_roundtrip() -> bool:
 		and GameData.crafted_items.size() == 1
 		and GameData.skill_uses.get("alchemy", 0) == 2
 		and GameData.gather_counts.get("herb", 0) == 2
+		and GameData.gather_sites.get("herb:12,18", {}).get("item", "") == "forest_moss"
+		and GameData.gather_sites.get("material:8,22", {}).get("depleted", false)
 		and GameData.get_meta("fog_active", false)
 		and is_equal_approx(GameData.get_meta("fog_timer", 0.0), 42.0)
 		and is_equal_approx(GameData.get_meta("home_garden_timer", 0.0), 17.5)
