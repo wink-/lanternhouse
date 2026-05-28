@@ -11,6 +11,15 @@ The pipeline validates every `*.layout.json` file in this directory, checks town
 layout shape, door approach tiles, building footprints, prop placement, and
 atlas/runtime drift, then renders matching `*.preview.png` files.
 
+Create a starter town layout with:
+
+```powershell
+python scripts/dev/create_town_layout.py mournlight_harbor --name "Mournlight Harbor"
+```
+
+That creates `mournlight_harbor.layout.json`, runs the world-art pipeline, and
+renders `mournlight_harbor.preview.png`.
+
 ## Brindlewick
 
 - Layout: `brindlewick.layout.json`

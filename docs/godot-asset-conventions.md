@@ -188,6 +188,15 @@ Run `python scripts/dev/build_world_art.py` after edits; it validates the
 runtime art atlas and every `assets/world/towns/*.layout.json`, then renders
 matching `*.preview.png` files for quick placement review.
 
+To create a new starter town layout:
+
+```powershell
+python scripts/dev/create_town_layout.py mournlight_harbor --name "Mournlight Harbor"
+```
+
+Use the generated layout as a scaffold, then add buildings, doors, props, and
+art kit references as the town becomes real.
+
 ## Adding New Enemy Types
 
 1. Add template to `scripts/data/enemies.gd` → `template()`.

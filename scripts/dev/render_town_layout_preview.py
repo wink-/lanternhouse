@@ -64,6 +64,13 @@ def draw_grid(draw: ImageDraw.ImageDraw, width: int, height: int, scale: int) ->
         draw.line((0, y * scale, width * scale, y * scale), fill=color)
 
 
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def render(layout: dict[str, Any], output: Path, scale: int) -> None:
     town_map: list[str] = layout["map"]
     width = len(town_map[0])
@@ -135,7 +142,7 @@ def render(layout: dict[str, Any], output: Path, scale: int) -> None:
 
     output.parent.mkdir(parents=True, exist_ok=True)
     canvas.convert("RGB").save(output)
-    print(f"Wrote {output.relative_to(ROOT)} ({canvas.size[0]}x{canvas.size[1]})")
+    print(f"Wrote {display_path(output)} ({canvas.size[0]}x{canvas.size[1]})")
 
 
 def main() -> None:

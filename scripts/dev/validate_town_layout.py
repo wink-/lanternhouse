@@ -192,6 +192,13 @@ def discover_layouts() -> list[Path]:
     return sorted(TOWN_DIR.glob("*.layout.json"))
 
 
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Lanternhouse town layout JSON files.")
     parser.add_argument("layouts", nargs="*", type=Path, help="Specific layout JSON files. Defaults to all assets/world/towns/*.layout.json.")
@@ -207,7 +214,7 @@ def main() -> int:
     for layout_path in layout_paths:
         full_path = layout_path if layout_path.is_absolute() else ROOT / layout_path
         errors = validate(full_path)
-        label = str(full_path.relative_to(ROOT))
+        label = display_path(full_path)
         if errors:
             failed = True
             print(f"FAIL town layout {label}")
