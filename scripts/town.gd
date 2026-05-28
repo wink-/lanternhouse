@@ -134,6 +134,12 @@ const BUILDING_INTERACTIONS := {
 	"workshop": {"npc": "tinkerer", "name": "Workshop", "door_offset": Vector2i(2, 3), "door_width": 3},
 	"chapel": {"npc": "healer", "name": "Chapel", "door_offset": Vector2i(2, 3), "door_width": 3},
 }
+const SOUTH_FACING_BUILDING_OVERRIDES := {
+	"weapon_shop": true,
+	"armor_shop": true,
+	"inn": true,
+	"chapel": true,
+}
 const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
 	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
@@ -326,7 +332,11 @@ func _draw_town_building(building_data: Dictionary) -> void:
 func _load_shop_building(building_id: String) -> Texture2D:
 	if _shop_building_textures.has(building_id):
 		return _shop_building_textures[building_id]
-	var texture := SpriteCache.town_building(building_id)
+	var texture: Texture2D
+	if SOUTH_FACING_BUILDING_OVERRIDES.has(building_id):
+		texture = SpriteCache.get_sprite("town/shops/buildings/%s.png" % building_id)
+	else:
+		texture = SpriteCache.town_building(building_id)
 	_shop_building_textures[building_id] = texture
 	return texture
 
