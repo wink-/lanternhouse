@@ -137,6 +137,15 @@ const BUILDING_DOORS := {
 	Vector2i(34, 17): "healer",
 	Vector2i(35, 17): "healer",
 }
+const BUILDING_INTERACTIONS := {
+	"elder_hall": {"npc": "elder", "name": "Elder Hall", "door_offset": Vector2i(3, 4), "door_width": 3},
+	"weapon_shop": {"npc": "weapon_merchant", "name": "Weapon Shop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"armor_shop": {"npc": "armor_merchant", "name": "Armor Shop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"inn": {"npc": "innkeeper", "name": "Inn", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"tavern": {"npc": "tavern_keeper", "name": "Tavern", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"workshop": {"npc": "tinkerer", "name": "Workshop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"chapel": {"npc": "healer", "name": "Chapel", "door_offset": Vector2i(2, 3), "door_width": 3},
+}
 const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
 	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
@@ -883,10 +892,12 @@ func _try_move(dir: Vector2i) -> void:
 		return
 	var next := pos + dir
 	if _is_blocked(next):
+		_update_hud()
 		return
 	pos = next
 	_update_player()
 	_check_exit()
+	_update_hud()
 
 func _is_blocked(grid: Vector2i) -> bool:
 	if grid.x < 0 or grid.x >= MAP[0].length() or grid.y < 0 or grid.y >= MAP.size():
@@ -925,7 +936,35 @@ func _interact() -> void:
 	_start_npc_interaction(npc)
 
 func _building_door_at(grid: Vector2i) -> String:
-	return BUILDING_DOORS.get(grid, "")
+	var exact: String = BUILDING_DOORS.get(grid, "")
+	if exact != "":
+		return exact
+	for building_data: Dictionary in TOWN_BUILDINGS:
+		var building_id: String = building_data["id"]
+		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		if interaction.is_empty():
+			continue
+		var door_offset: Vector2i = interaction["door_offset"]
+		var door_width: int = interaction.get("door_width", 1)
+		var door_start: Vector2i = building_data["grid"] + door_offset
+		for dx in range(door_width):
+			if grid == door_start + Vector2i(dx, 0):
+				return interaction["npc"]
+	return ""
+
+func _door_label_at(grid: Vector2i) -> String:
+	for building_data: Dictionary in TOWN_BUILDINGS:
+		var building_id: String = building_data["id"]
+		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		if interaction.is_empty():
+			continue
+		var door_offset: Vector2i = interaction["door_offset"]
+		var door_width: int = interaction.get("door_width", 1)
+		var door_start: Vector2i = building_data["grid"] + door_offset
+		for dx in range(door_width):
+			if grid == door_start + Vector2i(dx, 0):
+				return interaction["name"]
+	return ""
 
 func _nothing_here_text(target: Vector2i) -> String:
 	if target.y < pos.y:
@@ -1928,4 +1967,28 @@ func _update_hud() -> void:
 			lines.append("Lv%d %s  %d/%d" % [m["level"], m["name"], m["hp"], m["max_hp"]])
 		else:
 			lines.append("Lv%d %s  [KO]" % [m["level"], m["name"]])
+	var prompt := _interaction_prompt()
+	if prompt != "":
+		lines.append("")
+		lines.append(prompt)
 	dialog.text = "[b]Brindlewick[/b]    %s    Tonics: %d\n\n%s" % [GameData.format_money_short(), GameData.tonics, "\n".join(lines)]
+
+func _interaction_prompt() -> String:
+	var target := pos + facing
+	if target == _cat_pos:
+		return "[color=#f0d46a]Interact:[/color] Pet Tabby"
+	var door_npc := _building_door_at(target)
+	var door_label := _door_label_at(target)
+	if door_npc == "":
+		door_npc = _building_door_at(pos)
+		door_label = _door_label_at(pos)
+	if door_npc != "":
+		if door_label == "":
+			door_label = NPCDB.get_npc_name(door_npc)
+		return "[color=#f0d46a]Interact:[/color] Enter %s" % door_label
+	var npc: String = npc_positions.get(target, "")
+	if npc != "":
+		return "[color=#f0d46a]Interact:[/color] Talk to %s" % NPCDB.get_npc_name(npc)
+	if target.y >= MAP.size() - 1 or pos.y >= MAP.size() - 2:
+		return "[color=#f0d46a]Move south:[/color] Leave town"
+	return ""
