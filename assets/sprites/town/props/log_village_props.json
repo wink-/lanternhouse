@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8d0cd21b-fec0-45d5-9a5d-034c8201d3ce",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/log_village_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good log village prop sheet: logs, sign, axe, stump, crate, lantern, bucket, fence, pine sapling, blank note/sign, and cart.",
+  "downloaded_at": "2026-05-28T00:49:46"
+}

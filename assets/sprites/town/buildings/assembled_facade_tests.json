@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "ba2c0c3f-837a-43b4-809f-b94302aca4b9",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/assembled_facade_tests.png",
+  "size": "192x192",
+  "perspective": "rectangular top-down 3/4 JRPG building construction tiles, not isometric",
+  "downloaded_at": "2026-05-27T21:15:24"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5c884205-7286-43e7-9d6e-348b4484698d",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_building_threshold_shadow_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good threshold/door reference sheet with arched doors, stone wall sections, stoops, stairs, and threshold shadows; more facade-like than pure floor tiles.",
+  "downloaded_at": "2026-05-28T05:47:00"
+}

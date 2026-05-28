@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "13986a0b-6020-4f5e-b7c0-77cf01221558",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/rustic_castle_town_connective_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop sheet",
+  "notes": "Good connective prop sheet with palisade/stone stair piece, fence, rope, bucket, hook, planks, blank sign, work tables, crate, and mossy stone block.",
+  "downloaded_at": "2026-05-28T01:59:00"
+}

@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "97aa22a9-35e3-4267-9fe1-4bf300e5ca75",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/chapel.png",
+  "size": "80x80",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade, not isometric",
+  "downloaded_at": "2026-05-27T19:58:42"
+}

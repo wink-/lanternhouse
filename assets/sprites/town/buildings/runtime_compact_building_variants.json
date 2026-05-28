@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "f19abf5a-b6ad-4e40-93f8-f8bfe191562b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/runtime_compact_building_variants.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Four compact runtime-ready variants: cottage, healer nook, workshop shed, storage house.",
+  "downloaded_at": "2026-05-27T22:17:01"
+}

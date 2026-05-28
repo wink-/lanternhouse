@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c39ae89a-b385-4d39-b535-50f93bf1751c",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/town_sign_shop_icon_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse no-text sign/icon candidate; includes blank signs and a barrel-like shop detail.",
+  "downloaded_at": "2026-05-27T22:39:31"
+}

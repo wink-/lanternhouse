@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "bfe1a0ae-d65b-4f06-88e9-cd219ffffd5d",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/cobblestone_plaza.png",
+  "size": "96x96",
+  "perspective": "rectangular top-down grid, not isometric",
+  "downloaded_at": "2026-05-27T19:52:31"
+}

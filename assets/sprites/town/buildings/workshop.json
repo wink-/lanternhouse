@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8e1ef5d9-2eaa-4298-bbc1-b9f5ab8ba3fb",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/workshop.png",
+  "size": "96x96",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:05:07"
+}

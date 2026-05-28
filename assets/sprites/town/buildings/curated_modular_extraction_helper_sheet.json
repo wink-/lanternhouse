@@ -1,0 +1,13 @@
+{
+  "asset_name": "Curated Modular Extraction Helper Sheet",
+  "pixellab_id": "37314533-2af9-4215-b089-c3887567c28b",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/37314533-2af9-4215-b089-c3887567c28b/download",
+  "runtime_path": "assets/sprites/town/buildings/curated_modular_extraction_helper_sheet.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 candidate sheet",
+  "suggested_entrance_tile_offset": "Centered if used as facade reference",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Sparse helper output with a few useful UI-like building detail candidates: icon plaques/signs, door/threshold shapes, and small facade ornaments. Not a full modular construction sheet."
+}

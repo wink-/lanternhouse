@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e22df83f-63c3-44ce-a91b-dae7d253b54f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_morning_castle_missing_bits.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop sheet",
+  "notes": "Good castle missing-bits sheet with portcullis/gate piece, lantern, red banners, rubble/stairs, crate, chain/barrier, torch, and small trim pieces.",
+  "downloaded_at": "2026-05-28T06:47:00"
+}

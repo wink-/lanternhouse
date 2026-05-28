@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "140d5420-b22d-4fe1-8f69-0fd28c304410",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/castle_dungeon_exterior_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Sparse castle prop candidate; output contains a single blank banner/cloth prop.",
+  "downloaded_at": "2026-05-28T00:49:45"
+}

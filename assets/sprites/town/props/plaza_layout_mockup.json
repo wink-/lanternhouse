@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a0a58bc8-b2bb-447e-ae44-61622b4d02ab",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/plaza_layout_mockup.png",
+  "size": "192x192",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Reference-only Brindlewick plaza composition mockup.",
+  "downloaded_at": "2026-05-27T22:17:02"
+}

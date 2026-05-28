@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "b802717c-f3d8-4320-a874-cc73b772e604",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/exterior_prop_details.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG detail modules",
+  "notes": "Good exterior dressing sheet: lanterns, chimneys, flower boxes, barrels, crates, planters, roof moss, and small awning pieces.",
+  "downloaded_at": "2026-05-27T22:37:55"
+}

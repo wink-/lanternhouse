@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7d0b4008-3318-4e7b-b5d7-398b83bfe326",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/log_settlement_final_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop sheet",
+  "notes": "Good log settlement prop sheet with log piles, axe stump, barrel, small cart, saw horse, hanging lantern, stump, and mushroom/yard details.",
+  "downloaded_at": "2026-05-28T01:50:00"
+}

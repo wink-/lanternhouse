@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e61be50b-8e38-40c0-b97e-a68db4717f4b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_building_modular_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "PixelLab log atlas prompt drifted into a complete log cabin reference; useful for log wall, roof, door, and chimney style.",
+  "downloaded_at": "2026-05-28T00:17:18"
+}

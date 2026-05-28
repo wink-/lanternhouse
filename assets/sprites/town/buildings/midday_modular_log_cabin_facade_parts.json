@@ -1,0 +1,13 @@
+{
+  "asset_name": "Midday Modular Log Cabin Facade Parts",
+  "pixellab_id": "510c6d6f-aa02-464a-9fae-fb96da1ff0a4",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/510c6d6f-aa02-464a-9fae-fb96da1ff0a4/download",
+  "runtime_path": "assets/sprites/town/buildings/midday_modular_log_cabin_facade_parts.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 mixed module/reference sheet",
+  "suggested_entrance_tile_offset": "Centered door on cabin reference",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Best of the midday modular batch: includes a complete cabin reference plus separable doors, posts, hook/lantern, stool/barrel, fence/trim, and round door candidates."
+}

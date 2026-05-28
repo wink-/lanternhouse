@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e1ff7c66-b2fa-493e-9782-74eda3331535",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_roof_polish_sheet_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "PixelLab roof polish prompt drifted into a mixed roof/facade reference sheet; useful for future atlas roof refinement.",
+  "downloaded_at": "2026-05-28T00:12:23"
+}

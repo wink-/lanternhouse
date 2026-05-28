@@ -1,5 +1,8 @@
 {
-  "status": "downloaded",
-  "source": "https://api.pixellab.ai/mcp/map-objects/56684de0-23b6-401e-ba55-a8d94196fe5e/download",
-  "id": "56684de0-23b6-401e-ba55-a8d94196fe5e"
+  "source": "PixelLab MCP",
+  "id": "1d7af9c6-f24e-46f6-86c0-acaf50fc82fb",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/notice_board.png",
+  "size": "48x48",
+  "downloaded_at": "2026-05-27T19:51:54"
 }

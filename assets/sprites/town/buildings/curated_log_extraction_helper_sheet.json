@@ -1,0 +1,13 @@
+{
+  "asset_name": "Curated Log Extraction Helper Sheet",
+  "pixellab_id": "8150ed93-761b-4a03-ad0e-5c5ace15826d",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/8150ed93-761b-4a03-ad0e-5c5ace15826d/download",
+  "runtime_path": "assets/sprites/town/buildings/curated_log_extraction_helper_sheet.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 candidate sheet",
+  "suggested_entrance_tile_offset": "Centered if used as facade reference",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a few small cottage/facade cap references; useful for compact log/thatched roof silhouette, but not a clean separated log module sheet."
+}

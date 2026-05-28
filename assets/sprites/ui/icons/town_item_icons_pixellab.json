@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c8e3b27b-2722-4fa1-b113-d67a440d338f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/ui/icons/town_item_icons_pixellab.png",
+  "size": "128x128",
+  "perspective": "UI icon candidate",
+  "notes": "Very sparse UI icon candidate with one useful parchment/map-like icon; not a full item icon sheet.",
+  "downloaded_at": "2026-05-28T07:17:00"
+}

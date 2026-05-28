@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a33b2294-d8cd-48e5-9c2e-5286b4eeca2c",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/runtime_shop_split_sheet.png",
+  "size": "320x320",
+  "perspective": "rectangular JRPG town runtime candidate",
+  "notes": "Runtime shop candidate sheet: weapon, armor, tavern, and workshop buildings with no-text plaques.",
+  "downloaded_at": "2026-05-28T00:01:43"
+}

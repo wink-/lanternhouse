@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8e3f6ced-4699-45e1-a9ae-5208ef2fb650",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_facade_construction_atlas_pixellab.png",
+  "size": "256x256",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "PixelLab modular facade prompt drifted into many assembled facade references; useful source/reference for future modular atlas refinement.",
+  "downloaded_at": "2026-05-28T00:06:24"
+}

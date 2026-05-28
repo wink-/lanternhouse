@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a7b57ae9-694c-4a01-a5dc-4f64a76dd2d8",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_walkable_threshold_tile_cleanup.png",
+  "size": "128x128",
+  "perspective": "high top-down candidate",
+  "notes": "Sparse threshold candidate with a red carpet strip, green threshold tile, and small pale stone/grass tile.",
+  "downloaded_at": "2026-05-28T06:47:00"
+}

@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "df810902-68c6-473c-bbf2-5d8d837ccf80",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/stairs_curb_connectors.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:08:05"
+}

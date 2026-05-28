@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "1aa56e24-9ea7-4aa0-bd1f-a84f6012c503",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/town_roof_variant_modules.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Sparse roof prompt drifted into a tiny complete house reference; useful for chimney, dark roof, small lit facade, and compact proportions.",
+  "downloaded_at": "2026-05-28T03:17:00"
+}

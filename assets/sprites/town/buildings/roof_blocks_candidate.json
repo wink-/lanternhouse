@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8186a6cc-32ff-417f-b532-e4ef50b07b07",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/roof_blocks_candidate.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:00:26"
+}

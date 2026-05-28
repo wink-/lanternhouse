@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6cdd5d9b-4898-4d46-b8d0-0725d09c2793",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/shop_wall_kit.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete lanternlit shop reference with purple roof, centered door, display windows, awning/sign shapes, stoop, shrubs, and foundation block.",
+  "downloaded_at": "2026-05-28T04:17:00"
+}

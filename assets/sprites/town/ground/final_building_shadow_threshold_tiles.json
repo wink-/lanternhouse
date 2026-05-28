@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4f3d4431-d9c5-46a6-8d9d-80ada9e90055",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_building_shadow_threshold_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Threshold prompt drifted into a small stone building/reference candidate; keep for doorway/foundation inspiration.",
+  "downloaded_at": "2026-05-27T23:07:04"
+}

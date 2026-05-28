@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3f587022-9105-4335-b32b-988a9c720c37",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_log_hamlet_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG layout reference",
+  "notes": "Good log hamlet reference with log buildings, packed dirt path, grass edges, stump, sign/board, and aligned door thresholds.",
+  "downloaded_at": "2026-05-28T05:17:00"
+}

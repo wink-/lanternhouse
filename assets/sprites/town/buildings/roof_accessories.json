@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "981f05b1-07c8-4a49-915b-893f14dc5e87",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/roof_accessories.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Roof accessories: chimneys, dormers, vents, ridge caps, bracket details.",
+  "downloaded_at": "2026-05-27T22:17:01"
+}

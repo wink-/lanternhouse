@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4fbc3c9e-0351-4f56-88cf-e7a8826d7559",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/fortress_village_transition_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good transition kit with log/stone structures, stairs, posts, torch, platform, and small utility pieces; more assembled than pure tiles but useful.",
+  "downloaded_at": "2026-05-28T01:17:12"
+}

@@ -1,0 +1,13 @@
+{
+  "asset_name": "Curated Town Prop Extraction Helper Sheet",
+  "pixellab_id": "38f1729e-93c8-431a-a67e-1832b9160e9f",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/38f1729e-93c8-431a-a67e-1832b9160e9f/download",
+  "runtime_path": "assets/sprites/town/props/curated_town_prop_extraction_helper_sheet.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 prop sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Good small town prop sheet with barrel, bench, lantern posts, planters, fence runs, signs/boards, bucket, basin, woodpile/hay, and stone/metal container candidates."
+}

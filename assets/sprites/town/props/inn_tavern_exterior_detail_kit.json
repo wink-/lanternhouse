@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "1148ab96-eea3-421d-93d2-90e906b66abc",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/inn_tavern_exterior_detail_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Sparse inn/tavern detail candidate with a small table, hanging lantern/light, and barrel-like object.",
+  "downloaded_at": "2026-05-28T02:47:00"
+}

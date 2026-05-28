@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "d7af88c6-4807-4ff6-9306-5f2461ca79f6",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_brindlewick_street_edge_kit.png",
+  "size": "128x128",
+  "perspective": "high top-down reference/candidate",
+  "notes": "Prompt produced a compact plaza/curb reference with cobble center, dirt border, bright grass corners, and small edge detail; more assembled than isolated tiles.",
+  "downloaded_at": "2026-05-28T05:47:00"
+}

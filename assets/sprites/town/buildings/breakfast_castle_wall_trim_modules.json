@@ -1,0 +1,13 @@
+{
+  "asset_name": "Breakfast Castle Wall Trim Modules",
+  "pixellab_id": "481fe8b3-9623-4f43-b76d-11a0111a7851",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/481fe8b3-9623-4f43-b76d-11a0111a7851/download",
+  "runtime_path": "assets/sprites/town/buildings/breakfast_castle_wall_trim_modules.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered gate",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a compact castle gatehouse reference; useful for crenel rhythm, arched door, arrow slit, torch detail, and stone palette rather than strict isolated trim modules."
+}

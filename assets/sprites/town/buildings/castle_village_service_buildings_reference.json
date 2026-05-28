@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3a037816-1b8d-42ec-b256-a83805989439",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_village_service_buildings_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG building reference sheet",
+  "notes": "Good castle village service building reference sheet with chapel/armory-like variants, visible aligned doors, stone facades, dark roofs, and blank icon plaques.",
+  "downloaded_at": "2026-05-28T04:47:00"
+}

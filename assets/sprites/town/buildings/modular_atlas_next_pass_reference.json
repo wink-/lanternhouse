@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8b06ddf4-65fe-49b2-ba3f-0483f3a6e696",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_atlas_next_pass_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "PixelLab modular next-pass reference drifted into a cohesive larger town building; useful for future roof/facade refinement.",
+  "downloaded_at": "2026-05-28T00:15:51"
+}

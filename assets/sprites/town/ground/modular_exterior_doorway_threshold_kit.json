@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "61367956-4a52-4a95-b15c-89b9fb138fb2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/modular_exterior_doorway_threshold_kit.png",
+  "size": "128x128",
+  "perspective": "high top-down candidate",
+  "notes": "Very sparse threshold candidate; output contains a single pale stone/floor tile useful as a material swatch, not a full threshold kit.",
+  "downloaded_at": "2026-05-28T01:59:00"
+}

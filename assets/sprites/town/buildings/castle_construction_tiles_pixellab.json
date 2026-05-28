@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "63fe4014-d954-47a7-a773-b9300f864b8e",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_construction_tiles_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Castle construction prompt drifted into a small tower/keep reference; useful for crenellations, stone palette, stairs, gate, and torch details.",
+  "downloaded_at": "2026-05-28T00:47:20"
+}

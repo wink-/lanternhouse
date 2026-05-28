@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "aae959de-0e73-4786-8eba-78dc8de373aa",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/castle_settlement_final_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop sheet",
+  "notes": "Good castle settlement prop sheet with brazier, torch, blank banner, weapon bits, crates, rubble, mossy blocks, barriers, and barrels.",
+  "downloaded_at": "2026-05-28T01:50:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e56c5d6f-aa14-4264-a1dd-9a731e0d70f0",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/separate_log_material_swatch_strip.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete log cabin reference, useful for log wall, door, window, roof, stoop, foundation, and small grass-edge language.",
+  "downloaded_at": "2026-05-28T02:17:00"
+}

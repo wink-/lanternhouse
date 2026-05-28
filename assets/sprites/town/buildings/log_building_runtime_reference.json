@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "705dcd10-9985-48d9-9b15-f2a4f4120ead",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_building_runtime_reference.png",
+  "size": "256x256",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good log building runtime reference sheet with four cabin/lodge variants and centered doors.",
+  "downloaded_at": "2026-05-28T00:47:20"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "0ed85da3-f807-47c4-bdb0-4cac937dea13",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_tower_wall_parts.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt produced a large castle gate wall reference; useful for battlement rhythm, cracked stone texture, side edges, and arched entrance proportions.",
+  "downloaded_at": "2026-05-28T03:17:00"
+}

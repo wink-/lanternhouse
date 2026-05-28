@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c28c24bb-9f8d-43b1-8b29-b97d727128f4",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/market_stall_modular_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good complete market stall reference with striped canopy, wooden counter, produce crates, barrel, and clean south-facing shape; more assembled than modular.",
+  "downloaded_at": "2026-05-28T04:47:00"
+}

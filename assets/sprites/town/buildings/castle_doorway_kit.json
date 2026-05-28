@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6406e878-cbdc-4901-9c05-7dca59c9bda8",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_doorway_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle doorway kit with arched entries, red-carpet thresholds, torch/arrow slit details, stairs, and portcullis-like pieces.",
+  "downloaded_at": "2026-05-28T01:17:12"
+}

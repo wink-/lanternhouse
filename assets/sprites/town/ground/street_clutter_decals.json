@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "28248e14-af44-44c3-b52f-36a9a530c0ad",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/street_clutter_decals.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:13:08"
+}

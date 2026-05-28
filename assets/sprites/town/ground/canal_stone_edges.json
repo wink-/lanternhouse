@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2c6747a5-2fdf-464e-9723-154114a68617",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/canal_stone_edges.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:09:41"
+}

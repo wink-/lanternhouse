@@ -1,0 +1,13 @@
+{
+  "asset_name": "Midday Modular Brindlewick House Facade Parts",
+  "pixellab_id": "d5cc4831-a70a-4a4f-b677-ada002c970df",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/d5cc4831-a70a-4a4f-b677-ada002c970df/download",
+  "runtime_path": "assets/sprites/town/buildings/midday_modular_brindlewick_house_facade_parts.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered door",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a complete two-story Brindlewick house reference; useful for roof color, warm windows, timber/plaster palette, stone apron, and doorway proportions."
+}

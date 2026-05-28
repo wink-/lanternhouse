@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8f4d2df4-a3df-4071-9ff3-e9226bee2abd",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_castle_approach_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG layout reference",
+  "notes": "Good castle approach reference with gatehouse, short walls, torch posts, barrels, grass/cobble threshold, aligned entrance path, and compact layout language.",
+  "downloaded_at": "2026-05-28T05:17:00"
+}

@@ -1,5 +1,8 @@
 {
-  "status": "downloaded",
-  "source": "https://api.pixellab.ai/mcp/map-objects/ce403f3e-b887-4d84-94cf-481bed565067/download",
-  "id": "ce403f3e-b887-4d84-94cf-481bed565067"
+  "source": "PixelLab MCP",
+  "id": "19f7b179-1a70-493e-a2ac-221d624a4dda",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/well.png",
+  "size": "64x64",
+  "downloaded_at": "2026-05-27T19:51:56"
 }

@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "687739fb-65d0-4b96-93a0-833fba0c2cf0",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/roof_texture_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:06:18"
+}

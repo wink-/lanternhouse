@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "0bf568a7-a727-4355-9808-c980529af261",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/log_village_ground_details.png",
+  "size": "128x128",
+  "perspective": "high top-down candidate",
+  "notes": "Sparse log village ground candidate with four grass/dirt path tiles and small corner/edge details.",
+  "downloaded_at": "2026-05-28T03:47:00"
+}

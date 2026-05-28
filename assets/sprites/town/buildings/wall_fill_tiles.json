@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "3dbbcd8d-1208-4a59-8ea8-2243214bd06e",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/wall_fill_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction modules, not isometric",
+  "downloaded_at": "2026-05-27T21:42:12"
+}

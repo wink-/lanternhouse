@@ -1,0 +1,13 @@
+{
+  "asset_name": "Breakfast Brindlewick Garden Yard Props",
+  "pixellab_id": "31e0e405-51eb-4569-a54d-31f3b032de6e",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/31e0e405-51eb-4569-a54d-31f3b032de6e/download",
+  "runtime_path": "assets/sprites/town/props/breakfast_brindlewick_garden_yard_props.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 prop sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt collapsed into a single grassy garden-tile candidate rather than the requested full yard prop sheet; keep as a small material/style swatch for raised grass or garden plots."
+}

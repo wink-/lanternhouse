@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "63e2c228-e920-491e-933b-52527e49f934",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_town_atlas_improvement_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "Good modular town atlas improvement reference; output is a cohesive set of facade/building references for future atlas refinement.",
+  "downloaded_at": "2026-05-28T00:14:03"
+}

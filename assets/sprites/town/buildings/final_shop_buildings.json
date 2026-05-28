@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "02c8893c-b253-409f-b581-fbfa2ee08ca2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_shop_buildings.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG; review output before direct runtime split",
+  "notes": "Runtime candidate/reference for shops; includes some angled/boxy drift, keep as candidate.",
+  "downloaded_at": "2026-05-27T22:35:22"
+}

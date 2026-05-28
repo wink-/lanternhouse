@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8ebea973-62ac-4b34-86f8-0941ddc5ee62",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_cabin_construction_tiles_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Log construction prompt drifted into a complete log cabin reference; useful for log wall, corner posts, roof, door, window, chimney, and threshold language.",
+  "downloaded_at": "2026-05-28T00:47:20"
+}

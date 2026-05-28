@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5989269d-22a9-4727-8ae2-3f373f79de65",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_wall_tower_construction_pixellab.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle tower reference sheet with separated tower variants; useful for castle/tower construction language.",
+  "downloaded_at": "2026-05-28T00:17:19"
+}

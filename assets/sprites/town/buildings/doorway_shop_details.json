@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7dd87e15-4a98-44af-886f-da49c7320b2c",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/doorway_shop_details.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:15:00"
+}

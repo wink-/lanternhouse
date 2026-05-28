@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "93899fd3-d1c8-447f-b748-e17e4a434748",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/ultra_strict_castle_module_grid.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete small castle/courtyard reference, useful for walls, round corner towers, battlement rhythm, and gate proportions.",
+  "downloaded_at": "2026-05-28T01:59:00"
+}

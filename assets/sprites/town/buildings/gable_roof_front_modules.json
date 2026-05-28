@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "83bddd9e-ae41-47cb-9496-1d0965f423a8",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/gable_roof_front_modules.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction modules, not isometric",
+  "downloaded_at": "2026-05-27T21:49:45"
+}

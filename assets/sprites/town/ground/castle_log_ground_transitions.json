@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "486a40ea-9580-4c52-9c6a-ac2fe671c89e",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/castle_log_ground_transitions.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good ground transition sheet: castle stone walls/thresholds, grass/dirt paths, log doorway ground, ladder/steps, and settlement edge tiles.",
+  "downloaded_at": "2026-05-28T01:47:15"
+}

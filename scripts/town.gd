@@ -29,7 +29,8 @@ const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildin
 const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
 const SHOP_SIGN_PATH := "res://assets/sprites/town/shops/signs/%s.png"
 const SHOP_AWNING_PATH := "res://assets/sprites/town/shops/awnings/%s.png"
-const SHOP_BUILDING_PATH := "res://assets/sprites/town/shops/buildings/%s.png"
+const SHOP_BUILDING_PATH := "res://assets/sprites/town/buildings/%s.png"
+const MODULAR_BUILDING_ATLAS_PATH := "res://assets/sprites/town/buildings/modular_building_atlas.png"
 const TOWN_PROP_PATH := "res://assets/sprites/town/props/%s.png"
 const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
 const NPC_ROTATION_PATH := "res://assets/sprites/characters/town_npcs/%s/rotations/%s.png"
@@ -75,6 +76,37 @@ const NPC_RECTS := {
 	"realtor": Rect2i(Vector2i(112, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 const PLAYER_RECT := Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE))
+const MODULAR_BUILDING_TILE_RECTS := {
+	"roof_left": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_mid": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_right": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_ridge": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_eave": Rect2i(Vector2i(64, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_moss": Rect2i(Vector2i(80, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"chimney": Rect2i(Vector2i(96, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall": Rect2i(Vector2i(0, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_timber": Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_brace": Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_shadow": Rect2i(Vector2i(48, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"foundation": Rect2i(Vector2i(64, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"foundation_moss": Rect2i(Vector2i(80, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"foundation_shadow": Rect2i(Vector2i(96, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"threshold": Rect2i(Vector2i(112, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"door": Rect2i(Vector2i(0, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"door_open": Rect2i(Vector2i(16, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"window": Rect2i(Vector2i(32, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"window_arch": Rect2i(Vector2i(48, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"window_flower": Rect2i(Vector2i(64, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_blank": Rect2i(Vector2i(80, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"lantern": Rect2i(Vector2i(96, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"flower_box": Rect2i(Vector2i(112, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_sword": Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_shield": Rect2i(Vector2i(16, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_tankard": Rect2i(Vector2i(32, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_gear": Rect2i(Vector2i(48, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_bed": Rect2i(Vector2i(64, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_candle": Rect2i(Vector2i(80, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
 
 const MAP := [
 	",,,,,,,,,,,,,,,lllllll,,,,,,,,,,,,,,,,,,",
@@ -139,13 +171,13 @@ const BUILDING_DOORS := {
 }
 const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
-	{"id": "elder_hall", "grid": Vector2i(14, 1), "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
-	{"id": "weapon_shop", "grid": Vector2i(3, 7), "fallback_region": Rect2i(Vector2i(15, 573), Vector2i(117, 72)), "fallback_scale": 0.55},
-	{"id": "armor_shop", "grid": Vector2i(28, 7), "fallback_region": Rect2i(Vector2i(16, 466), Vector2i(116, 72)), "fallback_scale": 0.55},
-	{"id": "inn", "grid": Vector2i(4, 14), "fallback_region": Rect2i(Vector2i(16, 681), Vector2i(116, 72)), "fallback_scale": 0.55},
-	{"id": "tavern", "grid": Vector2i(13, 14), "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
-	{"id": "workshop", "grid": Vector2i(22, 14), "fallback_region": Rect2i(Vector2i(354, 466), Vector2i(129, 72)), "fallback_scale": 0.5},
-	{"id": "chapel", "grid": Vector2i(31, 14), "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
+	{"id": "elder_hall", "grid": Vector2i(14, 1), "size": Vector2i(7, 5), "plaque": "plaque_blank", "public": true, "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
+	{"id": "weapon_shop", "grid": Vector2i(3, 7), "size": Vector2i(6, 4), "plaque": "plaque_sword", "fallback_region": Rect2i(Vector2i(15, 573), Vector2i(117, 72)), "fallback_scale": 0.55},
+	{"id": "armor_shop", "grid": Vector2i(28, 7), "size": Vector2i(6, 4), "plaque": "plaque_shield", "fallback_region": Rect2i(Vector2i(16, 466), Vector2i(116, 72)), "fallback_scale": 0.55},
+	{"id": "inn", "grid": Vector2i(4, 14), "size": Vector2i(6, 4), "plaque": "plaque_bed", "fallback_region": Rect2i(Vector2i(16, 681), Vector2i(116, 72)), "fallback_scale": 0.55},
+	{"id": "tavern", "grid": Vector2i(13, 14), "size": Vector2i(6, 4), "plaque": "plaque_tankard", "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
+	{"id": "workshop", "grid": Vector2i(22, 14), "size": Vector2i(6, 4), "plaque": "plaque_gear", "fallback_region": Rect2i(Vector2i(354, 466), Vector2i(129, 72)), "fallback_scale": 0.5},
+	{"id": "chapel", "grid": Vector2i(31, 14), "size": Vector2i(6, 4), "plaque": "plaque_candle", "fallback_region": Rect2i(Vector2i(14, 16), Vector2i(118, 72)), "fallback_scale": 0.55},
 ]
 const SHOP_SIGNS := [
 	{"id": "weapon_shop", "grid": Vector2i(5, 7), "offset": Vector2(8, -5)},
@@ -166,6 +198,7 @@ const SHOP_AWNINGS := [
 const TOWN_PROPS := [
 	{"id": "well", "grid": Vector2i(20, 11), "offset": Vector2(8, 8), "scale": 0.62},
 	{"id": "notice_board", "grid": Vector2i(12, 10), "offset": Vector2(8, 4), "scale": 0.62},
+	{"id": "signpost", "grid": Vector2i(15, 6), "offset": Vector2(8, 8), "scale": 0.62},
 	{"id": "lantern_post", "grid": Vector2i(17, 6), "offset": Vector2(8, -2), "scale": 0.58},
 	{"id": "lantern_post", "grid": Vector2i(22, 12), "offset": Vector2(8, -2), "scale": 0.58},
 	{"id": "lantern_post", "grid": Vector2i(19, 16), "offset": Vector2(8, -2), "scale": 0.54},
@@ -197,6 +230,7 @@ var _town_atlas: Texture2D
 var _town_ground: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
+var _modular_building_atlas: Texture2D
 var _shop_sign_textures: Dictionary = {}
 var _shop_awning_textures: Dictionary = {}
 var _shop_building_textures: Dictionary = {}
@@ -259,6 +293,7 @@ func _load_quiet_village_assets() -> void:
 	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
 	_quiet_buildings = _load_png_texture(QUIET_BUILDINGS_PATH)
 	_quiet_props = _load_png_texture(QUIET_PROPS_PATH)
+	_modular_building_atlas = _load_png_texture(MODULAR_BUILDING_ATLAS_PATH)
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -304,10 +339,12 @@ func _draw_map() -> void:
 func _draw_buildings() -> void:
 	for building_data: Dictionary in TOWN_BUILDINGS:
 		_draw_town_building(building_data)
-	_draw_shop_awnings()
 	_draw_building_labels()
 
 func _draw_town_building(building_data: Dictionary) -> void:
+	if _modular_building_atlas:
+		_draw_modular_town_building(building_data)
+		return
 	var texture: Texture2D = _load_shop_building(building_data["id"])
 	if texture:
 		var sprite := Sprite2D.new()
@@ -319,6 +356,81 @@ func _draw_town_building(building_data: Dictionary) -> void:
 		building_layer.add_child(sprite)
 	elif _quiet_buildings:
 		_add_building(building_data["grid"], building_data["fallback_region"], building_data["fallback_scale"])
+
+func _draw_modular_town_building(building_data: Dictionary) -> void:
+	var root := Node2D.new()
+	root.name = "ModularTownBuilding_%s" % building_data["id"]
+	root.position = Vector2(building_data["grid"] * TILE_SIZE)
+	root.z_index = 2
+	building_layer.add_child(root)
+
+	var size: Vector2i = building_data.get("size", Vector2i(6, 4))
+	var door_col: int = int(size.x / 2)
+	var wall_start: int = 1
+	var foundation_row: int = size.y - 1
+	var plaque_id: String = building_data.get("plaque", "plaque_blank")
+
+	for x in range(size.x):
+		var roof_tile := "roof_mid"
+		if x == 0:
+			roof_tile = "roof_left"
+		elif x == size.x - 1:
+			roof_tile = "roof_right"
+		_add_modular_building_tile(root, roof_tile, Vector2i(x, 0))
+
+	for x in range(size.x):
+		var eave_tile := "roof_eave"
+		if building_data.get("public", false) and x == door_col:
+			eave_tile = "roof_ridge"
+		_add_modular_building_tile(root, eave_tile, Vector2i(x, wall_start))
+
+	for y in range(wall_start + 1, foundation_row):
+		for x in range(size.x):
+			var wall_tile := "wall"
+			if x == 0 or x == size.x - 1:
+				wall_tile = "wall_timber"
+			elif (x + y) % 4 == 0:
+				wall_tile = "wall_brace"
+			_add_modular_building_tile(root, wall_tile, Vector2i(x, y))
+
+	for x in range(size.x):
+		var foundation_tile := "foundation_moss" if x == 0 or x == size.x - 1 else "foundation"
+		_add_modular_building_tile(root, foundation_tile, Vector2i(x, foundation_row))
+
+	_add_modular_building_tile(root, "door", Vector2i(door_col, foundation_row - 1))
+	_add_modular_building_tile(root, "threshold", Vector2i(door_col, foundation_row))
+	_add_modular_building_tile(root, plaque_id, Vector2i(door_col, max(wall_start, foundation_row - 2)))
+	_add_modular_building_tile(root, "lantern", Vector2i(max(0, door_col - 1), foundation_row - 1))
+
+	for x in _building_window_columns(size.x, door_col):
+		var window_tile := "window_arch" if building_data.get("public", false) else "window"
+		_add_modular_building_tile(root, window_tile, Vector2i(x, foundation_row - 1))
+
+	if size.x >= 7:
+		_add_modular_building_tile(root, "chimney", Vector2i(size.x - 2, 0))
+	elif building_data["id"] in ["tavern", "workshop", "inn"]:
+		_add_modular_building_tile(root, "chimney", Vector2i(size.x - 2, 0))
+
+func _building_window_columns(width: int, door_col: int) -> Array:
+	var cols: Array = []
+	for x in range(1, width - 1):
+		if abs(x - door_col) >= 2:
+			cols.append(x)
+	if cols.is_empty() and width >= 5:
+		cols.append(1)
+		cols.append(width - 2)
+	return cols
+
+func _add_modular_building_tile(parent: Node2D, tile_id: String, local_grid: Vector2i) -> void:
+	if not MODULAR_BUILDING_TILE_RECTS.has(tile_id):
+		return
+	var sprite := Sprite2D.new()
+	sprite.texture = _modular_building_atlas
+	sprite.region_enabled = true
+	sprite.region_rect = MODULAR_BUILDING_TILE_RECTS[tile_id]
+	sprite.centered = false
+	sprite.position = Vector2(local_grid * TILE_SIZE)
+	parent.add_child(sprite)
 
 func _load_shop_building(building_id: String) -> Texture2D:
 	if _shop_building_textures.has(building_id):

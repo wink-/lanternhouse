@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "bbceccf3-ab1b-4a0c-940a-552d8e56205b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/woodland_log_village_decorations.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Sparse woodland/log village candidate; output contains a small log cart/log bundle prop.",
+  "downloaded_at": "2026-05-28T01:19:05"
+}

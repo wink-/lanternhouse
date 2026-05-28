@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2a110b75-4c9d-4ed6-9435-9c61030e82c3",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/entrance_storefront_details.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade candidate",
+  "notes": "Candidate storefront detail modules with doors, windows, counters, plaques, and no-text shop details.",
+  "downloaded_at": "2026-05-27T22:37:05"
+}

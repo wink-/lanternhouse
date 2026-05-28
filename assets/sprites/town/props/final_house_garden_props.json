@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "70b1bf2a-a5a2-4450-ab59-1eda8433267f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_house_garden_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good house garden prop sheet: fence posts, flower beds, watering can, stumps, hedge clumps, birdbath, lantern, and small garden details.",
+  "downloaded_at": "2026-05-27T23:10:56"
+}

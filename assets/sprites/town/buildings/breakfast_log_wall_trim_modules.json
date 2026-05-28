@@ -1,0 +1,13 @@
+{
+  "asset_name": "Breakfast Log Wall Trim Modules",
+  "pixellab_id": "4250dd1b-62ca-4525-933c-dc683d2d6f4e",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/4250dd1b-62ca-4525-933c-dc683d2d6f4e/download",
+  "runtime_path": "assets/sprites/town/buildings/breakfast_log_wall_trim_modules.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered door",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a complete log shop/cabin corner reference; useful for log wall palette, post/trim language, roof edge, lit window, door, and foundation base."
+}

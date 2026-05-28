@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e3b67a33-fa29-465c-9e6f-2d168bb6bf2a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_wall_true_tile_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Log wall tile atlas prompt produced a useful cabin facade/reference sheet with repeated log/roof/window/door modules.",
+  "downloaded_at": "2026-05-28T01:19:04"
+}

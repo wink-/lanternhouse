@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8fdc5b42-918a-4bdc-983e-62f020ccb9f6",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/lantern_details.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:09:42"
+}

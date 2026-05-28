@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6c785822-18ea-42db-b5de-ebf880271ff0",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_log_facade_pieces.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into stone/ruin-like modular pieces rather than log pieces; useful as extra wall, arch, grate, well, stump, and stone/grass platform reference.",
+  "downloaded_at": "2026-05-28T02:47:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e2fb3929-ba93-4844-bfc6-6f076fa82b8f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_roof_wall_expansion_sheet.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Sparse log roof/wall expansion candidate; output contains two useful log facade/door modules.",
+  "downloaded_at": "2026-05-28T01:48:51"
+}

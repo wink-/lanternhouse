@@ -1,0 +1,13 @@
+{
+  "asset_name": "Breakfast UI Item Icon Retry Sheet",
+  "pixellab_id": "e03f12e3-4592-495b-90b0-428ad29561d6",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/e03f12e3-4592-495b-90b0-428ad29561d6/download",
+  "runtime_path": "assets/sprites/ui/icons/town_item_icons_retry_pixellab.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 icon sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Good readable 16x16-ish icon sheet with lantern, key, shell/loaf, pouch, green item, coin, gem/herb, potion, map, hook/key, flower, hammer, scroll, stick/bundle, and candle candidates."
+}

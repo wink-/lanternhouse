@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5eadec63-b50c-4028-87fd-410a41b82210",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/shrub_planters.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:05:08"
+}

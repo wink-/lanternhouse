@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "584aa080-3211-44bc-91b1-01ae3e9aa756",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_wall_true_tile_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Castle wall tile prompt drifted into a sparse interior/corner wall reference; useful for stone wall palette and lit wall detail.",
+  "downloaded_at": "2026-05-28T01:19:04"
+}

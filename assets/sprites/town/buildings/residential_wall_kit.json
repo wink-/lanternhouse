@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5e8d20d6-52fb-4574-8247-3ebfed15eab7",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/residential_wall_kit.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete residential facade reference, useful for plaster wall, mossy roof edge, stone foundation, arched door, warm window, and side-depth proportions.",
+  "downloaded_at": "2026-05-28T03:47:00"
+}

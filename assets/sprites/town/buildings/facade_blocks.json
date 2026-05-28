@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "969d77c5-9a3e-4197-8196-246f0090dac5",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/facade_blocks.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:00:25"
+}

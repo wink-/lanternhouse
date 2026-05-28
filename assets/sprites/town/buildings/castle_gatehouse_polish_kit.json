@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a0a626f0-65c9-4b1d-bb67-8ee048c1830a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_gatehouse_polish_kit.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete compact castle gatehouse reference; useful for arched gate, battlements, wall depth, shield plaque, moss base, and small stone accents.",
+  "downloaded_at": "2026-05-28T04:17:00"
+}

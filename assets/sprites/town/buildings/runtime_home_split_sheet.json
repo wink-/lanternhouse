@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "9980b46a-a3e4-4f5b-b462-72de4786d965",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/runtime_home_split_sheet.png",
+  "size": "320x320",
+  "perspective": "rectangular JRPG town runtime candidate",
+  "notes": "Runtime home candidate sheet: cottage, larger house, old house, and mossy home/storage variants.",
+  "downloaded_at": "2026-05-28T00:01:43"
+}

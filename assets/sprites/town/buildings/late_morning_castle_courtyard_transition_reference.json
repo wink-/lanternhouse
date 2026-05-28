@@ -1,0 +1,13 @@
+{
+  "asset_name": "Late Morning Castle Courtyard Transition Reference",
+  "pixellab_id": "98a6312c-c7b3-491c-9733-f413d47be97b",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/98a6312c-c7b3-491c-9733-f413d47be97b/download",
+  "runtime_path": "assets/sprites/town/buildings/late_morning_castle_courtyard_transition_reference.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered door",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a compact castle chapel/gatehouse reference; useful for stone wall depth, red roof cap, arched entry, stair threshold, torch/lantern placement, and mossy base."
+}

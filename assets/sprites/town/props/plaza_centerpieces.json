@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "fda1441c-019d-44fb-8587-3dddfc95fc00",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/plaza_centerpieces.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:14:59"
+}

@@ -1,0 +1,309 @@
+{
+  "asset_name": "Curated Modular Building Atlas",
+  "runtime_path": "assets/sprites/town/buildings/modular_building_atlas.png",
+  "tile_size": 16,
+  "status": "integrated",
+  "notes": "Runtime atlas used by scripts/town.gd. Curated from PixelLab sheets and references while preserving existing tile IDs.",
+  "tiles": [
+    {
+      "tile": "roof_left",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 1,2"
+    },
+    {
+      "tile": "roof_mid",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 2,2"
+    },
+    {
+      "tile": "roof_right",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 4,2"
+    },
+    {
+      "tile": "roof_ridge",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 3,2"
+    },
+    {
+      "tile": "roof_eave",
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/roof_corner_edge_variants.png cell 2,3"
+    },
+    {
+      "tile": "roof_moss",
+      "rect": [
+        80,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 2,4"
+    },
+    {
+      "tile": "chimney",
+      "rect": [
+        96,
+        0,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/roof_accessories.png normalized crop 0,64,32,112"
+    },
+    {
+      "tile": "blank",
+      "rect": [
+        112,
+        0,
+        16,
+        16
+      ],
+      "source": "transparent blank"
+    },
+    {
+      "tile": "wall",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,3"
+    },
+    {
+      "tile": "wall_timber",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 5,3"
+    },
+    {
+      "tile": "wall_brace",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,3"
+    },
+    {
+      "tile": "wall_shadow",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,3 shadow mask"
+    },
+    {
+      "tile": "foundation",
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,5"
+    },
+    {
+      "tile": "foundation_moss",
+      "rect": [
+        80,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,5"
+    },
+    {
+      "tile": "foundation_shadow",
+      "rect": [
+        96,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,5 shadow mask"
+    },
+    {
+      "tile": "threshold",
+      "rect": [
+        112,
+        16,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 5,5"
+    },
+    {
+      "tile": "door",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed door"
+    },
+    {
+      "tile": "door_open",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed open door"
+    },
+    {
+      "tile": "window",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed square window"
+    },
+    {
+      "tile": "window_arch",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed arched window"
+    },
+    {
+      "tile": "window_flower",
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed arched window"
+    },
+    {
+      "tile": "plaque_blank",
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/blank_sign_boards.png palette-inspired composed blank plaque"
+    },
+    {
+      "tile": "lantern",
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ],
+      "source": "hand-composed from PixelLab lantern palette"
+    },
+    {
+      "tile": "flower_box",
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed flower box"
+    },
+    {
+      "tile": "plaque_sword",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png sword on curated plaque"
+    },
+    {
+      "tile": "plaque_shield",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png shield on curated plaque"
+    },
+    {
+      "tile": "plaque_tankard",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png tankard on curated plaque"
+    },
+    {
+      "tile": "plaque_gear",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png gear on curated plaque"
+    },
+    {
+      "tile": "plaque_bed",
+      "rect": [
+        64,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed/leaf on curated plaque"
+    },
+    {
+      "tile": "plaque_candle",
+      "rect": [
+        80,
+        48,
+        16,
+        16
+      ],
+      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle/boot on curated plaque"
+    }
+  ]
+}

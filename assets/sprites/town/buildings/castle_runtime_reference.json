@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5d8de1cd-f881-4b79-ac28-23bad7a181e2",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_runtime_reference.png",
+  "size": "256x256",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle runtime reference sheet with gatehouse, wall, tower, and keep variants.",
+  "downloaded_at": "2026-05-28T00:47:21"
+}

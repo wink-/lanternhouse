@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6a4db61e-c7b9-4a37-8bc3-ad9cf9bf7a66",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_shop_sign_awning_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "Sparse PixelLab shop sign/awning candidate; output contains one awning-like object.",
+  "downloaded_at": "2026-05-28T00:06:25"
+}

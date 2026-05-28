@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4d607f11-44a4-4fd1-9bcf-f1cbc8c27125",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/isolated_wall_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Strict 16x16 wall, timber, foundation, and mossy corner tile grid; good modular candidate.",
+  "downloaded_at": "2026-05-27T22:20:33"
+}

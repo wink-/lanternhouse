@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "b14091ae-20eb-498f-925d-1d4e45ac5e96",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_cabin_doorway_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Log doorway prompt drifted into a small interior/exterior corner reference; useful for log interior palette, door framing, crate, barrel, and light spill.",
+  "downloaded_at": "2026-05-28T01:17:13"
+}

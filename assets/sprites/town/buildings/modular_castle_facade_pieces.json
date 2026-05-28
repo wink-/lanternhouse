@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "87a14877-34ab-422a-adc9-059cad94df2b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_castle_facade_pieces.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle/stone modular reference but duplicated the log-facade output; useful for arch, stone blocks, grate, well, stump, and platform pieces.",
+  "downloaded_at": "2026-05-28T02:47:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4b780f51-1751-4025-b337-07151c336d8b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/town_door_window_variant_modules.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG module sheet",
+  "notes": "Good door/window variant module sheet with multiple arched doors, wood doors, lit window inserts, trim, stoops, and shadow pieces.",
+  "downloaded_at": "2026-05-28T03:17:00"
+}

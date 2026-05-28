@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "ff71acb4-9ee7-4382-bff6-bc2b99832629",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/castle_courtyard_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle courtyard prop sheet: braziers, banners no text, barrel, well/basin, posts, mirror/shield stand, and small fixtures.",
+  "downloaded_at": "2026-05-28T01:19:04"
+}

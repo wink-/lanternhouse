@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2e623aa1-4159-4a91-90dd-60cd55feb174",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/separate_castle_material_swatch_strip.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Sparse castle wall reference with useful wall, battlement, arched door, arrow slit, and small sign/torch-like detail candidates.",
+  "downloaded_at": "2026-05-28T02:17:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a7df6f9f-051d-4c22-9165-557072c7e16f",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/public_hall_facade_kit.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete narrow hall/shop reference, useful for side-depth wall, plain roof, centered door, window/box detail, steps, and foundation shadow.",
+  "downloaded_at": "2026-05-28T03:47:00"
+}

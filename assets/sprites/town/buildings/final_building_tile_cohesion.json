@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "2f323db2-ad36-4493-b533-97638d451e93",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_building_tile_cohesion.png",
+  "size": "128x128",
+  "perspective": "rectangular SNES JRPG building construction modules, not isometric",
+  "downloaded_at": "2026-05-27T21:51:35"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "bb15d09a-ec22-495e-94fe-67cfc924630e",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_stone_modular_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "PixelLab castle atlas prompt drifted into a complete small castle/tower reference; useful for stone palette, crenellations, gate, and moss base.",
+  "downloaded_at": "2026-05-28T00:17:19"
+}

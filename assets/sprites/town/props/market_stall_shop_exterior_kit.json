@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "263a264e-5408-4ecb-aebf-97fbcd8f1796",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/market_stall_shop_exterior_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good market stall and shop exterior kit: canopy, counter, food crates, blank placard, hanging lantern.",
+  "downloaded_at": "2026-05-27T22:39:30"
+}

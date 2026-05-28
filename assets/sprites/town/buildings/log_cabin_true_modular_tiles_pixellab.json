@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "84612839-e15e-4663-b3d0-4529c8962802",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_cabin_true_modular_tiles_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "True modular log tile retry drifted into a complete cabin reference; useful for cabin palette, log corners, thatch roof, windows, and woodpile.",
+  "downloaded_at": "2026-05-28T00:49:45"
+}

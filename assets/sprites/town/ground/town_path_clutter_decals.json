@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "b75be999-5ad7-4aeb-a25a-3de64f9d8c27",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/town_path_clutter_decals.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Sparse path clutter candidate; output contains a single small dark smudge/rock decal.",
+  "downloaded_at": "2026-05-27T23:12:51"
+}

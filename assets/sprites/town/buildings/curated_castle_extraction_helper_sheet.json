@@ -1,0 +1,13 @@
+{
+  "asset_name": "Curated Castle Extraction Helper Sheet",
+  "pixellab_id": "67bb7ad9-1a21-4678-8856-6e240595e89e",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/67bb7ad9-1a21-4678-8856-6e240595e89e/download",
+  "runtime_path": "assets/sprites/town/buildings/curated_castle_extraction_helper_sheet.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 candidate sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Sparse castle output with small pillar/stone post candidates and a pale base plane. Useful for tiny castle fixtures, not a wall/tower module atlas."
+}

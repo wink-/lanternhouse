@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "505c7d03-99b5-4696-924b-32c26662b149",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_gate_expansion_sheet.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good castle gate expansion sheet with four battlement/gate wall modules, including mossy and torch variants.",
+  "downloaded_at": "2026-05-28T01:48:51"
+}

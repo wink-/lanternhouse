@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "519a8fcc-d4dc-4018-b22c-09a7f51b17b5",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/modular_roof_wall_atlas_pixellab.png",
+  "size": "256x256",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "Sparse PixelLab roof/wall atlas candidate; output contains one small assembled house reference.",
+  "downloaded_at": "2026-05-28T00:06:24"
+}

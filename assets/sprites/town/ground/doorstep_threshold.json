@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "d5d3f2f9-e80a-4d83-a555-ad9010932943",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/doorstep_threshold.png",
+  "size": "64x64",
+  "perspective": "rectangular top-down grid, not isometric",
+  "downloaded_at": "2026-05-27T19:53:00"
+}

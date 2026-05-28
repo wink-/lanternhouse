@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c82c023d-c3ae-457e-b419-c81132490464",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/roof_construction_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG building construction tiles, not isometric",
+  "downloaded_at": "2026-05-27T21:13:42"
+}

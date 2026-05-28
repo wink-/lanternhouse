@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "5765a752-b7fa-4d36-88b3-a2808f4f8cb5",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/runtime_public_split_sheet.png",
+  "size": "320x320",
+  "perspective": "rectangular JRPG town runtime candidate",
+  "notes": "Runtime public candidate sheet: hall/inn/chapel-style buildings with aligned doors.",
+  "downloaded_at": "2026-05-28T00:01:44"
+}

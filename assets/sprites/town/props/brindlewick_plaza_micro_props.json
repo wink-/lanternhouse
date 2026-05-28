@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "1ae04ac8-7f04-4e91-9f61-54cb82f48470",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/brindlewick_plaza_micro_props.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop sheet",
+  "notes": "Good plaza micro prop sheet with pot, fences, crates, barrel, blank sign, hook, cloth, bucket, planks, rope/log bundle, tool, and stone/foliage clumps.",
+  "downloaded_at": "2026-05-28T02:17:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7c764e35-5199-4bdd-ad69-fb92390086a5",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/ultra_strict_log_module_grid.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete log house reference, useful for compact log home proportions, warm roof, chimney, door, window, and grass-base language.",
+  "downloaded_at": "2026-05-28T01:59:00"
+}

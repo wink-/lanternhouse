@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e6dd2ae4-3e54-49c2-82d2-01fdb8148b75",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/castle_wall_damage_moss_decals.png",
+  "size": "128x128",
+  "perspective": "high top-down decal sheet",
+  "notes": "Sparse but useful castle damage/moss decal candidate with cracked stone blocks, moss patches, and worn stone overlays.",
+  "downloaded_at": "2026-05-28T01:50:00"
+}

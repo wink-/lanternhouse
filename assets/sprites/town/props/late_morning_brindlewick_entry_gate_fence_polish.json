@@ -1,0 +1,13 @@
+{
+  "asset_name": "Late Morning Brindlewick Entry Gate Fence Polish",
+  "pixellab_id": "3bd8d46d-8667-485a-ab15-b6cf20ff274e",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/3bd8d46d-8667-485a-ab15-b6cf20ff274e/download",
+  "runtime_path": "assets/sprites/town/props/late_morning_brindlewick_entry_gate_fence_polish.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered gate",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into one assembled town gate/fence reference; useful for wood gate arch, fence posts, lantern rhythm, grass pad, flower accents, and threshold proportions."
+}

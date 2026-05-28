@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7ec68d05-286b-4ffb-ab51-ebb5b1f2944a",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/fortified_village_palisade_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good palisade kit: fence straights, corners, gate pieces, torch posts, dirt base, blank marker, and settlement edge details.",
+  "downloaded_at": "2026-05-28T01:48:52"
+}

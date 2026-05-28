@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "d44829cb-afed-4a4b-b6e5-b5cf75809863",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/town_shop_icon_plaque_final_sheet.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Very sparse plaque candidate containing one useful warm candle/flame icon plaque; not a full shop plaque set.",
+  "downloaded_at": "2026-05-28T05:17:00"
+}

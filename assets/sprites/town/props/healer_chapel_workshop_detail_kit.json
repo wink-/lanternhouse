@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "bbf5b882-a4dd-415a-9f55-ce9d754f6419",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/healer_chapel_workshop_detail_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Sparse healer/workshop detail candidate with a small crate and blank wood sign/workbench-like frame.",
+  "downloaded_at": "2026-05-28T02:47:00"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4ffd9991-f21e-4f23-b23b-02004e24f7ed",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/town_plaza_transition_curb_kit.png",
+  "size": "128x128",
+  "perspective": "high top-down candidate",
+  "notes": "Sparse plaza transition candidate with one raised grass/cobble block and one narrow curb/threshold strip.",
+  "downloaded_at": "2026-05-28T04:17:00"
+}

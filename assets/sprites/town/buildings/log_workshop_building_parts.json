@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "e9931b8e-70ac-44e0-92f4-436dc08795d8",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/log_workshop_building_parts.png",
+  "size": "160x160",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Good log workshop parts/reference sheet with log wall corner, small roof/awning pieces, door/window shapes, steps, stone blocks, and post details.",
+  "downloaded_at": "2026-05-28T03:17:00"
+}

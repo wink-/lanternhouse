@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "94680bd8-f3f0-460a-bbbf-bfcec5329faa",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_coastal_town_bridge_kit.png",
+  "size": "128x128",
+  "perspective": "high top-down source/reference candidate",
+  "notes": "Good assembled bridge/dock connector reference with plank span, stone lips, posts, water edge, and shadowing; more assembled than isolated modules.",
+  "downloaded_at": "2026-05-28T06:17:00"
+}

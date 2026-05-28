@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "b1308bfb-053c-4d27-bd1a-791db59c3a73",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/tiny_path_decal_grid_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good tiny path decal grid: pebbles, moss, leaves, flowers, dirt, straw, and small ground clutter.",
+  "downloaded_at": "2026-05-27T23:14:38"
+}

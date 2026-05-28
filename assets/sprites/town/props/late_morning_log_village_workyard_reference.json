@@ -1,0 +1,13 @@
+{
+  "asset_name": "Late Morning Log Village Workyard Reference",
+  "pixellab_id": "d60f66c5-8194-482d-895d-88c6a2723640",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/d60f66c5-8194-482d-895d-88c6a2723640/download",
+  "runtime_path": "assets/sprites/town/props/late_morning_log_village_workyard_reference.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 candidate sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Sparse output with a useful stacked log object and a small dotted ground tile; keep as a workyard prop/material candidate rather than a full sheet."
+}

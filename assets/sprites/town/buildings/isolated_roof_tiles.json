@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "50dddbde-2b80-4fd4-8a49-30924fdec68c",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/isolated_roof_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "notes": "Strict 16x16 roof tile prompt; output is a small roof-module candidate with some facade drift.",
+  "downloaded_at": "2026-05-27T22:20:33"
+}

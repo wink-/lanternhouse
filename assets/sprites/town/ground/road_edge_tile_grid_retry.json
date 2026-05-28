@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "b3a10a68-4f5b-4318-abb0-53ba98a76b63",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/road_edge_tile_grid_retry.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Road edge candidate; output is a large cobblestone strip with grass edges rather than a full isolated tile grid.",
+  "downloaded_at": "2026-05-27T22:41:04"
+}

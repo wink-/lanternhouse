@@ -1,0 +1,13 @@
+{
+  "asset_name": "Midday Town Foundation Doorstep Tile Modules",
+  "pixellab_id": "db3d3847-8940-4af0-938e-766ae15c960d",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/db3d3847-8940-4af0-938e-766ae15c960d/download",
+  "runtime_path": "assets/sprites/town/ground/midday_town_foundation_doorstep_tile_modules.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 candidate sheet",
+  "suggested_entrance_tile_offset": null,
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a small stone plaza/base and tiny house reference; useful as a foundation/plaza material candidate, not a true doorstep module sheet."
+}

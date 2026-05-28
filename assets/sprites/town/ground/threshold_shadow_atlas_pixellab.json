@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "798abb5d-523b-4d7a-9c0b-110fce864fbc",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/threshold_shadow_atlas_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG modular source/reference candidate",
+  "notes": "PixelLab threshold/shadow prompt drifted into doorway/foundation reference pieces; useful source/reference for future threshold refinement.",
+  "downloaded_at": "2026-05-28T00:10:49"
+}

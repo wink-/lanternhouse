@@ -1,0 +1,13 @@
+{
+  "asset_name": "Midday Modular Castle Wall Tower Parts",
+  "pixellab_id": "575f943e-559b-4de8-890b-da637f646acf",
+  "source": "PixelLab map object",
+  "download_url": "https://api.pixellab.ai/mcp/map-objects/575f943e-559b-4de8-890b-da637f646acf/download",
+  "runtime_path": "assets/sprites/town/buildings/midday_modular_castle_wall_tower_parts.png",
+  "size_px": [128, 128],
+  "intended_grid_footprint": "8x8 reference sheet",
+  "suggested_entrance_tile_offset": "Centered gate/opening",
+  "intended_scale": 1.0,
+  "status": "downloaded",
+  "notes": "Prompt drifted into a compact castle wall/tower block reference; useful for crenel rhythm, round tower language, blue-gray stone palette, stairs, and wall depth."
+}

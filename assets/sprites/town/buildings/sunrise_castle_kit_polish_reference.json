@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "902e91c8-d9a0-4099-830a-fcf1ccf92e13",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/sunrise_castle_kit_polish_reference.png",
+  "size": "192x192",
+  "perspective": "rectangular JRPG layout reference",
+  "notes": "Good castle polish reference with gate, towers, connected walls, torches, banners without text, mossy ground, and centered entrance threshold.",
+  "downloaded_at": "2026-05-28T07:17:00"
+}

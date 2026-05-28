@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "81032f5e-012f-415b-85d8-562f74f0a769",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/castle_courtyard_ground_details.png",
+  "size": "128x128",
+  "perspective": "high top-down reference/candidate",
+  "notes": "Good castle courtyard reference with wall borders, vines, dirt/cobble path, small stones, and shadowed corner composition; more scene-like than a strict isolated tile sheet.",
+  "downloaded_at": "2026-05-28T03:47:00"
+}

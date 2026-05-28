@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "bdab9411-49f3-414b-92ae-171dd08a45fa",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/castle_town_wall_cap_fence_details.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG kit",
+  "notes": "Good wall cap/fence kit with stone wall cap modules, low parapet pieces, rails, gate/hinge pieces, barrels, palisade-like panel, and small connector parts.",
+  "downloaded_at": "2026-05-28T02:17:00"
+}

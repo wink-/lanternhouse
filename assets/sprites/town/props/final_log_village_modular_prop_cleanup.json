@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "a6c9b279-f236-4d30-90bf-5a73d1680567",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_log_village_modular_prop_cleanup.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Sparse log village candidate with one small cart/crate-like object and handle detail.",
+  "downloaded_at": "2026-05-28T05:47:00"
+}

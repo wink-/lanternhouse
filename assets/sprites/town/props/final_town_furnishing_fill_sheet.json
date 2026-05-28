@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "cb22d3f1-f535-4d00-a48c-7a5f773110f5",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_town_furnishing_fill_sheet.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Sparse furnishing candidate with two useful potted plant/flower props.",
+  "downloaded_at": "2026-05-28T04:47:00"
+}

@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "404faf58-249c-40f6-b1ed-ae46982af855",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/stone_street_blocks.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:00:26"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "7af7f9cb-b7f3-4cfa-b9e4-02d22f5297b1",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/ground/final_cobblestone_plaza_transitions.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG town kit candidate",
+  "notes": "Good cobblestone transition candidate: blue-gray stone centers, edge-like shapes, and moss/grass boundaries.",
+  "downloaded_at": "2026-05-27T23:10:56"
+}

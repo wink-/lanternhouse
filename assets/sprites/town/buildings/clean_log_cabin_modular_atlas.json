@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "6d0322bb-a298-41ea-ab8a-448b9d8b94ed",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/clean_log_cabin_modular_atlas.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete log cabin reference, useful for log wall palette, thatch roof, door/window proportions, foundation stones, and outline style.",
+  "downloaded_at": "2026-05-28T01:55:00"
+}

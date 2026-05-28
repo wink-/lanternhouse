@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "8ce382b8-f61f-4190-88ce-bb83ac841553",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/final_no_text_service_sign_retry_sheet.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG prop candidate",
+  "notes": "Very sparse sign retry candidate with one usable golden coin/basket-like icon plaque.",
+  "downloaded_at": "2026-05-28T06:17:00"
+}

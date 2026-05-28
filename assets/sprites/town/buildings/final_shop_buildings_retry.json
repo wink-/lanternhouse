@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "4ca721d5-53c1-416b-8c67-a74bb8679f0b",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/final_shop_buildings_retry.png",
+  "size": "256x256",
+  "perspective": "rectangular top-down 3/4 JRPG, south-facing facade candidate",
+  "notes": "Stricter flat-front shop retry; good cohesive south-facing candidate sheet.",
+  "downloaded_at": "2026-05-27T22:37:04"
+}

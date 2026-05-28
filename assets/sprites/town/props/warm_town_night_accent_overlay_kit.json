@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "c15bf8b8-0023-440a-bc22-0d83ecd1a6e0",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/props/warm_town_night_accent_overlay_kit.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "Prompt drifted into a complete lanternlit shop reference; useful for warm window/glow language and night palette, but not a true overlay sheet.",
+  "downloaded_at": "2026-05-28T04:17:00"
+}

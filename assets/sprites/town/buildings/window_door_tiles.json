@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "f478a272-1c7b-4f58-a8bc-67112f8d77cf",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/window_door_tiles.png",
+  "size": "128x128",
+  "perspective": "rectangular top-down 3/4 JRPG building construction tiles, not isometric",
+  "downloaded_at": "2026-05-27T21:13:42"
+}

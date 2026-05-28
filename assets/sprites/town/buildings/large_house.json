@@ -1,0 +1,9 @@
+{
+  "source": "PixelLab MCP",
+  "id": "0690badd-5aa6-4bce-8e8d-f05d20433420",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/large_house.png",
+  "size": "96x96",
+  "perspective": "rectangular top-down 3/4 JRPG, not isometric",
+  "downloaded_at": "2026-05-27T20:08:05"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "PixelLab MCP",
+  "id": "44f07a15-0e7e-4eee-96c0-0028bf2a16df",
+  "status": "completed",
+  "runtime_path": "res://assets/sprites/town/buildings/castle_true_modular_tiles_pixellab.png",
+  "size": "128x128",
+  "perspective": "rectangular JRPG source/reference candidate",
+  "notes": "True modular castle tile retry drifted into a complete keep reference; useful for stone palette, arched entry, battlements, roof cap, and torch.",
+  "downloaded_at": "2026-05-28T00:49:45"
+}
