@@ -25,8 +25,6 @@ const ItemDB := preload("res://scripts/data/items.gd")
 
 const TILE_SIZE := 16
 const MAX_LEVEL := 40
-const PARTY_SPRITE_PATH := "res://assets/sprites/battle/party/%s.png"
-const ENEMY_SPRITE_PATH := "res://assets/sprites/battle/enemies/%s.png"
 
 # ── Zone backgrounds ──────────────────────────────────────────────────────
 const ZONE_BG := {
@@ -135,8 +133,10 @@ func _ready() -> void:
 		background.color = bg_color
 	_style_battle_panels()
 	_init_enemies()
+	_apply_prebattle_tools()
 	for m: Dictionary in GameData.party:
 		_pre_buff_stats[m["name"]] = {"str": m["str"], "def": m["def"], "agi": m["agi"]}
+	_apply_meal_buff()
 	round_phase = "command"
 	selecting_idx = _first_alive_party()
 	fight_target_idx = _first_alive_enemy()
@@ -272,6 +272,32 @@ func _init_enemies() -> void:
 			"alive": true, "command": "",
 		})
 
+func _apply_prebattle_tools() -> void:
+	if not GameData.get_meta("trap_kit_active", false):
+		return
+	GameData.set_meta("trap_kit_active", false)
+	var target_idx := _first_alive_enemy()
+	if target_idx < 0:
+		return
+	var target: Dictionary = enemies[target_idx]
+	var damage: int = maxi(6, int(ceil(float(target.get("max_hp", 1)) * 0.25)))
+	target["hp"] = maxi(0, target["hp"] - damage)
+	if target["hp"] <= 0:
+		target["alive"] = false
+	_push_log("[color=#f0d46a]A set Trap Kit snaps shut on %s for %d damage![/color]" % [target["name"], damage])
+
+func _apply_meal_buff() -> void:
+	var battles: int = GameData.get_meta("meal_buff_battles", 0)
+	var def_bonus: int = GameData.get_meta("meal_buff_def", 0)
+	if battles <= 0 or def_bonus <= 0:
+		return
+	for member: Dictionary in GameData.party:
+		if member.get("alive", false):
+			member["def"] += def_bonus
+	GameData.set_meta("meal_buff_battles", battles - 1)
+	var meal_name: String = GameData.get_meta("meal_buff_name", "Cooked meal")
+	_push_log("[color=#9fc5ff]%s keeps the party well fed. DEF +%d this battle (%d left).[/color]" % [meal_name, def_bonus, battles - 1])
+
 func _draw_sprites() -> void:
 	_clear_children(enemy_area)
 	_clear_children(party_area)
@@ -339,16 +365,7 @@ func _load_enemy_sprite(enemy_name: String) -> Texture2D:
 	var key: String = enemy_name.to_snake_case()
 	if _enemy_sprite_textures.has(key):
 		return _enemy_sprite_textures[key]
-	var path: String = ENEMY_SPRITE_PATH % key
-	if not FileAccess.file_exists(path):
-		_enemy_sprite_textures[key] = null
-		return null
-	var image := Image.new()
-	if image.load(path) != OK:
-		push_warning("Enemy sprite could not be loaded: %s" % path)
-		_enemy_sprite_textures[key] = null
-		return null
-	var texture := ImageTexture.create_from_image(image)
+	var texture := SpriteCache.enemy_sprite(key)
 	_enemy_sprite_textures[key] = texture
 	return texture
 
@@ -356,16 +373,7 @@ func _load_party_sprite(party_class: String) -> Texture2D:
 	var key: String = PARTY_SPRITE_IDS.get(party_class, party_class.to_snake_case())
 	if _party_sprite_textures.has(key):
 		return _party_sprite_textures[key]
-	var path: String = PARTY_SPRITE_PATH % key
-	if not FileAccess.file_exists(path):
-		_party_sprite_textures[key] = null
-		return null
-	var image := Image.new()
-	if image.load(path) != OK:
-		push_warning("Party sprite could not be loaded: %s" % path)
-		_party_sprite_textures[key] = null
-		return null
-	var texture := ImageTexture.create_from_image(image)
+	var texture := SpriteCache.party_sprite(key)
 	_party_sprite_textures[key] = texture
 	return texture
 

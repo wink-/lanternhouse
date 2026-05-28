@@ -23,11 +23,8 @@ const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
 
 const TILE_SIZE := 32
-const PLAYER_SPRITE_PATH := "res://assets/sprites/overworld/player.png"
-const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
-const OVERWORLD_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_overworld.png"
 const T_WATER_FULL := Vector2i(0, 0)
 const T_SAND := Vector2i(1, 0)
 const T_GRASS := Vector2i(2, 0)
@@ -207,6 +204,7 @@ const TINT_NIGHT := Color(0.15, 0.18, 0.35, 0.38)
 
 # ── Fog ───────────────────────────────────────────────────────────────────
 const FOG_BEACON_RADIUS := 6    # tiles cleared by a lit beacon
+const HERB_REGROW_DAYS := 30
 const FOG_MAX_ALPHA := 0.55
 const FOG_DARKEN_COLOR := Color(0.02, 0.04, 0.12)
 
@@ -349,12 +347,10 @@ func _ready() -> void:
 		debug_label.hide()
 
 func _build_tileset() -> void:
-	var tex: Texture2D
-	if FileAccess.file_exists(OVERWORLD_ATLAS_PATH):
-		tex = _load_png_texture(OVERWORLD_ATLAS_PATH)
+	var tex: Texture2D = SpriteCache.get_asset("tiles.overworld")
 	if not tex:
 		push_error("Failed to load overworld terrain atlas!")
-		print("ERROR: overworld terrain atlas not found: ", OVERWORLD_ATLAS_PATH)
+		print("ERROR: overworld terrain atlas not found in asset registry.")
 		# Fallback: render map with colors
 		_fallback_draw()
 		return
@@ -513,9 +509,7 @@ func _init_player_sprite() -> void:
 		if player_face:
 			player_face.hide()
 		return
-	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
-		return
-	player_texture.texture = _load_png_texture(PLAYER_SPRITE_PATH)
+	player_texture.texture = SpriteCache.player_sprite()
 	if not player_texture.texture:
 		return
 	player_texture.centered = true
@@ -528,7 +522,7 @@ func _init_player_sprite() -> void:
 
 func _load_player_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		_player_idle_textures[dir_name] = _load_png_texture(PLAYER_ROTATION_PATH % dir_name)
+		_player_idle_textures[dir_name] = SpriteCache.character_rotation("player", dir_name)
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -871,15 +865,29 @@ func _interact() -> void:
 	elif tile == "h":
 		_enter_brindlewick()
 	elif FishDB.can_fish(tile):
-		var zone := FishDB.zone_for_tile(tile)
-		if fishing_screen:
-			fishing_screen.open(zone)
+		_try_start_fishing(target)
 	elif AlchemyDB.can_gather(tile):
 		_try_gather_herbs(target)
 	elif TinkerDB.can_gather(tile):
 		_try_gather_materials(target)
 	else:
 		_update_hud_with_msg("Nothing here.")
+
+func _try_start_fishing(target: Vector2i) -> void:
+	if not _can_fish_from(pos, target):
+		_update_hud_with_msg("You need to stand beside open water to fish.")
+		return
+	var zone := FishDB.zone_for_tile(_tile(target))
+	if fishing_screen:
+		fishing_screen.open(zone)
+
+func _can_fish_from(standing: Vector2i, target: Vector2i) -> bool:
+	var target_tile := _tile(target)
+	if not FishDB.can_fish(target_tile):
+		return false
+	if target_tile == "~":
+		return true
+	return _water_neighbor_mask(standing) > 0 or _water_neighbor_mask(target) > 0
 
 func _interact_current_tile() -> bool:
 	var tile := _tile(pos)
@@ -913,16 +921,19 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 		GameData.change_faction_rep(FactionDB.Faction.KEEPERS_GUILD, 5)
 		AudioManager.play_beacon_light()
 		# Reveal fog of war around newly lit beacon
-		for dy in range(-FOG_BEACON_RADIUS, FOG_BEACON_RADIUS + 1):
-			for dx in range(-FOG_BEACON_RADIUS, FOG_BEACON_RADIUS + 1):
+		var reveal_radius := _consume_beacon_lens_radius()
+		for dy in range(-reveal_radius, reveal_radius + 1):
+			for dx in range(-reveal_radius, reveal_radius + 1):
 				var tx := beacon_pos.x + dx
 				var ty := beacon_pos.y + dy
 				if tx >= 0 and tx < MAP_W and ty >= 0 and ty < MAP_H:
-					if Vector2(dx, dy).length() <= FOG_BEACON_RADIUS:
+					if Vector2(dx, dy).length() <= reveal_radius:
 						GameData.explored_tiles[str(Vector2i(tx, ty))] = true
 						if not _fog_tiles.is_empty():
 							_fog_tiles[ty][tx].visible = false
 		var msg := "You light the %s beacon! The surrounding darkness recedes." % beacon_name.replace("_", " ")
+		if reveal_radius > FOG_BEACON_RADIUS:
+			msg += "\n[color=#9fc5ff]The tuned Beacon Lens widens the light.[/color]"
 		if quest_id != "":
 			var quest: Dictionary = QuestDB.get_quest(quest_id)
 			GameData.active_quests[quest_id]["progress"] = 1
@@ -933,6 +944,13 @@ func _interact_beacon(beacon_name: String, beacon_pos: Vector2i) -> void:
 		_check_all_beacons_event()
 	else:
 		_update_hud_with_msg("The %s beacon burns bright against the dark." % beacon_name.replace("_", " "))
+
+func _consume_beacon_lens_radius() -> int:
+	var charges: int = GameData.get_meta("beacon_lens_charges", 0)
+	if charges <= 0:
+		return FOG_BEACON_RADIUS
+	GameData.set_meta("beacon_lens_charges", charges - 1)
+	return FOG_BEACON_RADIUS + 2
 
 func _active_beacon_quest_for(beacon_name: String) -> String:
 	for qid: String in GameData.active_quests:
@@ -1064,6 +1082,16 @@ func _try_gather_herbs(target: Vector2i) -> void:
 	if herbs.is_empty():
 		_update_hud_with_msg("Nothing to gather here.")
 		return
+	var site_key := _gather_site_key("herb", target)
+	var site: Dictionary = GameData.gather_sites.get(site_key, {})
+	var next_available: float = site.get("next_available", 0.0)
+	if GameData.play_time < next_available:
+		var days_left := ceili((next_available - GameData.play_time) / GameData.DAY_CYCLE_SECONDS)
+		_update_hud_with_msg("This patch has been picked clean. Try again in %d day%s." % [days_left, "" if days_left == 1 else "s"])
+		return
+	if not GameData.is_growing_season():
+		_update_hud_with_msg("Nothing is growing here in %s." % GameData.get_season_name())
+		return
 	var skill_bonus := GameData.get_skill_bonus("alchemy")
 	var chance := 0.4 + skill_bonus * 0.1
 	if rng.randf() > chance:
@@ -1073,6 +1101,12 @@ func _try_gather_herbs(target: Vector2i) -> void:
 	var info: Dictionary = AlchemyDB.HERB_INFO[herb_id]
 	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
 	GameData.add_herb(info["id"], count)
+	GameData.gather_sites[site_key] = {
+		"kind": "herb",
+		"last_gathered": GameData.play_time,
+		"next_available": GameData.play_time + HERB_REGROW_DAYS * GameData.DAY_CYCLE_SECONDS,
+		"item": info["id"],
+	}
 	GameData.track_skill_use("alchemy", 1)
 	_update_hud_with_msg("Gathered %s x%d!" % [info["name"], count])
 
@@ -1081,6 +1115,10 @@ func _try_gather_materials(target: Vector2i) -> void:
 	var materials := TinkerDB.materials_for_tile(tile)
 	if materials.is_empty():
 		_update_hud_with_msg("Nothing to scavenge here.")
+		return
+	var site_key := _gather_site_key("material", target)
+	if GameData.gather_sites.get(site_key, {}).get("depleted", false):
+		_update_hud_with_msg("You already picked this spot clean.")
 		return
 	var skill_bonus := GameData.get_skill_bonus("tinkering")
 	var chance := 0.4 + skill_bonus * 0.1
@@ -1091,8 +1129,17 @@ func _try_gather_materials(target: Vector2i) -> void:
 	var info: Dictionary = TinkerDB.get_material_info(mat_id)
 	var count := 1 + (1 if rng.randf() < 0.3 + skill_bonus * 0.05 else 0)
 	GameData.add_material(info["id"], count)
+	GameData.gather_sites[site_key] = {
+		"kind": "material",
+		"depleted": true,
+		"last_gathered": GameData.play_time,
+		"item": info["id"],
+	}
 	GameData.track_skill_use("tinkering", 1)
 	_update_hud_with_msg("Scavenged %s x%d!" % [info["name"], count])
+
+func _gather_site_key(kind: String, target: Vector2i) -> String:
+	return "%s:%d,%d" % [kind, target.x, target.y]
 
 
 # ── Process ────────────────────────────────────────────────────────────────

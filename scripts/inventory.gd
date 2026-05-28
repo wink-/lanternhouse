@@ -17,7 +17,7 @@ const ItemDB := preload("res://scripts/data/items.gd")
 
 @onready var content: RichTextLabel = $Panel/Content
 var active: bool = false
-var tab: int = 0  # 0=consumables, 1=weapons, 2=armor, 3=trade
+var tab: int = 0  # 0=consumables, 1=weapons, 2=armor, 3=tools, 4=trade
 var selected_idx: int = 0
 var last_message: String = ""
 
@@ -25,7 +25,7 @@ var last_message: String = ""
 var equip_selecting: bool = false  # picking party member to equip
 var use_confirm: bool = false      # confirming item use
 
-const TAB_NAMES := ["Consumables", "Weapons", "Armor", "Trade Goods"]
+const TAB_NAMES := ["Consumables", "Weapons", "Armor", "Tools", "Trade Goods"]
 
 func _ready() -> void:
 	hide()
@@ -77,7 +77,8 @@ func _item_count() -> int:
 		0: return 2 + _crafted_consumables().size()
 		1: return GameData.weapons_bag.size()
 		2: return GameData.armor_bag.size()
-		3: return GameData.trade_goods.size() + _crafted_trade_goods().size()
+		3: return _crafted_tools().size()
+		4: return GameData.trade_goods.size() + _crafted_trade_goods().size()
 	return 0
 
 func _update() -> void:
@@ -100,7 +101,8 @@ func _update() -> void:
 		0: _draw_consumables(lines)
 		1: _draw_weapons(lines)
 		2: _draw_armor(lines)
-		3: _draw_trade_goods(lines)
+		3: _draw_tools(lines)
+		4: _draw_trade_goods(lines)
 
 	lines.append("")
 	if equip_selecting:
@@ -179,6 +181,20 @@ func _draw_trade_goods(lines: Array) -> void:
 		if count > 0:
 			lines.append("%s%s%s %-18s Value: %dc x%d%s" % [marker, color_start, ctg["name"], ctg.get("sell_base", 0), count, color_end])
 
+func _draw_tools(lines: Array) -> void:
+	var tools := _crafted_tools()
+	if tools.is_empty():
+		lines.append("No crafted tools. Make them at Fenn's workshop or a home workbench.")
+		return
+	for i in range(tools.size()):
+		var tool: Dictionary = tools[i]
+		var marker := "▶" if i == selected_idx else " "
+		var color_start := "[color=#f0d46a]" if i == selected_idx else ""
+		var color_end := "[/color]" if i == selected_idx else ""
+		var count := _crafted_count(tool["id"], "tool")
+		lines.append("%s%s%-18s x%d%s" % [marker, color_start, tool["name"], count, color_end])
+		lines.append("    %s" % tool.get("desc", ""))
+
 func _crafted_consumables() -> Array:
 	return GameData.crafted_items.filter(func(c): return c.get("type") == "consumable")
 
@@ -187,6 +203,15 @@ func _crafted_trade_goods() -> Array:
 	var result: Array = []
 	for c: Dictionary in GameData.crafted_items:
 		if c.get("type") == "trade" and not seen.has(c["id"]):
+			seen[c["id"]] = true
+			result.append(c)
+	return result
+
+func _crafted_tools() -> Array:
+	var seen: Dictionary = {}
+	var result: Array = []
+	for c: Dictionary in GameData.crafted_items:
+		if c.get("type") == "tool" and not seen.has(c["id"]):
 			seen[c["id"]] = true
 			result.append(c)
 	return result
@@ -219,7 +244,8 @@ func _try_use_item() -> void:
 		0: _use_consumable()
 		1: _start_equip_weapon()
 		2: _start_equip_armor()
-		3: _use_trade_good()
+		3: _use_tool()
+		4: _use_trade_good()
 
 func _use_consumable() -> void:
 	var crafted_count := _crafted_consumables().size()
@@ -394,3 +420,49 @@ func _use_trade_good() -> void:
 			_update()
 		_:
 			pass
+
+func _use_tool() -> void:
+	var tools := _crafted_tools()
+	if selected_idx < 0 or selected_idx >= tools.size():
+		return
+	var target_tool: Dictionary = tools[selected_idx]
+	for ci in range(GameData.crafted_items.size()):
+		var tool: Dictionary = GameData.crafted_items[ci]
+		if tool.get("type") != "tool" or tool.get("id", "") != target_tool.get("id", ""):
+			continue
+		var effect: Dictionary = tool.get("effect", {})
+		match effect.get("type", ""):
+			"heal":
+				var tg: Variant = _lowest_hp_alive()
+				if tg == null or tg["hp"] >= tg["max_hp"]:
+					last_message = "[color=gray]No one needs that right now.[/color]"
+					_update()
+					return
+				GameData.crafted_items.remove_at(ci)
+				var heal: int = mini(effect.get("hp", 18), tg["max_hp"] - tg["hp"])
+				tg["hp"] += heal
+				last_message = "[color=green]Used %s on %s. Restored %d HP.[/color]" % [tool["name"], tg["name"], heal]
+			"full_heal":
+				GameData.crafted_items.remove_at(ci)
+				GameData.full_heal()
+				last_message = "[color=green]Used %s. Party fully restored.[/color]" % tool["name"]
+			"fog_cover":
+				GameData.crafted_items.remove_at(ci)
+				GameData.set_meta("fog_active", true)
+				GameData.set_meta("fog_timer", effect.get("timer", 180.0))
+				last_message = "[color=green]%s burns steady. Heavy fog thins around the party.[/color]" % tool["name"]
+			"beacon_lens":
+				GameData.crafted_items.remove_at(ci)
+				GameData.set_meta("beacon_lens_charges", GameData.get_meta("beacon_lens_charges", 0) + 1)
+				last_message = "[color=green]Beacon Lens tuned. The next beacon will reveal farther.[/color]"
+			"trap":
+				GameData.crafted_items.remove_at(ci)
+				GameData.set_meta("trap_kit_active", true)
+				last_message = "[color=green]Trap Kit set. The next battle starts with an ambush trap.[/color]"
+			"passive":
+				last_message = "[color=gray]%s is carried automatically when needed.[/color]" % tool["name"]
+			_:
+				last_message = "[color=gray]That tool has no field use yet.[/color]"
+		selected_idx = mini(selected_idx, max(_item_count() - 1, 0))
+		_update()
+		return

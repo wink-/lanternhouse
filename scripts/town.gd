@@ -23,19 +23,6 @@ const NPC_FACTION_MAP := {
 
 const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
-const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
-const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
-const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
-const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
-const SHOP_SIGN_PATH := "res://assets/sprites/town/shops/signs/%s.png"
-const SHOP_AWNING_PATH := "res://assets/sprites/town/shops/awnings/%s.png"
-const SHOP_BUILDING_PATH := "res://assets/sprites/town/buildings/%s.png"
-const MODULAR_BUILDING_ATLAS_PATH := "res://assets/sprites/town/buildings/modular_building_atlas.png"
-const TOWN_PROP_PATH := "res://assets/sprites/town/props/%s.png"
-const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
-const NPC_ROTATION_PATH := "res://assets/sprites/characters/town_npcs/%s/rotations/%s.png"
-const CAT_ROTATION_PATH := "res://assets/sprites/characters/cat/rotations/%s.png"
-const CAT_WALK_PATH := "res://assets/sprites/characters/cat/walk/%s/%d.png"
 const CAT_HOME := Vector2i(18, 18)
 const CAT_WANDER_RADIUS := 5
 const CAT_FRAME_TIME := 0.12
@@ -169,6 +156,21 @@ const BUILDING_DOORS := {
 	Vector2i(34, 17): "healer",
 	Vector2i(35, 17): "healer",
 }
+const BUILDING_INTERACTIONS := {
+	"elder_hall": {"npc": "elder", "name": "Elder Hall", "door_offset": Vector2i(3, 4), "door_width": 3},
+	"weapon_shop": {"npc": "weapon_merchant", "name": "Weapon Shop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"armor_shop": {"npc": "armor_merchant", "name": "Armor Shop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"inn": {"npc": "innkeeper", "name": "Inn", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"tavern": {"npc": "tavern_keeper", "name": "Tavern", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"workshop": {"npc": "tinkerer", "name": "Workshop", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"chapel": {"npc": "healer", "name": "Chapel", "door_offset": Vector2i(2, 3), "door_width": 3},
+}
+const SOUTH_FACING_BUILDING_OVERRIDES := {
+	"weapon_shop": true,
+	"armor_shop": true,
+	"inn": true,
+	"chapel": true,
+}
 const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
 	{"id": "elder_hall", "grid": Vector2i(14, 1), "size": Vector2i(7, 5), "plaque": "plaque_blank", "public": true, "fallback_region": Rect2i(Vector2i(219, 16), Vector2i(172, 72)), "fallback_scale": 0.5},
@@ -258,6 +260,7 @@ const WANDER_RADIUS := 3
 func _ready() -> void:
 	_load_town_atlas()
 	_load_quiet_village_assets()
+	_apply_return_spawn()
 	_draw_map()
 	_draw_buildings()
 	_draw_props()
@@ -282,18 +285,15 @@ func _ready() -> void:
 	_show_arrival_hint()
 
 func _load_town_atlas() -> void:
-	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
-		push_warning("Town atlas missing: %s" % TOWN_ATLAS_PATH)
-		return
-	_town_atlas = _load_png_texture(TOWN_ATLAS_PATH)
+	_town_atlas = SpriteCache.get_asset("town.atlas")
 	if not _town_atlas:
-		push_warning("Town atlas could not be loaded: %s" % TOWN_ATLAS_PATH)
+		push_warning("Town atlas could not be loaded from asset registry.")
 
 func _load_quiet_village_assets() -> void:
-	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
-	_quiet_buildings = _load_png_texture(QUIET_BUILDINGS_PATH)
-	_quiet_props = _load_png_texture(QUIET_PROPS_PATH)
-	_modular_building_atlas = _load_png_texture(MODULAR_BUILDING_ATLAS_PATH)
+	_town_ground = SpriteCache.get_asset("town.ground")
+	_quiet_buildings = SpriteCache.get_asset("town.vendor.buildings")
+	_quiet_props = SpriteCache.get_asset("town.vendor.props")
+	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -435,11 +435,11 @@ func _add_modular_building_tile(parent: Node2D, tile_id: String, local_grid: Vec
 func _load_shop_building(building_id: String) -> Texture2D:
 	if _shop_building_textures.has(building_id):
 		return _shop_building_textures[building_id]
-	var path: String = SHOP_BUILDING_PATH % building_id
-	if not FileAccess.file_exists(path):
-		_shop_building_textures[building_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture: Texture2D
+	if SOUTH_FACING_BUILDING_OVERRIDES.has(building_id):
+		texture = SpriteCache.get_sprite("town/shops/buildings/%s.png" % building_id)
+	else:
+		texture = SpriteCache.town_building(building_id)
 	_shop_building_textures[building_id] = texture
 	return texture
 
@@ -483,11 +483,7 @@ func _draw_shop_awnings() -> void:
 func _load_shop_awning(awning_id: String) -> Texture2D:
 	if _shop_awning_textures.has(awning_id):
 		return _shop_awning_textures[awning_id]
-	var path: String = SHOP_AWNING_PATH % awning_id
-	if not FileAccess.file_exists(path):
-		_shop_awning_textures[awning_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_awning(awning_id)
 	_shop_awning_textures[awning_id] = texture
 	return texture
 
@@ -496,11 +492,6 @@ func _draw_props() -> void:
 		_draw_town_props()
 		_draw_shop_signs()
 		return
-	if _quiet_props:
-		_add_prop(Vector2i(21, 12), Rect2i(Vector2i(100, 39), Vector2i(36, 36)), 0.55)
-		_add_prop(Vector2i(13, 8), Rect2i(Vector2i(65, 24), Vector2i(28, 17)), 0.7)
-		_add_prop(Vector2i(23, 8), Rect2i(Vector2i(18, 41), Vector2i(26, 27)), 0.6)
-		_add_prop(Vector2i(8, 20), Rect2i(Vector2i(0, 108), Vector2i(38, 10)), 0.8)
 	_draw_town_props()
 	_draw_shop_signs()
 
@@ -532,11 +523,7 @@ func _draw_shop_signs() -> void:
 func _load_shop_sign(sign_id: String) -> Texture2D:
 	if _shop_sign_textures.has(sign_id):
 		return _shop_sign_textures[sign_id]
-	var path: String = SHOP_SIGN_PATH % sign_id
-	if not FileAccess.file_exists(path):
-		_shop_sign_textures[sign_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_sign(sign_id)
 	_shop_sign_textures[sign_id] = texture
 	return texture
 
@@ -558,11 +545,7 @@ func _draw_town_props() -> void:
 func _load_town_prop(prop_id: String) -> Texture2D:
 	if _town_prop_textures.has(prop_id):
 		return _town_prop_textures[prop_id]
-	var path: String = TOWN_PROP_PATH % prop_id
-	if not FileAccess.file_exists(path):
-		_town_prop_textures[prop_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_prop(prop_id)
 	_town_prop_textures[prop_id] = texture
 	return texture
 
@@ -607,8 +590,7 @@ func _load_npc_textures() -> void:
 	for npc_id: String in NPC_IDS:
 		if _npc_idle_textures.has(npc_id):
 			continue
-		var path: String = NPC_ROTATION_PATH % [npc_id, "south"]
-		_npc_idle_textures[npc_id] = _load_png_texture(path) if FileAccess.file_exists(path) else null
+		_npc_idle_textures[npc_id] = SpriteCache.character_rotation("town_npcs/%s" % npc_id, "south")
 
 func _make_solid_texture(color: Color) -> Texture2D:
 	var image := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
@@ -710,10 +692,10 @@ func _draw_cat() -> void:
 
 func _load_cat_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		_cat_idle_textures[dir_name] = _load_png_texture(CAT_ROTATION_PATH % dir_name)
+		_cat_idle_textures[dir_name] = SpriteCache.character_rotation("cat", dir_name)
 		var frames: Array = []
 		for i in range(6):
-			var frame_tex := _load_png_texture(CAT_WALK_PATH % [dir_name, i])
+			var frame_tex := SpriteCache.character_walk_frame("cat", dir_name, i)
 			if frame_tex:
 				frames.append(frame_tex)
 		_cat_walk_frames[dir_name] = frames
@@ -819,8 +801,7 @@ func _update_player_texture() -> void:
 
 func _load_player_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		var path: String = PLAYER_ROTATION_PATH % dir_name
-		_player_idle_textures[dir_name] = _load_png_texture(path) if FileAccess.file_exists(path) else null
+		_player_idle_textures[dir_name] = SpriteCache.character_rotation("player", dir_name)
 
 func _configure_camera() -> void:
 	if not camera:
@@ -995,10 +976,12 @@ func _try_move(dir: Vector2i) -> void:
 		return
 	var next := pos + dir
 	if _is_blocked(next):
+		_update_hud()
 		return
 	pos = next
 	_update_player()
 	_check_exit()
+	_update_hud()
 
 func _is_blocked(grid: Vector2i) -> bool:
 	if grid.x < 0 or grid.x >= MAP[0].length() or grid.y < 0 or grid.y >= MAP.size():
@@ -1033,11 +1016,50 @@ func _interact() -> void:
 	if npc == "":
 		_say(_nothing_here_text(target))
 		return
+	if npc == "tinkerer" and (_building_door_at(target) == "tinkerer" or _building_door_at(pos) == "tinkerer"):
+		SceneTransition.change_scene("res://scenes/workshop/workshop.tscn")
+		return
 
 	_start_npc_interaction(npc)
 
+func _apply_return_spawn() -> void:
+	if GameData.has_meta("town_spawn_pos"):
+		pos = GameData.get_meta("town_spawn_pos", pos)
+		GameData.remove_meta("town_spawn_pos")
+	if GameData.has_meta("town_spawn_facing"):
+		facing = GameData.get_meta("town_spawn_facing", facing)
+		GameData.remove_meta("town_spawn_facing")
+
 func _building_door_at(grid: Vector2i) -> String:
-	return BUILDING_DOORS.get(grid, "")
+	var exact: String = BUILDING_DOORS.get(grid, "")
+	if exact != "":
+		return exact
+	for building_data: Dictionary in TOWN_BUILDINGS:
+		var building_id: String = building_data["id"]
+		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		if interaction.is_empty():
+			continue
+		var door_offset: Vector2i = interaction["door_offset"]
+		var door_width: int = interaction.get("door_width", 1)
+		var door_start: Vector2i = building_data["grid"] + door_offset
+		for dx in range(door_width):
+			if grid == door_start + Vector2i(dx, 0):
+				return interaction["npc"]
+	return ""
+
+func _door_label_at(grid: Vector2i) -> String:
+	for building_data: Dictionary in TOWN_BUILDINGS:
+		var building_id: String = building_data["id"]
+		var interaction: Dictionary = BUILDING_INTERACTIONS.get(building_id, {})
+		if interaction.is_empty():
+			continue
+		var door_offset: Vector2i = interaction["door_offset"]
+		var door_width: int = interaction.get("door_width", 1)
+		var door_start: Vector2i = building_data["grid"] + door_offset
+		for dx in range(door_width):
+			if grid == door_start + Vector2i(dx, 0):
+				return interaction["name"]
+	return ""
 
 func _nothing_here_text(target: Vector2i) -> String:
 	if target.y < pos.y:
@@ -1631,13 +1653,7 @@ func _try_craft_tinker() -> void:
 		GameData.remove_material(mat_info["id"], recipe["materials"][mat_id])
 	# Add crafted item(s)
 	for _i in range(recipe.get("output_count", 1)):
-		GameData.add_crafted_item({
-			"id": recipe["id"],
-			"name": recipe["name"],
-			"desc": recipe["desc"],
-			"type": "tool",
-			"value": recipe.get("value", 0),
-		})
+		GameData.add_crafted_item(TinkerDB.create_crafted_item(recipe))
 	GameData.track_skill_use("tinkering", 1)
 	_say("[color=green]Crafted %s![/color] %s" % [recipe["name"], recipe["desc"]])
 	tinkering_mode = false
@@ -1701,7 +1717,8 @@ func _try_cook() -> void:
 			m["hp"] += actual
 			healed_names.append("%s +%d" % [m["name"], actual])
 	GameData.track_skill_use("cooking", 1)
-	_say("[color=green]Cooked %s![/color]\n%s" % [item["name"], ", ".join(healed_names)])
+	var buff := GameData.apply_meal_buff(item["name"], hp)
+	_say("[color=green]Cooked %s![/color]\n%s\n[color=#9fc5ff]Well fed: DEF +%d for the next %d battles.[/color]" % [item["name"], ", ".join(healed_names), buff["def"], buff["battles"]])
 	cooking_mode = false
 
 func _handle_exchange_input(keycode: int) -> void:
@@ -2040,4 +2057,28 @@ func _update_hud() -> void:
 			lines.append("Lv%d %s  %d/%d" % [m["level"], m["name"], m["hp"], m["max_hp"]])
 		else:
 			lines.append("Lv%d %s  [KO]" % [m["level"], m["name"]])
+	var prompt := _interaction_prompt()
+	if prompt != "":
+		lines.append("")
+		lines.append(prompt)
 	dialog.text = "[b]Brindlewick[/b]    %s    Tonics: %d\n\n%s" % [GameData.format_money_short(), GameData.tonics, "\n".join(lines)]
+
+func _interaction_prompt() -> String:
+	var target := pos + facing
+	if target == _cat_pos:
+		return "[color=#f0d46a]Interact:[/color] Pet Tabby"
+	var door_npc := _building_door_at(target)
+	var door_label := _door_label_at(target)
+	if door_npc == "":
+		door_npc = _building_door_at(pos)
+		door_label = _door_label_at(pos)
+	if door_npc != "":
+		if door_label == "":
+			door_label = NPCDB.get_npc_name(door_npc)
+		return "[color=#f0d46a]Interact:[/color] Enter %s" % door_label
+	var npc: String = npc_positions.get(target, "")
+	if npc != "":
+		return "[color=#f0d46a]Interact:[/color] Talk to %s" % NPCDB.get_npc_name(npc)
+	if target.y >= MAP.size() - 1 or pos.y >= MAP.size() - 2:
+		return "[color=#f0d46a]Move south:[/color] Leave town"
+	return ""

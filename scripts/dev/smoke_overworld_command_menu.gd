@@ -74,6 +74,7 @@ func _reset_state() -> void:
 	GameData.cleared_encounters.clear()
 	GameData.kill_counts.clear()
 	GameData.gather_counts.clear()
+	GameData.gather_sites.clear()
 	GameData.faction_reputation.clear()
 	GameData.skill_uses.clear()
 	GameData.owned_home = ""

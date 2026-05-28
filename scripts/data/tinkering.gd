@@ -23,56 +23,62 @@ const RECIPES := [
 	{
 		"id": "repair_kit",
 		"name": "Repair Kit",
-		"desc": "Restore 50% of equipment value",
+		"desc": "Restore 18 HP to the most wounded ally",
 		"materials": {TinkerMaterial.SCRAP_METAL: 2, TinkerMaterial.LEATHER_SCRAP: 1},
 		"skill_level": 0,
 		"output_count": 1,
 		"value": 60,
+		"tool_effect": {"type": "heal", "hp": 18},
 	},
 	{
 		"id": "lantern_lens",
 		"name": "Lantern Lens",
-		"desc": "Trade good — sells well to keepers",
+		"desc": "Keeper trade good that sells well",
 		"materials": {TinkerMaterial.GLASS_SHARDS: 3, TinkerMaterial.COPPER_WIRE: 1},
 		"skill_level": 1,
 		"output_count": 1,
 		"value": 80,
+		"item_type": "trade",
 	},
 	{
 		"id": "simple_lockpick",
 		"name": "Simple Lockpick",
-		"desc": "Open locked chests in dungeons",
+		"desc": "Carry for locked chests and future dungeon shortcuts",
 		"materials": {TinkerMaterial.COPPER_WIRE: 2, TinkerMaterial.SCRAP_METAL: 1},
 		"skill_level": 1,
 		"output_count": 2,
 		"value": 30,
+		"tool_effect": {"type": "passive"},
 	},
 	{
 		"id": "beacon_lens",
 		"name": "Beacon Lens",
-		"desc": "Increases beacon reveal radius",
+		"desc": "Tune the Lantern Line for wider fog reveal",
 		"materials": {TinkerMaterial.GLASS_SHARDS: 4, TinkerMaterial.OIL_RESIDUE: 2, TinkerMaterial.COPPER_WIRE: 2},
 		"skill_level": 2,
 		"output_count": 1,
 		"value": 200,
+		"tool_effect": {"type": "beacon_lens"},
 	},
 	{
 		"id": "oil_lantern",
 		"name": "Oil Lantern",
-		"desc": "Permanent fog reduction in a small area",
+		"desc": "Burns away heavy fog cover for a short expedition",
 		"materials": {TinkerMaterial.OIL_RESIDUE: 3, TinkerMaterial.GLASS_SHARDS: 2, TinkerMaterial.WOOD_CHIP: 2},
 		"skill_level": 2,
 		"output_count": 1,
 		"value": 150,
+		"tool_effect": {"type": "fog_cover", "timer": 180.0},
 	},
 	{
 		"id": "master_repair_kit",
 		"name": "Master Repair Kit",
-		"desc": "Fully restore equipment value",
+		"desc": "Fully restore the party's HP",
 		"materials": {TinkerMaterial.SCRAP_METAL: 4, TinkerMaterial.COPPER_WIRE: 2, TinkerMaterial.LEATHER_SCRAP: 2},
 		"skill_level": 3,
 		"output_count": 1,
 		"value": 300,
+		"tool_effect": {"type": "full_heal"},
 	},
 	{
 		"id": "trap_kit",
@@ -82,8 +88,23 @@ const RECIPES := [
 		"skill_level": 1,
 		"output_count": 2,
 		"value": 40,
+		"tool_effect": {"type": "trap"},
 	},
 ]
+
+static func create_crafted_item(recipe: Dictionary) -> Dictionary:
+	var item_type: String = recipe.get("item_type", "tool")
+	var item := {
+		"id": recipe["id"],
+		"name": recipe["name"],
+		"desc": recipe.get("desc", ""),
+		"type": item_type,
+		"value": recipe.get("value", 0),
+		"sell_base": recipe.get("value", 0),
+	}
+	if recipe.has("tool_effect"):
+		item["effect"] = recipe["tool_effect"].duplicate(true)
+	return item
 
 static func available_recipes(skill_level: int) -> Array:
 	return RECIPES.filter(func(r): return r["skill_level"] <= skill_level)

@@ -75,6 +75,7 @@ func _select() -> void:
 			GameData.active_quests.clear()
 			GameData.kill_counts.clear()
 			GameData.gather_counts.clear()
+			GameData.gather_sites.clear()
 			GameData.crafted_items.clear()
 			GameData.herb_bag.clear()
 			GameData.material_bag.clear()

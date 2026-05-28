@@ -58,6 +58,92 @@ Prompt fragment:
 [Environment Type] in a modern 16-bit JRPG pixel art style, top-down 3/4 perspective, grid-aligned modular design, crisp pixel-perfect details, visible vertical depth on walls and structures, defined 1-pixel borders, cluster-shaded stone/wood/grass details, shadows directly beneath structures, readable at gameplay zoom, transparent background for modular objects.
 ```
 
+### Brindlewick Town Building Kit
+
+Use this for the next coherent town environment pack. The goal is not one
+impressive standalone building. The goal is a reusable 3/4 town kit that lets us
+rebuild Brindlewick so the town feels intentional and consistent.
+
+```text
+We need a coherent Lanternhouse town building/environment art pack for Godot.
+
+Target style:
+Modern 16-bit JRPG pixel art, high-fidelity retro remaster, crisp pixel-perfect assets, hand-placed pixel feel, sharp 1px dark outlines, clear color clusters, controlled texture detail readable at gameplay zoom. No anti-aliasing.
+
+Perspective:
+Towns, dungeons, and interiors are top-down 3/4 JRPG exploration perspective, like classic SNES/PS1-era JRPG towns. Do NOT make flat top-down icons and do NOT make front-facing building stamps. Buildings must show roof depth, front facade, side hints, and a visible doorway at the base.
+
+Negative prompt:
+No 3D render, no photorealism, no vector art, no smooth gradients, no blurry textures, no modern bloom, no smooth lines, no NES/8-bit style, no fake unreadable text baked into signs.
+
+Game constraints:
+- Godot 4 project
+- Base tile size: 16x16
+- Current viewport: 1280x720
+- Town maps use grid movement
+- Buildings should align to 16x16 grid thresholds
+- Transparent PNGs
+- Doors must visibly align to a walkable 16x16 entrance tile at the building base/front facade
+- Assets should be modular enough to compose a cohesive town scene
+
+Theme:
+Lanternhouse is a warm lanternlit fantasy JRPG. Brindlewick is the first town: cozy, practical, slightly rustic, candlelit/lanternlit, with stone, wood, mossy grass, warm windows, and handmade shopfronts.
+
+Please generate a coherent town environment pack, all matching the same style and scale:
+
+1. Public buildings, top-down 3/4:
+- Elder Hall / town hall
+- Weapon shop
+- Armor shop
+- Inn
+- Tavern
+- Workshop / tinkerer
+- Chapel / healer
+- Generic small house
+- Generic larger house
+
+2. Building details:
+- Door/stoop pieces
+- Small stairs
+- Foundation shadows
+- Window variants
+- Roof trim
+- Optional awnings without baked text
+
+3. Ground/path tiles:
+- Cobblestone plaza tiles
+- Packed dirt road tiles
+- Grass-to-path transition tiles
+- Stone path borders
+- Small plaza edge/corner tiles
+- Doorstep threshold tiles
+
+4. Props:
+- Lantern post
+- Wooden signpost with no text
+- Notice board with no readable text
+- Bench
+- Barrel pair
+- Crate stack
+- Flower box
+- Herb planter
+- Well
+- Small fence pieces
+
+Output organization:
+Save original outputs under:
+assets/sprites/town/buildings/
+assets/sprites/town/ground/
+assets/sprites/town/props/
+
+Please keep a simple manifest listing:
+- asset name
+- intended grid footprint in 16x16 tiles
+- suggested entrance tile offset
+- intended scale
+- notes about where it belongs in town
+```
+
 ### Overworld Map
 
 Use for the world navigation map and major map icons.

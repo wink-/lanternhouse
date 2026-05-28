@@ -76,6 +76,7 @@ var explored_tiles: Dictionary = {}  # str(Vector2i) → true
 var active_quests: Dictionary = {}   # quest_id → {"status": "active"/"complete", "progress": int}
 var kill_counts: Dictionary = {}     # enemy_name → int
 var gather_counts: Dictionary = {}  # gather_type → int (herb, fish, etc.)
+var gather_sites: Dictionary = {}  # "type:Vector2i" -> site state
 # ── Play time tracking ────────────────────────────────────────────────────
 var play_time: float = 0.0
 
@@ -168,6 +169,8 @@ func get_property_tax() -> int:
 	return int(get_home_price(owned_home) * PROPERTY_TAX_RATE * maxi(lit_count - 1, 0))
 
 const DAY_CYCLE_SECONDS := 300.0
+const SEASON_LENGTH_DAYS := 30
+const YEAR_LENGTH_DAYS := SEASON_LENGTH_DAYS * 4
 
 func get_day_phase() -> String:
 	var t := fmod(play_time, DAY_CYCLE_SECONDS) / DAY_CYCLE_SECONDS
@@ -181,6 +184,21 @@ func get_day_phase() -> String:
 		return "dusk"
 	else:
 		return "night"
+
+func get_current_day() -> int:
+	return int(floor(play_time / DAY_CYCLE_SECONDS))
+
+func get_season_name() -> String:
+	var season_idx := int(floor(float(get_current_day() % YEAR_LENGTH_DAYS) / SEASON_LENGTH_DAYS))
+	match season_idx:
+		0: return "spring"
+		1: return "summer"
+		2: return "autumn"
+		_: return "winter"
+
+func is_growing_season() -> bool:
+	var season := get_season_name()
+	return season == "spring" or season == "summer"
 
 # Called once when the game first starts and party is empty.
 # Creates 4 starter characters from class templates.
@@ -234,6 +252,17 @@ func get_effective_def(char_index: int) -> int:
 	if m.get("wage", 0) > 0 and m.get("loyalty", 50) >= 80:
 		base = int(base * 1.1)
 	return base
+
+func get_equipped_fishing_bonus() -> int:
+	var bonus := 0
+	for wi in equipped_weapon:
+		if wi >= 0 and wi < weapons_bag.size():
+			var weapon: Dictionary = weapons_bag[wi]
+			if weapon.has("fishing_bonus"):
+				bonus += weapon.get("fishing_bonus", 0)
+			elif "pole" in str(weapon.get("id", "")).to_lower() or "pole" in str(weapon.get("name", "")).to_lower():
+				bonus += 1
+	return bonus
 
 func full_heal() -> void:
 	for m in party:
@@ -362,6 +391,14 @@ func get_skill_bonus(skill_name: String) -> int:
 	if uses >= 30: return 2
 	if uses >= 10: return 1
 	return 0
+
+func apply_meal_buff(meal_name: String, heal_value: int) -> Dictionary:
+	var def_bonus: int = clampi(1 + int(heal_value / 40) + get_skill_bonus("cooking"), 1, 6)
+	var battles := 3
+	set_meta("meal_buff_name", meal_name)
+	set_meta("meal_buff_def", def_bonus)
+	set_meta("meal_buff_battles", battles)
+	return {"name": meal_name, "def": def_bonus, "battles": battles}
 
 # ── Faction helpers ─────────────────────────────────────────────────────────
 func get_faction_rep(faction: int) -> int:

@@ -69,6 +69,7 @@ func save_game() -> bool:
 			"material_bag": GameData.material_bag,
 			"crafted_items": GameData.crafted_items,
 			"gather_counts": GameData.gather_counts,
+			"gather_sites": GameData.gather_sites,
 			"property_market_mod": GameData.property_market_mod,
 			"market_cycle": GameData.market_cycle,
 		"quest_flags": {
@@ -88,10 +89,16 @@ func save_game() -> bool:
 			"heal_casts": GameData.get_meta("heal_casts", 0),
 			"roster_pool": GameData.get_meta("roster_pool", []),
 			"cave_deep": GameData.get_meta("cave_deep", false),
+			"cave_claimed_chests": GameData.get_meta("cave_claimed_chests", []),
 			"deep_boss_active": GameData.get_meta("deep_boss_active", false),
 			"endgame_choice": GameData.get_meta("endgame_choice", ""),
 			"fog_active": GameData.get_meta("fog_active", false),
 			"fog_timer": GameData.get_meta("fog_timer", 0.0),
+			"trap_kit_active": GameData.get_meta("trap_kit_active", false),
+			"beacon_lens_charges": GameData.get_meta("beacon_lens_charges", 0),
+			"meal_buff_name": GameData.get_meta("meal_buff_name", ""),
+			"meal_buff_def": GameData.get_meta("meal_buff_def", 0),
+			"meal_buff_battles": GameData.get_meta("meal_buff_battles", 0),
 			"home_garden_timer": GameData.get_meta("home_garden_timer", 0.0),
 		},
 		"timestamp": Time.get_datetime_string_from_system(),
@@ -179,6 +186,7 @@ func load_game() -> bool:
 	GameData.material_bag = data.get("material_bag", {})
 	GameData.crafted_items = data.get("crafted_items", [])
 	GameData.gather_counts = data.get("gather_counts", {})
+	GameData.gather_sites = data.get("gather_sites", {})
 	GameData.property_market_mod = data.get("property_market_mod", 1.0)
 	GameData.market_cycle = data.get("market_cycle", 0)
 
@@ -199,10 +207,16 @@ func load_game() -> bool:
 	GameData.set_meta("heal_casts", quest_flags.get("heal_casts", 0))
 	GameData.set_meta("roster_pool", quest_flags.get("roster_pool", []))
 	GameData.set_meta("cave_deep", quest_flags.get("cave_deep", false))
+	GameData.set_meta("cave_claimed_chests", quest_flags.get("cave_claimed_chests", []))
 	GameData.set_meta("deep_boss_active", quest_flags.get("deep_boss_active", false))
 	GameData.set_meta("endgame_choice", quest_flags.get("endgame_choice", ""))
 	GameData.set_meta("fog_active", quest_flags.get("fog_active", false))
 	GameData.set_meta("fog_timer", quest_flags.get("fog_timer", 0.0))
+	GameData.set_meta("trap_kit_active", quest_flags.get("trap_kit_active", false))
+	GameData.set_meta("beacon_lens_charges", quest_flags.get("beacon_lens_charges", 0))
+	GameData.set_meta("meal_buff_name", quest_flags.get("meal_buff_name", ""))
+	GameData.set_meta("meal_buff_def", quest_flags.get("meal_buff_def", 0))
+	GameData.set_meta("meal_buff_battles", quest_flags.get("meal_buff_battles", 0))
 	GameData.set_meta("home_garden_timer", quest_flags.get("home_garden_timer", 0.0))
 
 	print("Game loaded: ", SAVE_DIR + SAVE_FILE)

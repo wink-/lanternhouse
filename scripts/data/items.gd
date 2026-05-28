@@ -21,6 +21,7 @@ const TONIC_HEAL := 20
 static func weapon_list() -> Array:
 	return [
 		{"id":"wooden_sword",  "name":"Wooden Sword",  "atk":1,  "price":15},
+		{"id":"fishing_pole",  "name":"Fishing Pole",  "atk":0,  "price":35, "fishing_bonus":2},
 		{"id":"short_sword",   "name":"Short Sword",   "atk":3,  "price":50},
 		{"id":"long_sword",    "name":"Long Sword",    "atk":5,  "price":140},
 		{"id":"broad_sword",   "name":"Broad Sword",   "atk":7,  "price":350},
