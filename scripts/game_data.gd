@@ -253,6 +253,17 @@ func get_effective_def(char_index: int) -> int:
 		base = int(base * 1.1)
 	return base
 
+func get_equipped_fishing_bonus() -> int:
+	var bonus := 0
+	for wi in equipped_weapon:
+		if wi >= 0 and wi < weapons_bag.size():
+			var weapon: Dictionary = weapons_bag[wi]
+			if weapon.has("fishing_bonus"):
+				bonus += weapon.get("fishing_bonus", 0)
+			elif "pole" in str(weapon.get("id", "")).to_lower() or "pole" in str(weapon.get("name", "")).to_lower():
+				bonus += 1
+	return bonus
+
 func full_heal() -> void:
 	for m in party:
 		m["hp"] = m["max_hp"]

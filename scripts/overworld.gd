@@ -872,15 +872,29 @@ func _interact() -> void:
 	elif tile == "h":
 		_enter_brindlewick()
 	elif FishDB.can_fish(tile):
-		var zone := FishDB.zone_for_tile(tile)
-		if fishing_screen:
-			fishing_screen.open(zone)
+		_try_start_fishing(target)
 	elif AlchemyDB.can_gather(tile):
 		_try_gather_herbs(target)
 	elif TinkerDB.can_gather(tile):
 		_try_gather_materials(target)
 	else:
 		_update_hud_with_msg("Nothing here.")
+
+func _try_start_fishing(target: Vector2i) -> void:
+	if not _can_fish_from(pos, target):
+		_update_hud_with_msg("You need to stand beside open water to fish.")
+		return
+	var zone := FishDB.zone_for_tile(_tile(target))
+	if fishing_screen:
+		fishing_screen.open(zone)
+
+func _can_fish_from(standing: Vector2i, target: Vector2i) -> bool:
+	var target_tile := _tile(target)
+	if not FishDB.can_fish(target_tile):
+		return false
+	if target_tile == "~":
+		return true
+	return _water_neighbor_mask(standing) > 0 or _water_neighbor_mask(target) > 0
 
 func _interact_current_tile() -> bool:
 	var tile := _tile(pos)

@@ -62,6 +62,7 @@ var fish_state: String = "idle"
 var fish_reel: int = 0
 var fish_target: int = 5
 var current_fish: Dictionary = {}
+var fishing_pole_bonus: int = 0
 var rng := RandomNumberGenerator.new()
 
 @onready var map_layer: Node2D = $MapLayer
@@ -251,6 +252,7 @@ func _start_fishing(zone: int) -> void:
 	fish_timer = 0.0
 	fish_reel = 0
 	current_fish = {}
+	fishing_pole_bonus = GameData.get_equipped_fishing_bonus()
 	GameData.set_meta("dock_fishing_zone", zone)
 	_update_fishing_display()
 
@@ -260,7 +262,7 @@ func _update_fishing(delta: float) -> void:
 			fish_timer -= delta
 			if fish_timer <= 0:
 				fish_state = "waiting"
-				fish_timer = randf_range(2.0, 6.0)
+				fish_timer = maxf(0.75, randf_range(2.0, 6.0) - fishing_pole_bonus * 0.35)
 		"waiting":
 			fish_timer -= delta
 			if fish_timer <= 0:
@@ -293,9 +295,9 @@ func _try_bite() -> void:
 	if current_fish.is_empty():
 		current_fish = available[0]
 	fish_state = "bite"
-	fish_timer = 2.5
+	fish_timer = 2.5 + fishing_pole_bonus * 0.25
 	fish_reel = 0
-	fish_target = mini(3 + int(current_fish["rarity"] * 20), 12)
+	fish_target = mini(maxi(2, 3 + int(current_fish["rarity"] * 20) - fishing_pole_bonus), 12)
 
 func _handle_fishing_input(keycode: int) -> void:
 	match keycode:
@@ -343,6 +345,8 @@ func _update_fishing_display() -> void:
 	var skill: int = GameData.skill_uses.get("fishing", 0)
 	var tier: String = GameData.get_skill_tier("fishing")
 	lines.append("Skill: %s (%d casts)" % [tier, skill])
+	if fishing_pole_bonus > 0:
+		lines.append("Gear: Fishing pole +%d" % fishing_pole_bonus)
 	lines.append("")
 	match fish_state:
 		"idle":

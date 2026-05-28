@@ -53,7 +53,27 @@ func _run_gather_site_rules() -> bool:
 	if _sum_counts(GameData.material_bag) != material_total:
 		return false
 
+	if not _check_fishing_rules(overworld):
+		return false
+
 	return true
+
+func _check_fishing_rules(overworld: Node) -> bool:
+	GameData.weapons_bag.append({"id": "fishing_pole", "name": "Fishing Pole", "atk": 0, "fishing_bonus": 2})
+	GameData.equipped_weapon[0] = GameData.weapons_bag.size() - 1
+	if GameData.get_equipped_fishing_bonus() < 2:
+		return false
+
+	var water_edge := _find_water_edge(overworld)
+	if water_edge.is_empty():
+		return false
+	if not overworld._can_fish_from(water_edge["standing"], water_edge["target"]):
+		return false
+
+	var dry_spot := _find_dry_fishable_spot(overworld)
+	if dry_spot.is_empty():
+		return false
+	return not overworld._can_fish_from(dry_spot["standing"], dry_spot["target"])
 
 func _find_target(overworld: Node, kind: String) -> Vector2i:
 	for y in range(overworld.MAP_H):
@@ -65,6 +85,34 @@ func _find_target(overworld: Node, kind: String) -> Vector2i:
 			if kind == "material" and TinkerDB.can_gather(tile):
 				return target
 	return Vector2i(-1, -1)
+
+func _find_water_edge(overworld: Node) -> Dictionary:
+	var directions := [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+	for y in range(overworld.MAP_H):
+		for x in range(overworld.MAP_W):
+			var standing := Vector2i(x, y)
+			if overworld._tile(standing) == "~":
+				continue
+			for direction in directions:
+				var target: Vector2i = standing + direction
+				if overworld._tile(target) == "~":
+					return {"standing": standing, "target": target}
+	return {}
+
+func _find_dry_fishable_spot(overworld: Node) -> Dictionary:
+	var directions := [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+	for y in range(overworld.MAP_H):
+		for x in range(overworld.MAP_W):
+			var target := Vector2i(x, y)
+			if not FishDB.can_fish(overworld._tile(target)):
+				continue
+			if overworld._water_neighbor_mask(target) > 0:
+				continue
+			for direction in directions:
+				var standing: Vector2i = target - direction
+				if overworld._tile(standing) != "~" and overworld._water_neighbor_mask(standing) == 0:
+					return {"standing": standing, "target": target}
+	return {}
 
 func _gather_until_site_created(overworld: Node, kind: String, target: Vector2i) -> bool:
 	var key: String = overworld._gather_site_key(kind, target)
@@ -88,6 +136,8 @@ func _reset_state() -> void:
 	GameData._init_party()
 	GameData.herb_bag.clear()
 	GameData.material_bag.clear()
+	GameData.weapons_bag.clear()
+	GameData.equipped_weapon = [-1, -1, -1, -1]
 	GameData.gather_counts.clear()
 	GameData.gather_sites.clear()
 	GameData.skill_uses = {"alchemy": 30, "tinkering": 30}

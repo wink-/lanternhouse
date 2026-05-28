@@ -11,6 +11,7 @@ var reel_progress: int = 0
 var reel_target: int = 5
 var current_fish: Dictionary = {}
 var zone: int = FishDB.Zone.COAST
+var pole_bonus: int = 0
 
 signal fish_caught(fish_id: String)
 
@@ -21,6 +22,7 @@ func _ready() -> void:
 func open(fishing_zone: int) -> void:
 	active = true
 	zone = fishing_zone
+	pole_bonus = GameData.get_equipped_fishing_bonus()
 	state = "idle"
 	_update()
 	show()
@@ -38,7 +40,7 @@ func _process(delta: float) -> void:
 			cast_timer -= delta
 			if cast_timer <= 0:
 				state = "waiting"
-				cast_timer = randf_range(2.0, 6.0)
+				cast_timer = maxf(0.75, randf_range(2.0, 6.0) - pole_bonus * 0.35)
 				_update()
 		"waiting":
 			cast_timer -= delta
@@ -72,9 +74,9 @@ func _try_bite() -> void:
 	if current_fish.is_empty():
 		current_fish = available[0]
 	state = "bite"
-	cast_timer = 2.5
+	cast_timer = 2.5 + pole_bonus * 0.25
 	reel_progress = 0
-	reel_target = 3 + int(current_fish["rarity"] * 20)
+	reel_target = maxi(2, 3 + int(current_fish["rarity"] * 20) - pole_bonus)
 	reel_target = mini(reel_target, 12)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -141,6 +143,8 @@ func _update() -> void:
 	var level := _skill_level(skill)
 	var tier: String = GameData.get_skill_tier("fishing")
 	lines.append("Skill: %s (%d casts)" % [tier, skill])
+	if pole_bonus > 0:
+		lines.append("Gear: Fishing pole +%d" % pole_bonus)
 	lines.append("")
 
 	match state:
