@@ -7,13 +7,9 @@
 # script doesn't know how the shop works, and the shop doesn't know how the
 # town map is drawn. They communicate through GameData (shared state) and
 # GameData.set_meta()/get_meta() (one-time messages like "shop_type=weapons").
+@tool
 extends Node2D
 
-const NPCDB := preload("res://scripts/data/npcs.gd")
-const AlchemyDB := preload("res://scripts/data/alchemy.gd")
-const TinkerDB := preload("res://scripts/data/tinkering.gd")
-const FactionDB := preload("res://scripts/data/factions.gd")
-const QuestDB := preload("res://scripts/data/quests.gd")
 const TownLayout := preload("res://scripts/town_layout.gd")
 const NPC_FACTION_MAP := {
 	"keepers": FactionDB.Faction.KEEPERS_GUILD,
@@ -22,7 +18,6 @@ const NPC_FACTION_MAP := {
 	"unlit": FactionDB.Faction.THE_UNLIT,
 }
 
-const CharDB := preload("res://scripts/data/classes.gd")
 const TOWN_LAYOUT_PATH := "res://assets/world/towns/brindlewick.layout.json"
 const TILE_SIZE := 16
 const CAT_HOME := Vector2i(18, 18)
@@ -215,6 +210,25 @@ const TOWN_PROPS := [
 	{"id": "crate_stack", "grid": Vector2i(8, 19), "offset": Vector2(8, 8), "scale": 0.55},
 	{"id": "barrel_pair", "grid": Vector2i(10, 19), "offset": Vector2(8, 8), "scale": 0.58},
 ]
+
+@export var load_layout: bool = false:
+	set(val):
+		if val:
+			_load_layout_from_json()
+		load_layout = false
+
+@export var save_layout: bool = false:
+	set(val):
+		if val:
+			_save_layout_to_json()
+		save_layout = false
+
+@export var clear_preview: bool = false:
+	set(val):
+		if val:
+			_clear_editor_nodes()
+		clear_preview = false
+
 var npc_positions: Dictionary = {}
 var _npc_markers: Dictionary = {}  # npc_id -> Sprite2D
 var _npc_positions_phase: String = ""
@@ -268,6 +282,10 @@ const WANDER_RADIUS := 3
 @onready var dialog: RichTextLabel = $UILayer/Dialog
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+		
+	_clear_editor_nodes()
 	_load_town_atlas()
 	_load_quiet_village_assets()
 	_load_town_layout()
@@ -582,6 +600,7 @@ func _draw_town_props() -> void:
 		sprite.centered = true
 		sprite.position = Vector2(prop_data["grid"] * TILE_SIZE) + prop_data["offset"]
 		sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
+		sprite.rotation = deg_to_rad(prop_data.get("rotation", 0.0))
 		sprite.z_index = 3
 		prop_layer.add_child(sprite)
 
@@ -1062,6 +1081,13 @@ func _interact() -> void:
 	if npc == "tinkerer" and (_building_door_at(target) == "tinkerer" or _building_door_at(pos) == "tinkerer"):
 		SceneTransition.change_scene("res://scenes/workshop/workshop.tscn")
 		return
+	if npc == "realtor" and (_building_door_at(target) == "realtor" or _building_door_at(pos) == "realtor"):
+		var door_grid := target if _building_door_at(target) == "realtor" else pos
+		var house_id := _house_id_at_door(door_grid)
+		GameData.set_meta("house_id", house_id)
+		GameData.set_meta("house_door_pos", Vector2i(door_grid.x, door_grid.y + 1))
+		SceneTransition.change_scene("res://scenes/house_interior/house_interior.tscn")
+		return
 
 	_start_npc_interaction(npc)
 
@@ -1089,6 +1115,21 @@ func _building_door_at(grid: Vector2i) -> String:
 			if grid == door_start + Vector2i(dx, 0):
 				return interaction["npc"]
 	return ""
+
+func _house_id_at_door(grid: Vector2i) -> String:
+	## Returns the building id of the residential house whose door matches grid.
+	for building_data: Dictionary in _town_buildings:
+		var building_id: String = building_data["id"]
+		var interaction: Dictionary = _building_interactions.get(building_id, {})
+		if interaction.get("npc", "") != "realtor":
+			continue
+		var door_offset: Vector2i = interaction["door_offset"]
+		var door_width: int = interaction.get("door_width", 1)
+		var door_start: Vector2i = building_data["grid"] + door_offset
+		for dx in range(door_width):
+			if grid == door_start + Vector2i(dx, 0):
+				return building_id
+	return "small_house"  # fallback
 
 func _door_label_at(grid: Vector2i) -> String:
 	for building_data: Dictionary in _town_buildings:
@@ -2123,3 +2164,271 @@ func _interaction_prompt() -> String:
 	if target.y >= _town_map.size() - 1 or pos.y >= _town_map.size() - 2:
 		return "[color=#f0d46a]Move south:[/color] Leave town"
 	return ""
+
+func _clear_editor_nodes() -> void:
+	for layer in [map_layer, building_layer, prop_layer]:
+		if not layer:
+			continue
+		for child in layer.get_children():
+			child.queue_free()
+
+func _load_layout_from_json() -> void:
+	_clear_editor_nodes()
+	
+	var layout := TownLayout.load_from_file(TOWN_LAYOUT_PATH, _default_town_layout())
+	if layout.is_empty():
+		push_error("Could not load town layout to editor.")
+		return
+	
+	_town_map = layout["map"]
+	_town_buildings = layout["buildings"]
+	_shop_signs = layout["shop_signs"]
+	_shop_awnings = layout["shop_awnings"]
+	_town_props = layout["props"]
+	_building_doors = layout["doors"]
+	_building_interactions = layout["building_interactions"]
+	
+	_load_town_atlas()
+	_load_quiet_village_assets()
+	_draw_map()
+	
+	for building_data: Dictionary in _town_buildings:
+		var building_id: String = building_data["id"]
+		var container := Node2D.new()
+		container.name = "Building_%s" % building_id
+		container.position = Vector2(building_data["grid"] * TILE_SIZE)
+		building_layer.add_child(container)
+		container.owner = get_tree().edited_scene_root
+		
+		var texture: Texture2D = _load_shop_building(building_id)
+		if texture:
+			var sprite := Sprite2D.new()
+			sprite.name = "Sprite"
+			sprite.texture = texture
+			sprite.centered = false
+			sprite.z_index = 2
+			container.add_child(sprite)
+			sprite.owner = get_tree().edited_scene_root
+		elif _quiet_buildings:
+			var sprite := Sprite2D.new()
+			sprite.name = "Sprite"
+			sprite.texture = _quiet_buildings
+			sprite.region_enabled = true
+			sprite.region_rect = building_data["fallback_region"]
+			sprite.centered = false
+			sprite.scale = Vector2(building_data["fallback_scale"], building_data["fallback_scale"])
+			sprite.z_index = 2
+			container.add_child(sprite)
+			sprite.owner = get_tree().edited_scene_root
+			
+		for sign_data: Dictionary in _shop_signs:
+			if sign_data["id"] == building_id:
+				var sign_texture: Texture2D = _load_shop_sign(building_id)
+				if sign_texture:
+					var sign_sprite := Sprite2D.new()
+					sign_sprite.name = "Sign"
+					sign_sprite.texture = sign_texture
+					sign_sprite.centered = true
+					var rel_grid := Vector2(sign_data["grid"] - building_data["grid"])
+					sign_sprite.position = rel_grid * TILE_SIZE + sign_data["offset"]
+					sign_sprite.scale = Vector2(0.68, 0.68)
+					sign_sprite.z_index = 5
+					container.add_child(sign_sprite)
+					sign_sprite.owner = get_tree().edited_scene_root
+					
+		for awning_data: Dictionary in _shop_awnings:
+			if awning_data["id"] == building_id:
+				var awning_texture: Texture2D = _load_shop_awning(building_id)
+				if awning_texture:
+					var awning_sprite := Sprite2D.new()
+					awning_sprite.name = "Awning"
+					awning_sprite.texture = awning_texture
+					awning_sprite.centered = false
+					var rel_grid := Vector2(awning_data["grid"] - building_data["grid"])
+					awning_sprite.position = rel_grid * TILE_SIZE + awning_data["offset"]
+					awning_sprite.z_index = 4
+					container.add_child(awning_sprite)
+					awning_sprite.owner = get_tree().edited_scene_root
+					
+	for prop_data: Dictionary in _town_props:
+		var prop_id: String = prop_data["id"]
+		var texture: Texture2D = _load_town_prop(prop_id)
+		if texture:
+			var sprite := Sprite2D.new()
+			sprite.name = "Prop_%s" % prop_id
+			sprite.texture = texture
+			sprite.centered = true
+			sprite.position = Vector2(prop_data["grid"] * TILE_SIZE) + prop_data["offset"]
+			sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
+			sprite.rotation = deg_to_rad(prop_data.get("rotation", 0.0))
+			sprite.z_index = 3
+			prop_layer.add_child(sprite)
+			sprite.owner = get_tree().edited_scene_root
+
+func _save_layout_to_json() -> void:
+	var file_content := ""
+	if FileAccess.file_exists(TOWN_LAYOUT_PATH):
+		var file := FileAccess.open(TOWN_LAYOUT_PATH, FileAccess.READ)
+		if file:
+			file_content = file.get_as_text()
+			
+	var layout: Dictionary = {}
+	if file_content != "":
+		var parsed = JSON.parse_string(file_content)
+		if parsed is Dictionary:
+			layout = parsed
+			
+	if layout.is_empty():
+		push_error("Could not load original layout file to update it.")
+		return
+		
+	var orig_buildings: Array = layout.get("buildings", [])
+	var new_buildings: Array = []
+	var new_signs: Array = []
+	var new_awnings: Array = []
+	
+	var orig_build_map := {}
+	for b: Dictionary in orig_buildings:
+		orig_build_map[b["id"]] = b
+		
+	for child in building_layer.get_children():
+		if child is Node2D and child.name.begins_with("Building_"):
+			var building_id: String = child.name.replace("Building_", "")
+			var b_pos: Vector2 = child.position
+			var grid_x: int = int(round(b_pos.x / TILE_SIZE))
+			var grid_y: int = int(round(b_pos.y / TILE_SIZE))
+			
+			var orig: Dictionary = orig_build_map.get(building_id, {
+				"id": building_id,
+				"size": [6, 4],
+				"plaque": "plaque_blank",
+				"fallback_region": [14, 16, 118, 72],
+				"fallback_scale": 0.55
+			})
+			
+			var entry: Dictionary = orig.duplicate(true)
+			entry["grid"] = [grid_x, grid_y]
+			new_buildings.append(entry)
+			
+			var sign_node = child.get_node_or_null("Sign")
+			if sign_node:
+				var sign_pos: Vector2 = sign_node.position
+				var global_sign_pos: Vector2 = child.position + sign_pos
+				var s_grid_x: int = int(round(global_sign_pos.x / TILE_SIZE))
+				var s_grid_y: int = int(round(global_sign_pos.y / TILE_SIZE))
+				var offset_x = global_sign_pos.x - s_grid_x * TILE_SIZE
+				var offset_y = global_sign_pos.y - s_grid_y * TILE_SIZE
+				new_signs.append({
+					"id": building_id,
+					"grid": [s_grid_x, s_grid_y],
+					"offset": [offset_x, offset_y]
+				})
+				
+			var awning_node = child.get_node_or_null("Awning")
+			if awning_node:
+				var awning_pos: Vector2 = awning_node.position
+				var global_awning_pos: Vector2 = child.position + awning_pos
+				var a_grid_x: int = int(round(global_awning_pos.x / TILE_SIZE))
+				var a_grid_y: int = int(round(global_awning_pos.y / TILE_SIZE))
+				var offset_x = global_awning_pos.x - a_grid_x * TILE_SIZE
+				var offset_y = global_awning_pos.y - a_grid_y * TILE_SIZE
+				new_awnings.append({
+					"id": building_id,
+					"grid": [a_grid_x, a_grid_y],
+					"offset": [offset_x, offset_y]
+				})
+				
+	layout["buildings"] = new_buildings
+	layout["shop_signs"] = new_signs
+	layout["shop_awnings"] = new_awnings
+	
+	var new_props: Array = []
+	for child in prop_layer.get_children():
+		if child is Sprite2D and child.name.begins_with("Prop_"):
+			var prop_id: String = child.name.replace("Prop_", "")
+			var parts: PackedStringArray = prop_id.split("@")
+			prop_id = parts[0].strip_edges()
+			
+			var regex: RegEx = RegEx.new()
+			regex.compile("^([A-Za-z_]+)\\d*$")
+			var match_res = regex.search(prop_id)
+			if match_res:
+				prop_id = match_res.get_string(1)
+				
+			var p_pos: Vector2 = child.position
+			var grid_x: int = int(round(p_pos.x / TILE_SIZE))
+			var grid_y: int = int(round(p_pos.y / TILE_SIZE))
+			var offset_x = p_pos.x - grid_x * TILE_SIZE
+			var offset_y = p_pos.y - grid_y * TILE_SIZE
+			
+			var prop_entry = {
+				"id": prop_id,
+				"grid": [grid_x, grid_y],
+				"offset": [offset_x, offset_y],
+				"scale": child.scale.x
+			}
+			if abs(child.rotation) > 0.001:
+				prop_entry["rotation"] = round(rad_to_deg(child.rotation))
+				
+			new_props.append(prop_entry)
+			
+	layout["props"] = new_props
+	
+	var new_doors: Array = []
+	var interactions: Dictionary = layout.get("building_interactions", {})
+	
+	for b in new_buildings:
+		var building_id: String = b["id"]
+		var inter: Dictionary = interactions.get(building_id, {})
+		if not inter.is_empty():
+			var npc = inter.get("npc", "")
+			var door_offset = inter.get("door_offset", [0, 0])
+			var door_width = inter.get("door_width", 1)
+			
+			var b_grid = b["grid"]
+			for dx in range(door_width):
+				var d_grid = [b_grid[0] + door_offset[0] + dx, b_grid[1] + door_offset[1]]
+				new_doors.append({
+					"grid": d_grid,
+					"npc": npc
+				})
+				
+	layout["doors"] = new_doors
+	
+	var current_map: Array = layout.get("map", [])
+	if not current_map.is_empty():
+		var mutable_map := []
+		for row in current_map:
+			var chars := []
+			for i in range(row.length()):
+				chars.append(row.substr(i, 1))
+			mutable_map.append(chars)
+			
+		for y in range(mutable_map.size()):
+			for x in range(mutable_map[y].size()):
+				if mutable_map[y][x] == "H":
+					mutable_map[y][x] = ","
+					
+		for b in new_buildings:
+			var bg = b["grid"]
+			var bs = b["size"]
+			for dy in range(bs[1]):
+				var y = bg[1] + dy
+				if y >= 0 and y < mutable_map.size():
+					for dx in range(bs[0]):
+						var x = bg[0] + dx
+						if x >= 0 and x < mutable_map[y].size():
+							mutable_map[y][x] = "H"
+							
+		var string_map := []
+		for row_chars in mutable_map:
+			string_map.append("".join(row_chars))
+			
+		layout["map"] = string_map
+		
+	var file := FileAccess.open(TOWN_LAYOUT_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(layout, "  ") + "\n")
+		print("Successfully saved town layout to JSON!")
+	else:
+		push_error("Could not write updated layout back to path.")

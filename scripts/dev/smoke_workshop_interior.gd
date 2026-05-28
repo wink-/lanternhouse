@@ -12,7 +12,20 @@ func _run_checks() -> bool:
 	var town := TownScene.instantiate()
 	add_child(town)
 	await get_tree().process_frame
-	if town._building_door_at(Vector2i(25, 17)) != "tinkerer":
+	
+	# Find tinkerer door dynamically
+	var tinkerer_door := Vector2i.ZERO
+	for door: Vector2i in town._building_doors:
+		if town._building_doors[door] == "tinkerer":
+			tinkerer_door = door
+			break
+	if tinkerer_door == Vector2i.ZERO:
+		push_error("Could not find tinkerer door in town layout")
+		town.queue_free()
+		return false
+		
+	if town._building_door_at(tinkerer_door) != "tinkerer":
+		town.queue_free()
 		return false
 	town.queue_free()
 	await get_tree().process_frame
@@ -26,10 +39,12 @@ func _run_checks() -> bool:
 		return false
 	if not _player_sprite_ok(workshop):
 		return false
-	GameData.set_meta("town_spawn_pos", Vector2i(25, 18))
+		
+	var spawn_pos := tinkerer_door + Vector2i(0, 1)
+	GameData.set_meta("town_spawn_pos", spawn_pos)
 	GameData.set_meta("town_spawn_facing", Vector2i.UP)
 	await get_tree().process_frame
-	if GameData.get_meta("town_spawn_pos", Vector2i.ZERO) != Vector2i(25, 18):
+	if GameData.get_meta("town_spawn_pos", Vector2i.ZERO) != spawn_pos:
 		return false
 	workshop.queue_free()
 	await get_tree().process_frame
@@ -37,7 +52,7 @@ func _run_checks() -> bool:
 	var returned_town := TownScene.instantiate()
 	add_child(returned_town)
 	await get_tree().process_frame
-	var returned_ok: bool = returned_town.pos == Vector2i(25, 18) and returned_town.facing == Vector2i.UP
+	var returned_ok: bool = returned_town.pos == spawn_pos and returned_town.facing == Vector2i.UP
 	returned_town.queue_free()
 	return returned_ok
 

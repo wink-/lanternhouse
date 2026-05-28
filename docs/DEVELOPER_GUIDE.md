@@ -894,6 +894,23 @@ func play_beacon_light() -> void:
 
 ---
 
+## Pattern 11: Procedural Town Generation
+
+**File:** `scripts/dev/generate_town.py` (~540 lines)
+
+### What it does
+
+Procedurally generates complete, playable, and validated town layout JSON files (such as `assets/world/towns/brindlewick.layout.json`) from a seed. It handles:
+- **Sizing & Borders**: Initializes a `50x42` grid with grass borders and random vegetation.
+- **Road Network & Plaza**: Creates main horizontal and vertical roads, intersecting at a central cobblestone plaza.
+- **Dynamic Lot Search**: Places buildings (elder hall, chapel, shops, houses) on random, non-overlapping padded slots.
+- **Smart Path Connection**: Connects building door thresholds to the nearest road using Manhattan pathfinding.
+- **Facade Dressings**: Places plaques, signs, and awnings relative to building door entryways.
+- **Prop Scattering**: Places well and notice boards in the plaza, lanterns along roads, and clusters crates/barrels next to walls.
+- **Automation Pipeline**: Generates visual previews (`assets/world/towns/<town_id>.preview.png`) and runs layout and art validation.
+
+---
+
 ## How to Add New Content
 
 ### Add a new enemy type
@@ -933,6 +950,20 @@ func play_beacon_light() -> void:
 1. Add the NPC data to `data/npcs.gd` with dialogue contexts
 2. Place the NPC in the town/village map in the scene script
 3. Handle interaction in the scene's `_interact()` function
+
+### Procedurally generate/regenerate a town layout
+
+1. Call the python generator script with the layout ID of your new town:
+   ```powershell
+   python scripts/dev/generate_town.py my_town_id --name "My Town Name" --seed 42 --force
+   ```
+2. The generator will:
+   - Initialize a `50x42` grid, pathing, and central plaza.
+   - Dynamically place 7 core shop/service buildings plus residential houses with 1-tile padding.
+   - Dynamically route path tiles from door thresholds to the main road network.
+   - Place lanterns along roads and scatter props (crates, barrels, planters) next to building facades.
+   - Automatically compile modular building atlases, build world art, validate the layout, and generate a layout PNG preview at `assets/world/towns/my_town_id.preview.png`.
+3. To add custom biomes or override styles (e.g., coastal docks, fortress walls), expand the layout generator options and run it with different seeds.
 
 ---
 

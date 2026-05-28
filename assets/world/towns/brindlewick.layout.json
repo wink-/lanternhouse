@@ -1,180 +1,178 @@
 {
   "id": "brindlewick",
   "name": "Brindlewick",
+  "style": "village",
   "tile_size": 16,
   "cat": {
     "home": [
-      18,
-      18
+      23,
+      25
     ],
     "wander_radius": 5
   },
   "map": [
-    ",,,,,,,,,,,,,,,lHHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,.HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,HHHHHHHH,,,,,,HHHHHH,,,,,,,,,,,,,,,,,,",
-    ",,HHHHHHHH,,,,,,HHHHHH,,,,HHHHHHHH,,,,,,",
-    ",,HHHHHHHH,,,,,,,,==,,,,,,HHHHHHHH,,,,,,",
-    ",,HHHHHHHH=======++====++=HHHHHHHH,,,,,,",
-    ",,,,,,,,,,,,,,,,,,,====,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,,,,====,,,,,,,,,,HHHHHHH",
-    ",,,,HHHHH,,,,,,,,,,====,,,,,,,,,,HHHHHHH",
-    ",,,,HHHHH;HHHHHHHHH==HHHHHHHHH,,,HHHHHHH",
-    ",,,,HHHHH,HHHHHHHHH,wHHHHHHHHH,,,HHHHHHH",
-    ",,,,HHHHH,HHHHHHHHH,,HHHHHHHHH,,,HHHHHHH",
-    ",,,,HHHHH,HHHHHHHHH,,HHHHHHHHH,,,HHHHHHH",
-    ",,,,,++==++,,,,++==++,,,,++==++,,++==+,,",
-    ",,,,,,,================================,",
-    ",,,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,,,,==,,,,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,",
-    ",,,,,,,,,,,,,,,,,,ss==ss,,,,,,,,,,,,,,,,"
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+    ",.,.....,.,..,......,..HHHHHH.............,..,.,.,",
+    ",....HHHHHHHHH......,..HHHHHH............,,,...,.,",
+    ",....HHHHHHHHH.........HHHHHH,.,....HHHHHHHH,....,",
+    ",....HHHHHHHHH...,....,HHHHHH....,..HHHHHHHH.....,",
+    ",....HHHHHHHHH..,......HHHHHH....,..HHHHHHHH,....,",
+    ",....HHHHHHHHH...,.....HHHHHH.,....,HHHHHHHH....,,",
+    ",..,.HHHHHHHHH...,,....HHHHHH.......HHHHHHHH..,..,",
+    ",......,..==......,....HHHHHH....,.....==........,",
+    ",..,......=,..HHHHHHHH.HHHHHH.HHHHHHHH.=....,..,.,",
+    ",...,.HHHHHHH.HHHHHHHH...==..,HHHHHHHH,=.........,",
+    ",.,...HHHHHHH.HHHHHHHH,..==,.,HHHHHHHH,=.........,",
+    ",,.,..HHHHHHH.HHHHHHHH,..==..,HHHHHHHH.=.........,",
+    ",.....HHHHHHH.HHHHHHHH.,.==...HHHHHHHH.=HHHHH.,.,,",
+    ",.....HHHHHHH.,..=..,....==.,....=.,,..=HHHHH....,",
+    ",.....HHHHHHH,...=.......==.....,=....,=HHHHH,...,",
+    ",,....HHHHHHH....=,......==......=.....=HHHHH....,",
+    ",,....HHHHHHH....=.......==......=....,=HHHHH....,",
+    ",.,.....===,.....=.......==......=..,,.=HHHHH....,",
+    ",,...,..=.=....,.=.,..++++++++...=.....=HHHHH,...,",
+    ",.......=.=......=,...++++++++...=,.,..=..=..,...,",
+    ",=====================++++++++===================,",
+    ",=====================++++++++===================,",
+    ",.HHHHHHHH........,...++++++++,.....,.,=......,..,",
+    ",.HHHHHHHH.,..........++++++++,...,.,..=.....,,..,",
+    ",.HHHHHHHH....,..,..,..,.==....,.,,....=.,,.....,,",
+    ",.HHHHHHHH.,.......,.....==..........,.=.,...,.,.,",
+    ",.HHHHHHHH....,,.........==......,,.HHHHHHHHH....,",
+    ",....=..............,,.,.==,..,.....HHHHHHHHH....,",
+    ",...........,....,......,==...,,....HHHHHHHHH,..,,",
+    ",,.....,..,...,..,..,....==.,.......HHHHHHHHH.,..,",
+    ",......,...,.,...........==.........HHHHHHHHH....,",
+    ",.,......,.....HHHHHHHH..==.......,.HHHHHHHHH.,..,",
+    ",..,....,......HHHHHHHH..==,......,....==......,,,",
+    ",...........,..HHHHHHHH..==...HHHHHHHH...,,......,",
+    ",...,......,...HHHHHHHH..==...HHHHHHHH..........,,",
+    ",.....,........HHHHHHHH..==...HHHHHHHH....,......,",
+    ",.....,.,.,,...HHHHHHHH..==...HHHHHHHH...........,",
+    ",.,...............=========,..HHHHHHHH......,....,",
+    ",............,.,.........=========.....,..,......,",
+    ",..,..,,......,....,.....==.....,..,.,...,..,..,.,",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"
   ],
   "doors": [
     {
       "grid": [
-        18,
-        8
+        25,
+        9
       ],
       "npc": "elder"
     },
     {
       "grid": [
-        19,
-        8
+        26,
+        9
       ],
       "npc": "elder"
-    },
-    {
-      "grid": [
-        5,
-        10
-      ],
-      "npc": "weapon_merchant"
-    },
-    {
-      "grid": [
-        6,
-        10
-      ],
-      "npc": "weapon_merchant"
-    },
-    {
-      "grid": [
-        7,
-        10
-      ],
-      "npc": "weapon_merchant"
-    },
-    {
-      "grid": [
-        29,
-        10
-      ],
-      "npc": "armor_merchant"
-    },
-    {
-      "grid": [
-        30,
-        10
-      ],
-      "npc": "armor_merchant"
-    },
-    {
-      "grid": [
-        31,
-        10
-      ],
-      "npc": "armor_merchant"
-    },
-    {
-      "grid": [
-        6,
-        17
-      ],
-      "npc": "innkeeper"
-    },
-    {
-      "grid": [
-        7,
-        17
-      ],
-      "npc": "innkeeper"
     },
     {
       "grid": [
         8,
         17
       ],
+      "npc": "healer"
+    },
+    {
+      "grid": [
+        9,
+        17
+      ],
+      "npc": "healer"
+    },
+    {
+      "grid": [
+        18,
+        37
+      ],
+      "npc": "weapon_merchant"
+    },
+    {
+      "grid": [
+        19,
+        37
+      ],
+      "npc": "weapon_merchant"
+    },
+    {
+      "grid": [
+        39,
+        7
+      ],
+      "npc": "armor_merchant"
+    },
+    {
+      "grid": [
+        40,
+        7
+      ],
+      "npc": "armor_merchant"
+    },
+    {
+      "grid": [
+        42,
+        19
+      ],
       "npc": "innkeeper"
     },
     {
       "grid": [
-        15,
-        17
+        10,
+        7
       ],
       "npc": "tavern_keeper"
     },
     {
       "grid": [
-        16,
-        17
+        11,
+        7
       ],
       "npc": "tavern_keeper"
+    },
+    {
+      "grid": [
+        39,
+        32
+      ],
+      "npc": "tinkerer"
+    },
+    {
+      "grid": [
+        40,
+        32
+      ],
+      "npc": "tinkerer"
+    },
+    {
+      "grid": [
+        5,
+        27
+      ],
+      "npc": "realtor"
+    },
+    {
+      "grid": [
+        33,
+        13
+      ],
+      "npc": "realtor"
+    },
+    {
+      "grid": [
+        33,
+        38
+      ],
+      "npc": "realtor"
     },
     {
       "grid": [
         17,
-        17
+        13
       ],
-      "npc": "tavern_keeper"
-    },
-    {
-      "grid": [
-        24,
-        17
-      ],
-      "npc": "tinkerer"
-    },
-    {
-      "grid": [
-        25,
-        17
-      ],
-      "npc": "tinkerer"
-    },
-    {
-      "grid": [
-        26,
-        17
-      ],
-      "npc": "tinkerer"
-    },
-    {
-      "grid": [
-        35,
-        17
-      ],
-      "npc": "healer"
-    },
-    {
-      "grid": [
-        36,
-        17
-      ],
-      "npc": "healer"
-    },
-    {
-      "grid": [
-        37,
-        17
-      ],
-      "npc": "healer"
+      "npc": "realtor"
     }
   ],
   "building_interactions": {
@@ -184,6 +182,15 @@
       "door_offset": [
         2,
         8
+      ],
+      "door_width": 2
+    },
+    "chapel": {
+      "npc": "healer",
+      "name": "Chapel",
+      "door_offset": [
+        2,
+        7
       ],
       "door_width": 2
     },
@@ -232,22 +239,49 @@
       ],
       "door_width": 2
     },
-    "chapel": {
-      "npc": "healer",
-      "name": "Chapel",
+    "small_house": {
+      "npc": "realtor",
+      "name": "Residential House",
       "door_offset": [
-        2,
-        7
+        3,
+        4
       ],
-      "door_width": 2
+      "door_width": 1
+    },
+    "large_house": {
+      "npc": "realtor",
+      "name": "Residential House",
+      "door_offset": [
+        3,
+        4
+      ],
+      "door_width": 1
+    },
+    "house_timber": {
+      "npc": "realtor",
+      "name": "Residential House",
+      "door_offset": [
+        3,
+        4
+      ],
+      "door_width": 1
+    },
+    "house_mossy": {
+      "npc": "realtor",
+      "name": "Residential House",
+      "door_offset": [
+        3,
+        4
+      ],
+      "door_width": 1
     }
   },
   "buildings": [
     {
       "id": "elder_hall",
       "grid": [
-        16,
-        0
+        23,
+        1
       ],
       "size": [
         6,
@@ -264,16 +298,37 @@
       "fallback_scale": 0.5
     },
     {
+      "id": "chapel",
+      "grid": [
+        6,
+        10
+      ],
+      "size": [
+        7,
+        8
+      ],
+      "plaque": "plaque_candle",
+      "public": true,
+      "fallback_region": [
+        14,
+        16,
+        118,
+        72
+      ],
+      "fallback_scale": 0.55
+    },
+    {
       "id": "weapon_shop",
       "grid": [
-        2,
-        5
+        15,
+        32
       ],
       "size": [
         8,
         6
       ],
       "plaque": "plaque_sword",
+      "public": true,
       "fallback_region": [
         15,
         573,
@@ -285,14 +340,15 @@
     {
       "id": "armor_shop",
       "grid": [
-        26,
-        6
+        36,
+        3
       ],
       "size": [
         8,
         5
       ],
       "plaque": "plaque_shield",
+      "public": true,
       "fallback_region": [
         16,
         466,
@@ -304,14 +360,15 @@
     {
       "id": "inn",
       "grid": [
-        4,
-        11
+        40,
+        13
       ],
       "size": [
         5,
         7
       ],
       "plaque": "plaque_bed",
+      "public": true,
       "fallback_region": [
         16,
         681,
@@ -323,14 +380,15 @@
     {
       "id": "tavern",
       "grid": [
-        10,
-        12
+        5,
+        2
       ],
       "size": [
         9,
         6
       ],
       "plaque": "plaque_tankard",
+      "public": true,
       "fallback_region": [
         14,
         16,
@@ -342,14 +400,15 @@
     {
       "id": "workshop",
       "grid": [
-        21,
-        12
+        36,
+        27
       ],
       "size": [
         9,
         6
       ],
       "plaque": "plaque_gear",
+      "public": true,
       "fallback_region": [
         354,
         466,
@@ -359,18 +418,79 @@
       "fallback_scale": 0.5
     },
     {
-      "id": "chapel",
+      "id": "small_house",
       "grid": [
-        33,
-        10
+        2,
+        23
       ],
       "size": [
-        7,
-        8
+        8,
+        5
       ],
-      "plaque": "plaque_candle",
+      "plaque": "plaque_blank",
+      "public": false,
       "fallback_region": [
+        16,
+        16,
+        118,
+        72
+      ],
+      "fallback_scale": 0.55
+    },
+    {
+      "id": "large_house",
+      "grid": [
+        30,
+        9
+      ],
+      "size": [
+        8,
+        5
+      ],
+      "plaque": "plaque_blank",
+      "public": false,
+      "fallback_region": [
+        16,
+        16,
+        118,
+        72
+      ],
+      "fallback_scale": 0.55
+    },
+    {
+      "id": "house_timber",
+      "grid": [
+        30,
+        34
+      ],
+      "size": [
+        8,
+        5
+      ],
+      "plaque": "plaque_blank",
+      "public": false,
+      "fallback_region": [
+        16,
+        16,
+        118,
+        72
+      ],
+      "fallback_scale": 0.55
+    },
+    {
+      "id": "house_mossy",
+      "grid": [
         14,
+        9
+      ],
+      "size": [
+        8,
+        5
+      ],
+      "plaque": "plaque_blank",
+      "public": false,
+      "fallback_region": [
+        16,
         16,
         118,
         72
@@ -380,10 +500,21 @@
   ],
   "shop_signs": [
     {
+      "id": "chapel",
+      "grid": [
+        8,
+        11
+      ],
+      "offset": [
+        8,
+        -5
+      ]
+    },
+    {
       "id": "weapon_shop",
       "grid": [
-        5,
-        7
+        18,
+        33
       ],
       "offset": [
         8,
@@ -393,8 +524,8 @@
     {
       "id": "armor_shop",
       "grid": [
-        30,
-        7
+        39,
+        4
       ],
       "offset": [
         8,
@@ -404,7 +535,7 @@
     {
       "id": "inn",
       "grid": [
-        6,
+        42,
         14
       ],
       "offset": [
@@ -415,8 +546,8 @@
     {
       "id": "tavern",
       "grid": [
-        15,
-        14
+        10,
+        3
       ],
       "offset": [
         8,
@@ -426,19 +557,8 @@
     {
       "id": "workshop",
       "grid": [
-        24,
-        14
-      ],
-      "offset": [
-        8,
-        -5
-      ]
-    },
-    {
-      "id": "chapel",
-      "grid": [
-        33,
-        14
+        39,
+        28
       ],
       "offset": [
         8,
@@ -448,10 +568,21 @@
   ],
   "shop_awnings": [
     {
+      "id": "chapel",
+      "grid": [
+        7,
+        12
+      ],
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
       "id": "weapon_shop",
       "grid": [
-        4,
-        8
+        17,
+        34
       ],
       "offset": [
         0,
@@ -461,8 +592,8 @@
     {
       "id": "armor_shop",
       "grid": [
-        29,
-        8
+        38,
+        5
       ],
       "offset": [
         0,
@@ -472,7 +603,7 @@
     {
       "id": "inn",
       "grid": [
-        5,
+        41,
         15
       ],
       "offset": [
@@ -483,8 +614,8 @@
     {
       "id": "tavern",
       "grid": [
-        14,
-        15
+        9,
+        4
       ],
       "offset": [
         0,
@@ -494,19 +625,8 @@
     {
       "id": "workshop",
       "grid": [
-        23,
-        15
-      ],
-      "offset": [
-        0,
-        0
-      ]
-    },
-    {
-      "id": "chapel",
-      "grid": [
-        32,
-        15
+        38,
+        29
       ],
       "offset": [
         0,
@@ -516,22 +636,10 @@
   ],
   "props": [
     {
-      "id": "well",
-      "grid": [
-        20,
-        11
-      ],
-      "offset": [
-        8,
-        8
-      ],
-      "scale": 0.62
-    },
-    {
       "id": "notice_board",
       "grid": [
-        12,
-        10
+        21,
+        20
       ],
       "offset": [
         8,
@@ -540,22 +648,22 @@
       "scale": 0.62
     },
     {
-      "id": "signpost",
+      "id": "lantern_post",
       "grid": [
-        15,
-        6
+        4,
+        20
       ],
       "offset": [
         8,
-        8
+        -2
       ],
-      "scale": 0.62
+      "scale": 0.58
     },
     {
       "id": "lantern_post",
       "grid": [
-        15,
-        8
+        12,
+        20
       ],
       "offset": [
         8,
@@ -567,7 +675,7 @@
       "id": "lantern_post",
       "grid": [
         20,
-        12
+        20
       ],
       "offset": [
         8,
@@ -578,68 +686,20 @@
     {
       "id": "lantern_post",
       "grid": [
-        19,
-        16
+        44,
+        20
       ],
       "offset": [
         8,
         -2
       ],
-      "scale": 0.54
-    },
-    {
-      "id": "bench",
-      "grid": [
-        18,
-        11
-      ],
-      "offset": [
-        8,
-        8
-      ],
       "scale": 0.58
-    },
-    {
-      "id": "bench",
-      "grid": [
-        21,
-        11
-      ],
-      "offset": [
-        8,
-        8
-      ],
-      "scale": 0.55
-    },
-    {
-      "id": "herb_planter",
-      "grid": [
-        17,
-        20
-      ],
-      "offset": [
-        8,
-        8
-      ],
-      "scale": 0.54
-    },
-    {
-      "id": "herb_planter",
-      "grid": [
-        21,
-        20
-      ],
-      "offset": [
-        8,
-        8
-      ],
-      "scale": 0.54
     },
     {
       "id": "crate_stack",
       "grid": [
-        20,
-        14
+        22,
+        9
       ],
       "offset": [
         8,
@@ -650,8 +710,8 @@
     {
       "id": "barrel_pair",
       "grid": [
-        9,
-        13
+        22,
+        10
       ],
       "offset": [
         8,
@@ -660,28 +720,448 @@
       "scale": 0.6
     },
     {
-      "id": "crate_stack",
-      "grid": [
-        8,
-        19
-      ],
-      "offset": [
-        8,
-        8
-      ],
-      "scale": 0.55
-    },
-    {
       "id": "barrel_pair",
       "grid": [
-        10,
-        19
+        29,
+        9
       ],
       "offset": [
         8,
         8
       ],
       "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        24,
+        10
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        5,
+        17
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        5,
+        18
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        13,
+        17
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        7,
+        18
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        14,
+        37
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        14,
+        38
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        23,
+        37
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        17,
+        38
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        35,
+        7
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        35,
+        8
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        44,
+        7
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        38,
+        8
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        41,
+        20
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        4,
+        7
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        4,
+        8
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        14,
+        7
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        9,
+        8
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        35,
+        32
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        35,
+        33
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        45,
+        32
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        38,
+        33
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        1,
+        27
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        1,
+        28
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        10,
+        27
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        4,
+        28
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        29,
+        13
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        29,
+        14
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        38,
+        13
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        32,
+        14
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        29,
+        38
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        38,
+        38
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "crate_stack",
+      "grid": [
+        13,
+        13
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        13,
+        14
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.6
+    },
+    {
+      "id": "barrel_pair",
+      "grid": [
+        22,
+        13
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "herb_planter",
+      "grid": [
+        16,
+        14
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.54
     }
   ]
 }

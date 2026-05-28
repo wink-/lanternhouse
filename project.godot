@@ -24,15 +24,15 @@ SaveManager="*res://scripts/save_manager.gd"
 SceneTransition="*res://scripts/scene_transition.gd"
 AudioManager="*res://scripts/audio_manager.gd"
 
+[debug]
+
+gdscript/warnings/treat_warnings_as_errors=false
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
-
-[debug]
-
-gdscript/warnings/treat_warnings_as_errors=false
 
 [input]
 
