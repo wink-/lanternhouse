@@ -23,6 +23,18 @@ Evergreen, persistent MMO-scale world in a Dragon Quest flavor. Leveling is a si
 - **Classes** give starting bonuses and small learning rate bonuses, but don't lock anything
 - Skills grow naturally — using an axe while fishing/fighting makes you better at axes
 
+## Implemented Tradeskill Loop
+
+- **Fishing:** Fish are trade goods with cooking data. Fishing skill and fishing-pole bonuses affect the fishing minigame.
+- **Cooking:** Cooking a fish heals the party immediately and applies a short "well fed" DEF buff for the next 3 battles. Stronger fish and higher cooking skill produce stronger buffs.
+- **Tinkering:** Tinkering recipes now create consistent crafted tools across town, home, and Fenn's workshop.
+  - Repair Kits and Master Repair Kits are field healing tools.
+  - Trap Kits can be set from the inventory and damage the first enemy in the next battle.
+  - Simple Lockpicks are passive dungeon tools and currently open locked cave chests.
+  - Beacon Lenses add a charge that widens the next newly lit beacon's fog-of-war reveal.
+  - Oil Lanterns create temporary fog cover on the overworld.
+- **Persistence:** Crafted tools, active trap state, beacon lens charges, cave chest claims, and meal buffs are covered by save/load smoke tests.
+
 ## Currency & Economy
 
 - **Standard coin:** Copper → Silver → Gold

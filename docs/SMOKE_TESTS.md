@@ -159,6 +159,30 @@ Run the home-base rest/storage/cooking/garden check:
 godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_home_base.tscn
 ```
 
+Run the tradeskill tool behavior check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_tradeskill_tools.tscn
+```
+
+Run the locked cave chest and lockpick check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_cave_lockpick_chests.tscn
+```
+
+Run the beacon lens reveal check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_beacon_lens_reveal.tscn
+```
+
+Run the cooked meal battle buff check:
+
+```powershell
+godot_console --headless --path "I:\code\lanternhouse" res://scenes/dev/smoke_meal_battle_buff.tscn
+```
+
 Run every scene:
 
 ```powershell
