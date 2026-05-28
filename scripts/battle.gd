@@ -136,6 +136,7 @@ func _ready() -> void:
 	_apply_prebattle_tools()
 	for m: Dictionary in GameData.party:
 		_pre_buff_stats[m["name"]] = {"str": m["str"], "def": m["def"], "agi": m["agi"]}
+	_apply_meal_buff()
 	round_phase = "command"
 	selecting_idx = _first_alive_party()
 	fight_target_idx = _first_alive_enemy()
@@ -284,6 +285,18 @@ func _apply_prebattle_tools() -> void:
 	if target["hp"] <= 0:
 		target["alive"] = false
 	_push_log("[color=#f0d46a]A set Trap Kit snaps shut on %s for %d damage![/color]" % [target["name"], damage])
+
+func _apply_meal_buff() -> void:
+	var battles: int = GameData.get_meta("meal_buff_battles", 0)
+	var def_bonus: int = GameData.get_meta("meal_buff_def", 0)
+	if battles <= 0 or def_bonus <= 0:
+		return
+	for member: Dictionary in GameData.party:
+		if member.get("alive", false):
+			member["def"] += def_bonus
+	GameData.set_meta("meal_buff_battles", battles - 1)
+	var meal_name: String = GameData.get_meta("meal_buff_name", "Cooked meal")
+	_push_log("[color=#9fc5ff]%s keeps the party well fed. DEF +%d this battle (%d left).[/color]" % [meal_name, def_bonus, battles - 1])
 
 func _draw_sprites() -> void:
 	_clear_children(enemy_area)

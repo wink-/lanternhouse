@@ -392,6 +392,14 @@ func get_skill_bonus(skill_name: String) -> int:
 	if uses >= 10: return 1
 	return 0
 
+func apply_meal_buff(meal_name: String, heal_value: int) -> Dictionary:
+	var def_bonus: int = clampi(1 + int(heal_value / 40) + get_skill_bonus("cooking"), 1, 6)
+	var battles := 3
+	set_meta("meal_buff_name", meal_name)
+	set_meta("meal_buff_def", def_bonus)
+	set_meta("meal_buff_battles", battles)
+	return {"name": meal_name, "def": def_bonus, "battles": battles}
+
 # ── Faction helpers ─────────────────────────────────────────────────────────
 func get_faction_rep(faction: int) -> int:
 	return faction_reputation.get(faction, 0)

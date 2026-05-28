@@ -96,6 +96,9 @@ func save_game() -> bool:
 			"fog_timer": GameData.get_meta("fog_timer", 0.0),
 			"trap_kit_active": GameData.get_meta("trap_kit_active", false),
 			"beacon_lens_charges": GameData.get_meta("beacon_lens_charges", 0),
+			"meal_buff_name": GameData.get_meta("meal_buff_name", ""),
+			"meal_buff_def": GameData.get_meta("meal_buff_def", 0),
+			"meal_buff_battles": GameData.get_meta("meal_buff_battles", 0),
 			"home_garden_timer": GameData.get_meta("home_garden_timer", 0.0),
 		},
 		"timestamp": Time.get_datetime_string_from_system(),
@@ -211,6 +214,9 @@ func load_game() -> bool:
 	GameData.set_meta("fog_timer", quest_flags.get("fog_timer", 0.0))
 	GameData.set_meta("trap_kit_active", quest_flags.get("trap_kit_active", false))
 	GameData.set_meta("beacon_lens_charges", quest_flags.get("beacon_lens_charges", 0))
+	GameData.set_meta("meal_buff_name", quest_flags.get("meal_buff_name", ""))
+	GameData.set_meta("meal_buff_def", quest_flags.get("meal_buff_def", 0))
+	GameData.set_meta("meal_buff_battles", quest_flags.get("meal_buff_battles", 0))
 	GameData.set_meta("home_garden_timer", quest_flags.get("home_garden_timer", 0.0))
 
 	print("Game loaded: ", SAVE_DIR + SAVE_FILE)

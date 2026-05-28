@@ -324,7 +324,8 @@ func _try_cook() -> void:
 			m["hp"] += actual
 			healed_names.append("%s +%d" % [m["name"], actual])
 	GameData.track_skill_use("cooking", 1)
-	_say("[color=green]Cooked %s![/color]\n%s" % [item["name"], ", ".join(healed_names)])
+	var buff := GameData.apply_meal_buff(item["name"], hp)
+	_say("[color=green]Cooked %s![/color]\n%s\n[color=#9fc5ff]Well fed: DEF +%d for the next %d battles.[/color]" % [item["name"], ", ".join(healed_names), buff["def"], buff["battles"]])
 	cooking_mode = false
 
 # ── Garden ───────────────────────────────────────────────────────────────
