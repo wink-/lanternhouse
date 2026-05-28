@@ -14,12 +14,9 @@
 # without changing a class definition). The tradeoff: no autocomplete for keys,
 # and typos in key names cause silent bugs.
 #
-# [CODING CONCEPT: Index Arrays for Equipment]
-# equipped_weapon = [0, -1, 2, -1] means party member 0 has weapon #0 from
-# weapons_bag, member 2 has weapon #2, and members 1 and 3 have nothing (-1).
-# This is called "parallel arrays" — each array has the same length as the party,
-# and the value at index i describes party member i. Simple but fragile if you
-# forget to update all arrays when removing a member.
+# [CODING CONCEPT: Character Equipment Records]
+# Each party member owns an "equipment" dictionary with weapon/head/body/accessory
+# slots. This keeps join/leave/reorder behavior local to the character record.
 
 extends Node
 
@@ -44,12 +41,6 @@ var faction_reputation: Dictionary = {}   # FactionDB.Faction enum → int (-100
 var weapons_bag: Array = []      # Array[Dictionary] — weapon entries {id, name, atk, price}
 var armor_bag: Array = []        # Array[Dictionary] — armor entries {id, name, def, price}
 var trade_goods: Array = []      # Array[Dictionary] — trade goods in inventory {id, name, price, sell_base}
-
-# ── Equipment slots per character index ───────────────────────────────────
-var equipped_weapon: Array = [-1, -1, -1, -1]   # index into weapons_bag, -1 = none
-var equipped_head: Array = [-1, -1, -1, -1]      # index into armor_bag (head slot)
-var equipped_body: Array = [-1, -1, -1, -1]      # index into armor_bag (body slot)
-var equipped_accessory: Array = [-1, -1, -1, -1] # index into armor_bag (accessory slot)
 
 # ── Overworld state ───────────────────────────────────────────────────────
 var overworld_position: Vector2i = Vector2i(15, 21)
@@ -121,6 +112,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if party.is_empty():
 		_init_party()
+	ensure_party_equipment()
 
 func _process(delta: float) -> void:
 	play_time += delta
@@ -217,6 +209,7 @@ func _init_party() -> void:
 			"alive": true,
 			"command": "",
 			"command_label": "",
+			"equipment": create_empty_equipment(),
 		})
 
 func _copy_magic(src: Dictionary) -> Dictionary:
@@ -224,6 +217,69 @@ func _copy_magic(src: Dictionary) -> Dictionary:
 	for lvl: int in src:
 		out[lvl] = {"charges": src[lvl], "max": src[lvl]}
 	return out
+
+func create_empty_equipment() -> Dictionary:
+	return {
+		"weapon": -1,
+		"head": -1,
+		"body": -1,
+		"accessory": -1,
+	}
+
+func ensure_party_equipment() -> void:
+	for member: Dictionary in party:
+		var equipment: Dictionary = member.get("equipment", {})
+		if equipment.is_empty():
+			equipment = create_empty_equipment()
+		else:
+			for slot: String in ["weapon", "head", "body", "accessory"]:
+				if not equipment.has(slot):
+					equipment[slot] = -1
+		member["equipment"] = equipment
+
+func get_equipped_index(char_index: int, slot: String) -> int:
+	if char_index < 0 or char_index >= party.size():
+		return -1
+	ensure_party_equipment()
+	return int(party[char_index].get("equipment", {}).get(slot, -1))
+
+func set_equipped_index(char_index: int, slot: String, bag_index: int) -> void:
+	if char_index < 0 or char_index >= party.size():
+		return
+	ensure_party_equipment()
+	var equipment: Dictionary = party[char_index]["equipment"]
+	equipment[slot] = bag_index
+	party[char_index]["equipment"] = equipment
+
+func is_weapon_equipped(bag_index: int) -> bool:
+	ensure_party_equipment()
+	for member: Dictionary in party:
+		if int(member.get("equipment", {}).get("weapon", -1)) == bag_index:
+			return true
+	return false
+
+func is_armor_equipped(bag_index: int) -> bool:
+	ensure_party_equipment()
+	for member: Dictionary in party:
+		var equipment: Dictionary = member.get("equipment", {})
+		if int(equipment.get("head", -1)) == bag_index:
+			return true
+		if int(equipment.get("body", -1)) == bag_index:
+			return true
+		if int(equipment.get("accessory", -1)) == bag_index:
+			return true
+	return false
+
+func adjust_equipment_after_bag_remove(bag_type: String, removed_index: int) -> void:
+	ensure_party_equipment()
+	for pi in range(party.size()):
+		var slots := ["weapon"] if bag_type == "weapon" else ["head", "body", "accessory"]
+		for slot: String in slots:
+			var current := get_equipped_index(pi, slot)
+			if current == removed_index:
+				set_equipped_index(pi, slot, -1)
+			elif current > removed_index:
+				set_equipped_index(pi, slot, current - 1)
 
 # ── Stat helpers ──────────────────────────────────────────────────────────
 # [CODING CONCEPT: Computed Properties]
@@ -235,7 +291,7 @@ func _copy_magic(src: Dictionary) -> Dictionary:
 func get_effective_str(char_index: int) -> int:
 	var m: Dictionary = party[char_index]
 	var base: int = m["str"]
-	var wi: int = equipped_weapon[char_index]
+	var wi: int = get_equipped_index(char_index, "weapon")
 	if wi >= 0 and wi < weapons_bag.size():
 		base += weapons_bag[wi].get("atk", 0)
 	if m.get("wage", 0) > 0 and m.get("loyalty", 50) >= 80:
@@ -245,8 +301,8 @@ func get_effective_str(char_index: int) -> int:
 func get_effective_def(char_index: int) -> int:
 	var m: Dictionary = party[char_index]
 	var base: int = m["def"]
-	for slot_array in [equipped_head, equipped_body, equipped_accessory]:
-		var ai: int = slot_array[char_index]
+	for slot: String in ["head", "body", "accessory"]:
+		var ai: int = get_equipped_index(char_index, slot)
 		if ai >= 0 and ai < armor_bag.size():
 			base += armor_bag[ai].get("def", 0)
 	if m.get("wage", 0) > 0 and m.get("loyalty", 50) >= 80:
@@ -255,7 +311,8 @@ func get_effective_def(char_index: int) -> int:
 
 func get_equipped_fishing_bonus() -> int:
 	var bonus := 0
-	for wi in equipped_weapon:
+	for pi in range(party.size()):
+		var wi := get_equipped_index(pi, "weapon")
 		if wi >= 0 and wi < weapons_bag.size():
 			var weapon: Dictionary = weapons_bag[wi]
 			if weapon.has("fishing_bonus"):
@@ -432,13 +489,10 @@ func check_loyalty_departures() -> void:
 		i -= 1
 
 func remove_departed_members() -> void:
+	ensure_party_equipment()
 	var i := party.size() - 1
 	while i >= 0:
 		if party[i].get("departed", false):
-			equipped_weapon.remove_at(i)
-			equipped_head.remove_at(i)
-			equipped_body.remove_at(i)
-			equipped_accessory.remove_at(i)
 			pending_departures.erase(party[i]["name"])
 			party.remove_at(i)
 		i -= 1

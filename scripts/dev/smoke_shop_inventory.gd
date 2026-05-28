@@ -75,10 +75,6 @@ func _reset_state() -> void:
 	GameData.weapons_bag.clear()
 	GameData.armor_bag.clear()
 	GameData.trade_goods.clear()
-	GameData.equipped_weapon = [-1, -1, -1, -1]
-	GameData.equipped_head = [-1, -1, -1, -1]
-	GameData.equipped_body = [-1, -1, -1, -1]
-	GameData.equipped_accessory = [-1, -1, -1, -1]
 
 func _backup_existing_save() -> void:
 	var save_path := SaveManager.SAVE_DIR + SaveManager.SAVE_FILE

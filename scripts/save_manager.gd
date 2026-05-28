@@ -25,6 +25,7 @@ func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_DIR + SAVE_FILE)
 
 func save_game() -> bool:
+	GameData.ensure_party_equipment()
 	DirAccess.make_dir_recursive_absolute(SAVE_DIR.get_base_dir())
 	var file := FileAccess.open(SAVE_DIR + SAVE_FILE, FileAccess.WRITE)
 	if not file:
@@ -42,10 +43,6 @@ func save_game() -> bool:
 			"ethers": GameData.ethers,
 		"weapons_bag": GameData.weapons_bag,
 		"armor_bag": GameData.armor_bag,
-		"equipped_weapon": GameData.equipped_weapon,
-		"equipped_head": GameData.equipped_head,
-			"equipped_body": GameData.equipped_body,
-			"equipped_accessory": GameData.equipped_accessory,
 		"overworld_position": {"x": GameData.overworld_position.x, "y": GameData.overworld_position.y},
 		"overworld_facing": {"x": GameData.overworld_facing.x, "y": GameData.overworld_facing.y},
 		"cleared_encounters": GameData.cleared_encounters,
@@ -138,29 +135,7 @@ func load_game() -> bool:
 	GameData.ethers = data.get("ethers", 0)
 	GameData.weapons_bag = data.get("weapons_bag", [])
 	GameData.armor_bag = data.get("armor_bag", [])
-	GameData.equipped_weapon = data.get("equipped_weapon", [-1, -1, -1, -1])
-	if data.has("equipped_body"):
-		GameData.equipped_head = data.get("equipped_head", [-1, -1, -1, -1])
-		GameData.equipped_body = data.get("equipped_body", [-1, -1, -1, -1])
-		GameData.equipped_accessory = data.get("equipped_accessory", [-1, -1, -1, -1])
-	elif data.has("equipped_armor"):
-		var old_armor: Array = data["equipped_armor"]
-		GameData.equipped_body = old_armor
-		GameData.equipped_head = [-1, -1, -1, -1]
-		GameData.equipped_accessory = [-1, -1, -1, -1]
-		# Migrate old armor items to body slot
-		for item in GameData.armor_bag:
-			if not item.has("slot"):
-				item["slot"] = "body"
-	else:
-		GameData.equipped_head = [-1, -1, -1, -1]
-		GameData.equipped_body = [-1, -1, -1, -1]
-		GameData.equipped_accessory = [-1, -1, -1, -1]
-
-	GameData.equipped_weapon = _normalize_index_array(GameData.equipped_weapon, GameData.party.size())
-	GameData.equipped_head = _normalize_index_array(GameData.equipped_head, GameData.party.size())
-	GameData.equipped_body = _normalize_index_array(GameData.equipped_body, GameData.party.size())
-	GameData.equipped_accessory = _normalize_index_array(GameData.equipped_accessory, GameData.party.size())
+	GameData.ensure_party_equipment()
 
 	GameData.overworld_position = _dict_to_vector2i(data.get("overworld_position", {}), Vector2i(14, 19))
 	GameData.overworld_facing = _dict_to_vector2i(data.get("overworld_facing", {}), Vector2i.DOWN)
@@ -252,13 +227,3 @@ func _normalize_party(value: Variant) -> Array:
 			member["magic_levels"] = _normalize_int_keyed_dictionary(member.get("magic_levels", {}))
 			normalized.append(member)
 	return normalized
-
-func _normalize_index_array(value: Variant, target_size: int) -> Array:
-	var out: Array = []
-	if value is Array:
-		out = value.duplicate()
-	while out.size() < target_size:
-		out.append(-1)
-	if out.size() > target_size:
-		out.resize(target_size)
-	return out

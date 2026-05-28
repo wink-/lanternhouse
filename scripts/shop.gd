@@ -157,7 +157,7 @@ func _buy_for_character(ci: int) -> void:
 		if existing < 0:
 			GameData.weapons_bag.append(item.duplicate(true))
 			existing = GameData.weapons_bag.size() - 1
-		GameData.equipped_weapon[ci] = existing
+		GameData.set_equipped_index(ci, "weapon", existing)
 
 	elif shop_type == "armor":
 		var existing: int = -1
@@ -169,13 +169,9 @@ func _buy_for_character(ci: int) -> void:
 			GameData.armor_bag.append(item.duplicate(true))
 			existing = GameData.armor_bag.size() - 1
 		var slot: String = item.get("slot", "body")
-		match slot:
-			"head":
-				GameData.equipped_head[ci] = existing
-			"accessory":
-				GameData.equipped_accessory[ci] = existing
-			_:
-				GameData.equipped_body[ci] = existing
+		if not slot in ["head", "body", "accessory"]:
+			slot = "body"
+		GameData.set_equipped_index(ci, slot, existing)
 
 	last_message = "[color=green]Equipped %s on %s.[/color]" % [item["name"], GameData.party[ci]["name"]]
 	selecting_character = false
@@ -204,23 +200,11 @@ func _build_sell_list() -> void:
 	sell_list.clear()
 	for i in range(GameData.weapons_bag.size()):
 		var w: Dictionary = GameData.weapons_bag[i]
-		var equipped: bool = false
-		for ew in GameData.equipped_weapon:
-			if ew == i: equipped = true
-		if not equipped:
+		if not GameData.is_weapon_equipped(i):
 			sell_list.append({"type": "weapon", "idx": i, "id": w["id"], "name": w["name"], "sell_price": ItemDB.get_sell_price(w["id"])})
 	for i in range(GameData.armor_bag.size()):
 		var a: Dictionary = GameData.armor_bag[i]
-		var equipped: bool = false
-		for ea in GameData.equipped_head:
-			if ea == i: equipped = true
-		if not equipped:
-			for ea in GameData.equipped_body:
-				if ea == i: equipped = true
-		if not equipped:
-			for ea in GameData.equipped_accessory:
-				if ea == i: equipped = true
-		if not equipped:
+		if not GameData.is_armor_equipped(i):
 			sell_list.append({"type": "armor", "idx": i, "id": a["id"], "name": a["name"], "sell_price": ItemDB.get_sell_price(a["id"])})
 	for i in range(GameData.trade_goods.size()):
 		var tg: Dictionary = GameData.trade_goods[i]
@@ -237,19 +221,10 @@ func _do_sell(idx: int) -> void:
 	last_message = "[color=green]Sold %s for %s.[/color]" % [entry["name"], _format_price(price)]
 	if entry["type"] == "weapon":
 		GameData.weapons_bag.remove_at(entry["idx"])
-		for i in range(GameData.equipped_weapon.size()):
-			if GameData.equipped_weapon[i] == entry["idx"]:
-				GameData.equipped_weapon[i] = -1
-			elif GameData.equipped_weapon[i] > entry["idx"]:
-				GameData.equipped_weapon[i] -= 1
+		GameData.adjust_equipment_after_bag_remove("weapon", entry["idx"])
 	elif entry["type"] == "armor":
 		GameData.armor_bag.remove_at(entry["idx"])
-		for slot_arr in [GameData.equipped_head, GameData.equipped_body, GameData.equipped_accessory]:
-			for i in range(slot_arr.size()):
-				if slot_arr[i] == entry["idx"]:
-					slot_arr[i] = -1
-				elif slot_arr[i] > entry["idx"]:
-					slot_arr[i] -= 1
+		GameData.adjust_equipment_after_bag_remove("armor", entry["idx"])
 	elif entry["type"] == "trade":
 		var profit: int = price
 		var buy_price: int = 0
@@ -286,17 +261,21 @@ func _update_display() -> void:
 			var m: Dictionary = GameData.party[i]
 			var marker: String = "▶" if i == char_idx else " "
 			var wep: String = "(none)"
-			if GameData.equipped_weapon[i] >= 0:
-				wep = GameData.weapons_bag[GameData.equipped_weapon[i]]["name"]
+			var weapon_index := GameData.get_equipped_index(i, "weapon")
+			if weapon_index >= 0:
+				wep = GameData.weapons_bag[weapon_index]["name"]
 			var head: String = ""
-			if GameData.equipped_head[i] >= 0:
-				head = GameData.armor_bag[GameData.equipped_head[i]]["name"]
+			var head_index := GameData.get_equipped_index(i, "head")
+			if head_index >= 0:
+				head = GameData.armor_bag[head_index]["name"]
 			var body: String = ""
-			if GameData.equipped_body[i] >= 0:
-				body = GameData.armor_bag[GameData.equipped_body[i]]["name"]
+			var body_index := GameData.get_equipped_index(i, "body")
+			if body_index >= 0:
+				body = GameData.armor_bag[body_index]["name"]
 			var acc: String = ""
-			if GameData.equipped_accessory[i] >= 0:
-				acc = GameData.armor_bag[GameData.equipped_accessory[i]]["name"]
+			var accessory_index := GameData.get_equipped_index(i, "accessory")
+			if accessory_index >= 0:
+				acc = GameData.armor_bag[accessory_index]["name"]
 			lines.append("%s Lv%d %s  W:%s H:%s B:%s A:%s" % [marker, m["level"], m["name"], wep, head, body, acc])
 		lines.append("")
 		lines.append("[1]/Enter to confirm, arrows to choose, [Esc] cancel")

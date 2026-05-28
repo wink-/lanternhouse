@@ -14,6 +14,7 @@ const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
 const FactionDB := preload("res://scripts/data/factions.gd")
 const QuestDB := preload("res://scripts/data/quests.gd")
+const TownLayout := preload("res://scripts/town_layout.gd")
 const NPC_FACTION_MAP := {
 	"keepers": FactionDB.Faction.KEEPERS_GUILD,
 	"harbor": FactionDB.Faction.HARBOR_COMPACT,
@@ -306,100 +307,34 @@ func _load_quiet_village_assets() -> void:
 	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
 
 func _load_town_layout() -> void:
-	if not FileAccess.file_exists(TOWN_LAYOUT_PATH):
-		push_warning("Town layout missing: %s" % TOWN_LAYOUT_PATH)
+	var layout := TownLayout.load_from_file(TOWN_LAYOUT_PATH, _default_town_layout())
+	if layout.is_empty():
 		return
-	var file := FileAccess.open(TOWN_LAYOUT_PATH, FileAccess.READ)
-	if not file:
-		push_warning("Town layout could not be opened: %s" % TOWN_LAYOUT_PATH)
-		return
-	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not (parsed is Dictionary):
-		push_warning("Town layout is not valid JSON object: %s" % TOWN_LAYOUT_PATH)
-		return
-	var layout: Dictionary = parsed
-	_town_map = layout.get("map", MAP).duplicate()
-	_town_buildings = _parse_layout_list(layout.get("buildings", TOWN_BUILDINGS))
-	_shop_signs = _parse_layout_list(layout.get("shop_signs", SHOP_SIGNS))
-	_shop_awnings = _parse_layout_list(layout.get("shop_awnings", SHOP_AWNINGS))
-	_town_props = _parse_layout_list(layout.get("props", TOWN_PROPS))
-	_building_doors = _parse_layout_doors(layout.get("doors", []))
-	if _building_doors.is_empty():
-		_building_doors = BUILDING_DOORS.duplicate(true)
-	_building_interactions = _parse_layout_interactions(layout.get("building_interactions", BUILDING_INTERACTIONS))
-	var cat_data: Dictionary = layout.get("cat", {})
-	_cat_home = _array_to_vector2i(cat_data.get("home", [CAT_HOME.x, CAT_HOME.y]), CAT_HOME)
+	_town_map = layout["map"]
+	_town_buildings = layout["buildings"]
+	_shop_signs = layout["shop_signs"]
+	_shop_awnings = layout["shop_awnings"]
+	_town_props = layout["props"]
+	_building_doors = layout["doors"]
+	_building_interactions = layout["building_interactions"]
+	_cat_home = layout["cat_home"]
 	_cat_pos = _cat_home
-	_cat_wander_radius = int(cat_data.get("wander_radius", CAT_WANDER_RADIUS))
+	_cat_wander_radius = layout["cat_wander_radius"]
 
-func _parse_layout_list(entries: Variant) -> Array:
-	var result: Array = []
-	if not (entries is Array):
-		return result
-	for entry: Variant in entries:
-		if entry is Dictionary:
-			result.append(_parse_layout_entry(entry))
-	return result
-
-func _parse_layout_entry(entry: Dictionary) -> Dictionary:
-	var parsed := entry.duplicate(true)
-	if parsed.has("grid"):
-		parsed["grid"] = _array_to_vector2i(parsed["grid"], Vector2i.ZERO)
-	if parsed.has("size"):
-		parsed["size"] = _array_to_vector2i(parsed["size"], Vector2i(1, 1))
-	if parsed.has("offset"):
-		parsed["offset"] = _array_to_vector2(parsed["offset"], Vector2.ZERO)
-	if parsed.has("fallback_region"):
-		parsed["fallback_region"] = _array_to_rect2i(parsed["fallback_region"], Rect2i())
-	return parsed
-
-func _parse_layout_doors(entries: Variant) -> Dictionary:
-	var result: Dictionary = {}
-	if not (entries is Array):
-		return result
-	for entry: Variant in entries:
-		if not (entry is Dictionary):
-			continue
-		var door_data: Dictionary = entry
-		if not door_data.has("grid") or not door_data.has("npc"):
-			continue
-		result[_array_to_vector2i(door_data["grid"], Vector2i.ZERO)] = String(door_data["npc"])
-	return result
-
-func _parse_layout_interactions(entries: Variant) -> Dictionary:
-	var result: Dictionary = {}
-	if not (entries is Dictionary):
-		return BUILDING_INTERACTIONS.duplicate(true)
-	for building_id: String in entries:
-		var data: Variant = entries[building_id]
-		if not (data is Dictionary):
-			continue
-		var parsed: Dictionary = data.duplicate(true)
-		if parsed.has("door_offset"):
-			parsed["door_offset"] = _array_to_vector2i(parsed["door_offset"], Vector2i.ZERO)
-		result[building_id] = parsed
-	return result
-
-func _array_to_vector2i(value: Variant, fallback: Vector2i) -> Vector2i:
-	if value is Vector2i:
-		return value
-	if value is Array and value.size() >= 2:
-		return Vector2i(int(value[0]), int(value[1]))
-	return fallback
-
-func _array_to_vector2(value: Variant, fallback: Vector2) -> Vector2:
-	if value is Vector2:
-		return value
-	if value is Array and value.size() >= 2:
-		return Vector2(float(value[0]), float(value[1]))
-	return fallback
-
-func _array_to_rect2i(value: Variant, fallback: Rect2i) -> Rect2i:
-	if value is Rect2i:
-		return value
-	if value is Array and value.size() >= 4:
-		return Rect2i(Vector2i(int(value[0]), int(value[1])), Vector2i(int(value[2]), int(value[3])))
-	return fallback
+func _default_town_layout() -> Dictionary:
+	return {
+		"map": MAP,
+		"buildings": TOWN_BUILDINGS,
+		"shop_signs": SHOP_SIGNS,
+		"shop_awnings": SHOP_AWNINGS,
+		"props": TOWN_PROPS,
+		"doors": BUILDING_DOORS,
+		"building_interactions": BUILDING_INTERACTIONS,
+		"cat": {
+			"home": CAT_HOME,
+			"wander_radius": CAT_WANDER_RADIUS,
+		},
+	}
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -1931,6 +1866,7 @@ func _try_recruit() -> void:
 		"command_label": "",
 		"wage": r["wage"],
 		"loyalty": r["loyalty"],
+		"equipment": GameData.create_empty_equipment(),
 	}
 	# Scale stats for level
 	for _i in range(r["level"] - 1):
@@ -1942,10 +1878,7 @@ func _try_recruit() -> void:
 		member["hp"] = member["max_hp"]
 		member["next_xp"] = int(round(member["next_xp"] * 1.4))
 	GameData.party.append(member)
-	GameData.equipped_weapon.append(-1)
-	GameData.equipped_head.append(-1)
-	GameData.equipped_body.append(-1)
-	GameData.equipped_accessory.append(-1)
+	GameData.ensure_party_equipment()
 	# Mark as recruited
 	var roster_pool = GameData.get_meta("roster_pool", _init_roster())
 	for entry in roster_pool:

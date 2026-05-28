@@ -94,26 +94,24 @@ func _update() -> void:
 
 		# Equipment
 		var wep_str := "None"
-		if GameData.equipped_weapon[selected_idx] >= 0:
-			var wi: int = GameData.equipped_weapon[selected_idx]
+		var wi := GameData.get_equipped_index(selected_idx, "weapon")
+		if wi >= 0:
 			if wi < GameData.weapons_bag.size():
 				wep_str = "%s (+%d)" % [GameData.weapons_bag[wi]["name"], GameData.weapons_bag[wi].get("atk", 0)]
 		lines.append("Weapon: %s" % wep_str)
 		var head_str := "None"
-		if GameData.equipped_head[selected_idx] >= 0:
-			var ai: int = GameData.equipped_head[selected_idx]
+		var ai := GameData.get_equipped_index(selected_idx, "head")
+		if ai >= 0:
 			if ai < GameData.armor_bag.size():
 				head_str = "%s (+%d)" % [GameData.armor_bag[ai]["name"], GameData.armor_bag[ai].get("def", 0)]
 		var body_str := "None"
-		if GameData.equipped_body[selected_idx] >= 0:
-			var ai: int = GameData.equipped_body[selected_idx]
-			if ai < GameData.armor_bag.size():
-				body_str = "%s (+%d)" % [GameData.armor_bag[ai]["name"], GameData.armor_bag[ai].get("def", 0)]
+		ai = GameData.get_equipped_index(selected_idx, "body")
+		if ai >= 0 and ai < GameData.armor_bag.size():
+			body_str = "%s (+%d)" % [GameData.armor_bag[ai]["name"], GameData.armor_bag[ai].get("def", 0)]
 		var acc_str := "None"
-		if GameData.equipped_accessory[selected_idx] >= 0:
-			var ai: int = GameData.equipped_accessory[selected_idx]
-			if ai < GameData.armor_bag.size():
-				acc_str = "%s (+%d)" % [GameData.armor_bag[ai]["name"], GameData.armor_bag[ai].get("def", 0)]
+		ai = GameData.get_equipped_index(selected_idx, "accessory")
+		if ai >= 0 and ai < GameData.armor_bag.size():
+			acc_str = "%s (+%d)" % [GameData.armor_bag[ai]["name"], GameData.armor_bag[ai].get("def", 0)]
 		lines.append("Head: %s    Body: %s    Acc: %s" % [head_str, body_str, acc_str])
 
 		# Magic

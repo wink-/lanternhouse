@@ -225,16 +225,15 @@ func _crafted_count(item_id: String, item_type: String) -> int:
 
 func _equipped_by_weapon(bag_idx: int) -> String:
 	var names: Array = []
-	for pi in range(GameData.equipped_weapon.size()):
-		if GameData.equipped_weapon[pi] == bag_idx:
-			if pi < GameData.party.size():
-				names.append(GameData.party[pi]["name"])
+	for pi in range(GameData.party.size()):
+		if GameData.get_equipped_index(pi, "weapon") == bag_idx:
+			names.append(GameData.party[pi]["name"])
 	return "Equipped: %s" % ", ".join(names) if not names.is_empty() else ""
 
 func _equipped_by_armor(bag_idx: int) -> String:
 	var names: Array = []
 	for pi in range(GameData.party.size()):
-		if GameData.equipped_head[pi] == bag_idx or GameData.equipped_body[pi] == bag_idx or GameData.equipped_accessory[pi] == bag_idx:
+		if GameData.get_equipped_index(pi, "head") == bag_idx or GameData.get_equipped_index(pi, "body") == bag_idx or GameData.get_equipped_index(pi, "accessory") == bag_idx:
 			names.append(GameData.party[pi]["name"])
 	return "Equipped: %s" % ", ".join(names) if not names.is_empty() else ""
 
@@ -373,37 +372,30 @@ func _do_equip(pi: int) -> void:
 
 	if tab == 1:
 		# Equip weapon
-		var old_idx: int = GameData.equipped_weapon[pi]
-		GameData.equipped_weapon[pi] = selected_idx
+		var old_idx: int = GameData.get_equipped_index(pi, "weapon")
+		GameData.set_equipped_index(pi, "weapon", selected_idx)
 		# If someone else had this weapon equipped, give them the old one
 		if old_idx == selected_idx:
 			pass  # same weapon, no change
 		else:
 			for other_pi in range(GameData.party.size()):
-				if other_pi != pi and GameData.equipped_weapon[other_pi] == selected_idx:
-					GameData.equipped_weapon[other_pi] = old_idx
+				if other_pi != pi and GameData.get_equipped_index(other_pi, "weapon") == selected_idx:
+					GameData.set_equipped_index(other_pi, "weapon", old_idx)
 	elif tab == 2:
 		# Equip armor — determine slot
 		var armor: Dictionary = GameData.armor_bag[selected_idx]
 		var slot: String = armor.get("slot", "body")
-		var slot_array: Array
-		match slot:
-			"head": slot_array = GameData.equipped_head
-			"body": slot_array = GameData.equipped_body
-			"accessory": slot_array = GameData.equipped_accessory
-			_: slot_array = GameData.equipped_body
-		var old_idx: int = slot_array[pi]
-		slot_array[pi] = selected_idx
+		if not slot in ["head", "body", "accessory"]:
+			slot = "body"
+		var old_idx: int = GameData.get_equipped_index(pi, slot)
+		GameData.set_equipped_index(pi, slot, selected_idx)
 		# If someone else had this armor equipped, give them the old one
 		if old_idx != selected_idx:
 			for other_pi in range(GameData.party.size()):
 				if other_pi != pi:
-					if GameData.equipped_head[other_pi] == selected_idx:
-						GameData.equipped_head[other_pi] = old_idx
-					if GameData.equipped_body[other_pi] == selected_idx:
-						GameData.equipped_body[other_pi] = old_idx
-					if GameData.equipped_accessory[other_pi] == selected_idx:
-						GameData.equipped_accessory[other_pi] = old_idx
+					for other_slot: String in ["head", "body", "accessory"]:
+						if GameData.get_equipped_index(other_pi, other_slot) == selected_idx:
+							GameData.set_equipped_index(other_pi, other_slot, old_idx)
 
 	equip_selecting = false
 	_update()

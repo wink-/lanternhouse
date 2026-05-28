@@ -60,7 +60,7 @@ func _run_gather_site_rules() -> bool:
 
 func _check_fishing_rules(overworld: Node) -> bool:
 	GameData.weapons_bag.append({"id": "fishing_pole", "name": "Fishing Pole", "atk": 0, "fishing_bonus": 2})
-	GameData.equipped_weapon[0] = GameData.weapons_bag.size() - 1
+	GameData.set_equipped_index(0, "weapon", GameData.weapons_bag.size() - 1)
 	if GameData.get_equipped_fishing_bonus() < 2:
 		return false
 
@@ -137,7 +137,6 @@ func _reset_state() -> void:
 	GameData.herb_bag.clear()
 	GameData.material_bag.clear()
 	GameData.weapons_bag.clear()
-	GameData.equipped_weapon = [-1, -1, -1, -1]
 	GameData.gather_counts.clear()
 	GameData.gather_sites.clear()
 	GameData.skill_uses = {"alchemy": 30, "tinkering": 30}

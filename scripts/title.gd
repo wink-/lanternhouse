@@ -60,10 +60,6 @@ func _select() -> void:
 			GameData.weapons_bag.clear()
 			GameData.armor_bag.clear()
 			GameData.trade_goods.clear()
-			GameData.equipped_weapon = [-1, -1, -1, -1]
-			GameData.equipped_head = [-1, -1, -1, -1]
-			GameData.equipped_body = [-1, -1, -1, -1]
-			GameData.equipped_accessory = [-1, -1, -1, -1]
 			GameData.overworld_position = Vector2i(15, 21)
 			GameData.overworld_facing = Vector2i.DOWN
 			GameData.cleared_encounters.clear()

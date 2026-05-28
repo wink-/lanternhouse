@@ -338,12 +338,10 @@ func _try_recruit_kira() -> void:
 		"magic_levels": _copy_magic(tmpl.get("magic_levels", {})),
 		"alive": true, "command": "", "command_label": "",
 		"wage": wage, "loyalty": 60,
+		"equipment": GameData.create_empty_equipment(),
 	}
 	GameData.party.append(member)
-	GameData.equipped_weapon.append(-1)
-	GameData.equipped_head.append(-1)
-	GameData.equipped_body.append(-1)
-	GameData.equipped_accessory.append(-1)
+	GameData.ensure_party_equipment()
 	GameData.change_faction_rep(FactionDB.Faction.THE_UNLIT, 5)
 	_say("[color=green]Kira Shadowstep joins your party![/color] Paid %dc wage." % wage)
 	talking_to = ""
