@@ -382,8 +382,10 @@ func _draw_buildings() -> void:
 		_draw_town_building(building_data)
 	_draw_building_labels()
 
+const USE_MODULAR_BUILDINGS := false
+
 func _draw_town_building(building_data: Dictionary) -> void:
-	if _modular_building_atlas:
+	if USE_MODULAR_BUILDINGS and _modular_building_atlas:
 		_draw_modular_town_building(building_data)
 		return
 	var texture: Texture2D = _load_shop_building(building_data["id"])

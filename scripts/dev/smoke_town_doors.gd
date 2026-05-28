@@ -24,13 +24,13 @@ func _run_town_door_checks() -> bool:
 		return false
 
 	var checks := {
-		Vector2i(18, 5): "elder",
+		Vector2i(18, 8): "elder",
 		Vector2i(6, 10): "weapon_merchant",
 		Vector2i(31, 10): "armor_merchant",
 		Vector2i(7, 17): "innkeeper",
 		Vector2i(16, 17): "tavern_keeper",
 		Vector2i(25, 17): "tinkerer",
-		Vector2i(34, 17): "healer",
+		Vector2i(36, 17): "healer",
 	}
 	for door: Vector2i in checks:
 		if town._building_door_at(door) != checks[door]:
@@ -48,7 +48,7 @@ func _run_town_door_checks() -> bool:
 
 	town.topic_mode = false
 	town.talking_to = ""
-	town.pos = Vector2i(34, 18)
+	town.pos = Vector2i(36, 18)
 	town.facing = Vector2i.UP
 	prompt = town._interaction_prompt()
 	if not prompt.contains("Chapel"):
