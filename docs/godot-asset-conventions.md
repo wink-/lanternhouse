@@ -87,11 +87,35 @@ walk_down, walk_up, walk_left, walk_right
 ## Adding New Sprites
 
 1. Place the PNG in the correct `assets/sprites/` subdirectory.
-2. No code change needed — `SpriteCache.get_sprite()` auto-detects files
-   and returns the texture, falling back to `null` (which triggers colored
-   block rendering).
+2. Prefer `SpriteCache` lookups over direct `load()` or `Image.load()` calls.
+   Use named keys such as `town.building.inn`, `town.prop.lantern_post`,
+   `battle.enemy.slime`, `battle.party.fighter`, or
+   `character.cat.rotation.south`.
 3. For new tile types, add the color entry to `COLORS` and any block/encounter
    logic in the relevant scene script, then drop the matching PNG.
+
+## Asset Registry
+
+`scripts/sprite_cache.gd` is the lightweight asset registry and texture cache.
+It maps logical names to files under `assets/sprites/` so scene code asks for
+game concepts instead of hardcoding paths everywhere.
+
+Common lookup patterns:
+
+| Asset type | Registry key | File path |
+|---|---|---|
+| Town building | `town.building.<id>` | `town/shops/buildings/<id>.png` |
+| Town awning | `town.awning.<id>` | `town/shops/awnings/<id>.png` |
+| Town sign | `town.sign.<id>` | `town/shops/signs/<id>.png` |
+| Town prop | `town.prop.<id>` | `town/props/<id>.png` |
+| Battle enemy | `battle.enemy.<id>` | `battle/enemies/<id>.png` |
+| Battle party | `battle.party.<id>` | `battle/party/<id>.png` |
+| Character rotation | `character.<id>.rotation.<direction>` | `characters/<id>/rotations/<direction>.png` |
+| Character walk frame | `character.<id>.walk.<direction>.<frame>` | `characters/<id>/walk/<direction>/<frame>.png` |
+
+For nested character folders, the `<id>` may include a subfolder, such as
+`town_npcs/elder`. Add fixed one-off atlases to `ASSET_PATHS` in
+`sprite_cache.gd`.
 
 ## Adding PixelLab Art
 

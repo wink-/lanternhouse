@@ -3,7 +3,6 @@ extends Node2D
 
 const TILE_SIZE := 16
 const GARDEN_GROW_SECONDS := 60.0
-const HOME_INTERIOR_PATH := "res://assets/sprites/interiors/town/home_interior.png"
 
 const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
@@ -97,14 +96,9 @@ func _ready() -> void:
 	garden_timer = GameData.get_meta("home_garden_timer", 0.0)
 
 func _load_home_interior() -> void:
-	if not FileAccess.file_exists(HOME_INTERIOR_PATH):
-		push_warning("Home interior atlas missing: %s" % HOME_INTERIOR_PATH)
-		return
-	var image := Image.new()
-	if image.load(HOME_INTERIOR_PATH) != OK:
-		push_warning("Home interior atlas could not be loaded: %s" % HOME_INTERIOR_PATH)
-		return
-	_home_interior = ImageTexture.create_from_image(image)
+	_home_interior = SpriteCache.get_asset("town.home.interior")
+	if not _home_interior:
+		push_warning("Home interior atlas could not be loaded from asset registry.")
 
 func _draw_map() -> void:
 	for y in range(MAP.size()):

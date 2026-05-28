@@ -23,11 +23,8 @@ const AlchemyDB := preload("res://scripts/data/alchemy.gd")
 const TinkerDB := preload("res://scripts/data/tinkering.gd")
 
 const TILE_SIZE := 32
-const PLAYER_SPRITE_PATH := "res://assets/sprites/overworld/player.png"
-const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
 
 # ── Terrain atlas tile coordinates (col, row in 32x32 grid) ──────────────
-const OVERWORLD_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_overworld.png"
 const T_WATER_FULL := Vector2i(0, 0)
 const T_SAND := Vector2i(1, 0)
 const T_GRASS := Vector2i(2, 0)
@@ -350,12 +347,10 @@ func _ready() -> void:
 		debug_label.hide()
 
 func _build_tileset() -> void:
-	var tex: Texture2D
-	if FileAccess.file_exists(OVERWORLD_ATLAS_PATH):
-		tex = _load_png_texture(OVERWORLD_ATLAS_PATH)
+	var tex: Texture2D = SpriteCache.get_asset("tiles.overworld")
 	if not tex:
 		push_error("Failed to load overworld terrain atlas!")
-		print("ERROR: overworld terrain atlas not found: ", OVERWORLD_ATLAS_PATH)
+		print("ERROR: overworld terrain atlas not found in asset registry.")
 		# Fallback: render map with colors
 		_fallback_draw()
 		return
@@ -514,9 +509,7 @@ func _init_player_sprite() -> void:
 		if player_face:
 			player_face.hide()
 		return
-	if not FileAccess.file_exists(PLAYER_SPRITE_PATH):
-		return
-	player_texture.texture = _load_png_texture(PLAYER_SPRITE_PATH)
+	player_texture.texture = SpriteCache.player_sprite()
 	if not player_texture.texture:
 		return
 	player_texture.centered = true
@@ -529,7 +522,7 @@ func _init_player_sprite() -> void:
 
 func _load_player_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		_player_idle_textures[dir_name] = _load_png_texture(PLAYER_ROTATION_PATH % dir_name)
+		_player_idle_textures[dir_name] = SpriteCache.character_rotation("player", dir_name)
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):

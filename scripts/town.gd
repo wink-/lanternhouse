@@ -23,18 +23,6 @@ const NPC_FACTION_MAP := {
 
 const CharDB := preload("res://scripts/data/classes.gd")
 const TILE_SIZE := 16
-const TOWN_ATLAS_PATH := "res://assets/sprites/tiles/lanternhouse_town.png"
-const TOWN_GROUND_PATH := "res://assets/sprites/tiles/lanternhouse_town_readable.png"
-const QUIET_BUILDINGS_PATH := "res://assets/sprites/vendor/quiet_village/Buildings.png"
-const QUIET_PROPS_PATH := "res://assets/sprites/vendor/quiet_village/Props.png"
-const SHOP_SIGN_PATH := "res://assets/sprites/town/shops/signs/%s.png"
-const SHOP_AWNING_PATH := "res://assets/sprites/town/shops/awnings/%s.png"
-const SHOP_BUILDING_PATH := "res://assets/sprites/town/shops/buildings/%s.png"
-const TOWN_PROP_PATH := "res://assets/sprites/town/props/%s.png"
-const PLAYER_ROTATION_PATH := "res://assets/sprites/characters/player/rotations/%s.png"
-const NPC_ROTATION_PATH := "res://assets/sprites/characters/town_npcs/%s/rotations/%s.png"
-const CAT_ROTATION_PATH := "res://assets/sprites/characters/cat/rotations/%s.png"
-const CAT_WALK_PATH := "res://assets/sprites/characters/cat/walk/%s/%d.png"
 const CAT_HOME := Vector2i(18, 18)
 const CAT_WANDER_RADIUS := 5
 const CAT_FRAME_TIME := 0.12
@@ -266,17 +254,14 @@ func _ready() -> void:
 	_show_arrival_hint()
 
 func _load_town_atlas() -> void:
-	if not FileAccess.file_exists(TOWN_ATLAS_PATH):
-		push_warning("Town atlas missing: %s" % TOWN_ATLAS_PATH)
-		return
-	_town_atlas = _load_png_texture(TOWN_ATLAS_PATH)
+	_town_atlas = SpriteCache.get_asset("town.atlas")
 	if not _town_atlas:
-		push_warning("Town atlas could not be loaded: %s" % TOWN_ATLAS_PATH)
+		push_warning("Town atlas could not be loaded from asset registry.")
 
 func _load_quiet_village_assets() -> void:
-	_town_ground = _load_png_texture(TOWN_GROUND_PATH)
-	_quiet_buildings = _load_png_texture(QUIET_BUILDINGS_PATH)
-	_quiet_props = _load_png_texture(QUIET_PROPS_PATH)
+	_town_ground = SpriteCache.get_asset("town.ground")
+	_quiet_buildings = SpriteCache.get_asset("town.vendor.buildings")
+	_quiet_props = SpriteCache.get_asset("town.vendor.props")
 
 func _load_png_texture(path: String) -> Texture2D:
 	if not FileAccess.file_exists(path):
@@ -341,11 +326,7 @@ func _draw_town_building(building_data: Dictionary) -> void:
 func _load_shop_building(building_id: String) -> Texture2D:
 	if _shop_building_textures.has(building_id):
 		return _shop_building_textures[building_id]
-	var path: String = SHOP_BUILDING_PATH % building_id
-	if not FileAccess.file_exists(path):
-		_shop_building_textures[building_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_building(building_id)
 	_shop_building_textures[building_id] = texture
 	return texture
 
@@ -389,11 +370,7 @@ func _draw_shop_awnings() -> void:
 func _load_shop_awning(awning_id: String) -> Texture2D:
 	if _shop_awning_textures.has(awning_id):
 		return _shop_awning_textures[awning_id]
-	var path: String = SHOP_AWNING_PATH % awning_id
-	if not FileAccess.file_exists(path):
-		_shop_awning_textures[awning_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_awning(awning_id)
 	_shop_awning_textures[awning_id] = texture
 	return texture
 
@@ -433,11 +410,7 @@ func _draw_shop_signs() -> void:
 func _load_shop_sign(sign_id: String) -> Texture2D:
 	if _shop_sign_textures.has(sign_id):
 		return _shop_sign_textures[sign_id]
-	var path: String = SHOP_SIGN_PATH % sign_id
-	if not FileAccess.file_exists(path):
-		_shop_sign_textures[sign_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_sign(sign_id)
 	_shop_sign_textures[sign_id] = texture
 	return texture
 
@@ -459,11 +432,7 @@ func _draw_town_props() -> void:
 func _load_town_prop(prop_id: String) -> Texture2D:
 	if _town_prop_textures.has(prop_id):
 		return _town_prop_textures[prop_id]
-	var path: String = TOWN_PROP_PATH % prop_id
-	if not FileAccess.file_exists(path):
-		_town_prop_textures[prop_id] = null
-		return null
-	var texture := _load_png_texture(path)
+	var texture := SpriteCache.town_prop(prop_id)
 	_town_prop_textures[prop_id] = texture
 	return texture
 
@@ -508,8 +477,7 @@ func _load_npc_textures() -> void:
 	for npc_id: String in NPC_IDS:
 		if _npc_idle_textures.has(npc_id):
 			continue
-		var path: String = NPC_ROTATION_PATH % [npc_id, "south"]
-		_npc_idle_textures[npc_id] = _load_png_texture(path) if FileAccess.file_exists(path) else null
+		_npc_idle_textures[npc_id] = SpriteCache.character_rotation("town_npcs/%s" % npc_id, "south")
 
 func _make_solid_texture(color: Color) -> Texture2D:
 	var image := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
@@ -611,10 +579,10 @@ func _draw_cat() -> void:
 
 func _load_cat_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		_cat_idle_textures[dir_name] = _load_png_texture(CAT_ROTATION_PATH % dir_name)
+		_cat_idle_textures[dir_name] = SpriteCache.character_rotation("cat", dir_name)
 		var frames: Array = []
 		for i in range(6):
-			var frame_tex := _load_png_texture(CAT_WALK_PATH % [dir_name, i])
+			var frame_tex := SpriteCache.character_walk_frame("cat", dir_name, i)
 			if frame_tex:
 				frames.append(frame_tex)
 		_cat_walk_frames[dir_name] = frames
@@ -720,8 +688,7 @@ func _update_player_texture() -> void:
 
 func _load_player_textures() -> void:
 	for dir_name in ["south", "east", "north", "west"]:
-		var path: String = PLAYER_ROTATION_PATH % dir_name
-		_player_idle_textures[dir_name] = _load_png_texture(path) if FileAccess.file_exists(path) else null
+		_player_idle_textures[dir_name] = SpriteCache.character_rotation("player", dir_name)
 
 func _configure_camera() -> void:
 	if not camera:

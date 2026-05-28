@@ -25,8 +25,6 @@ const ItemDB := preload("res://scripts/data/items.gd")
 
 const TILE_SIZE := 16
 const MAX_LEVEL := 40
-const PARTY_SPRITE_PATH := "res://assets/sprites/battle/party/%s.png"
-const ENEMY_SPRITE_PATH := "res://assets/sprites/battle/enemies/%s.png"
 
 # ── Zone backgrounds ──────────────────────────────────────────────────────
 const ZONE_BG := {
@@ -339,16 +337,7 @@ func _load_enemy_sprite(enemy_name: String) -> Texture2D:
 	var key: String = enemy_name.to_snake_case()
 	if _enemy_sprite_textures.has(key):
 		return _enemy_sprite_textures[key]
-	var path: String = ENEMY_SPRITE_PATH % key
-	if not FileAccess.file_exists(path):
-		_enemy_sprite_textures[key] = null
-		return null
-	var image := Image.new()
-	if image.load(path) != OK:
-		push_warning("Enemy sprite could not be loaded: %s" % path)
-		_enemy_sprite_textures[key] = null
-		return null
-	var texture := ImageTexture.create_from_image(image)
+	var texture := SpriteCache.enemy_sprite(key)
 	_enemy_sprite_textures[key] = texture
 	return texture
 
@@ -356,16 +345,7 @@ func _load_party_sprite(party_class: String) -> Texture2D:
 	var key: String = PARTY_SPRITE_IDS.get(party_class, party_class.to_snake_case())
 	if _party_sprite_textures.has(key):
 		return _party_sprite_textures[key]
-	var path: String = PARTY_SPRITE_PATH % key
-	if not FileAccess.file_exists(path):
-		_party_sprite_textures[key] = null
-		return null
-	var image := Image.new()
-	if image.load(path) != OK:
-		push_warning("Party sprite could not be loaded: %s" % path)
-		_party_sprite_textures[key] = null
-		return null
-	var texture := ImageTexture.create_from_image(image)
+	var texture := SpriteCache.party_sprite(key)
 	_party_sprite_textures[key] = texture
 	return texture
 
