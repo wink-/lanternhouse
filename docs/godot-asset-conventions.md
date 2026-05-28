@@ -197,6 +197,16 @@ python scripts/dev/create_town_layout.py mournlight_harbor --name "Mournlight Ha
 Use the generated layout as a scaffold, then add buildings, doors, props, and
 art kit references as the town becomes real.
 
+To stamp in one building and keep its door/interact data aligned:
+
+```powershell
+python scripts/dev/add_town_building.py smithy --name "Smithy" --npc weapon_merchant --x 10 --y 8 --width 6 --height 4 --plaque plaque_sword --door-width 3 --sign --awning
+```
+
+Use `--replace` when intentionally moving an existing building. The command
+updates the footprint, interaction target, door tiles, and optional shop
+sign/awning, then runs the world-art pipeline unless `--skip-build` is passed.
+
 ## Adding New Enemy Types
 
 1. Add template to `scripts/data/enemies.gd` → `template()`.
