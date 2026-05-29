@@ -44,7 +44,7 @@ The wrapper calls the permanent Godot harness directly:
 
 ```bash
 xvfb-run -a -s "-screen 0 1280x720x24" \
-  ~/.local/bin/godot4 --rendering-driver opengl3 --audio-driver Dummy --path . \
+  "${GODOT_BIN:-$HOME/.local/bin/godot}" --rendering-driver opengl3 --audio-driver Dummy --path . \
   scenes/dev/visual_scene_capture.tscn -- \
   --target town \
   --output artifacts/screenshots/town.png \
@@ -82,7 +82,7 @@ Wrapper-only options:
 | `--output-dir DIR` | timestamped visual QA dir | Batch output directory. |
 | `--frames N` | `12` | Passed to each target. |
 | `--width N` / `--height N` | `1280` / `720` | Xvfb screen size. |
-| `--godot PATH` | `$GODOT_BIN` or `~/.local/bin/godot4` | Override Godot binary. |
+| `--godot PATH` | `$GODOT_BIN`, `~/.local/bin/godot`, `godot`, `~/.local/bin/godot4`, then `godot4` | Override Godot binary. |
 
 ## Required Review Loop
 
@@ -150,8 +150,8 @@ scripts/dev/capture_visual_qa.sh town --output-dir artifacts/screenshots/before_
 scripts/dev/capture_visual_qa.sh town --output-dir artifacts/screenshots/after_town
 
 # Validate code/imports
-~/.local/bin/godot4 --headless --audio-driver Dummy --quit --path .
-xvfb-run -a ~/.local/bin/godot4 --headless --audio-driver Dummy --import --quit --path .
+"${GODOT_BIN:-$HOME/.local/bin/godot}" --headless --audio-driver Dummy --quit --path .
+xvfb-run -a "${GODOT_BIN:-$HOME/.local/bin/godot}" --headless --audio-driver Dummy --import --quit --path .
 
 git status --short
 ```

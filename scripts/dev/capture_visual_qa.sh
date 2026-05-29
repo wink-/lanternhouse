@@ -21,7 +21,7 @@ Options:
   --frames N         Process frames to wait before each capture. Default: 12.
   --width N          Xvfb width. Default: 1280.
   --height N         Xvfb height. Default: 720.
-  --godot PATH       Godot binary. Default: $GODOT_BIN or ~/.local/bin/godot4.
+  --godot PATH       Godot binary. Default: $GODOT_BIN, then ~/.local/bin/godot, godot, ~/.local/bin/godot4, godot4.
   -h, --help         Show this help.
 
 Each capture writes <target>.png and <target>.json manifest into the output dir.
@@ -30,7 +30,32 @@ USAGE
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-GODOT_BIN="${GODOT_BIN:-${HOME}/.local/bin/godot4}"
+
+resolve_godot_bin() {
+  if [[ -n "${GODOT_BIN:-}" ]]; then
+    echo "$GODOT_BIN"
+    return
+  fi
+  if [[ -x "${HOME}/.local/bin/godot" ]]; then
+    echo "${HOME}/.local/bin/godot"
+    return
+  fi
+  if command -v godot >/dev/null 2>&1; then
+    command -v godot
+    return
+  fi
+  if [[ -x "${HOME}/.local/bin/godot4" ]]; then
+    echo "${HOME}/.local/bin/godot4"
+    return
+  fi
+  if command -v godot4 >/dev/null 2>&1; then
+    command -v godot4
+    return
+  fi
+  echo "${HOME}/.local/bin/godot"
+}
+
+GODOT_BIN="$(resolve_godot_bin)"
 OUTPUT_DIR="${PROJECT_DIR}/artifacts/screenshots/visual_qa_$(date +%Y%m%d_%H%M%S)"
 FRAMES="12"
 WIDTH="1280"
