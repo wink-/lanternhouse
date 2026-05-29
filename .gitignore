@@ -5,6 +5,8 @@
 assets_work/
 assets/sprites/tiles/assets_work/
 downloads/
+__pycache__/
+*.pyc
 
 # OS
 .DS_Store

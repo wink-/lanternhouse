@@ -5,9 +5,12 @@ import argparse
 import sys
 from pathlib import Path
 
+from town_catalog import building_specs, load_catalog, prop_specs
+
 
 ROOT = Path(__file__).resolve().parents[2]
 TOWN_DIR = ROOT / "assets" / "world" / "towns"
+CATALOG_PATH = ROOT / "assets" / "world" / "town_asset_catalog.json"
 KNOWN_NPCS = {
     "weapon_merchant",
     "armor_merchant",
@@ -51,6 +54,66 @@ def walkable(town_map: list[str], pos: tuple[int, int]) -> bool:
     return tile_at(town_map, pos) not in BLOCKED_TILES
 
 
+def style_allowed(spec: dict[str, object], town_style: str) -> bool:
+    styles = spec.get("styles", [])
+    return not isinstance(styles, list) or not styles or town_style in styles
+
+
+def repo_path(value: object) -> Path | None:
+    if not isinstance(value, str) or value == "":
+        return None
+    return ROOT / value
+
+
+def validate_catalog(catalog: dict[str, object]) -> list[str]:
+    errors: list[str] = []
+    if catalog.get("tile_size") != 16:
+        errors.append(f"catalog tile_size must be 16, got {catalog.get('tile_size')!r}")
+
+    buildings = catalog.get("buildings", {})
+    if not isinstance(buildings, dict) or not buildings:
+        errors.append("catalog buildings must be a non-empty object")
+        buildings = {}
+    for building_id, spec in buildings.items():
+        if not isinstance(spec, dict):
+            errors.append(f"catalog building {building_id!r} must be an object")
+            continue
+        point(spec.get("size"), f"catalog.buildings.{building_id}.size", errors)
+        point(spec.get("door_offset"), f"catalog.buildings.{building_id}.door_offset", errors)
+        if not isinstance(spec.get("door_width"), int):
+            errors.append(f"catalog.buildings.{building_id}.door_width must be an integer")
+        npc = spec.get("npc", "")
+        if npc not in KNOWN_NPCS:
+            errors.append(f"catalog.buildings.{building_id}.npc unknown: {npc!r}")
+        if spec.get("fallback_region") is not None:
+            rect(spec.get("fallback_region"), f"catalog.buildings.{building_id}.fallback_region", errors)
+        if spec.get("runtime_ready", False):
+            path = repo_path(spec.get("sprite_path"))
+            if path is None:
+                errors.append(f"catalog.buildings.{building_id}.sprite_path is required when runtime_ready")
+            elif not path.exists():
+                errors.append(f"catalog.buildings.{building_id}.sprite_path missing: {path.relative_to(ROOT)}")
+
+    props = catalog.get("props", {})
+    if not isinstance(props, dict) or not props:
+        errors.append("catalog props must be a non-empty object")
+        props = {}
+    for prop_id, spec in props.items():
+        if not isinstance(spec, dict):
+            errors.append(f"catalog prop {prop_id!r} must be an object")
+            continue
+        point(spec.get("offset"), f"catalog.props.{prop_id}.offset", errors)
+        if not isinstance(spec.get("scale"), (int, float)):
+            errors.append(f"catalog.props.{prop_id}.scale must be numeric")
+        if spec.get("runtime_ready", False):
+            path = repo_path(spec.get("sprite_path"))
+            if path is None:
+                errors.append(f"catalog.props.{prop_id}.sprite_path is required when runtime_ready")
+            elif not path.exists():
+                errors.append(f"catalog.props.{prop_id}.sprite_path missing: {path.relative_to(ROOT)}")
+    return errors
+
+
 def footprint_tiles(grid: tuple[int, int], size: tuple[int, int]) -> set[tuple[int, int]]:
     return {
         (grid[0] + dx, grid[1] + dy)
@@ -59,11 +122,14 @@ def footprint_tiles(grid: tuple[int, int], size: tuple[int, int]) -> set[tuple[i
     }
 
 
-def validate(layout_path: Path) -> list[str]:
+def validate(layout_path: Path, catalog: dict[str, object]) -> list[str]:
     errors: list[str] = []
     if not layout_path.exists():
         return [f"Missing town layout: {layout_path.relative_to(ROOT)}"]
     data = json.loads(layout_path.read_text(encoding="utf-8"))
+    town_style = str(data.get("style", "village"))
+    known_buildings = building_specs(catalog)
+    known_props = prop_specs(catalog)
     town_map = data.get("map", [])
     if not isinstance(town_map, list) or not town_map:
         return ["layout.map must be a non-empty array of strings"]
@@ -114,6 +180,10 @@ def validate(layout_path: Path) -> list[str]:
         building_id = str(building.get("id", ""))
         if not building_id:
             errors.append(f"buildings[{index}] is missing id")
+        elif building_id not in known_buildings:
+            errors.append(f"buildings[{index}] unknown catalog id: {building_id!r}")
+        elif not style_allowed(known_buildings[building_id], town_style):
+            errors.append(f"buildings[{index}] {building_id!r} does not support town style {town_style!r}")
         building_ids.add(building_id)
         grid = point(building.get("grid"), f"buildings[{index}].grid", errors)
         size = point(building.get("size"), f"buildings[{index}].size", errors)
@@ -170,6 +240,15 @@ def validate(layout_path: Path) -> list[str]:
             if not isinstance(entry, dict):
                 errors.append(f"{section}[{index}] must be an object")
                 continue
+            entry_id = str(entry.get("id", ""))
+            if section in ["shop_signs", "shop_awnings"]:
+                if entry_id not in building_ids:
+                    errors.append(f"{section}[{index}] references unknown placed building id {entry_id!r}")
+            elif section == "props":
+                if entry_id not in known_props:
+                    errors.append(f"props[{index}] unknown catalog id: {entry_id!r}")
+                elif not style_allowed(known_props[entry_id], town_style):
+                    errors.append(f"props[{index}] {entry_id!r} does not support town style {town_style!r}")
             grid = point(entry.get("grid"), f"{section}[{index}].grid", errors)
             if grid and not in_bounds(grid, width, height):
                 errors.append(f"{section}[{index}] is outside map bounds")
@@ -211,9 +290,23 @@ def main() -> int:
         return 1
 
     failed = False
+    catalog_path = CATALOG_PATH
+    if not catalog_path.exists():
+        print(f"FAIL town asset catalog {catalog_path.relative_to(ROOT)}")
+        print("  - Missing town asset catalog")
+        return 1
+    catalog = load_catalog(catalog_path)
+    catalog_errors = validate_catalog(catalog)
+    if catalog_errors:
+        failed = True
+        print(f"FAIL town asset catalog {catalog_path.relative_to(ROOT)}")
+        for error in catalog_errors:
+            print(f"  - {error}")
+    else:
+        print(f"OK town asset catalog {catalog_path.relative_to(ROOT)}")
     for layout_path in layout_paths:
         full_path = layout_path if layout_path.is_absolute() else ROOT / layout_path
-        errors = validate(full_path)
+        errors = validate(full_path, catalog)
         label = display_path(full_path)
         if errors:
             failed = True

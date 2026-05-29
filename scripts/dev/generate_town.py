@@ -9,165 +9,18 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+from town_catalog import (
+    building_entry,
+    building_interaction,
+    building_specs,
+    load_catalog,
+    prop_entry,
+    prop_specs,
+    supports_style,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 TOWN_DIR = ROOT / "assets" / "world" / "towns"
-
-BUILDING_SPECS = {
-    "elder_hall": {
-        "size": [6, 9],
-        "door_offset": [2, 8],
-        "door_width": 2,
-        "npc": "elder",
-        "name": "Elder Hall",
-        "plaque": "plaque_blank",
-        "public": True,
-        "fallback_region": [219, 16, 172, 72],
-        "fallback_scale": 0.5
-    },
-    "weapon_shop": {
-        "size": [8, 6],
-        "door_offset": [3, 5],
-        "door_width": 2,
-        "npc": "weapon_merchant",
-        "name": "Weapon Shop",
-        "plaque": "plaque_sword",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [15, 573, 117, 72],
-        "fallback_scale": 0.55
-    },
-    "armor_shop": {
-        "size": [8, 5],
-        "door_offset": [3, 4],
-        "door_width": 2,
-        "npc": "armor_merchant",
-        "name": "Armor Shop",
-        "plaque": "plaque_shield",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [16, 466, 116, 72],
-        "fallback_scale": 0.55
-    },
-    "inn": {
-        "size": [5, 7],
-        "door_offset": [2, 6],
-        "door_width": 1,
-        "npc": "innkeeper",
-        "name": "Inn",
-        "plaque": "plaque_bed",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [16, 681, 116, 72],
-        "fallback_scale": 0.55
-    },
-    "tavern": {
-        "size": [9, 6],
-        "door_offset": [5, 5],
-        "door_width": 2,
-        "npc": "tavern_keeper",
-        "name": "Tavern",
-        "plaque": "plaque_tankard",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [14, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    "workshop": {
-        "size": [9, 6],
-        "door_offset": [3, 5],
-        "door_width": 2,
-        "npc": "tinkerer",
-        "name": "Workshop",
-        "plaque": "plaque_gear",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [354, 466, 129, 72],
-        "fallback_scale": 0.5
-    },
-    "chapel": {
-        "size": [7, 8],
-        "door_offset": [2, 7],
-        "door_width": 2,
-        "npc": "healer",
-        "name": "Chapel",
-        "plaque": "plaque_candle",
-        "public": True,
-        "sign": True,
-        "awning": True,
-        "fallback_region": [14, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    # Residential houses — now have real doors (door_width=1) so players can enter
-    "small_house": {
-        "size": [8, 5],
-        "door_offset": [3, 4],
-        "door_width": 1,
-        "npc": "realtor",
-        "name": "Residential House",
-        "plaque": "plaque_blank",
-        "fallback_region": [16, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    "large_house": {
-        "size": [8, 5],
-        "door_offset": [3, 4],
-        "door_width": 1,
-        "npc": "realtor",
-        "name": "Residential House",
-        "plaque": "plaque_blank",
-        "fallback_region": [16, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    "house_timber": {
-        "size": [8, 5],
-        "door_offset": [3, 4],
-        "door_width": 1,
-        "npc": "realtor",
-        "name": "Residential House",
-        "plaque": "plaque_blank",
-        "fallback_region": [16, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    "house_mossy": {
-        "size": [8, 5],
-        "door_offset": [3, 4],
-        "door_width": 1,
-        "npc": "realtor",
-        "name": "Residential House",
-        "plaque": "plaque_blank",
-        "fallback_region": [16, 16, 118, 72],
-        "fallback_scale": 0.55
-    },
-    # Fortress-only buildings
-    "barracks": {
-        "size": [10, 6],
-        "door_offset": [4, 5],
-        "door_width": 2,
-        "npc": "elder",
-        "name": "Barracks",
-        "plaque": "plaque_blank",
-        "public": True,
-        "fallback_region": [219, 16, 172, 72],
-        "fallback_scale": 0.5
-    },
-    # Coastal-only buildings
-    "dockmaster": {
-        "size": [6, 5],
-        "door_offset": [2, 4],
-        "door_width": 1,
-        "npc": "innkeeper",
-        "name": "Dockmaster",
-        "plaque": "plaque_blank",
-        "public": True,
-        "fallback_region": [16, 681, 116, 72],
-        "fallback_scale": 0.55
-    },
-}
 
 
 def find_slot(bw: int, bh: int, width: int, height: int, road_x: int, road_y: int,
@@ -270,11 +123,15 @@ def apply_style_terrain(grid_map: list, style: str, width: int, height: int,
     return grid_map
 
 
-def add_style_props(props: list, style: str, width: int, height: int,
+def add_style_props(props: list, prop_defs: dict[str, dict[str, Any]], style: str, width: int, height: int,
                     road_x: int, road_y: int, occupied: set) -> None:
     """Add style-specific decorative props."""
 
-    def try_prop(p_data: dict) -> bool:
+    def try_prop(prop_id: str, grid: list[int], **overrides: Any) -> bool:
+        spec = prop_defs.get(prop_id)
+        if not spec or not supports_style(spec, style):
+            return False
+        p_data = prop_entry(prop_id, spec, grid, **overrides)
         gx, gy = p_data["grid"]
         if 0 <= gx < width and 0 <= gy < height and (gx, gy) not in occupied:
             props.append(p_data)
@@ -286,38 +143,30 @@ def add_style_props(props: list, style: str, width: int, height: int,
         water_start = height - 4
         # Fishing props near dock ends
         for dock_x in [road_x - 4, road_x + 6]:
-            try_prop({"id": "barrel_pair", "grid": [dock_x - 1, water_start - 1],
-                      "offset": [8, 8], "scale": 0.58})
-            try_prop({"id": "crate_stack", "grid": [dock_x + 1, water_start - 1],
-                      "offset": [8, 8], "scale": 0.58})
-        # Boat props at water edge (placeholder IDs — render if atlas supports them)
-        try_prop({"id": "boat_hull", "grid": [road_x + 2, water_start + 1],
-                  "offset": [8, 8], "scale": 0.72})
-        try_prop({"id": "fishing_post", "grid": [road_x - 6, water_start],
-                  "offset": [8, 4], "scale": 0.60})
-        try_prop({"id": "net_post", "grid": [road_x + 8, water_start],
-                  "offset": [8, 4], "scale": 0.60})
+            try_prop("barrel_pair", [dock_x - 1, water_start - 1], scale=0.58)
+            try_prop("crate_stack", [dock_x + 1, water_start - 1])
+        try_prop("boat_hull", [road_x + 2, water_start + 1])
+        try_prop("fishing_post", [road_x - 6, water_start])
+        try_prop("net_post", [road_x + 8, water_start])
 
     elif style == "fortress":
         # Torch brackets near gate openings (placeholder IDs)
         for gate_x in [3, width - 4]:
-            try_prop({"id": "torch_bracket", "grid": [gate_x, road_y - 1],
-                      "offset": [8, -2], "scale": 0.58})
+            try_prop("torch_bracket", [gate_x, road_y - 1])
         # Guard post at top gate
-        try_prop({"id": "guard_post", "grid": [road_x - 2, 3],
-                  "offset": [8, 8], "scale": 0.60})
-        try_prop({"id": "guard_post", "grid": [road_x + 3, 3],
-                  "offset": [8, 8], "scale": 0.60})
+        try_prop("guard_post", [road_x - 2, 3])
+        try_prop("guard_post", [road_x + 3, 3])
         # Extra lanterns at gate entrances
-        try_prop({"id": "lantern_post", "grid": [3, road_y - 2],
-                  "offset": [8, -2], "scale": 0.58})
-        try_prop({"id": "lantern_post", "grid": [width - 4, road_y - 2],
-                  "offset": [8, -2], "scale": 0.58})
+        try_prop("lantern_post", [3, road_y - 2])
+        try_prop("lantern_post", [width - 4, road_y - 2])
 
 
 def generate_layout(town_id: str, name: str, width: int, height: int,
                     seed: int, style: str = "village") -> dict[str, Any]:
     random.seed(seed)
+    catalog = load_catalog()
+    build_defs = building_specs(catalog)
+    prop_defs = prop_specs(catalog)
 
     grid_map = [["." for _ in range(width)] for _ in range(height)]
 
@@ -369,27 +218,14 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
     props = []
 
     # 1. Place Elder Hall at top of the vertical road
-    eh_spec = BUILDING_SPECS["elder_hall"]
+    eh_spec = build_defs["elder_hall"]
     eh_w, eh_h = eh_spec["size"]
     eh_x = road_x - eh_w // 2 + 1
     eh_y = 1 if style != "fortress" else 3  # move down in fortress to clear wall
 
     building_rects.append((eh_x, eh_y, eh_w, eh_h))
-    buildings.append({
-        "id": "elder_hall",
-        "grid": [eh_x, eh_y],
-        "size": [eh_w, eh_h],
-        "plaque": eh_spec["plaque"],
-        "public": True,
-        "fallback_region": eh_spec["fallback_region"],
-        "fallback_scale": eh_spec["fallback_scale"]
-    })
-    building_interactions["elder_hall"] = {
-        "npc": eh_spec["npc"],
-        "name": eh_spec["name"],
-        "door_offset": eh_spec["door_offset"],
-        "door_width": eh_spec["door_width"]
-    }
+    buildings.append(building_entry("elder_hall", eh_spec, [eh_x, eh_y]))
+    building_interactions["elder_hall"] = building_interaction(eh_spec)
 
     # Ensure vertical road path reaches elder hall door
     for dy in range(eh_h, eh_y + eh_h + 2):
@@ -408,27 +244,16 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
         buildings_to_place.append("dockmaster")
 
     for bid in buildings_to_place:
-        spec = BUILDING_SPECS[bid]
+        spec = build_defs[bid]
+        if not supports_style(spec, style):
+            continue
         bw, bh = spec["size"]
         slot = find_slot(bw, bh, width, height, road_x, road_y, road_rects, building_rects)
         if slot:
             bx, by = slot
             building_rects.append((bx, by, bw, bh))
-            buildings.append({
-                "id": bid,
-                "grid": [bx, by],
-                "size": [bw, bh],
-                "plaque": spec["plaque"],
-                "public": spec.get("public", False),
-                "fallback_region": spec["fallback_region"],
-                "fallback_scale": spec["fallback_scale"]
-            })
-            building_interactions[bid] = {
-                "npc": spec["npc"],
-                "name": spec["name"],
-                "door_offset": spec["door_offset"],
-                "door_width": spec["door_width"]
-            }
+            buildings.append(building_entry(bid, spec, [bx, by]))
+            building_interactions[bid] = building_interaction(spec)
 
             # Connect door threshold to road network
             if spec["door_width"] > 0:
@@ -470,7 +295,7 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
                 grid_map[dy_pos + 1][dx_pos] = "="
 
         # Signs and Awnings
-        spec = BUILDING_SPECS[bid]
+        spec = build_defs[bid]
         if spec.get("sign") and door_width > 0:
             shop_signs.append({
                 "id": bid,
@@ -507,7 +332,11 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
             for x in range(bx, bx + bw_val):
                 occupied_prop_grids.add((x, y))
 
-    def try_add_prop(p_data: dict) -> bool:
+    def try_add_prop(prop_id: str, grid: list[int], **overrides: Any) -> bool:
+        spec = prop_defs.get(prop_id)
+        if not spec or not supports_style(spec, style):
+            return False
+        p_data = prop_entry(prop_id, spec, grid, **overrides)
         gx, gy = p_data["grid"]
         if (gx, gy) not in occupied_prop_grids:
             props.append(p_data)
@@ -518,58 +347,23 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
     # Well in the center of the plaza
     well_x = px + plaza_w // 2
     well_y = py + plaza_h // 2
-    try_add_prop({
-        "id": "well",
-        "grid": [well_x, well_y],
-        "offset": [8, 8],
-        "scale": 0.62
-    })
+    try_add_prop("well", [well_x, well_y])
     # Notice board near the plaza road edge
-    try_add_prop({
-        "id": "notice_board",
-        "grid": [px - 1, py + 1],
-        "offset": [8, 4],
-        "scale": 0.62
-    })
+    try_add_prop("notice_board", [px - 1, py + 1])
     # Signpost at the intersection
-    try_add_prop({
-        "id": "signpost",
-        "grid": [road_x - 1, road_y - 1],
-        "offset": [8, 8],
-        "scale": 0.62
-    })
+    try_add_prop("signpost", [road_x - 1, road_y - 1])
 
     # Benches around the well
-    try_add_prop({
-        "id": "bench",
-        "grid": [well_x - 2, well_y + 1],
-        "offset": [8, 8],
-        "scale": 0.58
-    })
-    try_add_prop({
-        "id": "bench",
-        "grid": [well_x + 1, well_y + 1],
-        "offset": [8, 8],
-        "scale": 0.55
-    })
+    try_add_prop("bench", [well_x - 2, well_y + 1])
+    try_add_prop("bench", [well_x + 1, well_y + 1], scale=0.55)
 
     # Scatter lanterns along roads
     for x in range(4, width - 4, 8):
         if x != road_x and x != road_x + 1:
             if grid_map[road_y - 1][x] == ".":
-                try_add_prop({
-                    "id": "lantern_post",
-                    "grid": [x, road_y - 1],
-                    "offset": [8, -2],
-                    "scale": 0.58
-                })
+                try_add_prop("lantern_post", [x, road_y - 1])
             elif grid_map[road_y + 2][x] == ".":
-                try_add_prop({
-                    "id": "lantern_post",
-                    "grid": [x, road_y + 2],
-                    "offset": [8, -2],
-                    "scale": 0.58
-                })
+                try_add_prop("lantern_post", [x, road_y + 2])
 
     # Scatter crates and barrels adjacent to building facades
     for b in buildings:
@@ -580,30 +374,15 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
         left_x = bx - 1
         left_y = by + bh - 1
         if left_x >= 0 and left_y < height and grid_map[left_y][left_x] == ".":
-            try_add_prop({
-                "id": "crate_stack",
-                "grid": [left_x, left_y],
-                "offset": [8, 8],
-                "scale": 0.58
-            })
+            try_add_prop("crate_stack", [left_x, left_y])
             if left_y + 1 < height and grid_map[left_y + 1][left_x] == ".":
-                try_add_prop({
-                    "id": "barrel_pair",
-                    "grid": [left_x, left_y + 1],
-                    "offset": [8, 8],
-                    "scale": 0.6
-                })
+                try_add_prop("barrel_pair", [left_x, left_y + 1])
 
         # Right wall cluster
         right_x = bx + bw
         right_y = by + bh - 1
         if right_x < width and right_y < height and grid_map[right_y][right_x] == ".":
-            try_add_prop({
-                "id": "barrel_pair",
-                "grid": [right_x, right_y],
-                "offset": [8, 8],
-                "scale": 0.58
-            })
+            try_add_prop("barrel_pair", [right_x, right_y], scale=0.58)
 
         # Planter next to door
         if b["id"] in building_interactions:
@@ -611,15 +390,10 @@ def generate_layout(town_id: str, name: str, width: int, height: int,
             planter_x = bx + door_offset[0] - 1
             planter_y = by + door_offset[1] + 1
             if planter_x >= 0 and planter_y < height and grid_map[planter_y][planter_x] == ".":
-                try_add_prop({
-                    "id": "herb_planter",
-                    "grid": [planter_x, planter_y],
-                    "offset": [8, 8],
-                    "scale": 0.54
-                })
+                try_add_prop("herb_planter", [planter_x, planter_y])
 
     # Add style-specific props
-    add_style_props(props, style, width, height, road_x, road_y, occupied_prop_grids)
+    add_style_props(props, prop_defs, style, width, height, road_x, road_y, occupied_prop_grids)
 
     map_str_list = ["".join(row) for row in grid_map]
 

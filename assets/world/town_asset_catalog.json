@@ -1,0 +1,302 @@
+{
+  "version": 1,
+  "tile_size": 16,
+  "buildings": {
+    "elder_hall": {
+      "display_name": "Elder Hall",
+      "sprite_path": "assets/sprites/town/buildings/elder_hall.png",
+      "runtime_ready": true,
+      "size": [6, 9],
+      "door_offset": [2, 8],
+      "door_width": 2,
+      "npc": "elder",
+      "plaque": "plaque_blank",
+      "public": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [219, 16, 172, 72],
+      "fallback_scale": 0.5
+    },
+    "weapon_shop": {
+      "display_name": "Weapon Shop",
+      "sprite_path": "assets/sprites/town/buildings/weapon_shop.png",
+      "runtime_ready": true,
+      "size": [8, 6],
+      "door_offset": [3, 5],
+      "door_width": 2,
+      "npc": "weapon_merchant",
+      "plaque": "plaque_sword",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [15, 573, 117, 72],
+      "fallback_scale": 0.55
+    },
+    "armor_shop": {
+      "display_name": "Armor Shop",
+      "sprite_path": "assets/sprites/town/buildings/armor_shop.png",
+      "runtime_ready": true,
+      "size": [8, 5],
+      "door_offset": [3, 4],
+      "door_width": 2,
+      "npc": "armor_merchant",
+      "plaque": "plaque_shield",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 466, 116, 72],
+      "fallback_scale": 0.55
+    },
+    "inn": {
+      "display_name": "Inn",
+      "sprite_path": "assets/sprites/town/buildings/inn.png",
+      "runtime_ready": true,
+      "size": [5, 7],
+      "door_offset": [2, 6],
+      "door_width": 1,
+      "npc": "innkeeper",
+      "plaque": "plaque_bed",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 681, 116, 72],
+      "fallback_scale": 0.55
+    },
+    "tavern": {
+      "display_name": "Tavern",
+      "sprite_path": "assets/sprites/town/buildings/tavern.png",
+      "runtime_ready": true,
+      "size": [9, 6],
+      "door_offset": [5, 5],
+      "door_width": 2,
+      "npc": "tavern_keeper",
+      "plaque": "plaque_tankard",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [14, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "workshop": {
+      "display_name": "Workshop",
+      "sprite_path": "assets/sprites/town/buildings/workshop.png",
+      "runtime_ready": true,
+      "size": [9, 6],
+      "door_offset": [3, 5],
+      "door_width": 2,
+      "npc": "tinkerer",
+      "plaque": "plaque_gear",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [354, 466, 129, 72],
+      "fallback_scale": 0.5
+    },
+    "chapel": {
+      "display_name": "Chapel",
+      "sprite_path": "assets/sprites/town/buildings/chapel.png",
+      "runtime_ready": true,
+      "size": [7, 8],
+      "door_offset": [2, 7],
+      "door_width": 2,
+      "npc": "healer",
+      "plaque": "plaque_candle",
+      "public": true,
+      "sign": true,
+      "awning": true,
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [14, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "small_house": {
+      "display_name": "Residential House",
+      "sprite_path": "assets/sprites/town/buildings/small_house.png",
+      "runtime_ready": true,
+      "size": [8, 5],
+      "door_offset": [3, 4],
+      "door_width": 1,
+      "npc": "realtor",
+      "plaque": "plaque_blank",
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "large_house": {
+      "display_name": "Residential House",
+      "sprite_path": "assets/sprites/town/buildings/large_house.png",
+      "runtime_ready": true,
+      "size": [8, 5],
+      "door_offset": [3, 4],
+      "door_width": 1,
+      "npc": "realtor",
+      "plaque": "plaque_blank",
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "house_timber": {
+      "display_name": "Residential House",
+      "sprite_path": "assets/sprites/town/buildings/runtime_home_split_sheet.png",
+      "runtime_ready": false,
+      "size": [8, 5],
+      "door_offset": [3, 4],
+      "door_width": 1,
+      "npc": "realtor",
+      "plaque": "plaque_blank",
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "house_mossy": {
+      "display_name": "Residential House",
+      "sprite_path": "assets/sprites/town/buildings/runtime_home_split_sheet.png",
+      "runtime_ready": false,
+      "size": [8, 5],
+      "door_offset": [3, 4],
+      "door_width": 1,
+      "npc": "realtor",
+      "plaque": "plaque_blank",
+      "styles": ["village", "coastal", "fortress"],
+      "fallback_region": [16, 16, 118, 72],
+      "fallback_scale": 0.55
+    },
+    "barracks": {
+      "display_name": "Barracks",
+      "sprite_path": "assets/sprites/town/buildings/runtime_public_split_sheet.png",
+      "runtime_ready": false,
+      "size": [10, 6],
+      "door_offset": [4, 5],
+      "door_width": 2,
+      "npc": "elder",
+      "plaque": "plaque_blank",
+      "public": true,
+      "styles": ["fortress"],
+      "fallback_region": [219, 16, 172, 72],
+      "fallback_scale": 0.5
+    },
+    "dockmaster": {
+      "display_name": "Dockmaster",
+      "sprite_path": "assets/sprites/town/buildings/runtime_public_split_sheet.png",
+      "runtime_ready": false,
+      "size": [6, 5],
+      "door_offset": [2, 4],
+      "door_width": 1,
+      "npc": "innkeeper",
+      "plaque": "plaque_blank",
+      "public": true,
+      "styles": ["coastal"],
+      "fallback_region": [16, 681, 116, 72],
+      "fallback_scale": 0.55
+    }
+  },
+  "props": {
+    "well": {
+      "sprite_path": "assets/sprites/town/props/well.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.62,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["plaza"]
+    },
+    "notice_board": {
+      "sprite_path": "assets/sprites/town/props/notice_board.png",
+      "runtime_ready": false,
+      "offset": [8, 4],
+      "scale": 0.62,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["plaza", "roadside"]
+    },
+    "signpost": {
+      "sprite_path": "assets/sprites/town/props/signpost.png",
+      "runtime_ready": true,
+      "offset": [8, 8],
+      "scale": 0.62,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["roadside"]
+    },
+    "lantern_post": {
+      "sprite_path": "assets/sprites/town/props/lantern_post.png",
+      "runtime_ready": false,
+      "offset": [8, -2],
+      "scale": 0.58,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["roadside", "night"]
+    },
+    "bench": {
+      "sprite_path": "assets/sprites/town/props/bench.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.58,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["plaza"]
+    },
+    "herb_planter": {
+      "sprite_path": "assets/sprites/town/props/herb_planter.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.54,
+      "styles": ["village", "coastal"],
+      "placement_tags": ["doorway", "garden", "profession"]
+    },
+    "crate_stack": {
+      "sprite_path": "assets/sprites/town/props/crate_stack.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.58,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["storage", "building_edge"]
+    },
+    "barrel_pair": {
+      "sprite_path": "assets/sprites/town/props/barrel_pair.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.6,
+      "styles": ["village", "coastal", "fortress"],
+      "placement_tags": ["storage", "building_edge"]
+    },
+    "boat_hull": {
+      "sprite_path": "assets/sprites/town/props/coastal_town_crossover_props.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.72,
+      "styles": ["coastal"],
+      "placement_tags": ["waterfront"]
+    },
+    "fishing_post": {
+      "sprite_path": "assets/sprites/town/props/coastal_town_crossover_props.png",
+      "runtime_ready": false,
+      "offset": [8, 4],
+      "scale": 0.6,
+      "styles": ["coastal"],
+      "placement_tags": ["waterfront", "profession"]
+    },
+    "net_post": {
+      "sprite_path": "assets/sprites/town/props/coastal_town_crossover_props.png",
+      "runtime_ready": false,
+      "offset": [8, 4],
+      "scale": 0.6,
+      "styles": ["coastal"],
+      "placement_tags": ["waterfront", "profession"]
+    },
+    "torch_bracket": {
+      "sprite_path": "assets/sprites/town/props/lamplight_evening_accents.png",
+      "runtime_ready": false,
+      "offset": [8, -2],
+      "scale": 0.58,
+      "styles": ["fortress"],
+      "placement_tags": ["gate", "night"]
+    },
+    "guard_post": {
+      "sprite_path": "assets/sprites/town/props/town_entry_gate_fence_kit.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.6,
+      "styles": ["fortress"],
+      "placement_tags": ["gate", "security"]
+    }
+  }
+}

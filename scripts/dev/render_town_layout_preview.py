@@ -35,6 +35,12 @@ BUILDING_COLORS = {
     "tavern": (143, 126, 104, 205),
     "workshop": (188, 109, 52, 205),
     "chapel": (220, 214, 181, 205),
+    "small_house": (156, 117, 79, 205),
+    "large_house": (166, 126, 88, 205),
+    "house_timber": (125, 91, 63, 205),
+    "house_mossy": (99, 123, 76, 205),
+    "dockmaster": (94, 125, 148, 205),
+    "barracks": (126, 132, 151, 205),
 }
 
 
