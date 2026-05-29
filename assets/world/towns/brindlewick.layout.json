@@ -1162,6 +1162,126 @@
         8
       ],
       "scale": 0.54
+    },
+    {
+      "id": "well",
+      "grid": [
+        25,
+        22
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.62
+    },
+    {
+      "id": "bench",
+      "grid": [
+        23,
+        22
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.55
+    },
+    {
+      "id": "bench",
+      "grid": [
+        28,
+        22
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.55
+    },
+    {
+      "id": "flower_box",
+      "grid": [
+        24,
+        21
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.52
+    },
+    {
+      "id": "flower_box",
+      "grid": [
+        27,
+        24
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.52
+    },
+    {
+      "id": "signpost",
+      "grid": [
+        22,
+        20
+      ],
+      "offset": [
+        8,
+        4
+      ],
+      "scale": 0.54
+    },
+    {
+      "id": "shrub_planters",
+      "grid": [
+        20,
+        23
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.22
+    },
+    {
+      "id": "shrub_planters",
+      "grid": [
+        31,
+        23
+      ],
+      "offset": [
+        8,
+        8
+      ],
+      "scale": 0.22
+    },
+    {
+      "id": "lantern_post",
+      "grid": [
+        22,
+        24
+      ],
+      "offset": [
+        8,
+        -2
+      ],
+      "scale": 0.58
+    },
+    {
+      "id": "lantern_post",
+      "grid": [
+        29,
+        24
+      ],
+      "offset": [
+        8,
+        -2
+      ],
+      "scale": 0.58
     }
   ]
 }
