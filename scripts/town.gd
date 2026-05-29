@@ -11,6 +11,12 @@
 extends Node2D
 
 const TownLayout := preload("res://scripts/town_layout.gd")
+const FactionDB := preload("res://scripts/data/factions.gd")
+const QuestDB := preload("res://scripts/data/quests.gd")
+const NPCDB := preload("res://scripts/data/npcs.gd")
+const AlchemyDB := preload("res://scripts/data/alchemy.gd")
+const TinkerDB := preload("res://scripts/data/tinkering.gd")
+const CharDB := preload("res://scripts/data/classes.gd")
 const NPC_FACTION_MAP := {
 	"keepers": FactionDB.Faction.KEEPERS_GUILD,
 	"harbor": FactionDB.Faction.HARBOR_COMPACT,
