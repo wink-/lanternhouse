@@ -44,6 +44,28 @@ const GROUND_TILE_RECTS := {
 	"l": Rect2i(Vector2i(48, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"H": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
+const WANG_NW := 1
+const WANG_NE := 2
+const WANG_SW := 4
+const WANG_SE := 8
+const GRASS_DIRT_WANG_RECTS := {
+	0: Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	1: Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	2: Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	3: Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	4: Rect2i(Vector2i(32, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	5: Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	6: Rect2i(Vector2i(0, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	7: Rect2i(Vector2i(16, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	8: Rect2i(Vector2i(48, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	9: Rect2i(Vector2i(32, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	10: Rect2i(Vector2i(48, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	11: Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	12: Rect2i(Vector2i(16, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	13: Rect2i(Vector2i(0, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	14: Rect2i(Vector2i(48, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	15: Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
 const TILE_RECTS := {
 	"#": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
 	".": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -252,6 +274,7 @@ var _wander_timer: float = 0.0
 var _npc_wander_pos: Dictionary = {}
 var _town_atlas: Texture2D
 var _town_ground: Texture2D
+var _grass_dirt_wang: Texture2D
 var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
 var _modular_building_atlas: Texture2D
@@ -326,6 +349,7 @@ func _load_town_atlas() -> void:
 
 func _load_quiet_village_assets() -> void:
 	_town_ground = SpriteCache.get_asset("town.ground")
+	_grass_dirt_wang = SpriteCache.get_asset("town.grass_dirt_wang")
 	_quiet_buildings = SpriteCache.get_asset("town.vendor.buildings")
 	_quiet_props = SpriteCache.get_asset("town.vendor.props")
 	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
@@ -378,7 +402,16 @@ func _draw_map() -> void:
 	for y in range(_town_map.size()):
 		for x in range(_town_map[y].length()):
 			var tile: String = _town_map[y].substr(x, 1)
-			if _town_ground and GROUND_TILE_RECTS.has(tile):
+			var wang_mask := _grass_dirt_wang_mask(x, y) if _is_grass_dirt_terrain_tile(tile) else 0
+			if _grass_dirt_wang and wang_mask != 0:
+				var sprite := Sprite2D.new()
+				sprite.texture = _grass_dirt_wang
+				sprite.region_enabled = true
+				sprite.region_rect = GRASS_DIRT_WANG_RECTS.get(wang_mask, GRASS_DIRT_WANG_RECTS[0])
+				sprite.centered = false
+				sprite.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
+				map_layer.add_child(sprite)
+			elif _town_ground and GROUND_TILE_RECTS.has(tile):
 				var sprite := Sprite2D.new()
 				sprite.texture = _town_ground
 				sprite.region_enabled = true
@@ -400,6 +433,39 @@ func _draw_map() -> void:
 				rect.position = Vector2(x * TILE_SIZE, y * TILE_SIZE)
 				rect.size = Vector2(TILE_SIZE, TILE_SIZE)
 				map_layer.add_child(rect)
+
+func _is_grass_dirt_terrain_tile(tile: String) -> bool:
+	return tile == "." or tile == "," or tile == "=" or tile == "+" or tile == "H"
+
+func _is_dirt_terrain_tile_at(x: int, y: int) -> bool:
+	if y < 0 or y >= _town_map.size():
+		return false
+	if x < 0 or x >= _town_map[y].length():
+		return false
+	var tile: String = _town_map[y].substr(x, 1)
+	return tile == "=" or tile == "+"
+
+func _grass_dirt_corner_is_dirt(tile_x: int, tile_y: int, vertex_x: int, vertex_y: int) -> bool:
+	var x := tile_x + vertex_x
+	var y := tile_y + vertex_y
+	return (
+		_is_dirt_terrain_tile_at(x - 1, y - 1)
+		or _is_dirt_terrain_tile_at(x, y - 1)
+		or _is_dirt_terrain_tile_at(x - 1, y)
+		or _is_dirt_terrain_tile_at(x, y)
+	)
+
+func _grass_dirt_wang_mask(x: int, y: int) -> int:
+	var mask := 0
+	if _grass_dirt_corner_is_dirt(x, y, 0, 0):
+		mask |= WANG_NW
+	if _grass_dirt_corner_is_dirt(x, y, 1, 0):
+		mask |= WANG_NE
+	if _grass_dirt_corner_is_dirt(x, y, 0, 1):
+		mask |= WANG_SW
+	if _grass_dirt_corner_is_dirt(x, y, 1, 1):
+		mask |= WANG_SE
+	return mask
 
 func _draw_buildings() -> void:
 	for building_data: Dictionary in _town_buildings:

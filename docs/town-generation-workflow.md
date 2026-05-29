@@ -15,6 +15,36 @@ those pieces can be used, and layout JSON files place them on tile maps.
 | `scripts/dev/render_town_layout_preview.py` | Quick PNG layout preview renderer. |
 | `scripts/dev/build_world_art.py` | Runs atlas build, validation, and town previews. |
 
+## Ground And Path Terrain
+
+Brindlewick currently uses a PixelLab Wang/autotile sheet for visible dirt paths
+and grass-to-dirt transitions:
+
+| File | Purpose |
+|---|---|
+| `assets/sprites/tiles/pixellab/brindlewick_grass_dirt_wang_tileset.png` | 64x64 source sheet containing 16 16x16 Wang tiles. |
+| `assets/sprites/tiles/pixellab/brindlewick_grass_dirt_wang_tileset.metadata.json` | PixelLab corner metadata and source prompt. |
+| `scripts/town.gd` | Computes the Wang mask from neighboring `=` and `+` path/plaza cells. |
+| `scripts/sprite_cache.gd` | Registers the sheet as `town.grass_dirt_wang`. |
+
+The runtime intentionally keeps the older textured grass for plain grass cells and
+uses the PixelLab sheet only where a path or transition is needed. This avoids
+turning the whole town into a flat fill while still exercising the autotile edge
+workflow.
+
+Current layout symbols relevant to this terrain pass:
+
+| Symbol | Runtime role |
+|---|---|
+| `=` | Dirt path terrain. |
+| `+` | Dirt/plaza terrain. |
+| `.`, `,`, `H` | Grass/building-footprint cells that can receive grass-to-dirt transition edges. |
+
+The first integrated sheet is functional but not final art polish. In screenshots,
+the path is darker/purpler than ideal and some transition edges read like a stone
+curb. Prefer a future retry with warmer brown dirt, muted olive grass, and a soft
+muddy transition with no stone border.
+
 ## Adding A Building Asset
 
 1. Generate or curate the PixelLab output under `assets/sprites/town/buildings/`.
@@ -41,7 +71,7 @@ assembled into a directly loadable asset.
 
 ## Generating Towns
 
-```powershell
+```bash
 python scripts/dev/generate_town.py mournlight_harbor --name "Mournlight Harbor" --style coastal --seed 101 --skip-build
 python scripts/dev/generate_town.py greywatch_keep --name "Greywatch Keep" --style fortress --seed 202 --skip-build
 python scripts/dev/build_world_art.py

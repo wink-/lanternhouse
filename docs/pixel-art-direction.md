@@ -144,6 +144,37 @@ Please keep a simple manifest listing:
 - notes about where it belongs in town
 ```
 
+### Town Terrain Autotiles
+
+Use this for grass, dirt roads, plazas, and terrain transitions. Prefer coherent
+sheet generation over one-off tile images so palette, lighting, and edge shapes
+stay consistent.
+
+Runtime notes:
+
+- Brindlewick's first terrain pass uses a PixelLab 16-tile Wang sheet at
+  `assets/sprites/tiles/pixellab/brindlewick_grass_dirt_wang_tileset.png`.
+- `scripts/town.gd` treats `=` and `+` as dirt/path cells and computes Wang
+  transitions into nearby grass cells.
+- Keep source metadata next to the PNG when PixelLab provides it.
+- Plain grass should remain textured; do not replace the whole town floor with a
+  flat grass tile unless the sheet has enough variation.
+
+Prompt fragment for the next grass/path retry:
+
+```text
+Create a cohesive 16x16 top-down 3/4 JRPG village terrain Wang/autotile sheet for Godot. Modern 16-bit pixel art, crisp hand-placed pixels, limited earthy palette, no anti-aliasing, transparent background only if appropriate for the tileset format.
+
+Terrain: muted dark olive village grass with tiny varied grass clusters and sparse muted wildflower pixels transitioning into medium dark warm brown packed dirt paths with subtle pebbles and worn foot traffic.
+
+Edges: soft irregular grass-to-dirt path transitions with muddy worn borders, sparse grass tufts, and tiny pebbles. Autotile-compatible corners and edges. Do not create a stone curb, rock wall, cliff edge, black/purple void, or raised border unless explicitly requested.
+
+Style constraints: medieval European village, consistent daylight from upper-left, readable at 2x gameplay zoom, no Japanese architecture, no modern objects, no baked-in text, no 3D render, no vector art, no smooth gradients, no blurry textures.
+```
+
+Avoid asking for character sprites in terrain prompts. Characters should use the
+separate character workflow so scale, rotations, and animation needs stay clear.
+
 ### Overworld Map
 
 Use for the world navigation map and major map icons.

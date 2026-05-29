@@ -8,6 +8,7 @@ const ASSET_PATHS := {
 	"overworld.player": "overworld/player.png",
 	"town.atlas": "tiles/lanternhouse_town.png",
 	"town.ground": "tiles/lanternhouse_town_readable.png",
+	"town.grass_dirt_wang": "tiles/pixellab/brindlewick_grass_dirt_wang_tileset.png",
 	"town.vendor.buildings": "vendor/quiet_village/Buildings.png",
 	"town.vendor.props": "vendor/quiet_village/Props.png",
 	"town.modular_building_atlas": "town/buildings/modular_building_atlas.png",

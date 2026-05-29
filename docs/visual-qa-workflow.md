@@ -39,3 +39,21 @@ The `opengl3` rendering driver avoids llvmpipe Vulkan crashes seen under Xvfb.
 
 For layout-only town previews, `python scripts/dev/build_world_art.py` also
 renders schematic previews for every `assets/world/towns/*.layout.json` file.
+
+## Terrain Checks
+
+When changing town ground/path art, capture the town and inspect:
+
+1. Path cells should read as walkable dirt, not a wall, river, or void.
+2. Grass-to-dirt edges should be soft enough for village paths unless a raised
+   curb is intentional.
+3. Plain grass should keep texture variation and should not become a flat color
+   field.
+4. Door thresholds should still visibly connect to nearby paths.
+5. UI guidance text should remain readable over busy roofs or ground tiles.
+
+Current Brindlewick terrain integration can be checked with:
+
+```bash
+xvfb-run -a godot --rendering-driver opengl3 --path . scenes/dev/visual_scene_capture.tscn -- --target town --output artifacts/screenshots/town_wang_terrain.png
+```
