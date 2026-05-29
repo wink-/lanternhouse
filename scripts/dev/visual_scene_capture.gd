@@ -11,49 +11,83 @@ const TARGET_SCENES := {
 }
 
 func _ready() -> void:
-	var options := _parse_options()
+	var options: Dictionary = _parse_options()
 	var target: String = options.get("target", "town")
-	var scene_path: String = options.get("scene", TARGET_SCENES.get(target, target))
+	var scene_path: String = options.get("scene", "")
 	var output_path: String = options.get("output", "artifacts/screenshots/%s.png" % target)
+	var manifest_path: String = options.get("manifest", output_path.get_basename() + ".json")
 	var frames: int = int(options.get("frames", "8"))
 
-	var ok := await _capture_scene(scene_path, output_path, frames)
-	if ok:
-		print("VISUAL_SCENE_CAPTURE_OK %s" % output_path)
+	if scene_path.is_empty():
+		if not TARGET_SCENES.has(target):
+			push_error("Unknown visual QA target '%s'. Known targets: %s. Use --scene for a direct scene path." % [target, ", ".join(TARGET_SCENES.keys())])
+			get_tree().quit(2)
+			return
+		scene_path = TARGET_SCENES[target]
+
+	print("VISUAL_SCENE_CAPTURE_START target=%s scene=%s output=%s frames=%d" % [target, scene_path, output_path, frames])
+	var result: Dictionary = await _capture_scene(target, scene_path, output_path, manifest_path, frames)
+	if bool(result.get("ok", false)):
+		print("VISUAL_SCENE_CAPTURE_OK target=%s scene=%s output=%s manifest=%s size=%sx%s" % [target, scene_path, output_path, manifest_path, result.get("width", 0), result.get("height", 0)])
 		get_tree().quit(0)
 	else:
-		push_error("VISUAL_SCENE_CAPTURE_FAILED")
+		push_error("VISUAL_SCENE_CAPTURE_FAILED target=%s reason=%s" % [target, result.get("error", "unknown")])
 		get_tree().quit(1)
 
-func _capture_scene(scene_path: String, output_path: String, frames: int) -> bool:
+func _capture_scene(target: String, scene_path: String, output_path: String, manifest_path: String, frames: int) -> Dictionary:
 	_reset_state()
 	var packed: PackedScene = load(scene_path)
 	if packed == null:
-		push_error("Could not load scene: %s" % scene_path)
-		return false
+		return {"ok": false, "error": "Could not load scene: %s" % scene_path}
 
-	var scene := packed.instantiate()
+	var scene: Node = packed.instantiate()
 	add_child(scene)
-	for _i in range(max(frames, 1)):
+	for _i: int in range(max(frames, 1)):
 		await get_tree().process_frame
 
-	var image := get_viewport().get_texture().get_image()
+	var image: Image = get_viewport().get_texture().get_image()
 	if image == null or image.is_empty():
-		push_error("Captured viewport image is empty")
-		return false
+		return {"ok": false, "error": "Captured viewport image is empty"}
 
-	var absolute_output := _absolute_output_path(output_path)
-	var directory := absolute_output.get_base_dir()
-	var dir_result := DirAccess.make_dir_recursive_absolute(directory)
+	var absolute_output: String = _absolute_output_path(output_path)
+	var directory: String = absolute_output.get_base_dir()
+	var dir_result: Error = DirAccess.make_dir_recursive_absolute(directory)
 	if dir_result != OK:
-		push_error("Could not create screenshot directory %s: %s" % [directory, error_string(dir_result)])
-		return false
+		return {"ok": false, "error": "Could not create screenshot directory %s: %s" % [directory, error_string(dir_result)]}
 
-	var save_result := image.save_png(absolute_output)
+	var save_result: Error = image.save_png(absolute_output)
 	if save_result != OK:
-		push_error("Could not save screenshot %s: %s" % [absolute_output, error_string(save_result)])
-		return false
-	return true
+		return {"ok": false, "error": "Could not save screenshot %s: %s" % [absolute_output, error_string(save_result)]}
+
+	var manifest: Dictionary = {
+		"ok": true,
+		"target": target,
+		"scene": scene_path,
+		"output": output_path,
+		"absolute_output": absolute_output,
+		"frames_waited": max(frames, 1),
+		"width": image.get_width(),
+		"height": image.get_height(),
+		"main_scene": ProjectSettings.get_setting("application/run/main_scene", ""),
+	}
+	var manifest_result: Error = _write_manifest(manifest_path, manifest)
+	if manifest_result != OK:
+		return {"ok": false, "error": "Could not write manifest %s: %s" % [manifest_path, error_string(manifest_result)]}
+	return manifest
+
+func _write_manifest(manifest_path: String, manifest: Dictionary) -> Error:
+	var absolute_manifest: String = _absolute_output_path(manifest_path)
+	var directory: String = absolute_manifest.get_base_dir()
+	var dir_result: Error = DirAccess.make_dir_recursive_absolute(directory)
+	if dir_result != OK:
+		return dir_result
+	var file: FileAccess = FileAccess.open(absolute_manifest, FileAccess.WRITE)
+	if file == null:
+		return FileAccess.get_open_error()
+	file.store_string(JSON.stringify(manifest, "  "))
+	file.store_string("\n")
+	file.close()
+	return OK
 
 func _absolute_output_path(output_path: String) -> String:
 	if output_path.begins_with("res://") or output_path.begins_with("user://"):
@@ -63,14 +97,14 @@ func _absolute_output_path(output_path: String) -> String:
 	return ProjectSettings.globalize_path("res://%s" % output_path)
 
 func _parse_options() -> Dictionary:
-	var result := {}
-	var args := OS.get_cmdline_user_args()
-	var index := 0
+	var result: Dictionary = {}
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	var index: int = 0
 	while index < args.size():
 		var arg: String = args[index]
 		if arg.begins_with("--"):
-			var key := arg.trim_prefix("--")
-			var value := "true"
+			var key: String = arg.trim_prefix("--")
+			var value: String = "true"
 			if index + 1 < args.size() and not String(args[index + 1]).begins_with("--"):
 				value = String(args[index + 1])
 				index += 1
