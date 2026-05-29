@@ -60,6 +60,22 @@ Catalog building entries should keep the runtime simple. If a PixelLab sheet is
 only a reference or source sheet, keep `runtime_ready` false until it is split or
 assembled into a directly loadable asset.
 
+## Runtime Building Layers
+
+Town buildings are split for Chrono Trigger-style walk-behind depth:
+
+| Layer | Purpose |
+|---|---|
+| `BuildingLayer` | Lower walls, bases, and contact shadows. These sit below the player. |
+| `PlayerSprite` | The player/body layer. |
+| `PropLayer` | Runtime props. |
+| `BuildingUpperLayer` | Roofs, eaves, chimneys, and awnings that should occlude the player when walking behind buildings. |
+
+When adding a building renderer, keep contact shadows on `BuildingLayer` with a
+lower z-index than the building body. Roofs/eaves/awnings belong on
+`BuildingUpperLayer`; avoid placing the full building texture above the player or
+it will block the facade/base and break walk-behind readability.
+
 ## Adding A Prop Asset
 
 1. Generate or curate the PixelLab output under `assets/sprites/town/props/`.

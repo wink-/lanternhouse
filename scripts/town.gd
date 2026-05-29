@@ -48,6 +48,25 @@ const WANG_NW := 1
 const WANG_NE := 2
 const WANG_SW := 4
 const WANG_SE := 8
+const DETAIL_GRASS_COLORS := [
+	Color("3f8c36"),
+	Color("5eaa48"),
+	Color("6fb858"),
+	Color("386f32"),
+]
+const DETAIL_FLOWER_COLORS := [
+	Color("f0d46a"),
+	Color("d98880"),
+	Color("c58cf0"),
+]
+const DETAIL_STONE_COLORS := [
+	Color("7b7969"),
+	Color("9a8f74"),
+]
+const SHADOW_COLOR := Color(0.05, 0.04, 0.03, 0.48)
+const BUILDING_CONTACT_SHADOW_COLOR := Color(0.05, 0.04, 0.03, 0.22)
+const UI_PANEL_COLOR := Color(0.035, 0.032, 0.045, 0.82)
+const UI_PANEL_BORDER := Color(0.82, 0.72, 0.46, 0.86)
 const GRASS_DIRT_WANG_RECTS := {
 	0: Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
 	1: Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
@@ -306,6 +325,7 @@ const WANDER_RADIUS := 3
 @onready var map_layer: Node2D = $MapLayer
 @onready var building_layer: Node2D = $BuildingLayer
 @onready var prop_layer: Node2D = $PropLayer
+@onready var building_upper_layer: Node2D = $BuildingUpperLayer
 @onready var camera: Camera2D = $Camera2D
 @onready var player_sprite: Node2D = $PlayerSprite
 @onready var dialog: RichTextLabel = $UILayer/Dialog
@@ -318,8 +338,10 @@ func _ready() -> void:
 	_load_town_atlas()
 	_load_quiet_village_assets()
 	_load_town_layout()
+	_configure_dialog_panel()
 	_apply_return_spawn()
 	_draw_map()
+	_draw_ground_details()
 	_draw_buildings()
 	_draw_props()
 	_build_npc_positions()
@@ -346,6 +368,35 @@ func _load_town_atlas() -> void:
 	_town_atlas = SpriteCache.get_asset("town.atlas")
 	if not _town_atlas:
 		push_warning("Town atlas could not be loaded from asset registry.")
+
+func _configure_dialog_panel() -> void:
+	if not dialog:
+		return
+	var ui_layer := dialog.get_parent()
+	if not ui_layer or ui_layer.has_node("DialogPanel"):
+		return
+	var border := ColorRect.new()
+	border.name = "DialogPanel"
+	border.color = UI_PANEL_BORDER
+	border.position = dialog.position - Vector2(3, 3)
+	border.size = dialog.size + Vector2(6, 6)
+	border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	border.z_index = -2
+	ui_layer.add_child(border)
+	ui_layer.move_child(border, 0)
+	var panel := ColorRect.new()
+	panel.name = "DialogPanelFill"
+	panel.color = UI_PANEL_COLOR
+	panel.position = dialog.position - Vector2(1, 1)
+	panel.size = dialog.size + Vector2(2, 2)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.z_index = -1
+	ui_layer.add_child(panel)
+	ui_layer.move_child(panel, 1)
+	dialog.add_theme_color_override("default_color", Color("f5efd6"))
+	dialog.add_theme_color_override("font_shadow_color", Color("100d0b"))
+	dialog.add_theme_constant_override("shadow_offset_x", 1)
+	dialog.add_theme_constant_override("shadow_offset_y", 1)
 
 func _load_quiet_village_assets() -> void:
 	_town_ground = SpriteCache.get_asset("town.ground")
@@ -434,15 +485,43 @@ func _draw_map() -> void:
 				rect.size = Vector2(TILE_SIZE, TILE_SIZE)
 				map_layer.add_child(rect)
 
+func _draw_ground_details() -> void:
+	for y in range(_town_map.size()):
+		for x in range(_town_map[y].length()):
+			var tile: String = _town_map[y].substr(x, 1)
+			if tile != "." and tile != ",":
+				continue
+			var h := int(abs((x * 928371 + y * 364479 + x * y * 1013) % 97))
+			if h > 32:
+				continue
+			var base := Vector2(x * TILE_SIZE, y * TILE_SIZE)
+			if h % 11 == 0:
+				_add_ground_pixel_cluster(base + Vector2(3 + h % 8, 5 + int(h / 3) % 7), DETAIL_FLOWER_COLORS[h % DETAIL_FLOWER_COLORS.size()], 1, 1)
+			elif h % 7 == 0:
+				_add_ground_pixel_cluster(base + Vector2(4 + h % 6, 7 + int(h / 5) % 5), DETAIL_STONE_COLORS[h % DETAIL_STONE_COLORS.size()], 3, 2)
+			else:
+				_add_ground_pixel_cluster(base + Vector2(2 + h % 9, 4 + int(h / 4) % 7), DETAIL_GRASS_COLORS[h % DETAIL_GRASS_COLORS.size()], 4, 1)
+
+func _add_ground_pixel_cluster(position: Vector2, color: Color, width: int, height: int) -> void:
+	var detail := ColorRect.new()
+	detail.color = color
+	detail.position = position
+	detail.size = Vector2(width, height)
+	detail.z_index = 1
+	map_layer.add_child(detail)
+
 func _is_grass_dirt_terrain_tile(tile: String) -> bool:
 	return tile == "." or tile == "," or tile == "=" or tile == "+" or tile == "H"
 
-func _is_dirt_terrain_tile_at(x: int, y: int) -> bool:
+func _terrain_tile_at(x: int, y: int) -> String:
 	if y < 0 or y >= _town_map.size():
-		return false
+		return ""
 	if x < 0 or x >= _town_map[y].length():
-		return false
-	var tile: String = _town_map[y].substr(x, 1)
+		return ""
+	return _town_map[y].substr(x, 1)
+
+func _is_dirt_terrain_tile_at(x: int, y: int) -> bool:
+	var tile: String = _terrain_tile_at(x, y)
 	return tile == "=" or tile == "+"
 
 func _grass_dirt_corner_is_dirt(tile_x: int, tile_y: int, vertex_x: int, vertex_y: int) -> bool:
@@ -480,15 +559,33 @@ func _draw_town_building(building_data: Dictionary) -> void:
 		return
 	var texture: Texture2D = _load_shop_building(building_data["id"])
 	if texture:
-		var sprite := Sprite2D.new()
-		sprite.name = "TownBuilding_%s" % building_data["id"]
-		sprite.texture = texture
-		sprite.centered = false
-		sprite.position = Vector2(building_data["grid"] * TILE_SIZE)
-		sprite.z_index = 2
-		building_layer.add_child(sprite)
+		_add_soft_shadow(
+			building_layer,
+			Vector2(building_data["grid"] * TILE_SIZE) + Vector2(2, max(4, texture.get_height() - 1)),
+			Vector2(max(24, texture.get_width() - 4), 2),
+			1,
+			BUILDING_CONTACT_SHADOW_COLOR
+		)
+		_add_split_texture_building(building_data["id"], texture, Vector2(building_data["grid"] * TILE_SIZE))
 	elif _quiet_buildings:
+		var fallback_size: Vector2 = Vector2(building_data["fallback_region"].size) * building_data["fallback_scale"]
+		_add_soft_shadow(
+			building_layer,
+			Vector2(building_data["grid"] * TILE_SIZE) + Vector2(2, max(4, fallback_size.y - 1)),
+			Vector2(max(24, fallback_size.x - 4), 2),
+			1,
+			BUILDING_CONTACT_SHADOW_COLOR
+		)
 		_add_building(building_data["grid"], building_data["fallback_region"], building_data["fallback_scale"])
+
+func _add_soft_shadow(parent: Node, position: Vector2, size: Vector2, z: int, color: Color = SHADOW_COLOR) -> void:
+	var shadow := ColorRect.new()
+	shadow.name = "SoftShadow"
+	shadow.color = color
+	shadow.position = position
+	shadow.size = size
+	shadow.z_index = z
+	parent.add_child(shadow)
 
 func _draw_modular_town_building(building_data: Dictionary) -> void:
 	var root := Node2D.new()
@@ -496,6 +593,12 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	root.position = Vector2(building_data["grid"] * TILE_SIZE)
 	root.z_index = 2
 	building_layer.add_child(root)
+
+	var upper_root := Node2D.new()
+	upper_root.name = "ModularTownBuildingUpper_%s" % building_data["id"]
+	upper_root.position = root.position
+	upper_root.z_index = 2
+	building_upper_layer.add_child(upper_root)
 
 	var size: Vector2i = building_data.get("size", Vector2i(6, 4))
 	var door_col: int = int(size.x / 2)
@@ -509,13 +612,13 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 			roof_tile = "roof_left"
 		elif x == size.x - 1:
 			roof_tile = "roof_right"
-		_add_modular_building_tile(root, roof_tile, Vector2i(x, 0))
+		_add_modular_building_tile(upper_root, roof_tile, Vector2i(x, 0))
 
 	for x in range(size.x):
 		var eave_tile := "roof_eave"
 		if building_data.get("public", false) and x == door_col:
 			eave_tile = "roof_ridge"
-		_add_modular_building_tile(root, eave_tile, Vector2i(x, wall_start))
+		_add_modular_building_tile(upper_root, eave_tile, Vector2i(x, wall_start))
 
 	for y in range(wall_start + 1, foundation_row):
 		for x in range(size.x):
@@ -540,9 +643,9 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 		_add_modular_building_tile(root, window_tile, Vector2i(x, foundation_row - 1))
 
 	if size.x >= 7:
-		_add_modular_building_tile(root, "chimney", Vector2i(size.x - 2, 0))
+		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
 	elif building_data["id"] in ["tavern", "workshop", "inn"]:
-		_add_modular_building_tile(root, "chimney", Vector2i(size.x - 2, 0))
+		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
 
 func _building_window_columns(width: int, door_col: int) -> Array:
 	var cols: Array = []
@@ -577,15 +680,61 @@ func _load_shop_building(building_id: String) -> Texture2D:
 	return texture
 
 func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = _quiet_buildings
-	sprite.region_enabled = true
-	sprite.region_rect = region
-	sprite.centered = false
-	sprite.position = Vector2(grid * TILE_SIZE)
-	sprite.scale = Vector2(scale_amount, scale_amount)
-	sprite.z_index = 2
-	building_layer.add_child(sprite)
+	var upper_height := _building_upper_height(region.size.y)
+	var lower_height := region.size.y - upper_height
+	var upper_region := Rect2i(region.position, Vector2i(region.size.x, upper_height))
+	var lower_region := Rect2i(region.position + Vector2i(0, upper_height), Vector2i(region.size.x, lower_height))
+	if lower_height > 0:
+		var lower_sprite := Sprite2D.new()
+		lower_sprite.name = "BuildingLower"
+		lower_sprite.texture = _quiet_buildings
+		lower_sprite.region_enabled = true
+		lower_sprite.region_rect = lower_region
+		lower_sprite.centered = false
+		lower_sprite.position = Vector2(grid * TILE_SIZE) + Vector2(0, float(upper_height) * scale_amount)
+		lower_sprite.scale = Vector2(scale_amount, scale_amount)
+		lower_sprite.z_index = 2
+		building_layer.add_child(lower_sprite)
+	var upper_sprite := Sprite2D.new()
+	upper_sprite.name = "BuildingUpper"
+	upper_sprite.texture = _quiet_buildings
+	upper_sprite.region_enabled = true
+	upper_sprite.region_rect = upper_region
+	upper_sprite.centered = false
+	upper_sprite.position = Vector2(grid * TILE_SIZE)
+	upper_sprite.scale = Vector2(scale_amount, scale_amount)
+	upper_sprite.z_index = 2
+	building_upper_layer.add_child(upper_sprite)
+
+func _add_split_texture_building(building_id: String, texture: Texture2D, position: Vector2) -> void:
+	var texture_size := texture.get_size()
+	var upper_height := _building_upper_height(int(texture_size.y))
+	var lower_height := int(texture_size.y) - upper_height
+	if lower_height > 0:
+		var lower_sprite := Sprite2D.new()
+		lower_sprite.name = "TownBuildingLower_%s" % building_id
+		lower_sprite.texture = texture
+		lower_sprite.region_enabled = true
+		lower_sprite.region_rect = Rect2(Vector2(0, upper_height), Vector2(texture_size.x, lower_height))
+		lower_sprite.centered = false
+		lower_sprite.position = position + Vector2(0, upper_height)
+		lower_sprite.z_index = 2
+		building_layer.add_child(lower_sprite)
+	var upper_sprite := Sprite2D.new()
+	upper_sprite.name = "TownBuildingUpper_%s" % building_id
+	upper_sprite.texture = texture
+	upper_sprite.region_enabled = true
+	upper_sprite.region_rect = Rect2(Vector2.ZERO, Vector2(texture_size.x, upper_height))
+	upper_sprite.centered = false
+	upper_sprite.position = position
+	upper_sprite.z_index = 2
+	building_upper_layer.add_child(upper_sprite)
+
+func _building_upper_height(texture_height: int) -> int:
+	var max_upper: int = max(1, texture_height - 1)
+	var minimum_upper: int = min(TILE_SIZE, max_upper)
+	var upper_height := int(round(float(texture_height) * 0.45))
+	return clampi(upper_height, minimum_upper, max_upper)
 
 func _draw_building_labels() -> void:
 	for label_data: Dictionary in BUILDING_LABELS:
@@ -610,8 +759,8 @@ func _draw_shop_awnings() -> void:
 		sprite.texture = texture
 		sprite.centered = false
 		sprite.position = Vector2(awning_data["grid"] * TILE_SIZE) + awning_data["offset"]
-		sprite.z_index = 4
-		building_layer.add_child(sprite)
+		sprite.z_index = 2
+		building_upper_layer.add_child(sprite)
 
 func _load_shop_awning(awning_id: String) -> Texture2D:
 	if _shop_awning_textures.has(awning_id):
@@ -674,6 +823,9 @@ func _draw_town_props() -> void:
 		sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
 		sprite.rotation = deg_to_rad(prop_data.get("rotation", 0.0))
 		sprite.z_index = 3
+		var prop_scale: float = prop_data.get("scale", 0.6)
+		var shadow_width := clampf(sprite.texture.get_width() * prop_scale * 0.7, 10.0, 34.0)
+		_add_soft_shadow(prop_layer, sprite.position + Vector2(-shadow_width / 2.0, 5), Vector2(shadow_width, 5), 2)
 		prop_layer.add_child(sprite)
 
 func _load_town_prop(prop_id: String) -> Texture2D:
@@ -2238,7 +2390,7 @@ func _interaction_prompt() -> String:
 	return ""
 
 func _clear_editor_nodes() -> void:
-	for layer in [map_layer, building_layer, prop_layer]:
+	for layer in [map_layer, building_layer, prop_layer, building_upper_layer]:
 		if not layer:
 			continue
 		for child in layer.get_children():
