@@ -184,14 +184,14 @@ const SIGNPOST_TEXTS := {
 const LANDMARK_MARKERS := [
 	{"pos": BRINDLEWICK_POS, "label": "Brindlewick", "color": Color(1.0, 0.86, 0.24, 0.95), "offset": Vector2(-44, -31)},
 	{"pos": Vector2i(25, 13), "label": "Lighthouse", "color": Color(1.0, 0.95, 0.62, 0.95), "offset": Vector2(-46, -34)},
-	{"pos": Vector2i(17, 13), "label": "North Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-54, -34)},
+	{"pos": Vector2i(17, 13), "label": "North Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(16, 74)},
 	{"pos": Vector2i(24, 19), "label": "Hill Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-48, -34)},
 	{"pos": Vector2i(24, 23), "label": "South Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-54, 10)},
 	{"pos": Vector2i(10, 26), "label": "West Beacon", "color": Color(0.62, 0.82, 1.0, 0.9), "offset": Vector2(-50, -34)},
 	{"pos": Vector2i(23, 24), "label": "Dock", "color": Color(0.55, 0.9, 1.0, 0.9), "offset": Vector2(-24, 10)},
 	{"pos": Vector2i(21, 15), "label": "Camp", "color": Color(1.0, 0.55, 0.3, 0.9), "offset": Vector2(-24, -34)},
 	{"pos": Vector2i(26, 17), "label": "Cave", "color": Color(0.78, 0.72, 1.0, 0.9), "offset": Vector2(-24, -34)},
-	{"pos": Vector2i(18, 13), "label": "Clearing", "color": Color(0.6, 1.0, 0.65, 0.9), "offset": Vector2(-36, 10)},
+	{"pos": Vector2i(18, 13), "label": "Clearing", "color": Color(0.6, 1.0, 0.65, 0.9), "offset": Vector2(16, 42)},
 	{"pos": Vector2i(10, 25), "label": "Ruins", "color": Color(1.0, 0.55, 0.75, 0.9), "offset": Vector2(-28, -34)},
 ]
 

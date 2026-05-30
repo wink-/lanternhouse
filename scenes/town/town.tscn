@@ -34,4 +34,5 @@ polygon = PackedVector2Array(-6, -8, 6, -8, 8, 6, 0, 10, -8, 6)
 [node name="Dialog" type="RichTextLabel" parent="UILayer"]
 bbcode_enabled = true
 position = Vector2(8, 8)
-size = Vector2(400, 120)
+size = Vector2(620, 132)
+scroll_active = false
