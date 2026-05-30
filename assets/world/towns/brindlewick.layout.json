@@ -429,6 +429,7 @@
       ],
       "plaque": "plaque_blank",
       "public": false,
+      "render": "modular_tiles",
       "fallback_region": [
         16,
         16,
