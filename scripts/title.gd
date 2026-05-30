@@ -1,6 +1,6 @@
 extends Control
 
-const MENU_ITEMS := ["New Game", "Continue", "Settings"]
+const MENU_ITEMS := ["New Game", "Host LAN Game", "Join LAN Game", "Continue", "Settings"]
 var selected := 0
 var has_save := false
 var settings_open := false
@@ -32,20 +32,61 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	match event.keycode:
 		KEY_UP:
-			selected = (selected - 1) % MENU_ITEMS.size()
-			if selected < 0: selected = MENU_ITEMS.size() - 1
-			if selected == 1 and not has_save:
-				selected = (selected - 1) % MENU_ITEMS.size()
+			_move_selection(-1)
 			_update_display()
 		KEY_DOWN:
-			selected = (selected + 1) % MENU_ITEMS.size()
-			if selected == 1 and not has_save:
-				selected = (selected + 1) % MENU_ITEMS.size()
-			if selected == 2 and not has_save and MENU_ITEMS.size() > 2:
-				selected = 0
+			_move_selection(1)
 			_update_display()
 		KEY_ENTER, KEY_SPACE:
 			_select()
+
+func _move_selection(step: int) -> void:
+	for _i in range(MENU_ITEMS.size()):
+		selected = (selected + step) % MENU_ITEMS.size()
+		if selected < 0:
+			selected = MENU_ITEMS.size() - 1
+		if _menu_item_selectable(MENU_ITEMS[selected]):
+			return
+
+func _menu_item_selectable(item: String) -> bool:
+	return item != "Continue" or has_save
+
+func _start_new_game() -> void:
+	GameData.party.clear()
+	GameData.gold = 500
+	GameData.tonics = 3
+	GameData.ethers = 0
+	GameData.keeper_marks = 0
+	GameData.harbor_tokens = 0
+	GameData.chapel_script = 0
+	GameData.weapons_bag.clear()
+	GameData.armor_bag.clear()
+	GameData.trade_goods.clear()
+	GameData.overworld_position = Vector2i(15, 21)
+	GameData.overworld_facing = Vector2i.DOWN
+	GameData.cleared_encounters.clear()
+	GameData.visited_town = false
+	GameData.boss_defeated = false
+	GameData.beacon_lit = false
+	GameData.beacon_states.clear()
+	GameData.explored_tiles.clear()
+	GameData.active_quests.clear()
+	GameData.kill_counts.clear()
+	GameData.gather_counts.clear()
+	GameData.gather_sites.clear()
+	GameData.crafted_items.clear()
+	GameData.herb_bag.clear()
+	GameData.material_bag.clear()
+	GameData.faction_reputation.clear()
+	GameData.play_time = 0.0
+	GameData.skill_uses.clear()
+	GameData.owned_home = ""
+	GameData.home_upgrades.clear()
+	GameData.home_storage.clear()
+	GameData.wage_timer = 0.0
+	GameData.pending_departures.clear()
+	GameData._init_party()
+	SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
 
 func _select() -> void:
 	match MENU_ITEMS[selected]:
@@ -85,6 +126,12 @@ func _select() -> void:
 			GameData.pending_departures.clear()
 			GameData._init_party()
 			SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")
+		"Host LAN Game":
+			NetworkManager.host_game()
+			_start_new_game()
+		"Join LAN Game":
+			NetworkManager.join_game()
+			_start_new_game()
 		"Continue":
 			if SaveManager.load_game():
 				SceneTransition.change_scene("res://scenes/overworld/overworld.tscn")

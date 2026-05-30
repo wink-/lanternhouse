@@ -323,6 +323,15 @@ Character ancestry direction: current player and town NPCs are humans. Keep the 
 | Fortress courtyard prop sheet | `8301d2b6-f458-4862-a998-345368ab9acd` | Downloaded | `assets/sprites/town/pixellab_inbox/fortress_courtyard_prop_sheet.png` | Pending curation | 128x128 | Fortress town kit inbox | Good fortress prop sheet with braziers, crates, barrels, torch posts, and small stand/detail candidates. |
 | Town modular crop helper sheet | `334f8277-9e68-45ab-9737-2e64d27bb0a2` | Downloaded | `assets/sprites/town/pixellab_inbox/town_modular_crop_helper_sheet.png` | Pending curation | 128x128 | Shared town building kit inbox | Good crop-helper sheet with isolated doors, signs, sign brackets, lanterns, tables, tiny props, and shop-facing objects. |
 
+## Party Sprites
+
+| Asset | PixelLab ID | Status | Source Output | Runtime Path | Size | Usage | Notes |
+|---|---|---|---|---|---|---|---|
+| Fighter party sprite pack | `2df3dc18-37a7-48f7-a125-b4296ab3f45f` / `39cb1e73-3c8b-40c4-a5c1-6631a11650a9` | Downloaded | `scripts/dev/materialize_party_sprites.py` | `assets/sprites/characters/fighter/{overworld,battle}/...` | 92x92 | Overworld + battle preview assets | Overworld includes 8 rotations and 4-frame walks; battle includes idle/attack/hurt pose rotations. |
+| Thief party sprite pack | `4220b6f2-0b31-40f7-ae6a-1459ef29111a` / `3b2a2286-14eb-489d-a66f-822764db5212` | Downloaded | `scripts/dev/materialize_party_sprites.py` | `assets/sprites/characters/thief/{overworld,battle}/...` | 96x96 / 84x84 | Overworld + battle preview assets | Overworld includes 8 rotations and 4-frame walks; battle includes idle/attack/hurt pose rotations. |
+| BlackBelt party sprite pack | `006fb193-88ac-45bb-a57c-13d131724415` / `af356c4d-c164-4b43-b0ab-6c9b0fb68fdb` | Downloaded | `scripts/dev/materialize_party_sprites.py` | `assets/sprites/characters/blackbelt/{overworld,battle}/...` | 96x96 | Overworld + battle preview assets | Overworld includes 8 rotations and 4-frame walks; battle includes idle/attack/hurt pose rotations. |
+| RedMage party sprite pack | `393d1677-3da8-4462-970a-a9be8e6e38e5` / `65d9637c-c0fa-4782-a894-efac4c7c6361` | Downloaded | `scripts/dev/materialize_party_sprites.py` | `assets/sprites/characters/redmage/{overworld,battle}/...` | 88x88 / 92x92 | Overworld + battle preview assets | Overworld includes 8 rotations and 4-frame walks; battle includes idle/attack/hurt pose rotations. |
+
 ## Battle Sprites
 
 | Asset | PixelLab ID | Status | Source Output | Runtime Path | Size | Usage | Notes |

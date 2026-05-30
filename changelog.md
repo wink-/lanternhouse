@@ -2,6 +2,13 @@
 
 All notable changes to the Lanternhouse project will be documented in this file.
 
+## [Unreleased] - 2026-05-30
+
+### Playable Demo Gate
+*   **Playable Demo Route**: Added `docs/playable-demo-script.md` and `docs/world-building.md` so the GitHub repo explains the current demo route, world tone, Brindlewick setup, and smoke-test expectations.
+*   **Demo Smoke Coverage**: Added `smoke_playable_demo_flow`, LAN host/client smoke scenes, and a `NetworkManager` autoload for private-LAN host/join validation.
+*   **Readability Polish**: Restored overworld fog/fog-of-war for shipping while adding stronger HUD/waypoint label separation and preserving the town dialog contrast panel.
+
 ## [Unreleased] - 2026-05-28
 
 ### Refactoring & Monolith Cleanups

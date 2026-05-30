@@ -23,6 +23,7 @@ SpriteCache="*res://scripts/sprite_cache.gd"
 SaveManager="*res://scripts/save_manager.gd"
 SceneTransition="*res://scripts/scene_transition.gd"
 AudioManager="*res://scripts/audio_manager.gd"
+NetworkManager="*res://scripts/network_manager.gd"
 
 [debug]
 

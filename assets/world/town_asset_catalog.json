@@ -242,6 +242,14 @@
       "styles": ["village", "coastal"],
       "placement_tags": ["doorway", "garden", "profession"]
     },
+    "market_stall_modular_kit": {
+      "sprite_path": "assets/sprites/town/props/market_stall_modular_kit.png",
+      "runtime_ready": false,
+      "offset": [8, 8],
+      "scale": 0.36,
+      "styles": ["village", "coastal"],
+      "placement_tags": ["market", "plaza"]
+    },
     "crate_stack": {
       "sprite_path": "assets/sprites/town/props/crate_stack.png",
       "runtime_ready": false,

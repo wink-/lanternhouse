@@ -203,6 +203,7 @@ const TINT_DUSK  := Color(1.0, 0.7, 0.5, 0.18)
 const TINT_NIGHT := Color(0.15, 0.18, 0.35, 0.38)
 
 # ── Fog ───────────────────────────────────────────────────────────────────
+const OVERWORLD_FOG_ENABLED := true
 const FOG_BEACON_RADIUS := 6    # tiles cleared by a lit beacon
 const HERB_REGROW_DAYS := 30
 const FOG_MAX_ALPHA := 0.55
@@ -287,6 +288,7 @@ const ZONE_NAMES := {
 var _zone_label: Label
 var _zone_label_timer: float = 0.0
 var _last_zone_tile: String = ""
+var _hud_panel: ColorRect
 
 # ── Debug ───────────────────────────────────────────────────────────────────────
 var debug_visible: bool = false
@@ -314,9 +316,12 @@ func _ready() -> void:
 	_init_overlays()
 	_init_particles()
 	_configure_camera_limits()
+	if location_markers:
+		location_markers.z_index = 60
 	_update_player_visual()
 	_update_camera()
 	_update_hud()
+	_configure_hud_panel()
 	_update_day_night()
 	_update_fog()
 	_init_fog_of_war()
@@ -413,6 +418,25 @@ func _water_neighbor_mask(grid: Vector2i) -> int:
 		mask |= 8
 	return mask
 
+func _configure_hud_panel() -> void:
+	if not hud or _hud_panel:
+		return
+	var ui_layer := hud.get_parent()
+	if not ui_layer:
+		return
+	_hud_panel = ColorRect.new()
+	_hud_panel.name = "HUDPanel"
+	_hud_panel.color = Color(0.035, 0.032, 0.045, 0.82)
+	_hud_panel.position = hud.position - Vector2(4, 4)
+	_hud_panel.size = hud.size + Vector2(8, 8)
+	_hud_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui_layer.add_child(_hud_panel)
+	ui_layer.move_child(_hud_panel, max(0, hud.get_index()))
+	hud.add_theme_color_override("default_color", Color("f5efd6"))
+	hud.add_theme_color_override("font_shadow_color", Color("100d0b"))
+	hud.add_theme_constant_override("shadow_offset_x", 1)
+	hud.add_theme_constant_override("shadow_offset_y", 1)
+
 func _draw_location_markers() -> void:
 	if not location_markers:
 		return
@@ -443,6 +467,13 @@ func _add_location_marker(grid: Vector2i, label_text: String, marker_color: Colo
 	])
 	marker.add_child(pin)
 
+	var backplate := ColorRect.new()
+	backplate.color = Color(0.035, 0.032, 0.045, 0.78)
+	backplate.position = label_offset + Vector2(-2, 1)
+	backplate.size = Vector2(112, 18)
+	backplate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	marker.add_child(backplate)
+
 	var label := Label.new()
 	label.text = label_text
 	label.position = label_offset
@@ -450,9 +481,9 @@ func _add_location_marker(grid: Vector2i, label_text: String, marker_color: Colo
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 13)
 	label.add_theme_color_override("font_color", Color(marker_color.r, marker_color.g, marker_color.b, 1.0))
-	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
-	label.add_theme_constant_override("shadow_offset_x", 1)
-	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 1.0))
+	label.add_theme_constant_override("shadow_offset_x", 2)
+	label.add_theme_constant_override("shadow_offset_y", 2)
 	marker.add_child(label)
 
 	location_markers.add_child(marker)
@@ -1230,6 +1261,11 @@ func _lerp_color(a: Color, b: Color, t: float) -> Color:
 func _update_fog() -> void:
 	if not fog_overlay:
 		return
+	if not OVERWORLD_FOG_ENABLED:
+		fog_overlay.color = Color(FOG_DARKEN_COLOR.r, FOG_DARKEN_COLOR.g, FOG_DARKEN_COLOR.b, 0.0)
+		fog_overlay.visible = false
+		return
+	fog_overlay.visible = true
 	var player_px := Vector2(pos)
 	var min_dist := FOG_BEACON_RADIUS + 1.0
 	for bname: String in BEACON_POSITIONS:
@@ -1248,6 +1284,11 @@ func _update_fog() -> void:
 func _init_fog_of_war() -> void:
 	if not fog_of_war:
 		return
+	if not OVERWORLD_FOG_ENABLED:
+		fog_of_war.visible = false
+		_fog_tiles.clear()
+		return
+	fog_of_war.visible = true
 	_fog_tiles.clear()
 	for y in range(MAP_H):
 		var row: Array = []
@@ -1274,6 +1315,8 @@ func _init_fog_of_war() -> void:
 	_update_fog_of_war()
 
 func _update_fog_of_war() -> void:
+	if not OVERWORLD_FOG_ENABLED:
+		return
 	if _fog_tiles.is_empty():
 		return
 	for dy in range(-FOW_REVEAL_RADIUS, FOW_REVEAL_RADIUS + 1):
@@ -1288,6 +1331,8 @@ func _update_fog_of_war() -> void:
 					_fog_tiles[ty][tx].visible = false
 
 func _refresh_fog_of_war() -> void:
+	if not OVERWORLD_FOG_ENABLED:
+		return
 	if _fog_tiles.is_empty():
 		return
 	for y in range(MAP_H):
