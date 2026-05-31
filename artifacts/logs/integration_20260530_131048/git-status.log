@@ -1,0 +1,29 @@
+## main...origin/main [ahead 1]
+ M assets/world/town_asset_catalog.json
+ M assets/world/towns/brindlewick.layout.json
+ M docs/pixellab-art-inventory.md
+ M scripts/overworld.gd
+?? artifacts/
+?? assets/sprites/town/pixellab_inbox/coastal_harbor_building_reference_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/coastal_harbor_market_stall_reference.png.import
+?? assets/sprites/town/pixellab_inbox/coastal_prop_modules.png.import
+?? assets/sprites/town/pixellab_inbox/doorway_threshold_foundation_modules.png.import
+?? assets/sprites/town/pixellab_inbox/fortress_courtyard_prop_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/fortress_gate_wall_modules.png.import
+?? assets/sprites/town/pixellab_inbox/fortress_prop_modules.png.import
+?? assets/sprites/town/pixellab_inbox/fortress_settlement_building_reference_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/harbor_dockside_shop_facade_parts.png.import
+?? assets/sprites/town/pixellab_inbox/log_hamlet_building_reference_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/market_profession_exterior_kit.png.import
+?? assets/sprites/town/pixellab_inbox/profession_station_prop_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/red_clay_roof_accessory_retry.png.import
+?? assets/sprites/town/pixellab_inbox/town_modular_crop_helper_sheet.png.import
+?? assets/sprites/town/pixellab_inbox/warm_window_lantern_modules.png.import
+?? assets/world/towns/greywatch_keep.preview.png.import
+?? assets/world/towns/mournlight_harbor.preview.png.import
+?? docs/autonomous-workflow.md
+?? scripts/dev/daily_integration_pass.sh
+?? scripts/dev/kanban_crash_watchdog.py
+?? scripts/dev/lanternhouse_workflow_preflight.py
+?? scripts/dev/queue_visual_fix_pair.py
+?? scripts/house_interior.gd.uid

@@ -1,0 +1,35 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.
+     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:364)
+OpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)
+
+VISUAL_SCENE_CAPTURE_START target=overworld scene=res://scenes/overworld/overworld.tscn output=/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260529_174400/overworld.png frames=12
+overworld_atlas loaded: 256x224
+  added tile '~' at atlas (0, 0)
+  added tile '.' at atlas (1, 0)
+  added tile ',' at atlas (2, 0)
+  added tile 'T' at atlas (3, 0)
+  added tile '^' at atlas (4, 0)
+  added tile 'M' at atlas (5, 0)
+  added tile '#' at atlas (6, 0)
+  added tile '=' at atlas (7, 0)
+  added tile 'h' at atlas (0, 1)
+  added tile 'L' at atlas (1, 1)
+  added tile 'B' at atlas (2, 1)
+  added tile 'S' at atlas (3, 1)
+  added tile '!' at atlas (4, 1)
+  added tile 'C' at atlas (5, 1)
+  added tile 'V' at atlas (6, 1)
+  added tile 'A' at atlas (1, 2)
+  added tile 'D' at atlas (7, 1)
+  added tile 'f' at atlas (0, 2)
+  added tile 'd' at atlas (2, 2)
+  added tile ';' at atlas (3, 2)
+  added tile '*' at atlas (4, 2)
+  added tile 'r' at atlas (5, 2)
+  added tile 'p' at atlas (6, 2)
+  added tile 'm' at atlas (7, 2)
+TileSet built with 25 tile types
+Map drawn: 2304 tiles
+Overworld ready. Player at (14, 19) (tile: ;)
+VISUAL_SCENE_CAPTURE_OK target=overworld scene=res://scenes/overworld/overworld.tscn output=/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260529_174400/overworld.png manifest=/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260529_174400/overworld.json size=1280x720

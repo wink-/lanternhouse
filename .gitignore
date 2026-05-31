@@ -7,8 +7,6 @@ assets/sprites/tiles/assets_work/
 downloads/
 __pycache__/
 *.pyc
-artifacts/screenshots/
-artifacts/logs/
 .worktrees/
 
 # OS

@@ -1,0 +1,11 @@
+{
+  "absolute_output": "/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260530_162150/town.png",
+  "frames_waited": 12,
+  "height": 720,
+  "main_scene": "res://scenes/title/title.tscn",
+  "ok": true,
+  "output": "/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260530_162150/town.png",
+  "scene": "res://scenes/town/town.tscn",
+  "target": "town",
+  "width": 1280
+}

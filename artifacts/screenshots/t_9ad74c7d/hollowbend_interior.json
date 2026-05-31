@@ -1,0 +1,11 @@
+{
+  "absolute_output": "/home/ubuntu/lanternhouse/artifacts/screenshots/t_9ad74c7d/hollowbend_interior.png",
+  "frames_waited": 12,
+  "height": 720,
+  "main_scene": "res://scenes/title/title.tscn",
+  "ok": true,
+  "output": "artifacts/screenshots/t_9ad74c7d/hollowbend_interior.png",
+  "scene": "res://scenes/house_interior/house_interior.tscn",
+  "target": "house_interior",
+  "width": 1280
+}

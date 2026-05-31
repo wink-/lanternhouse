@@ -1,0 +1,18 @@
+=== Lanternhouse workflow preflight ===
+Project: /home/ubuntu/lanternhouse
+Board:   2d-game
+[PASS] project:root: /home/ubuntu/lanternhouse
+[PASS] project:visual_wrapper: scripts/dev/capture_visual_qa.sh
+[PASS] project:layout_validator: scripts/dev/validate_town_layout.py
+[PASS] project:git_status: 28 changed/untracked files
+[PASS] godot:binary: 4.6.3.stable.official.7d41c59c4
+[PASS] capture:xvfb-run: /usr/bin/xvfb-run
+[PASS] kanban:board: 2d-game
+[PASS] profile:artist:skills_dir: /home/ubuntu/.hermes/profiles/artist/skills
+[PASS] profile:artist:skill:lanternhouse-art-pipeline: /home/ubuntu/.hermes/profiles/artist/skills/software-development/lanternhouse-art-pipeline
+[PASS] profile:artist:skill:lanternhouse-visual-polish: /home/ubuntu/.hermes/profiles/artist/skills/software-development/lanternhouse-visual-polish
+[PASS] profile:artist:skill:godot-headless-validation: /home/ubuntu/.hermes/profiles/artist/skills/software-development/godot-headless-validation
+[PASS] profile:visual-reviewer:skills_dir: /home/ubuntu/.hermes/profiles/visual-reviewer/skills
+[PASS] profile:visual-reviewer:skill:lanternhouse-visual-polish: /home/ubuntu/.hermes/profiles/visual-reviewer/skills/software-development/lanternhouse-visual-polish
+[PASS] profile:visual-reviewer:skill:godot-headless-validation: /home/ubuntu/.hermes/profiles/visual-reviewer/skills/software-development/godot-headless-validation
+PREFLIGHT_OK

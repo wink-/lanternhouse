@@ -1,0 +1,11 @@
+{
+  "absolute_output": "/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260530_131615/home.png",
+  "frames_waited": 12,
+  "height": 720,
+  "main_scene": "res://scenes/title/title.tscn",
+  "ok": true,
+  "output": "/home/ubuntu/lanternhouse/artifacts/screenshots/visual_qa_20260530_131615/home.png",
+  "scene": "res://scenes/home/home.tscn",
+  "target": "home",
+  "width": 1280
+}

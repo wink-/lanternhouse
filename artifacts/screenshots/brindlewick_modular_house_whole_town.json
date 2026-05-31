@@ -1,0 +1,11 @@
+{
+  "absolute_output": "/home/ubuntu/lanternhouse/artifacts/screenshots/brindlewick_modular_house_whole_town.png",
+  "frames_waited": 20,
+  "height": 720,
+  "main_scene": "res://scenes/title/title.tscn",
+  "ok": true,
+  "output": "artifacts/screenshots/brindlewick_modular_house_whole_town.png",
+  "scene": "res://scenes/town/town.tscn",
+  "target": "town",
+  "width": 1280
+}
