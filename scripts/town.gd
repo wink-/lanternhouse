@@ -639,6 +639,7 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	var wall_start: int = 1
 	var foundation_row: int = size.y - 1
 	var plaque_id: String = building_data.get("plaque", "plaque_blank")
+	var is_residential_modular: bool = String(building_data["id"]) == "small_house"
 
 	for x in range(size.x):
 		var roof_tile := "roof_mid"
@@ -646,6 +647,8 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 			roof_tile = "roof_left"
 		elif x == size.x - 1:
 			roof_tile = "roof_right"
+		elif is_residential_modular and x == door_col:
+			roof_tile = "roof_ridge"
 		_add_modular_building_tile(upper_root, roof_tile, Vector2i(x, 0))
 
 	for x in range(size.x):
@@ -659,7 +662,7 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 			var wall_tile := "wall"
 			if x == 0 or x == size.x - 1:
 				wall_tile = "wall_timber"
-			elif (x + y) % 4 == 0:
+			elif not is_residential_modular and (x + y) % 4 == 0:
 				wall_tile = "wall_brace"
 			_add_modular_building_tile(root, wall_tile, Vector2i(x, y))
 
@@ -674,8 +677,11 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	_add_modular_building_tile(root, "lantern", Vector2i(max(0, door_col - 1), foundation_row - 1))
 
 	var window_row: int = foundation_row - 1 if building_data.get("public", false) else max(wall_start + 1, foundation_row - 2)
-	for x in _building_window_columns(size.x, door_col):
-		if not building_data.get("public", false) and x < door_col:
+	var window_columns: Array = _building_window_columns(size.x, door_col)
+	if is_residential_modular:
+		window_columns = [max(1, door_col - 2), min(size.x - 2, door_col + 2)]
+	for x: int in window_columns:
+		if not building_data.get("public", false) and x < door_col and not is_residential_modular:
 			continue
 		var window_tile := "window_arch" if building_data.get("public", false) else "window"
 		_add_modular_building_tile(root, window_tile, Vector2i(x, window_row))

@@ -152,10 +152,12 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/buildings/tavern.png` | 96x96 | 1 | PixelLab 3/4 tavern building |
 | `assets/sprites/town/buildings/workshop.png` | 96x96 | 1 | PixelLab 3/4 tinkerer workshop building |
 | `assets/sprites/town/buildings/chapel.png` | 80x80 | 1 | PixelLab 3/4 chapel/healer building |
-| `assets/sprites/town/buildings/small_house.png` | 64x64 | 1 | PixelLab 3/4 reusable small house |
-| `assets/sprites/town/buildings/large_house.png` | 96x96 | 1 | PixelLab 3/4 reusable larger house |
-| `assets/sprites/town/buildings/door_stoop_pieces.png` | 96x96 | 1 | PixelLab modular doors and stoops |
-| `assets/sprites/town/buildings/facade_blocks.png` | 128x128 | 1 | Pending PixelLab plaster, stone, balcony, window, and flower-box modules |
+| `assets/sprites/town/buildings/small_house.png` | 64×64 | 1 | PixelLab 3/4 reusable small house |
+| `assets/sprites/town/buildings/small_house_direction_preview.png` | 176×136 | 1 | Reference-only small house direction mockup |
+| `assets/sprites/town/buildings/small_house_direction_preview.json` | metadata | 1 | Reference-only mockup metadata |
+| `assets/sprites/town/buildings/large_house.png` | 96×96 | 1 | PixelLab 3/4 reusable larger house |
+| `assets/sprites/town/buildings/door_stoop_pieces.png` | 96×96 | 1 | PixelLab modular doors and stoops |
+
 | `assets/sprites/town/buildings/wall_construction_tiles.png` | 128x128 | 1 | PixelLab wall, stone, timber, post, trim, and balcony construction sheet |
 | `assets/sprites/town/buildings/warm_wall_construction_tiles.png` | 128x128 | 1 | PixelLab warm wall construction candidate sheet |
 | `assets/sprites/town/buildings/roof_blocks.png` | 128x128 | 1 | Pending corrected PixelLab red clay roof, dormer, eave, and chimney modules |

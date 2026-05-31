@@ -1,0 +1,398 @@
+{
+  "asset_name": "Lanternhouse Modular Roof Tileset",
+  "runtime_path": "assets/sprites/town/buildings/roof_tileset.png",
+  "recipe_path": "assets/sprites/town/buildings/roof_tileset.recipe.json",
+  "tile_size": 16,
+  "atlas_size": [
+    128,
+    64
+  ],
+  "status": "integrated",
+  "notes": "Composite roof atlas for Brindlewick town buildings. Green family on the left, red-brown family on the right. Tile ids are documented in roof_tileset.md and can be reused in Godot building composition code.",
+  "tiles": [
+    {
+      "id": "green_nw_corner",
+      "family": "green",
+      "role": "nw_corner",
+      "source_index": 0,
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_ne_corner",
+      "family": "green",
+      "role": "ne_corner",
+      "source_index": 1,
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_sw_corner",
+      "family": "green",
+      "role": "sw_corner",
+      "source_index": 2,
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_se_corner",
+      "family": "green",
+      "role": "se_corner",
+      "source_index": 3,
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_center_panel",
+      "family": "green",
+      "role": "center_panel",
+      "source_index": 4,
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_ridge_segment",
+      "family": "green",
+      "role": "ridge_segment",
+      "source_index": 5,
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_left_edge_slope",
+      "family": "green",
+      "role": "left_edge_slope",
+      "source_index": 6,
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_right_edge_slope",
+      "family": "green",
+      "role": "right_edge_slope",
+      "source_index": 7,
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_front_eave_shadow",
+      "family": "green",
+      "role": "front_eave_shadow",
+      "source_index": 8,
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_rear_eave_shadow",
+      "family": "green",
+      "role": "rear_eave_shadow",
+      "source_index": 9,
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_gable_end_cap",
+      "family": "green",
+      "role": "gable_end_cap",
+      "source_index": 10,
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_dormer_cap",
+      "family": "green",
+      "role": "dormer_cap",
+      "source_index": 11,
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_chimney_through",
+      "family": "green",
+      "role": "chimney_through",
+      "source_index": 12,
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_chimney_base",
+      "family": "green",
+      "role": "chimney_base",
+      "source_index": 13,
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_moss_patch",
+      "family": "green",
+      "role": "moss_patch",
+      "source_index": 14,
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "green_repaired_patch",
+      "family": "green",
+      "role": "repaired_patch",
+      "source_index": 15,
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_nw_corner",
+      "family": "red",
+      "role": "nw_corner",
+      "source_index": 0,
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_ne_corner",
+      "family": "red",
+      "role": "ne_corner",
+      "source_index": 1,
+      "rect": [
+        80,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_sw_corner",
+      "family": "red",
+      "role": "sw_corner",
+      "source_index": 2,
+      "rect": [
+        96,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_se_corner",
+      "family": "red",
+      "role": "se_corner",
+      "source_index": 3,
+      "rect": [
+        112,
+        0,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_center_panel",
+      "family": "red",
+      "role": "center_panel",
+      "source_index": 4,
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_ridge_segment",
+      "family": "red",
+      "role": "ridge_segment",
+      "source_index": 5,
+      "rect": [
+        80,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_left_edge_slope",
+      "family": "red",
+      "role": "left_edge_slope",
+      "source_index": 6,
+      "rect": [
+        96,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_right_edge_slope",
+      "family": "red",
+      "role": "right_edge_slope",
+      "source_index": 7,
+      "rect": [
+        112,
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_front_eave_shadow",
+      "family": "red",
+      "role": "front_eave_shadow",
+      "source_index": 8,
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_rear_eave_shadow",
+      "family": "red",
+      "role": "rear_eave_shadow",
+      "source_index": 9,
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_gable_end_cap",
+      "family": "red",
+      "role": "gable_end_cap",
+      "source_index": 10,
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_dormer_cap",
+      "family": "red",
+      "role": "dormer_cap",
+      "source_index": 11,
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_chimney_through",
+      "family": "red",
+      "role": "chimney_through",
+      "source_index": 12,
+      "rect": [
+        64,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_chimney_base",
+      "family": "red",
+      "role": "chimney_base",
+      "source_index": 13,
+      "rect": [
+        80,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_weathered_patch",
+      "family": "red",
+      "role": "weathered_patch",
+      "source_index": 14,
+      "rect": [
+        96,
+        48,
+        16,
+        16
+      ]
+    },
+    {
+      "id": "red_repaired_patch",
+      "family": "red",
+      "role": "repaired_patch",
+      "source_index": 15,
+      "rect": [
+        112,
+        48,
+        16,
+        16
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "asset_name": "Lanternhouse Modular Roof Tileset",
+  "output": "assets/sprites/town/buildings/roof_tileset.png",
+  "tile_size": 16,
+  "family_columns": 4,
+  "family_rows": 4,
+  "notes": "Composite roof atlas for Brindlewick town buildings. Green family on the left, red-brown family on the right. Tile ids are documented in roof_tileset.md and can be reused in Godot building composition code.",
+  "sources": {
+    "green": "0b7d61f7-82e8-49ae-8712-7a4e78e28867",
+    "red": "93b9ae6f-2dc9-4efe-ade7-028892cdc158"
+  },
+  "green_roles": [
+    "nw_corner",
+    "ne_corner",
+    "sw_corner",
+    "se_corner",
+    "center_panel",
+    "ridge_segment",
+    "left_edge_slope",
+    "right_edge_slope",
+    "front_eave_shadow",
+    "rear_eave_shadow",
+    "gable_end_cap",
+    "dormer_cap",
+    "chimney_through",
+    "chimney_base",
+    "moss_patch",
+    "repaired_patch"
+  ],
+  "red_roles": [
+    "nw_corner",
+    "ne_corner",
+    "sw_corner",
+    "se_corner",
+    "center_panel",
+    "ridge_segment",
+    "left_edge_slope",
+    "right_edge_slope",
+    "front_eave_shadow",
+    "rear_eave_shadow",
+    "gable_end_cap",
+    "dormer_cap",
+    "chimney_through",
+    "chimney_base",
+    "weathered_patch",
+    "repaired_patch"
+  ]
+}

@@ -26,6 +26,7 @@ func _ready() -> void:
 		scene_path = TARGET_SCENES[target]
 
 	print("VISUAL_SCENE_CAPTURE_START target=%s scene=%s output=%s frames=%d" % [target, scene_path, output_path, frames])
+	_apply_capture_options(options)
 	var result: Dictionary = await _capture_scene(target, scene_path, output_path, manifest_path, frames)
 	if bool(result.get("ok", false)):
 		print("VISUAL_SCENE_CAPTURE_OK target=%s scene=%s output=%s manifest=%s size=%sx%s" % [target, scene_path, output_path, manifest_path, result.get("width", 0), result.get("height", 0)])
@@ -33,6 +34,14 @@ func _ready() -> void:
 	else:
 		push_error("VISUAL_SCENE_CAPTURE_FAILED target=%s reason=%s" % [target, result.get("error", "unknown")])
 		get_tree().quit(1)
+
+func _apply_capture_options(options: Dictionary) -> void:
+	if options.has("town-spawn-x") and options.has("town-spawn-y"):
+		var spawn := Vector2i(int(options["town-spawn-x"]), int(options["town-spawn-y"]))
+		GameData.set_meta("town_spawn_pos", spawn)
+	if options.has("town-spawn-facing-x") and options.has("town-spawn-facing-y"):
+		var facing := Vector2i(int(options["town-spawn-facing-x"]), int(options["town-spawn-facing-y"]))
+		GameData.set_meta("town_spawn_facing", facing)
 
 func _capture_scene(target: String, scene_path: String, output_path: String, manifest_path: String, frames: int) -> Dictionary:
 	_reset_state()

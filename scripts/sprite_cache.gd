@@ -12,6 +12,7 @@ const ASSET_PATHS := {
 	"town.vendor.buildings": "vendor/quiet_village/Buildings.png",
 	"town.vendor.props": "vendor/quiet_village/Props.png",
 	"town.modular_building_atlas": "town/buildings/modular_building_atlas.png",
+	"town.roof_tileset": "town/buildings/roof_tileset.png",
 	"town.home.interior": "interiors/town/home_interior.png",
 	"tiles.overworld": "tiles/lanternhouse_overworld.png",
 }

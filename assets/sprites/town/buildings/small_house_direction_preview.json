@@ -1,0 +1,16 @@
+{
+  "asset_name": "Brindlewick Small House Direction Preview",
+  "source": "Derived from final_residential_buildings.png top-left cottage",
+  "runtime_path": "assets/sprites/town/buildings/small_house_direction_preview.png",
+  "tile_size": 16,
+  "footprint_tiles": "approx. 5x4 base with roof overhang",
+  "palette_notes": [
+    "warm red-clay roof",
+    "cream plaster walls",
+    "dark timber trim",
+    "cool gray stone foundation",
+    "lantern-warm windows"
+  ],
+  "status": "preview",
+  "notes": "Reference mockup for the rebuilt single-house direction; use as the visual target when assembling modular wall, roof, threshold, and grounding pieces."
+}

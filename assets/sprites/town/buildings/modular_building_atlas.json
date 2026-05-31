@@ -4,7 +4,7 @@
   "recipe_path": "assets/sprites/town/buildings/modular_building_atlas.recipe.json",
   "tile_size": 16,
   "status": "integrated",
-  "notes": "Recipe-driven runtime atlas for 3/4 Brindlewick buildings. Tile ids are consumed by scripts/town.gd.",
+  "notes": "Runtime atlas for 3/4 Brindlewick buildings. Red-clay roof, cream plaster walls, timber trim, gray foundation; tile ids are consumed by scripts/town.gd.",
   "tiles": [
     {
       "tile": "roof_left",
@@ -14,7 +14,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 1,2"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "roof_mid",
@@ -24,7 +24,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 2,2"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "roof_right",
@@ -34,7 +34,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 4,2"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "roof_ridge",
@@ -44,7 +44,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 3,2"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "roof_eave",
@@ -54,7 +54,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/roof_corner_edge_variants.png cell 2,3"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "roof_moss",
@@ -64,7 +64,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/pure_roof_swatches_retry.png cell 2,4"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "chimney",
@@ -74,7 +74,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/roof_accessories.png normalized crop 0,64,32,112"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "blank",
@@ -84,7 +84,7 @@
         16,
         16
       ],
-      "source": "transparent blank"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "wall",
@@ -94,7 +94,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,3"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "wall_timber",
@@ -104,7 +104,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 5,3"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "wall_brace",
@@ -114,7 +114,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,3"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "wall_shadow",
@@ -124,7 +124,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,3 shadow mask"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "foundation",
@@ -134,7 +134,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,5"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "foundation_moss",
@@ -144,7 +144,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 4,5"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "foundation_shadow",
@@ -154,7 +154,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 3,5 shadow mask"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "threshold",
@@ -164,7 +164,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/final_building_tile_cohesion.png cell 5,5"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "door",
@@ -174,7 +174,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed door"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "door_open",
@@ -184,7 +184,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed open door"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "window",
@@ -194,7 +194,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed square window"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "window_arch",
@@ -204,7 +204,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed arched window"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "window_flower",
@@ -214,7 +214,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed arched window"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_blank",
@@ -224,7 +224,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/blank_sign_boards.png palette-inspired composed blank plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "lantern",
@@ -234,7 +234,7 @@
         16,
         16
       ],
-      "source": "hand-composed from PixelLab lantern palette"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "flower_box",
@@ -244,7 +244,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/window_door_tiles_expanded.png palette-inspired composed flower box"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_sword",
@@ -254,7 +254,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png sword on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_shield",
@@ -264,7 +264,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png shield on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_tankard",
@@ -274,7 +274,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png tankard on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_gear",
@@ -284,7 +284,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png gear on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_bed",
@@ -294,7 +294,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png bed on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     },
     {
       "tile": "plaque_candle",
@@ -304,7 +304,7 @@
         16,
         16
       ],
-      "source": "assets/sprites/town/buildings/isolated_shop_symbols_retry.png candle on curated plaque"
+      "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset"
     }
   ]
 }
