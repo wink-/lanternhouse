@@ -208,6 +208,10 @@ const BUILDING_INTERACTIONS := {
 	"tavern": {"npc": "tavern_keeper", "name": "Tavern", "door_offset": Vector2i(2, 3), "door_width": 3},
 	"workshop": {"npc": "tinkerer", "name": "Workshop", "door_offset": Vector2i(2, 3), "door_width": 3},
 	"chapel": {"npc": "healer", "name": "Chapel", "door_offset": Vector2i(2, 3), "door_width": 3},
+	"small_house": {"npc": "realtor", "name": "Small House", "door_offset": Vector2i(3, 3), "door_width": 3},
+	"large_house": {"npc": "realtor", "name": "Large House", "door_offset": Vector2i(3, 3), "door_width": 3},
+	"house_timber": {"npc": "realtor", "name": "Timber House", "door_offset": Vector2i(3, 3), "door_width": 3},
+	"house_mossy": {"npc": "realtor", "name": "Mossy House", "door_offset": Vector2i(3, 3), "door_width": 3},
 }
 const SOUTH_FACING_BUILDING_OVERRIDES := {
 	"weapon_shop": true,
