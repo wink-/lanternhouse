@@ -298,6 +298,7 @@ var _quiet_buildings: Texture2D
 var _quiet_props: Texture2D
 var _modular_building_atlas: Texture2D
 var _modular_building_tileset: TileSet
+var _modular_building_atlas_coords: Dictionary  ## tile_id -> Vector2i, precomputed from MODULAR_BUILDING_TILE_RECTS
 var _town_map: Array = MAP.duplicate()
 var _town_buildings: Array = TOWN_BUILDINGS.duplicate(true)
 var _shop_signs: Array = SHOP_SIGNS.duplicate(true)
@@ -410,14 +411,19 @@ func _load_quiet_village_assets() -> void:
 func _build_modular_building_tileset() -> TileSet:
 	if not _modular_building_atlas:
 		return null
+	# Precompute atlas coords once — avoids per-tile division during building draw
+	_modular_building_atlas_coords.clear()
+	for tile_id: String in MODULAR_BUILDING_TILE_RECTS:
+		var rect: Rect2i = MODULAR_BUILDING_TILE_RECTS[tile_id]
+		_modular_building_atlas_coords[tile_id] = Vector2i(rect.position.x / TILE_SIZE, rect.position.y / TILE_SIZE)
 	var tile_set := TileSet.new()
 	tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
 	var source := TileSetAtlasSource.new()
 	source.texture = _modular_building_atlas
 	source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
 	source.use_texture_padding = true
-	for tile_id: String in MODULAR_BUILDING_TILE_RECTS:
-		var atlas_coord := _modular_building_atlas_coord(tile_id)
+	for tile_id: String in _modular_building_atlas_coords:
+		var atlas_coord: Vector2i = _modular_building_atlas_coords[tile_id]
 		if not source.has_tile(atlas_coord):
 			source.create_tile(atlas_coord)
 	tile_set.add_source(source, 0)
@@ -569,13 +575,8 @@ func _draw_buildings() -> void:
 		_draw_town_building(building_data)
 	_draw_building_labels()
 
-const USE_MODULAR_BUILDINGS := false
-
 func _draw_town_building(building_data: Dictionary) -> void:
-	if _uses_modular_building_tiles(building_data):
-		_draw_modular_town_building(building_data)
-		return
-	if USE_MODULAR_BUILDINGS and _modular_building_atlas:
+	if _modular_building_tileset:
 		_draw_modular_town_building(building_data)
 		return
 	var texture: Texture2D = _load_shop_building(building_data["id"])
@@ -599,8 +600,6 @@ func _draw_town_building(building_data: Dictionary) -> void:
 		)
 		_add_building(building_data["grid"], building_data["fallback_region"], building_data["fallback_scale"])
 
-func _uses_modular_building_tiles(building_data: Dictionary) -> bool:
-	return String(building_data.get("render", "")) == "modular_tiles" and _modular_building_tileset != null
 
 func _add_soft_shadow(parent: Node, position: Vector2, size: Vector2, z: int, color: Color = SHADOW_COLOR) -> void:
 	var shadow := ColorRect.new()
@@ -639,7 +638,8 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	var wall_start: int = 1
 	var foundation_row: int = size.y - 1
 	var plaque_id: String = building_data.get("plaque", "plaque_blank")
-	var is_residential_modular: bool = String(building_data["id"]) == "small_house"
+	var is_residential: bool = building_data.get("style", "") == "residential"
+	var is_public: bool = building_data.get("public", false)
 
 	for x in range(size.x):
 		var roof_tile := "roof_mid"
@@ -647,13 +647,13 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 			roof_tile = "roof_left"
 		elif x == size.x - 1:
 			roof_tile = "roof_right"
-		elif is_residential_modular and x == door_col:
+		elif is_residential and x == door_col:
 			roof_tile = "roof_ridge"
 		_add_modular_building_tile(upper_root, roof_tile, Vector2i(x, 0))
 
 	for x in range(size.x):
 		var eave_tile := "roof_eave"
-		if building_data.get("public", false) and x == door_col:
+		if is_public and x == door_col:
 			eave_tile = "roof_ridge"
 		_add_modular_building_tile(upper_root, eave_tile, Vector2i(x, wall_start))
 
@@ -662,7 +662,7 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 			var wall_tile := "wall"
 			if x == 0 or x == size.x - 1:
 				wall_tile = "wall_timber"
-			elif not is_residential_modular and (x + y) % 4 == 0:
+			elif not is_residential and (x + y) % 4 == 0:
 				wall_tile = "wall_brace"
 			_add_modular_building_tile(root, wall_tile, Vector2i(x, y))
 
@@ -672,23 +672,34 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 
 	_add_modular_building_tile(root, "door", Vector2i(door_col, foundation_row - 1))
 	_add_modular_building_tile(root, "threshold", Vector2i(door_col, foundation_row))
-	if plaque_id != "plaque_blank" or building_data.get("public", false):
+	if plaque_id != "plaque_blank" or is_public:
 		_add_modular_building_tile(root, plaque_id, Vector2i(door_col, max(wall_start, foundation_row - 2)))
 	_add_modular_building_tile(root, "lantern", Vector2i(max(0, door_col - 1), foundation_row - 1))
 
-	var window_row: int = foundation_row - 1 if building_data.get("public", false) else max(wall_start + 1, foundation_row - 2)
-	var window_columns: Array = _building_window_columns(size.x, door_col)
-	if is_residential_modular:
-		window_columns = [max(1, door_col - 2), min(size.x - 2, door_col + 2)]
-	for x: int in window_columns:
-		if not building_data.get("public", false) and x < door_col and not is_residential_modular:
-			continue
-		var window_tile := "window_arch" if building_data.get("public", false) else "window"
-		_add_modular_building_tile(root, window_tile, Vector2i(x, window_row))
+	var window_columns: Array = (
+		[max(1, door_col - 2), min(size.x - 2, door_col + 2)]
+		if is_residential
+		else _building_window_columns(size.x, door_col)
+	)
+	var window_tile := "window_arch" if is_public else "window"
+	var wall_rows: int = foundation_row - wall_start - 2
+	if wall_rows >= 4:
+		# Multi-story: windows every 2 rows from top
+		var start_row: int = wall_start + 2 if is_public else wall_start + 1
+		for y in range(start_row, foundation_row - 1, 2):
+			for x: int in window_columns:
+				if not is_public and x < door_col and not is_residential:
+					continue
+				_add_modular_building_tile(root, window_tile, Vector2i(x, y))
+	else:
+		# Single-story: windows on one row just above door/foundation
+		var window_row: int = foundation_row - 1 if is_public else max(wall_start + 1, foundation_row - 2)
+		for x: int in window_columns:
+			if not is_public and x < door_col and not is_residential:
+				continue
+			_add_modular_building_tile(root, window_tile, Vector2i(x, window_row))
 
-	if size.x >= 7:
-		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
-	elif building_data["id"] in ["tavern", "workshop", "inn"]:
+	if size.x >= 7 or building_data["id"] in ["tavern", "workshop", "inn"]:
 		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
 
 func _building_door_column(building_data: Dictionary, size: Vector2i) -> int:
@@ -710,24 +721,10 @@ func _building_window_columns(width: int, door_col: int) -> Array:
 		cols.append(width - 2)
 	return cols
 
-func _add_modular_building_tile(parent: Node2D, tile_id: String, local_grid: Vector2i) -> void:
-	if not MODULAR_BUILDING_TILE_RECTS.has(tile_id):
+func _add_modular_building_tile(tilemap: TileMapLayer, tile_id: String, local_grid: Vector2i) -> void:
+	if not _modular_building_atlas_coords.has(tile_id):
 		return
-	if parent is TileMapLayer:
-		var tilemap := parent as TileMapLayer
-		tilemap.set_cell(local_grid, 0, _modular_building_atlas_coord(tile_id))
-		return
-	var sprite := Sprite2D.new()
-	sprite.texture = _modular_building_atlas
-	sprite.region_enabled = true
-	sprite.region_rect = MODULAR_BUILDING_TILE_RECTS[tile_id]
-	sprite.centered = false
-	sprite.position = Vector2(local_grid * TILE_SIZE)
-	parent.add_child(sprite)
-
-func _modular_building_atlas_coord(tile_id: String) -> Vector2i:
-	var rect: Rect2i = MODULAR_BUILDING_TILE_RECTS[tile_id]
-	return Vector2i(rect.position.x / TILE_SIZE, rect.position.y / TILE_SIZE)
+	tilemap.set_cell(local_grid, 0, _modular_building_atlas_coords[tile_id])
 
 func _load_shop_building(building_id: String) -> Texture2D:
 	if _shop_building_textures.has(building_id):
