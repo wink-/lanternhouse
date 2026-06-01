@@ -53,13 +53,13 @@ Scene transitions use `get_tree().change_scene_to_file()`. Data passes between s
 - **Maps are ASCII arrays** — tile characters map to colors (fallback) or atlas coordinates (Pipoya). Blocked tiles, encounter zones, and interactable tiles are defined in const dictionaries.
 - **Party members are plain dictionaries** — keys: `name`, `class`, `hp`, `max_hp`, `str`, `def`, `agi`, `level`, `xp`, `next_xp`, `magic_levels`, `alive`, `command`, `command_label`. Equipment is tracked separately via index arrays on `GameData`.
 - **Commands are strings** — `"fight:<target_idx>"`, `"magic:<lvl>:<spell_idx>:<target_idx>"`, `"run"`, `"pass"`, `"item_used"`. Parsed by splitting on `:` during resolution.
-- **All rendering is currently colored blocks** (Polygon2D / ColorRect). `SpriteCache` is wired and ready for PNG drops — the colored blocks are the fallback path.
+- **Town buildings use modular tiles** — all buildings are assembled at runtime from a 30-tile atlas (`modular_building_atlas.png`) via TileMapLayer. The tileset is built from `MODULAR_BUILDING_TILE_RECTS` const. When the atlas is missing, buildings fall back to sprite textures or Quiet Village atlas pieces.
 
 ## Tile system
 
 Overworld uses the **Pipoya RPG World Tileset** (32×32 tiles) combined into `assets/sprites/tiles/pipoya_combined.png`. Atlas coordinates are defined as `Vector2i(col, row)` constants in `overworld.gd`. The full Pipoya source sheets are in `Pipoya/` at 32×32, 40×40, and 48×48 sizes.
 
-Town still uses colored-block rendering (16×16 ColorRect tiles, no sprite atlas yet).
+Town ground tiles use 16×16 ColorRect tiles. Buildings are rendered from a modular tile atlas (30 tile types: roof, wall, foundation, door, window, plaque, decor) assembled into TileMapLayer nodes. Multi-story buildings (4+ wall rows) get windows every 2 rows.
 
 ## Input actions
 
@@ -71,6 +71,7 @@ Defined in `project.godot`: `move_up/down/left/right` (WASD + arrows + gamepad),
 - **New tile type:** Add symbol to `MAP` array, entry to `TILE_ATLAS`/`COLORS`, add to `BLOCKED`/`ENCOUNTER` dicts as needed, sprite to `assets/sprites/tiles/<name>.png`
 - **New class:** Add template to `classes.gd` `get_template()`, level-up stats to `level_up_stats()`, color to `battle.gd` `PARTY_COLORS`, sprite to `assets/sprites/battle/party/<class>.png`
 - **New shop item:** Add to `items.gd` weapon/armor/item list, handle effect in `shop.gd`
+- **New building:** Add entry to layout JSON (`assets/world/towns/<town>.layout.json`) with `grid`, `size`, `public`/`style`, `plaque`. Add NPC interaction to `BUILDING_INTERACTIONS` in `town.gd`. Building renders from modular tiles automatically — no sprite needed.
 
 ## Developer documentation
 
