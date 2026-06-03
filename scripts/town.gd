@@ -48,21 +48,6 @@ const WANG_NW := 1
 const WANG_NE := 2
 const WANG_SW := 4
 const WANG_SE := 8
-const DETAIL_GRASS_COLORS := [
-	Color("3f8c36"),
-	Color("5eaa48"),
-	Color("6fb858"),
-	Color("386f32"),
-]
-const DETAIL_FLOWER_COLORS := [
-	Color("f0d46a"),
-	Color("d98880"),
-	Color("c58cf0"),
-]
-const DETAIL_STONE_COLORS := [
-	Color("7b7969"),
-	Color("9a8f74"),
-]
 const SHADOW_COLOR := Color(0.05, 0.04, 0.03, 0.48)
 const BUILDING_CONTACT_SHADOW_COLOR := Color(0.05, 0.04, 0.03, 0.22)
 const UI_PANEL_COLOR := Color(0.035, 0.032, 0.045, 0.82)
@@ -137,6 +122,19 @@ const MODULAR_BUILDING_TILE_RECTS := {
 	"plaque_gear": Rect2i(Vector2i(48, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"plaque_bed": Rect2i(Vector2i(64, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"plaque_candle": Rect2i(Vector2i(80, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_roof_left": Rect2i(Vector2i(0, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_roof_mid": Rect2i(Vector2i(16, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_roof_right": Rect2i(Vector2i(32, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_roof_eave": Rect2i(Vector2i(48, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_chimney": Rect2i(Vector2i(64, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_wall": Rect2i(Vector2i(80, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_wall_timber": Rect2i(Vector2i(96, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_foundation": Rect2i(Vector2i(112, 64), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_door": Rect2i(Vector2i(0, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_window": Rect2i(Vector2i(16, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_weapon_rack": Rect2i(Vector2i(32, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_anvil_plaque": Rect2i(Vector2i(48, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"forge_door_right": Rect2i(Vector2i(64, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
 
 const MAP := [
@@ -212,12 +210,6 @@ const BUILDING_INTERACTIONS := {
 	"large_house": {"npc": "realtor", "name": "Large House", "door_offset": Vector2i(3, 3), "door_width": 3},
 	"house_timber": {"npc": "realtor", "name": "Timber House", "door_offset": Vector2i(3, 3), "door_width": 3},
 	"house_mossy": {"npc": "realtor", "name": "Mossy House", "door_offset": Vector2i(3, 3), "door_width": 3},
-}
-const SOUTH_FACING_BUILDING_OVERRIDES := {
-	"weapon_shop": true,
-	"armor_shop": true,
-	"inn": true,
-	"chapel": true,
 }
 const BUILDING_LABELS := []
 const TOWN_BUILDINGS := [
@@ -298,23 +290,16 @@ var _npc_wander_pos: Dictionary = {}
 var _town_atlas: Texture2D
 var _town_ground: Texture2D
 var _grass_dirt_wang: Texture2D
-var _quiet_buildings: Texture2D
-var _quiet_props: Texture2D
 var _modular_building_atlas: Texture2D
 var _modular_building_tileset: TileSet
 var _modular_building_atlas_coords: Dictionary  ## tile_id -> Vector2i, precomputed from MODULAR_BUILDING_TILE_RECTS
 var _town_map: Array = MAP.duplicate()
 var _town_buildings: Array = TOWN_BUILDINGS.duplicate(true)
 var _shop_signs: Array = SHOP_SIGNS.duplicate(true)
-var _shop_awnings: Array = SHOP_AWNINGS.duplicate(true)
 var _town_props: Array = TOWN_PROPS.duplicate(true)
 var _building_doors: Dictionary = BUILDING_DOORS.duplicate(true)
 var _building_interactions: Dictionary = BUILDING_INTERACTIONS.duplicate(true)
 var _cat_wander_radius: int = CAT_WANDER_RADIUS
-var _shop_sign_textures: Dictionary = {}
-var _shop_awning_textures: Dictionary = {}
-var _shop_building_textures: Dictionary = {}
-var _town_prop_textures: Dictionary = {}
 var _player_idle_textures: Dictionary = {}
 var _npc_idle_textures: Dictionary = {}
 var _cat_marker: Sprite2D
@@ -347,9 +332,7 @@ func _ready() -> void:
 	_configure_dialog_panel()
 	_apply_return_spawn()
 	_draw_map()
-	_draw_ground_details()
 	_draw_buildings()
-	_draw_props()
 	_build_npc_positions()
 	_draw_npcs()
 	_draw_cat()
@@ -407,8 +390,6 @@ func _configure_dialog_panel() -> void:
 func _load_quiet_village_assets() -> void:
 	_town_ground = SpriteCache.get_asset("town.ground")
 	_grass_dirt_wang = SpriteCache.get_asset("town.grass_dirt_wang")
-	_quiet_buildings = SpriteCache.get_asset("town.vendor.buildings")
-	_quiet_props = SpriteCache.get_asset("town.vendor.props")
 	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
 	_modular_building_tileset = _build_modular_building_tileset()
 
@@ -440,7 +421,6 @@ func _load_town_layout() -> void:
 	_town_map = layout["map"]
 	_town_buildings = layout["buildings"]
 	_shop_signs = layout["shop_signs"]
-	_shop_awnings = layout["shop_awnings"]
 	_town_props = layout["props"]
 	_building_doors = layout["doors"]
 	_building_interactions = layout["building_interactions"]
@@ -513,31 +493,6 @@ func _draw_map() -> void:
 				rect.size = Vector2(TILE_SIZE, TILE_SIZE)
 				map_layer.add_child(rect)
 
-func _draw_ground_details() -> void:
-	for y in range(_town_map.size()):
-		for x in range(_town_map[y].length()):
-			var tile: String = _town_map[y].substr(x, 1)
-			if tile != "." and tile != ",":
-				continue
-			var h := int(abs((x * 928371 + y * 364479 + x * y * 1013) % 97))
-			if h > 32:
-				continue
-			var base := Vector2(x * TILE_SIZE, y * TILE_SIZE)
-			if h % 11 == 0:
-				_add_ground_pixel_cluster(base + Vector2(3 + h % 8, 5 + int(h / 3) % 7), DETAIL_FLOWER_COLORS[h % DETAIL_FLOWER_COLORS.size()], 1, 1)
-			elif h % 7 == 0:
-				_add_ground_pixel_cluster(base + Vector2(4 + h % 6, 7 + int(h / 5) % 5), DETAIL_STONE_COLORS[h % DETAIL_STONE_COLORS.size()], 3, 2)
-			else:
-				_add_ground_pixel_cluster(base + Vector2(2 + h % 9, 4 + int(h / 4) % 7), DETAIL_GRASS_COLORS[h % DETAIL_GRASS_COLORS.size()], 4, 1)
-
-func _add_ground_pixel_cluster(position: Vector2, color: Color, width: int, height: int) -> void:
-	var detail := ColorRect.new()
-	detail.color = color
-	detail.position = position
-	detail.size = Vector2(width, height)
-	detail.z_index = 1
-	map_layer.add_child(detail)
-
 func _is_grass_dirt_terrain_tile(tile: String) -> bool:
 	return tile == "." or tile == "," or tile == "=" or tile == "+" or tile == "H"
 
@@ -583,26 +538,7 @@ func _draw_town_building(building_data: Dictionary) -> void:
 	if _modular_building_tileset:
 		_draw_modular_town_building(building_data)
 		return
-	var texture: Texture2D = _load_shop_building(building_data["id"])
-	if texture:
-		_add_soft_shadow(
-			building_layer,
-			Vector2(building_data["grid"] * TILE_SIZE) + Vector2(2, max(4, texture.get_height() - 1)),
-			Vector2(max(24, texture.get_width() - 4), 2),
-			1,
-			BUILDING_CONTACT_SHADOW_COLOR
-		)
-		_add_split_texture_building(building_data["id"], texture, Vector2(building_data["grid"] * TILE_SIZE))
-	elif _quiet_buildings:
-		var fallback_size: Vector2 = Vector2(building_data["fallback_region"].size) * building_data["fallback_scale"]
-		_add_soft_shadow(
-			building_layer,
-			Vector2(building_data["grid"] * TILE_SIZE) + Vector2(2, max(4, fallback_size.y - 1)),
-			Vector2(max(24, fallback_size.x - 4), 2),
-			1,
-			BUILDING_CONTACT_SHADOW_COLOR
-		)
-		_add_building(building_data["grid"], building_data["fallback_region"], building_data["fallback_scale"])
+	push_warning("Skipping %s: town buildings require the modular tile atlas." % building_data["id"])
 
 
 func _add_soft_shadow(parent: Node, position: Vector2, size: Vector2, z: int, color: Color = SHADOW_COLOR) -> void:
@@ -645,21 +581,20 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	var is_residential: bool = building_data.get("style", "") == "residential"
 	var is_public: bool = building_data.get("public", false)
 
+	if building_data["id"] == "weapon_shop":
+		_draw_weapon_shop_tiles(root, upper_root, size, door_col, wall_start, foundation_row)
+		return
+
 	for x in range(size.x):
 		var roof_tile := "roof_mid"
 		if x == 0:
 			roof_tile = "roof_left"
 		elif x == size.x - 1:
 			roof_tile = "roof_right"
-		elif is_residential and x == door_col:
-			roof_tile = "roof_ridge"
 		_add_modular_building_tile(upper_root, roof_tile, Vector2i(x, 0))
 
 	for x in range(size.x):
-		var eave_tile := "roof_eave"
-		if is_public and x == door_col:
-			eave_tile = "roof_ridge"
-		_add_modular_building_tile(upper_root, eave_tile, Vector2i(x, wall_start))
+		_add_modular_building_tile(upper_root, "roof_eave", Vector2i(x, wall_start))
 
 	for y in range(wall_start + 1, foundation_row):
 		for x in range(size.x):
@@ -706,6 +641,40 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 	if size.x >= 7 or building_data["id"] in ["tavern", "workshop", "inn"]:
 		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
 
+func _draw_weapon_shop_tiles(root: TileMapLayer, upper_root: TileMapLayer, size: Vector2i, door_col: int, wall_start: int, foundation_row: int) -> void:
+	for x in range(size.x):
+		var roof_tile := "forge_roof_mid"
+		if x == 0:
+			roof_tile = "forge_roof_left"
+		elif x == size.x - 1:
+			roof_tile = "forge_roof_right"
+		_add_modular_building_tile(upper_root, roof_tile, Vector2i(x, 0))
+
+	for x in range(size.x):
+		_add_modular_building_tile(upper_root, "forge_roof_eave", Vector2i(x, wall_start))
+	_add_modular_building_tile(upper_root, "forge_chimney", Vector2i(max(1, size.x - 2), 0))
+
+	for y in range(wall_start + 1, foundation_row):
+		for x in range(size.x):
+			var wall_tile := "forge_wall"
+			if x == 0 or x == size.x - 1:
+				wall_tile = "forge_wall_timber"
+			_add_modular_building_tile(root, wall_tile, Vector2i(x, y))
+
+	for x in range(size.x):
+		_add_modular_building_tile(root, "forge_foundation", Vector2i(x, foundation_row))
+
+	var door_right_col: int = min(size.x - 2, door_col + 1)
+	_add_modular_building_tile(root, "forge_door", Vector2i(door_col, foundation_row - 1))
+	_add_modular_building_tile(root, "forge_door_right", Vector2i(door_right_col, foundation_row - 1))
+	_add_modular_building_tile(root, "threshold", Vector2i(door_col, foundation_row))
+	_add_modular_building_tile(root, "threshold", Vector2i(door_right_col, foundation_row))
+	_add_modular_building_tile(root, "forge_anvil_plaque", Vector2i(door_col, max(wall_start + 1, foundation_row - 3)))
+
+	if size.x >= 6:
+		_add_modular_building_tile(root, "forge_weapon_rack", Vector2i(1, foundation_row - 2))
+		_add_modular_building_tile(root, "forge_window", Vector2i(size.x - 2, foundation_row - 2))
+
 func _building_door_column(building_data: Dictionary, size: Vector2i) -> int:
 	var building_id: String = building_data["id"]
 	if _building_interactions.has(building_id):
@@ -730,74 +699,6 @@ func _add_modular_building_tile(tilemap: TileMapLayer, tile_id: String, local_gr
 		return
 	tilemap.set_cell(local_grid, 0, _modular_building_atlas_coords[tile_id])
 
-func _load_shop_building(building_id: String) -> Texture2D:
-	if _shop_building_textures.has(building_id):
-		return _shop_building_textures[building_id]
-	var texture: Texture2D
-	if SOUTH_FACING_BUILDING_OVERRIDES.has(building_id):
-		texture = SpriteCache.get_sprite("town/shops/buildings/%s.png" % building_id)
-	else:
-		texture = SpriteCache.town_building(building_id)
-	_shop_building_textures[building_id] = texture
-	return texture
-
-func _add_building(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
-	var upper_height := _building_upper_height(region.size.y)
-	var lower_height := region.size.y - upper_height
-	var upper_region := Rect2i(region.position, Vector2i(region.size.x, upper_height))
-	var lower_region := Rect2i(region.position + Vector2i(0, upper_height), Vector2i(region.size.x, lower_height))
-	if lower_height > 0:
-		var lower_sprite := Sprite2D.new()
-		lower_sprite.name = "BuildingLower"
-		lower_sprite.texture = _quiet_buildings
-		lower_sprite.region_enabled = true
-		lower_sprite.region_rect = lower_region
-		lower_sprite.centered = false
-		lower_sprite.position = Vector2(grid * TILE_SIZE) + Vector2(0, float(upper_height) * scale_amount)
-		lower_sprite.scale = Vector2(scale_amount, scale_amount)
-		lower_sprite.z_index = 2
-		building_layer.add_child(lower_sprite)
-	var upper_sprite := Sprite2D.new()
-	upper_sprite.name = "BuildingUpper"
-	upper_sprite.texture = _quiet_buildings
-	upper_sprite.region_enabled = true
-	upper_sprite.region_rect = upper_region
-	upper_sprite.centered = false
-	upper_sprite.position = Vector2(grid * TILE_SIZE)
-	upper_sprite.scale = Vector2(scale_amount, scale_amount)
-	upper_sprite.z_index = 2
-	building_upper_layer.add_child(upper_sprite)
-
-func _add_split_texture_building(building_id: String, texture: Texture2D, position: Vector2) -> void:
-	var texture_size := texture.get_size()
-	var upper_height := _building_upper_height(int(texture_size.y))
-	var lower_height := int(texture_size.y) - upper_height
-	if lower_height > 0:
-		var lower_sprite := Sprite2D.new()
-		lower_sprite.name = "TownBuildingLower_%s" % building_id
-		lower_sprite.texture = texture
-		lower_sprite.region_enabled = true
-		lower_sprite.region_rect = Rect2(Vector2(0, upper_height), Vector2(texture_size.x, lower_height))
-		lower_sprite.centered = false
-		lower_sprite.position = position + Vector2(0, upper_height)
-		lower_sprite.z_index = 2
-		building_layer.add_child(lower_sprite)
-	var upper_sprite := Sprite2D.new()
-	upper_sprite.name = "TownBuildingUpper_%s" % building_id
-	upper_sprite.texture = texture
-	upper_sprite.region_enabled = true
-	upper_sprite.region_rect = Rect2(Vector2.ZERO, Vector2(texture_size.x, upper_height))
-	upper_sprite.centered = false
-	upper_sprite.position = position
-	upper_sprite.z_index = 2
-	building_upper_layer.add_child(upper_sprite)
-
-func _building_upper_height(texture_height: int) -> int:
-	var max_upper: int = max(1, texture_height - 1)
-	var minimum_upper: int = min(TILE_SIZE, max_upper)
-	var upper_height := int(round(float(texture_height) * 0.45))
-	return clampi(upper_height, minimum_upper, max_upper)
-
 func _draw_building_labels() -> void:
 	for label_data: Dictionary in BUILDING_LABELS:
 		var label := Label.new()
@@ -809,94 +710,6 @@ func _draw_building_labels() -> void:
 		label.add_theme_constant_override("shadow_offset_y", 1)
 		label.z_index = 5
 		building_layer.add_child(label)
-
-func _draw_shop_awnings() -> void:
-	for awning_data: Dictionary in _shop_awnings:
-		var awning_id: String = awning_data["id"]
-		var texture: Texture2D = _load_shop_awning(awning_id)
-		if not texture:
-			continue
-		var sprite := Sprite2D.new()
-		sprite.name = "ShopAwning_%s" % awning_id
-		sprite.texture = texture
-		sprite.centered = false
-		sprite.position = Vector2(awning_data["grid"] * TILE_SIZE) + awning_data["offset"]
-		sprite.z_index = 2
-		building_upper_layer.add_child(sprite)
-
-func _load_shop_awning(awning_id: String) -> Texture2D:
-	if _shop_awning_textures.has(awning_id):
-		return _shop_awning_textures[awning_id]
-	var texture := SpriteCache.town_awning(awning_id)
-	_shop_awning_textures[awning_id] = texture
-	return texture
-
-func _draw_props() -> void:
-	if not _quiet_props:
-		_draw_town_props()
-		_draw_shop_signs()
-		return
-	_draw_town_props()
-	_draw_shop_signs()
-
-func _add_prop(grid: Vector2i, region: Rect2i, scale_amount: float) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = _quiet_props
-	sprite.region_enabled = true
-	sprite.region_rect = region
-	sprite.centered = false
-	sprite.position = Vector2(grid * TILE_SIZE)
-	sprite.scale = Vector2(scale_amount, scale_amount)
-	prop_layer.add_child(sprite)
-
-func _draw_shop_signs() -> void:
-	for sign_data: Dictionary in _shop_signs:
-		var sign_id: String = sign_data["id"]
-		var texture: Texture2D = _load_shop_sign(sign_id)
-		if not texture:
-			continue
-		var sprite := Sprite2D.new()
-		sprite.name = "ShopSign_%s" % sign_id
-		sprite.texture = texture
-		sprite.centered = true
-		sprite.position = Vector2(sign_data["grid"] * TILE_SIZE) + sign_data["offset"]
-		sprite.scale = Vector2(0.68, 0.68)
-		sprite.z_index = 5
-		prop_layer.add_child(sprite)
-
-func _load_shop_sign(sign_id: String) -> Texture2D:
-	if _shop_sign_textures.has(sign_id):
-		return _shop_sign_textures[sign_id]
-	var texture := SpriteCache.town_sign(sign_id)
-	_shop_sign_textures[sign_id] = texture
-	return texture
-
-func _draw_town_props() -> void:
-	for prop_data: Dictionary in _town_props:
-		var prop_id: String = prop_data["id"]
-		var texture: Texture2D = _load_town_prop(prop_id)
-		if not texture:
-			continue
-		var sprite := Sprite2D.new()
-		sprite.name = "TownProp_%s" % prop_id
-		sprite.texture = texture
-		sprite.centered = true
-		sprite.position = Vector2(prop_data["grid"] * TILE_SIZE) + prop_data["offset"]
-		sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
-		sprite.rotation = deg_to_rad(prop_data.get("rotation", 0.0))
-		sprite.z_index = 3
-		var prop_scale: float = prop_data.get("scale", 0.6)
-		var shadow_width := clampf(sprite.texture.get_width() * prop_scale * 0.7, 10.0, 34.0)
-		_add_soft_shadow(prop_layer, sprite.position + Vector2(-shadow_width / 2.0, 5), Vector2(shadow_width, 5), 2)
-		prop_layer.add_child(sprite)
-
-func _load_town_prop(prop_id: String) -> Texture2D:
-	if _town_prop_textures.has(prop_id):
-		return _town_prop_textures[prop_id]
-	var texture := SpriteCache.town_prop(prop_id)
-	_town_prop_textures[prop_id] = texture
-	return texture
-
 
 func _build_npc_positions() -> void:
 	npc_positions.clear()
@@ -2469,7 +2282,6 @@ func _load_layout_from_json() -> void:
 	_town_map = layout["map"]
 	_town_buildings = layout["buildings"]
 	_shop_signs = layout["shop_signs"]
-	_shop_awnings = layout["shop_awnings"]
 	_town_props = layout["props"]
 	_building_doors = layout["doors"]
 	_building_interactions = layout["building_interactions"]
@@ -2479,77 +2291,8 @@ func _load_layout_from_json() -> void:
 	_draw_map()
 	
 	for building_data: Dictionary in _town_buildings:
-		var building_id: String = building_data["id"]
-		var container := Node2D.new()
-		container.name = "Building_%s" % building_id
-		container.position = Vector2(building_data["grid"] * TILE_SIZE)
-		building_layer.add_child(container)
-		container.owner = get_tree().edited_scene_root
-		
-		var texture: Texture2D = _load_shop_building(building_id)
-		if texture:
-			var sprite := Sprite2D.new()
-			sprite.name = "Sprite"
-			sprite.texture = texture
-			sprite.centered = false
-			sprite.z_index = 2
-			container.add_child(sprite)
-			sprite.owner = get_tree().edited_scene_root
-		elif _quiet_buildings:
-			var sprite := Sprite2D.new()
-			sprite.name = "Sprite"
-			sprite.texture = _quiet_buildings
-			sprite.region_enabled = true
-			sprite.region_rect = building_data["fallback_region"]
-			sprite.centered = false
-			sprite.scale = Vector2(building_data["fallback_scale"], building_data["fallback_scale"])
-			sprite.z_index = 2
-			container.add_child(sprite)
-			sprite.owner = get_tree().edited_scene_root
-			
-		for sign_data: Dictionary in _shop_signs:
-			if sign_data["id"] == building_id:
-				var sign_texture: Texture2D = _load_shop_sign(building_id)
-				if sign_texture:
-					var sign_sprite := Sprite2D.new()
-					sign_sprite.name = "Sign"
-					sign_sprite.texture = sign_texture
-					sign_sprite.centered = true
-					var rel_grid := Vector2(sign_data["grid"] - building_data["grid"])
-					sign_sprite.position = rel_grid * TILE_SIZE + sign_data["offset"]
-					sign_sprite.scale = Vector2(0.68, 0.68)
-					sign_sprite.z_index = 5
-					container.add_child(sign_sprite)
-					sign_sprite.owner = get_tree().edited_scene_root
-					
-		for awning_data: Dictionary in _shop_awnings:
-			if awning_data["id"] == building_id:
-				var awning_texture: Texture2D = _load_shop_awning(building_id)
-				if awning_texture:
-					var awning_sprite := Sprite2D.new()
-					awning_sprite.name = "Awning"
-					awning_sprite.texture = awning_texture
-					awning_sprite.centered = false
-					var rel_grid := Vector2(awning_data["grid"] - building_data["grid"])
-					awning_sprite.position = rel_grid * TILE_SIZE + awning_data["offset"]
-					awning_sprite.z_index = 4
-					container.add_child(awning_sprite)
-					awning_sprite.owner = get_tree().edited_scene_root
-					
-	for prop_data: Dictionary in _town_props:
-		var prop_id: String = prop_data["id"]
-		var texture: Texture2D = _load_town_prop(prop_id)
-		if texture:
-			var sprite := Sprite2D.new()
-			sprite.name = "Prop_%s" % prop_id
-			sprite.texture = texture
-			sprite.centered = true
-			sprite.position = Vector2(prop_data["grid"] * TILE_SIZE) + prop_data["offset"]
-			sprite.scale = Vector2(prop_data.get("scale", 0.6), prop_data.get("scale", 0.6))
-			sprite.rotation = deg_to_rad(prop_data.get("rotation", 0.0))
-			sprite.z_index = 3
-			prop_layer.add_child(sprite)
-			sprite.owner = get_tree().edited_scene_root
+		_draw_town_building(building_data)
+	_draw_building_labels()
 
 func _save_layout_to_json() -> void:
 	var file_content := ""

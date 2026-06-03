@@ -1,0 +1,177 @@
+{
+  "asset_name": "PixelLab Modular Roof Components",
+  "runtime_path": "assets/sprites/town/buildings/modular_roof_components_c5b96b12.png",
+  "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+  "tile_size": 16,
+  "sheet_size": [
+    4,
+    4
+  ],
+  "status": "candidate_reviewed",
+  "notes": "Useful roof textures and trim candidates, but several tiles drift into miniature facade chunks. Keep as candidate source and select manually.",
+  "pixellab_job": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8",
+  "seed": 6202030,
+  "source_dir": "assets/sprites/town/buildings/pixellab_candidates/modular_tileset_c5b96b12",
+  "tiles": [
+    {
+      "tile": "roof_center",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_0"
+    },
+    {
+      "tile": "roof_left_edge",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_1"
+    },
+    {
+      "tile": "roof_right_edge",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_2"
+    },
+    {
+      "tile": "roof_ridge",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_3"
+    },
+    {
+      "tile": "ridge_left_cap",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_4"
+    },
+    {
+      "tile": "ridge_right_cap",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_5"
+    },
+    {
+      "tile": "eave_underside",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_6"
+    },
+    {
+      "tile": "left_eave_corner",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_7"
+    },
+    {
+      "tile": "right_eave_corner",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_8"
+    },
+    {
+      "tile": "gable_peak",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_9"
+    },
+    {
+      "tile": "gable_timber_trim",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_10"
+    },
+    {
+      "tile": "roof_dormer",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_11"
+    },
+    {
+      "tile": "chimney",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_12"
+    },
+    {
+      "tile": "moss_patch",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_13"
+    },
+    {
+      "tile": "roof_chip_decal",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_14"
+    },
+    {
+      "tile": "roof_shadow_strip",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8 tile_15"
+    }
+  ]
+}

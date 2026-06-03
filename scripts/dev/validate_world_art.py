@@ -2,16 +2,23 @@ from __future__ import annotations
 
 import json
 import re
+import struct
 import sys
 from pathlib import Path
-
-from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
 TOWN_GD = ROOT / "scripts" / "town.gd"
-MODULAR_ATLAS = ROOT / "assets" / "sprites" / "town" / "buildings" / "modular_building_atlas.png"
+MODULAR_ATLAS = ROOT / "assets" / "sprites" / "town" / "buildings" / "modular_building_atlas_v2.png"
 MODULAR_SIDECAR = MODULAR_ATLAS.with_suffix(".json")
+
+
+def png_size(path: Path) -> tuple[int, int]:
+    with path.open("rb") as file:
+        header = file.read(24)
+    if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
+        raise ValueError(f"{path.relative_to(ROOT)} is not a PNG with an IHDR header")
+    return struct.unpack(">II", header[16:24])
 
 
 def gd_modular_rects() -> dict[str, tuple[int, int, int, int]]:
@@ -36,8 +43,7 @@ def validate_modular_building_atlas() -> list[str]:
     if tile_size != 16:
         errors.append(f"Expected modular atlas tile_size 16, got {tile_size}")
 
-    with Image.open(MODULAR_ATLAS) as atlas:
-        width, height = atlas.size
+    width, height = png_size(MODULAR_ATLAS)
     for tile in tiles:
         tile_id = tile["tile"]
         rect = tuple(tile["rect"])

@@ -1,0 +1,445 @@
+{
+  "asset_name": "PixelLab Modular Building Atlas",
+  "runtime_path": "assets/sprites/town/buildings/modular_building_atlas_v2.png",
+  "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+  "tile_size": 16,
+  "status": "candidate_integrated",
+  "notes": "Runtime atlas composed only from PixelLab-generated reusable 16x16 modules. No single-building sprites or assembled facade sprites.",
+  "pixellab_jobs": [
+    "144b6eec-4c16-41d0-b3ad-d5c8903eb34a",
+    "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d",
+    "edf0c894-c136-48b9-af70-6d16b5c7f886"
+  ],
+  "tiles": [
+    {
+      "tile": "roof_left",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_0"
+    },
+    {
+      "tile": "roof_mid",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_1"
+    },
+    {
+      "tile": "roof_right",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_2"
+    },
+    {
+      "tile": "roof_ridge",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_3"
+    },
+    {
+      "tile": "roof_eave",
+      "rect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_4"
+    },
+    {
+      "tile": "roof_moss",
+      "rect": [
+        80,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_5"
+    },
+    {
+      "tile": "chimney",
+      "rect": [
+        96,
+        0,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_7"
+    },
+    {
+      "tile": "blank",
+      "rect": [
+        112,
+        0,
+        16,
+        16
+      ],
+      "source": "transparent"
+    },
+    {
+      "tile": "wall",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_8"
+    },
+    {
+      "tile": "wall_timber",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_9"
+    },
+    {
+      "tile": "wall_brace",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_10"
+    },
+    {
+      "tile": "wall_shadow",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_11"
+    },
+    {
+      "tile": "foundation",
+      "rect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_12"
+    },
+    {
+      "tile": "foundation_moss",
+      "rect": [
+        80,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_13"
+    },
+    {
+      "tile": "foundation_shadow",
+      "rect": [
+        96,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_14"
+    },
+    {
+      "tile": "threshold",
+      "rect": [
+        112,
+        16,
+        16,
+        16
+      ],
+      "source": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a tile_15"
+    },
+    {
+      "tile": "door",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_0"
+    },
+    {
+      "tile": "door_open",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_1"
+    },
+    {
+      "tile": "window",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_4"
+    },
+    {
+      "tile": "window_arch",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_5"
+    },
+    {
+      "tile": "window_flower",
+      "rect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_6"
+    },
+    {
+      "tile": "plaque_blank",
+      "rect": [
+        80,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_8"
+    },
+    {
+      "tile": "lantern",
+      "rect": [
+        96,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_15"
+    },
+    {
+      "tile": "flower_box",
+      "rect": [
+        112,
+        32,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_7"
+    },
+    {
+      "tile": "plaque_sword",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_9"
+    },
+    {
+      "tile": "plaque_shield",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_10"
+    },
+    {
+      "tile": "plaque_tankard",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_11"
+    },
+    {
+      "tile": "plaque_gear",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_12"
+    },
+    {
+      "tile": "plaque_bed",
+      "rect": [
+        64,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_13"
+    },
+    {
+      "tile": "plaque_candle",
+      "rect": [
+        80,
+        48,
+        16,
+        16
+      ],
+      "source": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d tile_14"
+    },
+    {
+      "tile": "forge_roof_left",
+      "rect": [
+        0,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_0"
+    },
+    {
+      "tile": "forge_roof_mid",
+      "rect": [
+        16,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_1"
+    },
+    {
+      "tile": "forge_roof_right",
+      "rect": [
+        32,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_2"
+    },
+    {
+      "tile": "forge_roof_eave",
+      "rect": [
+        48,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_3"
+    },
+    {
+      "tile": "forge_chimney",
+      "rect": [
+        64,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_4"
+    },
+    {
+      "tile": "forge_wall",
+      "rect": [
+        80,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_5"
+    },
+    {
+      "tile": "forge_wall_timber",
+      "rect": [
+        96,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_6"
+    },
+    {
+      "tile": "forge_foundation",
+      "rect": [
+        112,
+        64,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_7"
+    },
+    {
+      "tile": "forge_door",
+      "rect": [
+        0,
+        80,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_8"
+    },
+    {
+      "tile": "forge_window",
+      "rect": [
+        16,
+        80,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_10"
+    },
+    {
+      "tile": "forge_weapon_rack",
+      "rect": [
+        32,
+        80,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_11"
+    },
+    {
+      "tile": "forge_anvil_plaque",
+      "rect": [
+        48,
+        80,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_12"
+    },
+    {
+      "tile": "forge_door_right",
+      "rect": [
+        64,
+        80,
+        16,
+        16
+      ],
+      "source": "edf0c894-c136-48b9-af70-6d16b5c7f886 tile_9"
+    }
+  ]
+}

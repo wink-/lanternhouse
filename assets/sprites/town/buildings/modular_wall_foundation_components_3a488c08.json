@@ -1,0 +1,177 @@
+{
+  "asset_name": "PixelLab Modular Wall Foundation Components",
+  "runtime_path": "assets/sprites/town/buildings/modular_wall_foundation_components_3a488c08.png",
+  "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+  "tile_size": 16,
+  "sheet_size": [
+    4,
+    4
+  ],
+  "status": "candidate_reviewed",
+  "notes": "Strongest sheet of this pass. Plaster, timber, braces, foundation, shadow, threshold, and stoop modules are clean enough for atlas refinement.",
+  "pixellab_job": "3a488c08-1b4e-4d15-8511-62ab9e80de28",
+  "seed": 6202031,
+  "source_dir": "assets/sprites/town/buildings/pixellab_candidates/modular_tileset_3a488c08",
+  "tiles": [
+    {
+      "tile": "plaster_plain",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_0"
+    },
+    {
+      "tile": "plaster_weathered",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_1"
+    },
+    {
+      "tile": "plaster_left_post",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_2"
+    },
+    {
+      "tile": "plaster_right_post",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_3"
+    },
+    {
+      "tile": "vertical_timber_post",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_4"
+    },
+    {
+      "tile": "horizontal_timber_beam",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_5"
+    },
+    {
+      "tile": "diagonal_brace_rising",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_6"
+    },
+    {
+      "tile": "diagonal_brace_falling",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_7"
+    },
+    {
+      "tile": "eave_shadow",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_8"
+    },
+    {
+      "tile": "stone_foundation_center",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_9"
+    },
+    {
+      "tile": "stone_foundation_left",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_10"
+    },
+    {
+      "tile": "stone_foundation_right",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_11"
+    },
+    {
+      "tile": "stone_foundation_moss",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_12"
+    },
+    {
+      "tile": "contact_shadow_base",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_13"
+    },
+    {
+      "tile": "stone_threshold",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_14"
+    },
+    {
+      "tile": "two_step_stoop",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "3a488c08-1b4e-4d15-8511-62ab9e80de28 tile_15"
+    }
+  ]
+}

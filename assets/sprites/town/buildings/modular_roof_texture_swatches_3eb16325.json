@@ -1,0 +1,177 @@
+{
+  "asset_name": "PixelLab Roof Texture Swatches",
+  "runtime_path": "assets/sprites/town/buildings/modular_roof_texture_swatches_3eb16325.png",
+  "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+  "tile_size": 16,
+  "sheet_size": [
+    4,
+    4
+  ],
+  "status": "candidate_reviewed",
+  "notes": "Preferred roof material sheet from this pass. The filled-swatch prompt avoided facade drift and produced reusable red clay shingle variants.",
+  "pixellab_job": "3eb16325-6122-4b26-b807-d8d6ef000106",
+  "seed": 6202034,
+  "source_dir": "assets/sprites/town/buildings/pixellab_candidates/modular_tileset_3eb16325",
+  "tiles": [
+    {
+      "tile": "roof_plain",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_0"
+    },
+    {
+      "tile": "roof_alternate_pattern",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_1"
+    },
+    {
+      "tile": "roof_darker_rows",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_2"
+    },
+    {
+      "tile": "roof_sun_worn_rows",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_3"
+    },
+    {
+      "tile": "roof_tiny_chips",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_4"
+    },
+    {
+      "tile": "roof_sparse_moss",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_5"
+    },
+    {
+      "tile": "roof_diagonal_age",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_6"
+    },
+    {
+      "tile": "roof_dense_small_tiles",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_7"
+    },
+    {
+      "tile": "roof_large_tile_rows",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_8"
+    },
+    {
+      "tile": "roof_old_uneven_rows",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_9"
+    },
+    {
+      "tile": "roof_warm_highlights",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_10"
+    },
+    {
+      "tile": "roof_cool_shadows",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_11"
+    },
+    {
+      "tile": "roof_cracked_tiles",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_12"
+    },
+    {
+      "tile": "roof_soot_specks",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_13"
+    },
+    {
+      "tile": "roof_moss_seam",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_14"
+    },
+    {
+      "tile": "roof_clean_base",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "3eb16325-6122-4b26-b807-d8d6ef000106 tile_15"
+    }
+  ]
+}

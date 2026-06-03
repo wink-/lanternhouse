@@ -11,7 +11,7 @@ const ASSET_PATHS := {
 	"town.grass_dirt_wang": "tiles/pixellab/brindlewick_grass_dirt_wang_tileset.png",
 	"town.vendor.buildings": "vendor/quiet_village/Buildings.png",
 	"town.vendor.props": "vendor/quiet_village/Props.png",
-	"town.modular_building_atlas": "town/buildings/modular_building_atlas.png",
+	"town.modular_building_atlas": "town/buildings/modular_building_atlas_v2.png",
 	"town.roof_tileset": "town/buildings/roof_tileset.png",
 	"town.home.interior": "interiors/town/home_interior.png",
 	"tiles.overworld": "tiles/lanternhouse_overworld.png",
@@ -82,8 +82,6 @@ func resolve_asset_path(asset_key: String) -> String:
 			if parts.size() == 5 and parts[2] == "walk":
 				return "characters/%s/walk/%s/%s.png" % [parts[1], parts[3], parts[4]]
 		"town":
-			if parts.size() == 3 and parts[1] == "building":
-				return "town/buildings/%s.png" % parts[2]
 			if parts.size() == 3 and parts[1] == "awning":
 				return "town/shops/awnings/%s.png" % parts[2]
 			if parts.size() == 3 and parts[1] == "sign":
@@ -105,7 +103,8 @@ func tile_sprite(tile_id: String) -> Texture2D:
 	return get_sprite("tiles/%s.png" % tile_id)
 
 func town_building(building_id: String) -> Texture2D:
-	return get_asset("town.building.%s" % building_id)
+	push_warning("Single-building sprites are retired; use town.modular_building_atlas for composed buildings.")
+	return null
 
 func town_awning(awning_id: String) -> Texture2D:
 	return get_asset("town.awning.%s" % awning_id)

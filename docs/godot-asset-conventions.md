@@ -62,7 +62,7 @@ All textures should use nearest-neighbor filtering. The following
 | Party class | `battle/party/<class>.png` | `fighter.png`, `redmage.png` |
 | Enemy | `battle/enemies/<name>.png` | `slime.png`, `drake.png` |
 | NPC | `overworld/npc_<role>.png` | `npc_merchant.png` |
-| Town building | `town/buildings/<name>.png` | `weapon_shop.png` |
+| Town building modules | `town/buildings/<module_or_atlas>.png` | `modular_building_atlas_v2.png` |
 | Town ground tile | `town/ground/<name>.png` | `cobblestone_plaza.png` |
 | Town prop | `town/props/<name>.png` | `lantern_post.png` |
 | Terrain tile | `tiles/<type>.png` | `water.png`, `forest.png` |
@@ -88,7 +88,7 @@ walk_down, walk_up, walk_left, walk_right
 
 1. Place the PNG in the correct `assets/sprites/` subdirectory.
 2. Prefer `SpriteCache` lookups over direct `load()` or `Image.load()` calls.
-   Use named keys such as `town.building.inn`, `town.prop.lantern_post`,
+   Use named keys such as `town.modular_building_atlas`, `town.prop.lantern_post`,
    `battle.enemy.slime`, `battle.party.fighter`, or
    `character.cat.rotation.south`.
 3. For new tile types, add the color entry to `COLORS` and any block/encounter
@@ -104,7 +104,7 @@ Common lookup patterns:
 
 | Asset type | Registry key | File path |
 |---|---|---|
-| Town building | `town.building.<id>` | `town/buildings/<id>.png` |
+| Town building atlas | `town.modular_building_atlas` | `town/buildings/modular_building_atlas_v2.png` |
 | Town awning | `town.awning.<id>` | `town/shops/awnings/<id>.png` |
 | Town sign | `town.sign.<id>` | `town/shops/signs/<id>.png` |
 | Town prop | `town.prop.<id>` | `town/props/<id>.png` |
@@ -162,19 +162,19 @@ as scattered decoration.
 
 ### World-Building Tools
 
-Runtime town-building tiles are assembled from a recipe instead of manually
-cropping a finished atlas. The current recipe lives at:
+Runtime town-building tiles are assembled by script instead of manually cropping
+a finished atlas. The current atlas builder lives at:
 
-`assets/sprites/town/buildings/modular_building_atlas.recipe.json`
+`scripts/dev/build_town_modular_building_atlas.py`
 
 Use this workflow when promoting PixelLab outputs into the playable town kit:
 
 1. Save original PixelLab outputs under `assets/sprites/town/`.
-2. Add or adjust recipe entries for the chosen source sheet, cell/crop, and tile
-   id.
+2. Add or adjust the selected source sheet, source tile, and atlas tile id in
+   `scripts/dev/build_town_modular_building_atlas.py`.
 3. Run `python scripts/dev/build_world_art.py`.
-4. Keep the generated atlas, sidecar JSON, Markdown manifest, and recipe in the
-   same commit.
+4. Keep the generated atlas, sidecar JSON, Markdown manifest, and builder script
+   in the same commit.
 5. Run the relevant Godot smoke scene after wiring the art into gameplay.
 
 Town layouts are also data-driven. Brindlewick currently lives at:

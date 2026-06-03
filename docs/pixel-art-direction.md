@@ -73,6 +73,12 @@ Modern 16-bit JRPG pixel art, high-fidelity retro remaster, crisp pixel-perfect 
 Perspective:
 Towns, dungeons, and interiors are top-down 3/4 JRPG exploration perspective, like classic SNES/PS1-era JRPG towns. Do NOT make flat top-down icons and do NOT make front-facing building stamps. Buildings must show roof depth, front facade, side hints, and a visible doorway at the base.
 
+Runtime town buildings must be assembled from reusable 16x16 roof, wall,
+foundation, door, window, and trim tiles. Do not integrate a town building as a
+single bespoke PNG facade, even if the source art looks good. The target
+composition model is closer to early tile-built JRPG towns such as Final Fantasy
+I: a compact set of repeatable map tiles produces every building footprint.
+
 Negative prompt:
 No 3D render, no photorealism, no vector art, no smooth gradients, no blurry textures, no modern bloom, no smooth lines, no NES/8-bit style, no fake unreadable text baked into signs.
 

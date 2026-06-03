@@ -19,7 +19,7 @@ Created/downloaded PixelLab assets are tracked in `docs/pixellab-art-inventory.m
 | Innkeeper, armor merchant, tavern keeper, healer, tinkerer, realtor | `scripts/town.gd` atlas NPC regions | `assets/sprites/characters/town_npcs/<npc_id>/rotations/*.png` | Human townsfolk batch. Dwarves, gnomes, elves, and other fantasy ancestries are reserved for later passes. |
 | Town ground tiles | `scripts/town.gd` `GROUND_TILE_RECTS` | `assets/sprites/tiles/lanternhouse_town_readable.png` | Rebuildable 16px atlas for grass, paths, plaza, mud, decking, garden soil, and accents. |
 | Town shop signs | `scripts/town.gd` prop layer | `assets/sprites/town/shops/signs/<shop_id>.png` | PixelLab signs for weapons, armor, inn, tavern, workshop, chapel/healer. |
-| Town props/buildings | `scripts/town.gd` Quiet Village vendor sheets | `assets/sprites/town/props/`, `assets/sprites/town/buildings/` | Replace vendor regions with project-owned PixelLab props when enough pieces exist. |
+| Town props/building tiles | `scripts/town.gd` modular building atlas | `assets/sprites/town/props/`, `assets/sprites/town/buildings/modular_building_atlas_v2.png` | Buildings must be assembled from reusable 16x16 roof, wall, foundation, door, and window tiles. Do not integrate one-off building facade sprites. |
 | Town tiles | `scripts/town.gd` `lanternhouse_town*.png` | `assets/sprites/tiles/lanternhouse_town*.png` | Keep current atlas until a coherent tileset is generated. |
 
 ## Priority 3: Combat Silhouette Pass
@@ -50,7 +50,7 @@ Created/downloaded PixelLab assets are tracked in `docs/pixellab-art-inventory.m
 |---|---|---|---|
 | 1 | Town ground variety | `assets/sprites/tiles/lanternhouse_town_readable.png` | Expand walkable town terrain without changing town gameplay. |
 | 2 | Shop identity pass | `assets/sprites/town/shops/signs/*.png` | Add readable signs and shop props above the current vendor building art. |
-| 3 | Shop building replacements | `assets/sprites/town/shops/buildings/*.png` | Project-owned facades integrated with vendor buildings as fallback. |
+| 3 | Shop building tile-kit expansion | `assets/sprites/town/buildings/modular_building_atlas_v2.png` | Add reusable shop/public-building tile variants; no one-off facade sprites. |
 | 4 | Town prop clusters | `assets/sprites/town/props/*.png` | PixelLab barrels, crates, benches, lantern posts, flower boxes, wells, notice board, herb planters integrated through `TOWN_PROPS`. |
 | 5 | Town interior starter set | `assets/sprites/interiors/town/home_interior.png` | Home interior atlas integrated into `scripts/home.gd`; next pass can add shop/interior scenes as they become playable. |
 | 6 | Battle party silhouettes | `assets/sprites/battle/party/*.png` | Fighter, thief, blackbelt, redmage, whitemage, blackmage integrated with polygon fallback. |

@@ -1,0 +1,177 @@
+{
+  "asset_name": "PixelLab Modular Shop Detail Components",
+  "runtime_path": "assets/sprites/town/buildings/modular_shop_detail_components_6dba82d7.png",
+  "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+  "tile_size": 16,
+  "sheet_size": [
+    4,
+    4
+  ],
+  "status": "candidate_reviewed",
+  "notes": "Good plaque, awning, lantern, flower-box, and exterior-detail candidates. A few bottom-row outputs are larger dressing chunks and should be used selectively.",
+  "pixellab_job": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e",
+  "seed": 6202032,
+  "source_dir": "assets/sprites/town/buildings/pixellab_candidates/modular_tileset_6dba82d7",
+  "tiles": [
+    {
+      "tile": "blank_hanging_plaque",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_0"
+    },
+    {
+      "tile": "crossed_swords_plaque",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_1"
+    },
+    {
+      "tile": "shield_plaque",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_2"
+    },
+    {
+      "tile": "forge_icon_plaque",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_3"
+    },
+    {
+      "tile": "tankard_plaque",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_4"
+    },
+    {
+      "tile": "bed_plaque",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_5"
+    },
+    {
+      "tile": "healer_candle_plaque",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_6"
+    },
+    {
+      "tile": "elder_scroll_plaque",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_7"
+    },
+    {
+      "tile": "wall_lantern",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_8"
+    },
+    {
+      "tile": "unlit_wall_lantern",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_9"
+    },
+    {
+      "tile": "awning_left",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_10"
+    },
+    {
+      "tile": "awning_middle",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_11"
+    },
+    {
+      "tile": "awning_right",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_12"
+    },
+    {
+      "tile": "flower_box",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_13"
+    },
+    {
+      "tile": "barrel_or_crate",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_14"
+    },
+    {
+      "tile": "moss_crack_soot_decal",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e tile_15"
+    }
+  ]
+}

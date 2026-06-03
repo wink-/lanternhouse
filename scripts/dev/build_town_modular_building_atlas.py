@@ -1,245 +1,397 @@
+#!/usr/bin/env python3
 from __future__ import annotations
 
+import binascii
 import json
+import struct
 import sys
+import zlib
 from pathlib import Path
 
-from PIL import Image, ImageDraw
-
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "assets" / "sprites" / "town" / "buildings" / "modular_building_atlas.png"
+BUILDINGS_DIR = ROOT / "assets" / "sprites" / "town" / "buildings"
+OUTPUT = BUILDINGS_DIR / "modular_building_atlas_v2.png"
 SIDECAR = OUTPUT.with_suffix(".json")
 TILE_SIZE = 16
-COLUMNS = 8
-ROWS = 4
+ATLAS_WIDTH = 128
+ATLAS_HEIGHT = 96
+CANDIDATE_SHEET_WIDTH = 64
+CANDIDATE_SHEET_HEIGHT = 64
 
-TILE_ORDER = [
-    "roof_left",
-    "roof_mid",
-    "roof_right",
-    "roof_ridge",
-    "roof_eave",
-    "roof_moss",
-    "chimney",
-    "blank",
-    "wall",
-    "wall_timber",
-    "wall_brace",
-    "wall_shadow",
-    "foundation",
-    "foundation_moss",
-    "foundation_shadow",
-    "threshold",
-    "door",
-    "door_open",
-    "window",
-    "window_arch",
-    "window_flower",
-    "plaque_blank",
-    "lantern",
-    "flower_box",
-    "plaque_sword",
-    "plaque_shield",
-    "plaque_tankard",
-    "plaque_gear",
-    "plaque_bed",
-    "plaque_candle",
+PIXELLAB_SOURCES = {
+    "structure": {
+        "job_id": "144b6eec-4c16-41d0-b3ad-d5c8903eb34a",
+        "dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_144b6eec",
+    },
+    "details": {
+        "job_id": "e0e17ab4-d78f-4234-9e5c-3fd9ef6e746d",
+        "dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_e0e17ab4",
+    },
+    "forge": {
+        "job_id": "edf0c894-c136-48b9-af70-6d16b5c7f886",
+        "dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_edf0c894",
+    },
+}
+
+CANDIDATE_SHEETS = [
+    {
+        "asset_name": "PixelLab Modular Roof Components",
+        "job_id": "c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8",
+        "seed": 6202030,
+        "source_dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_c5b96b12",
+        "output": BUILDINGS_DIR / "modular_roof_components_c5b96b12.png",
+        "status": "candidate_reviewed",
+        "notes": "Useful roof textures and trim candidates, but several tiles drift into miniature facade chunks. Keep as candidate source and select manually.",
+        "tile_labels": [
+            "roof_center",
+            "roof_left_edge",
+            "roof_right_edge",
+            "roof_ridge",
+            "ridge_left_cap",
+            "ridge_right_cap",
+            "eave_underside",
+            "left_eave_corner",
+            "right_eave_corner",
+            "gable_peak",
+            "gable_timber_trim",
+            "roof_dormer",
+            "chimney",
+            "moss_patch",
+            "roof_chip_decal",
+            "roof_shadow_strip",
+        ],
+    },
+    {
+        "asset_name": "PixelLab Roof Texture Swatches",
+        "job_id": "3eb16325-6122-4b26-b807-d8d6ef000106",
+        "seed": 6202034,
+        "source_dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_3eb16325",
+        "output": BUILDINGS_DIR / "modular_roof_texture_swatches_3eb16325.png",
+        "status": "candidate_reviewed",
+        "notes": "Preferred roof material sheet from this pass. The filled-swatch prompt avoided facade drift and produced reusable red clay shingle variants.",
+        "tile_labels": [
+            "roof_plain",
+            "roof_alternate_pattern",
+            "roof_darker_rows",
+            "roof_sun_worn_rows",
+            "roof_tiny_chips",
+            "roof_sparse_moss",
+            "roof_diagonal_age",
+            "roof_dense_small_tiles",
+            "roof_large_tile_rows",
+            "roof_old_uneven_rows",
+            "roof_warm_highlights",
+            "roof_cool_shadows",
+            "roof_cracked_tiles",
+            "roof_soot_specks",
+            "roof_moss_seam",
+            "roof_clean_base",
+        ],
+    },
+    {
+        "asset_name": "PixelLab Modular Wall Foundation Components",
+        "job_id": "3a488c08-1b4e-4d15-8511-62ab9e80de28",
+        "seed": 6202031,
+        "source_dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_3a488c08",
+        "output": BUILDINGS_DIR / "modular_wall_foundation_components_3a488c08.png",
+        "status": "candidate_reviewed",
+        "notes": "Strongest sheet of this pass. Plaster, timber, braces, foundation, shadow, threshold, and stoop modules are clean enough for atlas refinement.",
+        "tile_labels": [
+            "plaster_plain",
+            "plaster_weathered",
+            "plaster_left_post",
+            "plaster_right_post",
+            "vertical_timber_post",
+            "horizontal_timber_beam",
+            "diagonal_brace_rising",
+            "diagonal_brace_falling",
+            "eave_shadow",
+            "stone_foundation_center",
+            "stone_foundation_left",
+            "stone_foundation_right",
+            "stone_foundation_moss",
+            "contact_shadow_base",
+            "stone_threshold",
+            "two_step_stoop",
+        ],
+    },
+    {
+        "asset_name": "PixelLab Modular Shop Detail Components",
+        "job_id": "6dba82d7-aebe-4456-9805-bfd62c6a9d9e",
+        "seed": 6202032,
+        "source_dir": BUILDINGS_DIR / "pixellab_candidates" / "modular_tileset_6dba82d7",
+        "output": BUILDINGS_DIR / "modular_shop_detail_components_6dba82d7.png",
+        "status": "candidate_reviewed",
+        "notes": "Good plaque, awning, lantern, flower-box, and exterior-detail candidates. A few bottom-row outputs are larger dressing chunks and should be used selectively.",
+        "tile_labels": [
+            "blank_hanging_plaque",
+            "crossed_swords_plaque",
+            "shield_plaque",
+            "forge_icon_plaque",
+            "tankard_plaque",
+            "bed_plaque",
+            "healer_candle_plaque",
+            "elder_scroll_plaque",
+            "wall_lantern",
+            "unlit_wall_lantern",
+            "awning_left",
+            "awning_middle",
+            "awning_right",
+            "flower_box",
+            "barrel_or_crate",
+            "moss_crack_soot_decal",
+        ],
+    },
 ]
 
-ROOF_DARK = (112, 45, 34, 255)
-ROOF_MID = (184, 78, 49, 255)
-ROOF_LIGHT = (222, 118, 67, 255)
-ROOF_SHADOW = (95, 38, 31, 255)
-CREAM = (224, 196, 139, 255)
-CREAM_SHADOW = (181, 144, 94, 255)
-TIMBER = (78, 54, 42, 255)
-TIMBER_HI = (125, 84, 53, 255)
-STONE = (102, 105, 101, 255)
-STONE_HI = (152, 148, 135, 255)
-STONE_DARK = (63, 67, 68, 255)
-BLUE = (77, 130, 151, 255)
-BLUE_HI = (151, 200, 198, 255)
-DOOR = (102, 57, 36, 255)
-DOOR_HI = (158, 93, 51, 255)
+TILE_MAP = {
+    "roof_left": ("structure", 0, 0, 0),
+    "roof_mid": ("structure", 1, 1, 0),
+    "roof_right": ("structure", 2, 2, 0),
+    "roof_ridge": ("structure", 3, 3, 0),
+    "roof_eave": ("structure", 4, 4, 0),
+    "roof_moss": ("structure", 5, 5, 0),
+    "chimney": ("structure", 7, 6, 0),
+    "blank": (None, -1, 7, 0),
+    "wall": ("structure", 8, 0, 1),
+    "wall_timber": ("structure", 9, 1, 1),
+    "wall_brace": ("structure", 10, 2, 1),
+    "wall_shadow": ("structure", 11, 3, 1),
+    "foundation": ("structure", 12, 4, 1),
+    "foundation_moss": ("structure", 13, 5, 1),
+    "foundation_shadow": ("structure", 14, 6, 1),
+    "threshold": ("structure", 15, 7, 1),
+    "door": ("details", 0, 0, 2),
+    "door_open": ("details", 1, 1, 2),
+    "window": ("details", 4, 2, 2),
+    "window_arch": ("details", 5, 3, 2),
+    "window_flower": ("details", 6, 4, 2),
+    "plaque_blank": ("details", 8, 5, 2),
+    "lantern": ("details", 15, 6, 2),
+    "flower_box": ("details", 7, 7, 2),
+    "plaque_sword": ("details", 9, 0, 3),
+    "plaque_shield": ("details", 10, 1, 3),
+    "plaque_tankard": ("details", 11, 2, 3),
+    "plaque_gear": ("details", 12, 3, 3),
+    "plaque_bed": ("details", 13, 4, 3),
+    "plaque_candle": ("details", 14, 5, 3),
+    "forge_roof_left": ("forge", 0, 0, 4),
+    "forge_roof_mid": ("forge", 1, 1, 4),
+    "forge_roof_right": ("forge", 2, 2, 4),
+    "forge_roof_eave": ("forge", 3, 3, 4),
+    "forge_chimney": ("forge", 4, 4, 4),
+    "forge_wall": ("forge", 5, 5, 4),
+    "forge_wall_timber": ("forge", 6, 6, 4),
+    "forge_foundation": ("forge", 7, 7, 4),
+    "forge_door": ("forge", 8, 0, 5),
+    "forge_window": ("forge", 10, 1, 5),
+    "forge_weapon_rack": ("forge", 11, 2, 5),
+    "forge_anvil_plaque": ("forge", 12, 3, 5),
+    "forge_door_right": ("forge", 9, 4, 5),
+}
 
 
-def tile_draw(img: Image.Image, col: int, row: int, bg: tuple[int, int, int, int] | None = None) -> tuple[ImageDraw.ImageDraw, int, int]:
-    draw = ImageDraw.Draw(img)
-    x = col * TILE_SIZE
-    y = row * TILE_SIZE
-    if bg is not None:
-        draw.rectangle([x, y, x + 15, y + 15], fill=bg)
-    return draw, x, y
+def png_chunks(data: bytes):
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError("not a PNG")
+    pos = 8
+    while pos < len(data):
+        length = struct.unpack(">I", data[pos:pos + 4])[0]
+        kind = data[pos + 4:pos + 8]
+        payload = data[pos + 8:pos + 8 + length]
+        yield kind, payload
+        pos += 12 + length
 
 
-def build_atlas() -> Image.Image:
-    img = Image.new("RGBA", (COLUMNS * TILE_SIZE, ROWS * TILE_SIZE), (0, 0, 0, 0))
-
-    for c in range(3):
-        draw, x, y = tile_draw(img, c, 0, ROOF_MID)
-        draw.rectangle([x, y, x + 15, y + 2], fill=ROOF_LIGHT)
-        draw.rectangle([x, y + 13, x + 15, y + 15], fill=ROOF_SHADOW)
-        for yy in (5, 9, 13):
-            draw.line([x + 1, y + yy, x + 14, y + yy], fill=ROOF_DARK)
-        for xx in (4, 9, 14):
-            draw.line([x + xx, y + 3, x + xx, y + 13], fill=ROOF_DARK)
-        if c == 0:
-            draw.line([x, y, x, y + 15], fill=ROOF_DARK)
-            draw.line([x + 1, y + 1, x + 5, y + 15], fill=ROOF_LIGHT)
-        elif c == 2:
-            draw.line([x + 15, y, x + 15, y + 15], fill=ROOF_DARK)
-            draw.line([x + 14, y + 1, x + 10, y + 15], fill=ROOF_SHADOW)
-
-    draw, x, y = tile_draw(img, 3, 0)
-    draw.polygon([(x + 1, y + 13), (x + 8, y + 1), (x + 14, y + 13)], fill=ROOF_MID, outline=ROOF_DARK)
-    draw.line([x + 8, y + 1, x + 8, y + 13], fill=ROOF_LIGHT)
-    draw.rectangle([x + 4, y + 10, x + 12, y + 15], fill=CREAM)
-    draw.rectangle([x + 7, y + 11, x + 9, y + 13], fill=BLUE)
-    draw.rectangle([x + 3, y + 14, x + 13, y + 15], fill=ROOF_SHADOW)
-
-    draw, x, y = tile_draw(img, 4, 0)
-    draw.rectangle([x, y, x + 15, y + 6], fill=ROOF_MID)
-    draw.rectangle([x, y + 7, x + 15, y + 10], fill=ROOF_SHADOW)
-    draw.rectangle([x, y + 11, x + 15, y + 15], fill=(70, 51, 43, 255))
-    for xx in (2, 7, 12):
-        draw.line([x + xx, y + 1, x + xx + 2, y + 6], fill=ROOF_LIGHT)
-
-    draw, x, y = tile_draw(img, 5, 0, ROOF_MID)
-    draw.rectangle([x, y + 11, x + 15, y + 15], fill=ROOF_SHADOW)
-    draw.point([(x + 3, y + 3), (x + 7, y + 6), (x + 12, y + 4)], fill=(178, 132, 75, 255))
-
-    draw, x, y = tile_draw(img, 6, 0)
-    draw.rectangle([x + 5, y + 1, x + 10, y + 13], fill=(112, 69, 52, 255), outline=(60, 38, 35, 255))
-    draw.rectangle([x + 4, y, x + 11, y + 2], fill=(78, 48, 43, 255))
-    draw.rectangle([x + 6, y + 4, x + 9, y + 6], fill=(166, 101, 68, 255))
-
-    draw, x, y = tile_draw(img, 0, 1, CREAM)
-    draw.rectangle([x, y + 12, x + 15, y + 15], fill=CREAM_SHADOW)
-    draw.point([(x + 4, y + 5), (x + 11, y + 8)], fill=(196, 162, 105, 255))
-
-    draw, x, y = tile_draw(img, 1, 1, CREAM)
-    draw.rectangle([x, y, x + 3, y + 15], fill=TIMBER)
-    draw.rectangle([x + 12, y, x + 15, y + 15], fill=TIMBER)
-    draw.rectangle([x, y + 12, x + 15, y + 15], fill=CREAM_SHADOW)
-    draw.line([x + 3, y + 2, x + 12, y + 11], fill=TIMBER_HI)
-
-    draw, x, y = tile_draw(img, 2, 1, CREAM)
-    draw.rectangle([x, y + 12, x + 15, y + 15], fill=CREAM_SHADOW)
-    draw.line([x + 1, y + 13, x + 14, y + 1], fill=TIMBER)
-    draw.line([x + 1, y + 1, x + 14, y + 13], fill=TIMBER_HI)
-
-    draw, x, y = tile_draw(img, 3, 1, CREAM_SHADOW)
-    draw.rectangle([x, y, x + 15, y + 3], fill=(104, 65, 47, 255))
-    draw.rectangle([x, y + 12, x + 15, y + 15], fill=(151, 111, 76, 255))
-
-    draw, x, y = tile_draw(img, 4, 1, STONE)
-    for yy in (4, 9, 14):
-        draw.line([x, y + yy, x + 15, y + yy], fill=STONE_DARK)
-    for xx in (5, 10):
-        draw.line([x + xx, y, x + xx, y + 15], fill=STONE_DARK)
-    draw.line([x + 1, y + 1, x + 13, y + 1], fill=STONE_HI)
-
-    draw, x, y = tile_draw(img, 5, 1, STONE)
-    for yy in (4, 9, 14):
-        draw.line([x, y + yy, x + 15, y + yy], fill=STONE_DARK)
-    draw.rectangle([x, y, x + 4, y + 3], fill=(83, 123, 65, 255))
-    draw.point([(x + 7, y + 2), (x + 13, y + 5)], fill=(104, 147, 77, 255))
-
-    draw, x, y = tile_draw(img, 6, 1, STONE_DARK)
-    draw.rectangle([x, y, x + 15, y + 6], fill=STONE)
-    draw.rectangle([x, y + 12, x + 15, y + 15], fill=(42, 44, 45, 255))
-
-    draw, x, y = tile_draw(img, 7, 1)
-    draw.rectangle([x + 1, y + 6, x + 14, y + 13], fill=STONE_HI, outline=STONE_DARK)
-    draw.rectangle([x + 3, y + 2, x + 12, y + 7], fill=(128, 103, 74, 255), outline=(66, 54, 42, 255))
-
-    draw, x, y = tile_draw(img, 0, 2, CREAM)
-    draw.rectangle([x + 3, y + 2, x + 12, y + 15], fill=DOOR, outline=(50, 33, 29, 255))
-    draw.rectangle([x + 5, y + 4, x + 10, y + 7], fill=DOOR_HI)
-    draw.point((x + 10, y + 10), fill=(231, 181, 83, 255))
-    draw.rectangle([x, y + 14, x + 15, y + 15], fill=STONE_DARK)
-
-    draw, x, y = tile_draw(img, 1, 2, CREAM)
-    draw.rectangle([x + 3, y + 2, x + 12, y + 15], fill=(38, 28, 25, 255), outline=(50, 33, 29, 255))
-    draw.rectangle([x + 3, y + 2, x + 5, y + 15], fill=DOOR_HI)
-
-    draw, x, y = tile_draw(img, 2, 2, CREAM)
-    draw.rectangle([x + 4, y + 4, x + 12, y + 11], fill=BLUE, outline=TIMBER)
-    draw.line([x + 8, y + 4, x + 8, y + 11], fill=BLUE_HI)
-    draw.line([x + 4, y + 7, x + 12, y + 7], fill=BLUE_HI)
-    draw.rectangle([x + 3, y + 12, x + 13, y + 14], fill=TIMBER_HI)
-
-    draw, x, y = tile_draw(img, 3, 2, CREAM)
-    draw.pieslice([x + 3, y + 2, x + 13, y + 12], 180, 360, fill=BLUE, outline=TIMBER)
-    draw.rectangle([x + 3, y + 7, x + 13, y + 13], fill=BLUE, outline=TIMBER)
-    draw.line([x + 8, y + 4, x + 8, y + 13], fill=BLUE_HI)
-
-    draw, x, y = tile_draw(img, 4, 2, CREAM)
-    draw.rectangle([x + 4, y + 3, x + 12, y + 10], fill=BLUE, outline=TIMBER)
-    draw.rectangle([x + 3, y + 11, x + 13, y + 14], fill=TIMBER_HI)
-    draw.point([(x + 5, y + 12), (x + 8, y + 13), (x + 11, y + 12)], fill=(221, 104, 90, 255))
-
-    draw, x, y = tile_draw(img, 5, 2)
-    draw.rectangle([x + 3, y + 5, x + 12, y + 10], fill=(130, 87, 52, 255), outline=(63, 44, 36, 255))
-
-    draw, x, y = tile_draw(img, 6, 2)
-    draw.line([x + 8, y, x + 8, y + 4], fill=TIMBER)
-    draw.rectangle([x + 5, y + 4, x + 11, y + 12], fill=(235, 167, 77, 255), outline=(75, 45, 32, 255))
-    draw.point((x + 8, y + 8), fill=(255, 231, 129, 255))
-    draw.rectangle([x + 6, y + 12, x + 10, y + 14], fill=TIMBER)
-
-    draw, x, y = tile_draw(img, 7, 2)
-    draw.rectangle([x + 2, y + 7, x + 14, y + 12], fill=TIMBER_HI, outline=TIMBER)
-    draw.point([(x + 4, y + 6), (x + 7, y + 5), (x + 10, y + 6), (x + 12, y + 5)], fill=(214, 88, 82, 255))
-    draw.point([(x + 5, y + 7), (x + 9, y + 7)], fill=(83, 131, 70, 255))
-
-    icon_colors = [
-        (199, 202, 190, 255),
-        (127, 157, 186, 255),
-        (219, 147, 72, 255),
-        (157, 157, 133, 255),
-        (185, 142, 90, 255),
-        (238, 198, 83, 255),
-    ]
-    for c, color in enumerate(icon_colors):
-        draw, x, y = tile_draw(img, c, 3)
-        draw.rectangle([x + 2, y + 4, x + 13, y + 11], fill=(117, 76, 45, 255), outline=(51, 35, 30, 255))
-        draw.rectangle([x + 6, y + 5, x + 9, y + 10], fill=color)
-
-    return img
+def unfilter_scanline(filter_type: int, line: bytearray, prev: bytes, bpp: int) -> bytearray:
+    out = bytearray(line)
+    for i in range(len(out)):
+        left = out[i - bpp] if i >= bpp else 0
+        up = prev[i] if prev else 0
+        up_left = prev[i - bpp] if prev and i >= bpp else 0
+        if filter_type == 1:
+            out[i] = (out[i] + left) & 0xFF
+        elif filter_type == 2:
+            out[i] = (out[i] + up) & 0xFF
+        elif filter_type == 3:
+            out[i] = (out[i] + ((left + up) // 2)) & 0xFF
+        elif filter_type == 4:
+            p = left + up - up_left
+            pa = abs(p - left)
+            pb = abs(p - up)
+            pc = abs(p - up_left)
+            predictor = left if pa <= pb and pa <= pc else up if pb <= pc else up_left
+            out[i] = (out[i] + predictor) & 0xFF
+        elif filter_type != 0:
+            raise ValueError(f"unsupported PNG filter {filter_type}")
+    return out
 
 
-def write_sidecar() -> None:
+def read_png_rgba(path: Path) -> tuple[int, int, bytearray]:
+    width = height = color_type = bit_depth = None
+    compressed = bytearray()
+    for kind, payload in png_chunks(path.read_bytes()):
+        if kind == b"IHDR":
+            width, height, bit_depth, color_type, _, _, interlace = struct.unpack(">IIBBBBB", payload)
+            if interlace != 0:
+                raise ValueError(f"{path} uses interlacing")
+        elif kind == b"IDAT":
+            compressed.extend(payload)
+    if width is None or height is None or color_type is None or bit_depth != 8:
+        raise ValueError(f"{path} is not an 8-bit PNG")
+    channels = {2: 3, 6: 4}.get(color_type)
+    if channels is None:
+        raise ValueError(f"{path} uses unsupported PNG color type {color_type}")
+
+    raw = zlib.decompress(bytes(compressed))
+    stride = width * channels
+    pixels = bytearray(width * height * 4)
+    prev = bytes(stride)
+    pos = 0
+    out_pos = 0
+    for _ in range(height):
+        filter_type = raw[pos]
+        pos += 1
+        line = unfilter_scanline(filter_type, bytearray(raw[pos:pos + stride]), prev, channels)
+        pos += stride
+        prev = bytes(line)
+        for x in range(width):
+            src = x * channels
+            pixels[out_pos:out_pos + 3] = line[src:src + 3]
+            pixels[out_pos + 3] = line[src + 3] if channels == 4 else 255
+            out_pos += 4
+    return width, height, pixels
+
+
+def write_png_rgba(path: Path, width: int, height: int, pixels: bytes) -> None:
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        return (
+            struct.pack(">I", len(payload))
+            + kind
+            + payload
+            + struct.pack(">I", binascii.crc32(kind + payload) & 0xFFFFFFFF)
+        )
+
+    raw = bytearray()
+    stride = width * 4
+    for y in range(height):
+        raw.append(0)
+        raw.extend(pixels[y * stride:(y + 1) * stride])
+    path.write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(bytes(raw), 9))
+        + chunk(b"IEND", b"")
+    )
+
+
+def blit(dst: bytearray, dst_width: int, src: bytearray, src_width: int, src_height: int, x: int, y: int) -> None:
+    for row in range(src_height):
+        dst_start = ((y + row) * dst_width + x) * 4
+        src_start = row * src_width * 4
+        dst[dst_start:dst_start + src_width * 4] = src[src_start:src_start + src_width * 4]
+
+
+def build_atlas() -> bytearray:
+    atlas = bytearray((0, 0, 0, 0) * ATLAS_WIDTH * ATLAS_HEIGHT)
+    for tile_id, (source_key, source_tile, col, row) in TILE_MAP.items():
+        if source_key is None:
+            continue
+        source_dir = PIXELLAB_SOURCES[source_key]["dir"]
+        path = source_dir / f"tile_{source_tile}.png"
+        if not path.exists():
+            raise FileNotFoundError(f"Missing PixelLab source tile for {tile_id}: {path.relative_to(ROOT)}")
+        width, height, pixels = read_png_rgba(path)
+        if width != TILE_SIZE or height != TILE_SIZE:
+            raise ValueError(f"{path.relative_to(ROOT)} is {width}x{height}, expected {TILE_SIZE}x{TILE_SIZE}")
+        blit(atlas, ATLAS_WIDTH, pixels, width, height, col * TILE_SIZE, row * TILE_SIZE)
+    return atlas
+
+
+def build_candidate_sheet(config: dict) -> bytearray:
+    sheet = bytearray((0, 0, 0, 0) * CANDIDATE_SHEET_WIDTH * CANDIDATE_SHEET_HEIGHT)
+    source_dir = config["source_dir"]
+    for tile_index in range(16):
+        path = source_dir / f"tile_{tile_index}.png"
+        if not path.exists():
+            raise FileNotFoundError(f"Missing PixelLab source tile: {path.relative_to(ROOT)}")
+        width, height, pixels = read_png_rgba(path)
+        if width != TILE_SIZE or height != TILE_SIZE:
+            raise ValueError(f"{path.relative_to(ROOT)} is {width}x{height}, expected {TILE_SIZE}x{TILE_SIZE}")
+        col = tile_index % 4
+        row = tile_index // 4
+        blit(sheet, CANDIDATE_SHEET_WIDTH, pixels, width, height, col * TILE_SIZE, row * TILE_SIZE)
+    return sheet
+
+
+def write_candidate_sidecar(config: dict) -> None:
+    output = config["output"]
     tiles = []
-    for idx, tile_id in enumerate(TILE_ORDER):
-        col = idx % COLUMNS
-        row = idx // COLUMNS
+    for tile_index, tile_id in enumerate(config["tile_labels"]):
+        col = tile_index % 4
+        row = tile_index // 4
         tiles.append(
             {
                 "tile": tile_id,
                 "rect": [col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE],
-                "source": "red-clay coherent residential reset palette from small_house_direction_preview and roof_tileset",
+                "source": f"{config['job_id']} tile_{tile_index}",
             }
         )
     payload = {
-        "asset_name": "Curated Modular Building Atlas",
-        "runtime_path": "assets/sprites/town/buildings/modular_building_atlas.png",
-        "recipe_path": "assets/sprites/town/buildings/modular_building_atlas.recipe.json",
+        "asset_name": config["asset_name"],
+        "runtime_path": str(output.relative_to(ROOT)).replace("\\", "/"),
+        "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
         "tile_size": TILE_SIZE,
-        "status": "integrated",
-        "notes": "Runtime atlas for 3/4 Brindlewick buildings. Red-clay roof, cream plaster walls, timber trim, gray foundation; tile ids are consumed by scripts/town.gd.",
+        "sheet_size": [4, 4],
+        "status": config["status"],
+        "notes": config["notes"],
+        "pixellab_job": config["job_id"],
+        "seed": config["seed"],
+        "source_dir": str(config["source_dir"].relative_to(ROOT)).replace("\\", "/"),
+        "tiles": tiles,
+    }
+    output.with_suffix(".json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def write_sidecar() -> None:
+    tiles = []
+    for tile_id, (source_key, source_tile, col, row) in TILE_MAP.items():
+        source = "transparent"
+        if source_key is not None:
+            source = f"{PIXELLAB_SOURCES[source_key]['job_id']} tile_{source_tile}"
+        tiles.append(
+            {
+                "tile": tile_id,
+                "rect": [col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE],
+                "source": source,
+            }
+        )
+    payload = {
+        "asset_name": "PixelLab Modular Building Atlas",
+        "runtime_path": "assets/sprites/town/buildings/modular_building_atlas_v2.png",
+        "prompt_log": "assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md",
+        "tile_size": TILE_SIZE,
+        "status": "candidate_integrated",
+        "notes": "Runtime atlas composed only from PixelLab-generated reusable 16x16 modules. No single-building sprites or assembled facade sprites.",
+        "pixellab_jobs": [source["job_id"] for source in PIXELLAB_SOURCES.values()],
         "tiles": tiles,
     }
     SIDECAR.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    atlas = build_atlas()
-    atlas.save(OUTPUT)
+    pixels = build_atlas()
+    write_png_rgba(OUTPUT, ATLAS_WIDTH, ATLAS_HEIGHT, bytes(pixels))
     write_sidecar()
-    print(f"Wrote {OUTPUT.relative_to(ROOT)} ({atlas.width}x{atlas.height})")
+    print(f"Wrote {OUTPUT.relative_to(ROOT)} ({ATLAS_WIDTH}x{ATLAS_HEIGHT})")
     print(f"Wrote {SIDECAR.relative_to(ROOT)}")
+    for config in CANDIDATE_SHEETS:
+        sheet = build_candidate_sheet(config)
+        output = config["output"]
+        write_png_rgba(output, CANDIDATE_SHEET_WIDTH, CANDIDATE_SHEET_HEIGHT, bytes(sheet))
+        write_candidate_sidecar(config)
+        print(f"Wrote {output.relative_to(ROOT)} ({CANDIDATE_SHEET_WIDTH}x{CANDIDATE_SHEET_HEIGHT})")
+        print(f"Wrote {output.with_suffix('.json').relative_to(ROOT)}")
     return 0
 
 

@@ -141,21 +141,12 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/shops/awnings/workshop.png` | 48×24 | 1 | Copper storefront awning |
 | `assets/sprites/town/shops/awnings/chapel.png` | 48×24 | 1 | Blue-green chapel awning |
 
-## Town Shop Buildings
+## Town Building Modules
 
 | File | Size | Frames | Notes |
 |---|---|---|---|
-| `assets/sprites/town/buildings/elder_hall.png` | 96x96 | 1 | PixelLab 3/4 Elder Hall building |
-| `assets/sprites/town/buildings/weapon_shop.png` | 80x80 | 1 | PixelLab 3/4 weapon shop building |
-| `assets/sprites/town/buildings/armor_shop.png` | 80x80 | 1 | PixelLab 3/4 armor shop building |
-| `assets/sprites/town/buildings/inn.png` | 96x96 | 1 | PixelLab 3/4 inn building |
-| `assets/sprites/town/buildings/tavern.png` | 96x96 | 1 | PixelLab 3/4 tavern building |
-| `assets/sprites/town/buildings/workshop.png` | 96x96 | 1 | PixelLab 3/4 tinkerer workshop building |
-| `assets/sprites/town/buildings/chapel.png` | 80x80 | 1 | PixelLab 3/4 chapel/healer building |
-| `assets/sprites/town/buildings/small_house.png` | 64×64 | 1 | PixelLab 3/4 reusable small house |
 | `assets/sprites/town/buildings/small_house_direction_preview.png` | 176×136 | 1 | Reference-only small house direction mockup |
 | `assets/sprites/town/buildings/small_house_direction_preview.json` | metadata | 1 | Reference-only mockup metadata |
-| `assets/sprites/town/buildings/large_house.png` | 96×96 | 1 | PixelLab 3/4 reusable larger house |
 | `assets/sprites/town/buildings/door_stoop_pieces.png` | 96×96 | 1 | PixelLab modular doors and stoops |
 
 | `assets/sprites/town/buildings/wall_construction_tiles.png` | 128x128 | 1 | PixelLab wall, stone, timber, post, trim, and balcony construction sheet |
@@ -260,10 +251,10 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/buildings/doorway_exterior_transitions.png` | 128x128 | 1 | PixelLab doorway/exterior transition candidate |
 | `assets/sprites/town/ground/seasonal_flower_foliage_accents.png` | 128x128 | 1 | PixelLab seasonal flower and foliage accents |
 | `assets/sprites/town/props/coastal_town_crossover_props.png` | 128x128 | 1 | PixelLab coastal-town crossover prop sheet |
-| `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 320x320 | 1 | PixelLab runtime shop sprite split sheet |
-| `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 320x320 | 1 | PixelLab runtime home sprite split sheet |
-| `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 320x320 | 1 | PixelLab runtime public building split sheet |
-| `assets/sprites/town/buildings/modular_building_atlas.png` | 128x64 | 1 | Curated 16x16 modular building atlas used by `scripts/town.gd` |
+| `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 320x320 | 1 | PixelLab shop reference/candidate sheet; not split into one-off runtime sprites |
+| `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 320x320 | 1 | PixelLab home reference/candidate sheet; not split into one-off runtime sprites |
+| `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 320x320 | 1 | PixelLab public-building reference/candidate sheet; not split into one-off runtime sprites |
+| `assets/sprites/town/buildings/modular_building_atlas_v2.png` | 128x96 | 1 | Curated 16x16 modular building atlas used by `scripts/town.gd` |
 | `assets/sprites/town/buildings/modular_facade_construction_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular facade reference/candidate |
 | `assets/sprites/town/buildings/modular_roof_wall_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular roof/wall reference/candidate |
 | `assets/sprites/town/buildings/modular_shop_sign_awning_atlas_pixellab.png` | 128x128 | 1 | PixelLab modular shop sign/awning reference/candidate |
@@ -356,30 +347,16 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/buildings/breakfast_log_wall_trim_modules.png` | 128x128 | 1 | Pending PixelLab breakfast log wall trim modules |
 | `assets/sprites/ui/icons/town_item_icons_retry_pixellab.png` | 128x128 | 1 | Pending PixelLab breakfast UI item icon retry sheet |
 | `assets/sprites/town/buildings/roof_blocks_candidate.png` | 128x128 | 1 | PixelLab roof/building style reference; not final modular sheet |
-| `assets/sprites/town/shops/buildings/elder_hall.png` | 96×64 | 1 | Project-owned elder hall facade |
-| `assets/sprites/town/shops/buildings/weapon_shop.png` | 96×64 | 1 | Project-owned weapon shop facade |
-| `assets/sprites/town/shops/buildings/armor_shop.png` | 96×64 | 1 | Project-owned armor shop facade |
-| `assets/sprites/town/shops/buildings/inn.png` | 96×64 | 1 | Project-owned inn facade |
-| `assets/sprites/town/shops/buildings/tavern.png` | 96×64 | 1 | Project-owned tavern facade |
-| `assets/sprites/town/shops/buildings/workshop.png` | 96×64 | 1 | Project-owned workshop facade |
-| `assets/sprites/town/shops/buildings/chapel.png` | 96×64 | 1 | Project-owned chapel facade |
-
-Rebuild town shop facades with:
-
-```powershell
-python scripts/dev/build_town_shop_buildings.py
-```
-
 Rebuild the modular Brindlewick building atlas used by `scripts/town.gd` with:
 
 ```powershell
 python scripts/dev/build_town_modular_building_atlas.py
 ```
 
-The modular atlas is recipe-driven. Edit the source/cell/crop choices in:
+The modular atlas is script-driven. Edit the PixelLab source tile selections in:
 
 ```text
-assets/sprites/town/buildings/modular_building_atlas.recipe.json
+scripts/dev/build_town_modular_building_atlas.py
 ```
 
 Then run the world-art pipeline:
