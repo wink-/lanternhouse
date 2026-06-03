@@ -300,7 +300,6 @@ var _town_props: Array = TOWN_PROPS.duplicate(true)
 var _building_doors: Dictionary = BUILDING_DOORS.duplicate(true)
 var _building_interactions: Dictionary = BUILDING_INTERACTIONS.duplicate(true)
 var _cat_wander_radius: int = CAT_WANDER_RADIUS
-var _runtime_building_textures: Dictionary = {}
 var _player_idle_textures: Dictionary = {}
 var _npc_idle_textures: Dictionary = {}
 var _cat_marker: Sprite2D
@@ -536,10 +535,6 @@ func _draw_buildings() -> void:
 	_draw_building_labels()
 
 func _draw_town_building(building_data: Dictionary) -> void:
-	var texture: Texture2D = _load_runtime_building(building_data["id"])
-	if texture:
-		_draw_runtime_building_sprite(building_data, texture)
-		return
 	if _modular_building_tileset:
 		_draw_modular_town_building(building_data)
 		return
@@ -554,56 +549,6 @@ func _add_soft_shadow(parent: Node, position: Vector2, size: Vector2, z: int, co
 	shadow.size = size
 	shadow.z_index = z
 	parent.add_child(shadow)
-
-func _load_runtime_building(building_id: String) -> Texture2D:
-	if _runtime_building_textures.has(building_id):
-		return _runtime_building_textures[building_id]
-	var texture := SpriteCache.town_building(building_id)
-	_runtime_building_textures[building_id] = texture
-	return texture
-
-func _draw_runtime_building_sprite(building_data: Dictionary, texture: Texture2D) -> void:
-	var size: Vector2i = building_data.get("size", Vector2i(6, 4))
-	var footprint := Vector2(size * TILE_SIZE)
-	var position := Vector2(building_data["grid"] * TILE_SIZE)
-	position += Vector2((footprint.x - texture.get_width()) / 2.0, footprint.y - texture.get_height())
-	_add_soft_shadow(
-		building_layer,
-		position + Vector2(4, max(6, texture.get_height() - 4)),
-		Vector2(max(24, texture.get_width() - 8), 4),
-		1,
-		BUILDING_CONTACT_SHADOW_COLOR
-	)
-	_add_split_runtime_building(building_data["id"], texture, position)
-
-func _add_split_runtime_building(building_id: String, texture: Texture2D, position: Vector2) -> void:
-	var upper_height := _building_upper_height(texture.get_height())
-	var lower_height := texture.get_height() - upper_height
-	if lower_height > 0:
-		var lower_sprite := Sprite2D.new()
-		lower_sprite.name = "RuntimeBuildingLower_%s" % building_id
-		lower_sprite.texture = texture
-		lower_sprite.region_enabled = true
-		lower_sprite.region_rect = Rect2(Vector2(0, upper_height), Vector2(texture.get_width(), lower_height))
-		lower_sprite.centered = false
-		lower_sprite.position = position + Vector2(0, upper_height)
-		lower_sprite.z_index = 2
-		building_layer.add_child(lower_sprite)
-	var upper_sprite := Sprite2D.new()
-	upper_sprite.name = "RuntimeBuildingUpper_%s" % building_id
-	upper_sprite.texture = texture
-	upper_sprite.region_enabled = true
-	upper_sprite.region_rect = Rect2(Vector2.ZERO, Vector2(texture.get_width(), upper_height))
-	upper_sprite.centered = false
-	upper_sprite.position = position
-	upper_sprite.z_index = 2
-	building_upper_layer.add_child(upper_sprite)
-
-func _building_upper_height(texture_height: int) -> int:
-	var max_upper: int = max(1, texture_height - 1)
-	var minimum_upper: int = min(TILE_SIZE, max_upper)
-	var upper_height := int(round(float(texture_height) * 0.55))
-	return clampi(upper_height, minimum_upper, max_upper)
 
 func _draw_modular_town_building(building_data: Dictionary) -> void:
 	var size: Vector2i = building_data.get("size", Vector2i(6, 4))

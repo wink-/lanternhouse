@@ -10,7 +10,6 @@ PYTHON = sys.executable
 
 BUILD_STEPS = [
     ["scripts/dev/build_town_modular_building_atlas.py"],
-    ["scripts/dev/extract_town_runtime_buildings.py"],
     ["scripts/dev/validate_world_art.py"],
     ["scripts/dev/validate_town_layout.py"],
     ["scripts/dev/render_town_layout_preview.py", "--all"],
