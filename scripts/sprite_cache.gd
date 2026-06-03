@@ -103,8 +103,7 @@ func tile_sprite(tile_id: String) -> Texture2D:
 	return get_sprite("tiles/%s.png" % tile_id)
 
 func town_building(building_id: String) -> Texture2D:
-	push_warning("Single-building sprites are retired; use town.modular_building_atlas for composed buildings.")
-	return null
+	return get_sprite("town/buildings/runtime/%s.png" % building_id)
 
 func town_awning(awning_id: String) -> Texture2D:
 	return get_asset("town.awning.%s" % awning_id)
