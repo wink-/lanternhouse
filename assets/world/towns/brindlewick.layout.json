@@ -289,7 +289,7 @@
       ],
       "plaque": "plaque_blank",
       "public": true,
-      "render": "modular_tiles",
+      "render": "manual_sprites",
       "fallback_region": [
         219,
         16,
