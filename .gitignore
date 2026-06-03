@@ -8,6 +8,8 @@ downloads/
 __pycache__/
 *.pyc
 .worktrees/
+.venv/
+artifacts/screenshots/
 
 # OS
 .DS_Store
