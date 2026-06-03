@@ -14,6 +14,18 @@ props, or cat placement; then run `python scripts/dev/build_world_art.py`.
 
 Brindlewick buildings are assembled from modular 16x16 roof, wall, foundation, door, window, plaque, trim, and lantern tiles. Do not add one-off single-building facade sprites here.
 
+## Archived Building References
+
+These sheets are kept only for provenance. The live town renderer uses the modular building atlas instead.
+
+| Asset | PixelLab ID | Runtime Path | Footprint | Entrance Offset | Intended Scale | Notes |
+|---|---|---|---|---|---|---|
+| Runtime Building Variants | `355bdb01-93fc-46de-84b7-4ec9e07314f2` | `assets/sprites/town/buildings/archived/runtime_building_variants.png` | 16x16 reference sheet | N/A | 1.0 | Archived single-building reference sheet for provenance only. |
+| Runtime Compact Building Variants | `f19abf5a-b6ad-4e40-93f8-f8bfe191562b` | `assets/sprites/town/buildings/archived/runtime_compact_building_variants.png` | 16x16 reference sheet | N/A | 1.0 | Archived single-building reference sheet for provenance only. |
+| Runtime Shop Split Sheet | `a33b2294-d8cd-48e5-9c2e-5286b4eeca2c` | `assets/sprites/town/buildings/archived/runtime_shop_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Archived single-building reference sheet for provenance only. |
+| Runtime Home Split Sheet | `9980b46a-a3e4-4f5b-b462-72de4786d965` | `assets/sprites/town/buildings/archived/runtime_home_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Archived single-building reference sheet for provenance only. |
+| Runtime Public Split Sheet | `5765a752-b7fa-4d36-88b3-a2808f4f8cb5` | `assets/sprites/town/buildings/archived/runtime_public_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Archived single-building reference sheet for provenance only. |
+
 ## Building Details
 
 | Asset | PixelLab ID | Runtime Path | Footprint | Entrance Offset | Intended Scale | Notes |
@@ -84,8 +96,6 @@ Brindlewick buildings are assembled from modular 16x16 roof, wall, foundation, d
 | Residential Facade Reference | `b4cd24ca-7f18-4b56-8b3b-bef099de1f2d` | `assets/sprites/town/buildings/residential_facade_reference.png` | 12x8 reference sheet | N/A | 1.0 | Small house, large house, and cozy cottage facade references. |
 | Final Facade Polish Reference | `f7b0cdeb-7698-45d7-82ef-37e5da043344` | `assets/sprites/town/buildings/final_facade_polish_reference.png` | 12x8 reference sheet | N/A | 1.0 | House, shop, inn, and hall facades using identical materials and aligned doors. |
 | Final Roof Polish Reference | `0b48aee4-53b1-4f27-aecb-f02a07fe69d7` | `assets/sprites/town/buildings/final_roof_polish_reference.png` | 8x6 reference sheet | N/A | 1.0 | Roof strips, corners, gable caps, ridge caps, mossy variants, and eave shadows. |
-| Runtime Building Variants | `355bdb01-93fc-46de-84b7-4ec9e07314f2` | `assets/sprites/town/buildings/runtime_building_variants.png` | 16x16 reference sheet | N/A | 1.0 | Runtime-ready small house, shop, inn, and hall variants using the final facade language. |
-| Runtime Compact Building Variants | `f19abf5a-b6ad-4e40-93f8-f8bfe191562b` | `assets/sprites/town/buildings/runtime_compact_building_variants.png` | 16x16 reference sheet | N/A | 1.0 | Runtime-ready cottage, healer nook, workshop shed, and storage house variants. |
 | Cohesive Construction Tiles | `cbbc2ee0-b0d5-4877-844b-ef0db1362728` | `assets/sprites/town/buildings/cohesive_construction_tiles.png` | 16x16 reference/candidate sheet | N/A | 1.0 | Candidate sheet for cohesive wall, roof, and threshold construction language; output includes small assembled pieces. |
 | Shopfront Facade Modules | `df0eedf1-6e63-4a81-b0cd-65bddcd57e65` | `assets/sprites/town/buildings/shopfront_facade_modules.png` | 16x16 reference/candidate sheet | N/A | 1.0 | Candidate strip for shopfront facades and no-text storefront language. |
 | Residential Building Modules | `4942941a-43c1-4fe9-94ba-f4538e30c3ae` | `assets/sprites/town/buildings/residential_building_modules.png` | 16x16 reference/candidate sheet | N/A | 1.0 | Candidate sheet for residential facades, cottage doors, windows, roofs, and exterior details. |
@@ -100,9 +110,6 @@ Brindlewick buildings are assembled from modular 16x16 roof, wall, foundation, d
 | Exterior Prop Details | `b802717c-f3d8-4320-a874-cc73b772e604` | `assets/sprites/town/buildings/exterior_prop_details.png` | 8x8 module sheet | N/A | 1.0 | Good exterior dressing sheet: lanterns, chimneys, flower boxes, barrels, crates, planters, roof moss, and small awning pieces. |
 | Final Roof Chimney Accessories | `72d67c09-4356-4500-9cab-8ab8f0135990` | `assets/sprites/town/buildings/final_roof_chimney_accessories.png` | 8x8 module sheet | N/A | 1.0 | Good roof accessory module sheet: roof chunks, chimney barrels, vents, eaves, table-like trim pieces, and red clay variants. |
 | Doorway Exterior Transitions | `42a352ea-b881-4434-98a9-a451670cdd9a` | `assets/sprites/town/buildings/doorway_exterior_transitions.png` | 8x8 candidate sheet | N/A | 1.0 | Sparse doorway/exterior candidate; output contains a small stone doorway/threshold object with foliage. |
-| Runtime Shop Split Sheet | `a33b2294-d8cd-48e5-9c2e-5286b4eeca2c` | `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Reference/candidate sheet for shop proportions; do not split into one-off runtime sprites. |
-| Runtime Home Split Sheet | `9980b46a-a3e4-4f5b-b462-72de4786d965` | `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Reference/candidate sheet for home proportions; do not split into one-off runtime sprites. |
-| Runtime Public Split Sheet | `5765a752-b7fa-4d36-88b3-a2808f4f8cb5` | `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 20x20 sheet | Centered per building | 1.0 | Reference/candidate sheet for public-building proportions; do not split into one-off runtime sprites. |
 | Modular Building Atlas | Local script-driven atlas | `assets/sprites/town/buildings/modular_building_atlas_v2.png` | 8x6 16px atlas | Centered per composed building | 1.0 | Runtime atlas used by `scripts/town.gd` to assemble Brindlewick buildings from curated PixelLab roof, wall, foundation, door, window, plaque, trim, lantern, and forge pieces. Edit `scripts/dev/build_town_modular_building_atlas.py`, then rebuild with `scripts/dev/build_world_art.py`. |
 | Modular Roof Components C5B96B12 | `c5b96b12-d4cd-46ed-a95b-cdd8cb97e5a8` | `assets/sprites/town/buildings/modular_roof_components_c5b96b12.png` | 4x4 16px sheet | N/A | 1.0 | Candidate PixelLab roof component sheet from seed `6202030`; useful texture/trim pieces but some mini-facade drift, so select manually. Prompt is saved in `assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md`. |
 | Modular Roof Texture Swatches 3EB16325 | `3eb16325-6122-4b26-b807-d8d6ef000106` | `assets/sprites/town/buildings/modular_roof_texture_swatches_3eb16325.png` | 4x4 16px sheet | N/A | 1.0 | Preferred PixelLab roof material sheet from seed `6202034`; filled red clay texture swatch prompt avoided facade drift and produced reusable shingle variants. Prompt is saved in `assets/sprites/town/buildings/pixellab_candidates/PROMPTS.md`. |

@@ -213,8 +213,6 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/buildings/residential_facade_reference.png` | 192x192 | 1 | PixelLab residential facade reference sheet |
 | `assets/sprites/town/buildings/final_facade_polish_reference.png` | 192x192 | 1 | PixelLab final facade polish reference |
 | `assets/sprites/town/buildings/final_roof_polish_reference.png` | 128x128 | 1 | PixelLab final roof polish reference |
-| `assets/sprites/town/buildings/runtime_building_variants.png` | 256x256 | 1 | PixelLab runtime-ready building variant sheet |
-| `assets/sprites/town/buildings/runtime_compact_building_variants.png` | 256x256 | 1 | PixelLab runtime-ready compact building variant sheet |
 | `assets/sprites/town/buildings/cohesive_construction_tiles.png` | 256x256 | 1 | PixelLab cohesive building construction reference/candidate sheet |
 | `assets/sprites/town/buildings/shopfront_facade_modules.png` | 256x256 | 1 | PixelLab shopfront facade reference/candidate strip |
 | `assets/sprites/town/buildings/residential_building_modules.png` | 256x256 | 1 | PixelLab residential building reference/candidate sheet |
@@ -251,9 +249,6 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/buildings/doorway_exterior_transitions.png` | 128x128 | 1 | PixelLab doorway/exterior transition candidate |
 | `assets/sprites/town/ground/seasonal_flower_foliage_accents.png` | 128x128 | 1 | PixelLab seasonal flower and foliage accents |
 | `assets/sprites/town/props/coastal_town_crossover_props.png` | 128x128 | 1 | PixelLab coastal-town crossover prop sheet |
-| `assets/sprites/town/buildings/runtime_shop_split_sheet.png` | 320x320 | 1 | PixelLab shop reference/candidate sheet; not split into one-off runtime sprites |
-| `assets/sprites/town/buildings/runtime_home_split_sheet.png` | 320x320 | 1 | PixelLab home reference/candidate sheet; not split into one-off runtime sprites |
-| `assets/sprites/town/buildings/runtime_public_split_sheet.png` | 320x320 | 1 | PixelLab public-building reference/candidate sheet; not split into one-off runtime sprites |
 | `assets/sprites/town/buildings/modular_building_atlas_v2.png` | 128x96 | 1 | Curated 16x16 modular building atlas used by `scripts/town.gd` |
 | `assets/sprites/town/buildings/modular_facade_construction_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular facade reference/candidate |
 | `assets/sprites/town/buildings/modular_roof_wall_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular roof/wall reference/candidate |
@@ -381,6 +376,18 @@ file. It also renders quick placement previews such as:
 ```text
 assets/world/towns/brindlewick.preview.png
 ```
+
+## Archived Town Building Sheets
+
+These files are kept for provenance only and are not expected by the live game.
+
+| File | Size | Frames | Notes |
+|---|---|---|---|
+| `assets/sprites/town/buildings/archived/runtime_building_variants.png` | 256x256 | 1 | Archived runtime-ready building variant sheet |
+| `assets/sprites/town/buildings/archived/runtime_compact_building_variants.png` | 256x256 | 1 | Archived runtime-ready compact building variant sheet |
+| `assets/sprites/town/buildings/archived/runtime_shop_split_sheet.png` | 320x320 | 1 | Archived shop reference/candidate sheet; not split into one-off runtime sprites |
+| `assets/sprites/town/buildings/archived/runtime_home_split_sheet.png` | 320x320 | 1 | Archived home reference/candidate sheet; not split into one-off runtime sprites |
+| `assets/sprites/town/buildings/archived/runtime_public_split_sheet.png` | 320x320 | 1 | Archived public-building reference/candidate sheet; not split into one-off runtime sprites |
 
 ## Town Ground Kit
 
