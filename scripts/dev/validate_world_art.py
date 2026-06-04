@@ -11,6 +11,8 @@ ROOT = Path(__file__).resolve().parents[2]
 TOWN_GD = ROOT / "scripts" / "town.gd"
 MODULAR_ATLAS = ROOT / "assets" / "sprites" / "town" / "buildings" / "modular_building_atlas_v2.png"
 MODULAR_SIDECAR = MODULAR_ATLAS.with_suffix(".json")
+ELDER_HALL_ATLAS = ROOT / "assets" / "sprites" / "town" / "buildings" / "elder_hall_modular_atlas_v1.png"
+ELDER_HALL_SIDECAR = ELDER_HALL_ATLAS.with_suffix(".json")
 
 
 def png_size(path: Path) -> tuple[int, int]:
@@ -74,8 +76,36 @@ def validate_modular_building_atlas() -> list[str]:
     return errors
 
 
+def validate_elder_hall_building_atlas() -> list[str]:
+    errors: list[str] = []
+    if not ELDER_HALL_ATLAS.exists():
+        return [f"Missing atlas: {ELDER_HALL_ATLAS.relative_to(ROOT)}"]
+    if not ELDER_HALL_SIDECAR.exists():
+        return [f"Missing atlas sidecar: {ELDER_HALL_SIDECAR.relative_to(ROOT)}"]
+
+    sidecar = json.loads(ELDER_HALL_SIDECAR.read_text(encoding="utf-8"))
+    tile_size = int(sidecar.get("tile_size", 16))
+    tiles = sidecar.get("tiles", [])
+    if tile_size != 16:
+        errors.append(f"Expected elder hall atlas tile_size 16, got {tile_size}")
+
+    width, height = png_size(ELDER_HALL_ATLAS)
+    for tile in tiles:
+        tile_id = tile["tile"]
+        rect = tuple(tile["rect"])
+        x, y, w, h = rect
+        if w != tile_size or h != tile_size:
+            errors.append(f"{tile_id}: rect size {w}x{h} does not match tile_size {tile_size}")
+        if x < 0 or y < 0 or x + w > width or y + h > height:
+            errors.append(f"{tile_id}: rect {rect} is outside atlas {width}x{height}")
+    return errors
+
+
 def main() -> int:
-    checks = [("modular building atlas", validate_modular_building_atlas())]
+    checks = [
+        ("modular building atlas", validate_modular_building_atlas()),
+        ("elder hall building atlas", validate_elder_hall_building_atlas()),
+    ]
     failed = False
     for name, errors in checks:
         if errors:

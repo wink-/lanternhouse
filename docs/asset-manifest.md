@@ -250,6 +250,7 @@ python scripts/dev/build_town_ground_atlas.py
 | `assets/sprites/town/ground/seasonal_flower_foliage_accents.png` | 128x128 | 1 | PixelLab seasonal flower and foliage accents |
 | `assets/sprites/town/props/coastal_town_crossover_props.png` | 128x128 | 1 | PixelLab coastal-town crossover prop sheet |
 | `assets/sprites/town/buildings/modular_building_atlas_v2.png` | 128x96 | 1 | Curated 16x16 modular building atlas used by `scripts/town.gd` |
+| `assets/sprites/town/buildings/elder_hall_modular_atlas_v1.png` | 64x64 | 1 | Dedicated Elder Hall modular atlas used by `scripts/town.gd` |
 | `assets/sprites/town/buildings/modular_facade_construction_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular facade reference/candidate |
 | `assets/sprites/town/buildings/modular_roof_wall_atlas_pixellab.png` | 256x256 | 1 | PixelLab modular roof/wall reference/candidate |
 | `assets/sprites/town/buildings/modular_shop_sign_awning_atlas_pixellab.png` | 128x128 | 1 | PixelLab modular shop sign/awning reference/candidate |

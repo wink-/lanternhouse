@@ -1,0 +1,170 @@
+{
+  "asset_name": "PixelLab Elder Hall Modular Atlas",
+  "runtime_path": "assets/sprites/town/buildings/elder_hall_modular_atlas_v1.png",
+  "source_tile_job": "acee5a00-74f6-4d72-b182-4b6ba71d9996",
+  "tile_size": 16,
+  "status": "candidate_integrated",
+  "notes": "Dedicated PixelLab modular atlas for Elder Hall. Built from reusable 16x16 hall modules; not a single-sprite facade.",
+  "tiles": [
+    {
+      "tile": "roof_left",
+      "rect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_0"
+    },
+    {
+      "tile": "roof_mid",
+      "rect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_1"
+    },
+    {
+      "tile": "roof_right",
+      "rect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_2"
+    },
+    {
+      "tile": "roof_ridge",
+      "rect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_3"
+    },
+    {
+      "tile": "roof_eave",
+      "rect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_4"
+    },
+    {
+      "tile": "chimney",
+      "rect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_5"
+    },
+    {
+      "tile": "wall",
+      "rect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_6"
+    },
+    {
+      "tile": "wall_timber",
+      "rect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_7"
+    },
+    {
+      "tile": "wall_brace",
+      "rect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_8"
+    },
+    {
+      "tile": "wall_shadow",
+      "rect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_9"
+    },
+    {
+      "tile": "foundation",
+      "rect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_10"
+    },
+    {
+      "tile": "foundation_moss",
+      "rect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_11"
+    },
+    {
+      "tile": "threshold",
+      "rect": [
+        0,
+        48,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_12"
+    },
+    {
+      "tile": "door",
+      "rect": [
+        16,
+        48,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_13"
+    },
+    {
+      "tile": "window_arch",
+      "rect": [
+        32,
+        48,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_14"
+    },
+    {
+      "tile": "plaque_blank",
+      "rect": [
+        48,
+        48,
+        16,
+        16
+      ],
+      "source": "acee5a00 tile_15"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "buildings": {
     "elder_hall": {
       "display_name": "Elder Hall",
-      "sprite_path": "assets/sprites/town/buildings/modular_building_atlas_v2.png",
+      "sprite_path": "assets/sprites/town/buildings/elder_hall_modular_atlas_v1.png",
       "runtime_ready": true,
       "size": [6, 9],
       "door_offset": [2, 8],

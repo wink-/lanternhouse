@@ -136,6 +136,24 @@ const MODULAR_BUILDING_TILE_RECTS := {
 	"forge_anvil_plaque": Rect2i(Vector2i(48, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
 	"forge_door_right": Rect2i(Vector2i(64, 80), Vector2i(TILE_SIZE, TILE_SIZE)),
 }
+const ELDER_HALL_MODULAR_BUILDING_TILE_RECTS := {
+	"roof_left": Rect2i(Vector2i(0, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_mid": Rect2i(Vector2i(16, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_right": Rect2i(Vector2i(32, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_ridge": Rect2i(Vector2i(48, 0), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"roof_eave": Rect2i(Vector2i(0, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"chimney": Rect2i(Vector2i(16, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall": Rect2i(Vector2i(32, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_timber": Rect2i(Vector2i(48, 16), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_brace": Rect2i(Vector2i(0, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"wall_shadow": Rect2i(Vector2i(16, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"foundation": Rect2i(Vector2i(32, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"foundation_moss": Rect2i(Vector2i(48, 32), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"threshold": Rect2i(Vector2i(0, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"door": Rect2i(Vector2i(16, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"window_arch": Rect2i(Vector2i(32, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+	"plaque_blank": Rect2i(Vector2i(48, 48), Vector2i(TILE_SIZE, TILE_SIZE)),
+}
 
 const MAP := [
 	",,,,,,,,,,,,,,,lllllll,,,,,,,,,,,,,,,,,,",
@@ -291,6 +309,8 @@ var _town_atlas: Texture2D
 var _town_ground: Texture2D
 var _grass_dirt_wang: Texture2D
 var _modular_building_atlas: Texture2D
+var _elder_hall_modular_building_atlas: Texture2D
+var _elder_hall_modular_building_atlas_coords: Dictionary
 var _modular_building_tileset: TileSet
 var _modular_building_atlas_coords: Dictionary  ## tile_id -> Vector2i, precomputed from MODULAR_BUILDING_TILE_RECTS
 var _town_map: Array = MAP.duplicate()
@@ -391,6 +411,11 @@ func _load_quiet_village_assets() -> void:
 	_town_ground = SpriteCache.get_asset("town.ground")
 	_grass_dirt_wang = SpriteCache.get_asset("town.grass_dirt_wang")
 	_modular_building_atlas = SpriteCache.get_asset("town.modular_building_atlas")
+	_elder_hall_modular_building_atlas = SpriteCache.get_asset("town.elder_hall_modular_atlas")
+	_elder_hall_modular_building_atlas_coords.clear()
+	for tile_id: String in ELDER_HALL_MODULAR_BUILDING_TILE_RECTS:
+		var rect: Rect2i = ELDER_HALL_MODULAR_BUILDING_TILE_RECTS[tile_id]
+		_elder_hall_modular_building_atlas_coords[tile_id] = Vector2i(rect.position.x / TILE_SIZE, rect.position.y / TILE_SIZE)
 	_modular_building_tileset = _build_modular_building_tileset()
 
 func _build_modular_building_tileset() -> TileSet:
@@ -646,7 +671,11 @@ func _draw_modular_town_building(building_data: Dictionary) -> void:
 		_add_modular_building_tile(upper_root, "chimney", Vector2i(size.x - 2, 0))
 
 func _draw_manual_town_building(building_data: Dictionary) -> void:
+	if building_data["id"] == "elder_hall":
+		_draw_elder_hall_manual_town_building(building_data)
+		return
 	var size: Vector2i = building_data.get("size", Vector2i(6, 4))
+	var atlas_texture: Texture2D = _modular_building_atlas
 	var root := Node2D.new()
 	root.name = "Building_%s" % building_data["id"]
 	root.position = Vector2(building_data["grid"] * TILE_SIZE)
@@ -674,10 +703,10 @@ func _draw_manual_town_building(building_data: Dictionary) -> void:
 			roof_tile = "roof_right"
 		elif x == 1 or x == size.x - 2:
 			roof_tile = "roof_moss"
-		_add_modular_building_sprite(root, roof_tile, Vector2i(x, 0), 3)
+		_add_modular_building_sprite(root, roof_tile, Vector2i(x, 0), 3, atlas_texture)
 
 	for x in range(size.x):
-		_add_modular_building_sprite(root, "roof_eave", Vector2i(x, 1), 3)
+		_add_modular_building_sprite(root, "roof_eave", Vector2i(x, 1), 3, atlas_texture)
 
 	for y in range(2, foundation_row):
 		for x in range(size.x):
@@ -688,17 +717,17 @@ func _draw_manual_town_building(building_data: Dictionary) -> void:
 				wall_tile = "wall_shadow"
 			elif not is_public and x in [1, size.x - 2] and y == 3:
 				wall_tile = "wall_brace"
-			_add_modular_building_sprite(root, wall_tile, Vector2i(x, y), 2)
+			_add_modular_building_sprite(root, wall_tile, Vector2i(x, y), 2, atlas_texture)
 
 	for x in range(size.x):
 		var foundation_tile := "foundation_moss" if x == 0 or x == size.x - 1 else "foundation"
-		_add_modular_building_sprite(root, foundation_tile, Vector2i(x, foundation_row), 1)
+		_add_modular_building_sprite(root, foundation_tile, Vector2i(x, foundation_row), 1, atlas_texture)
 
-	_add_modular_building_sprite(root, "door", Vector2i(door_col, foundation_row - 1), 3)
-	_add_modular_building_sprite(root, "threshold", Vector2i(door_col, foundation_row), 1)
+	_add_modular_building_sprite(root, "door", Vector2i(door_col, foundation_row - 1), 3, atlas_texture)
+	_add_modular_building_sprite(root, "threshold", Vector2i(door_col, foundation_row), 1, atlas_texture)
 	if plaque_id != "plaque_blank" or is_public:
-		_add_modular_building_sprite(root, plaque_id, Vector2i(door_col, max(2, foundation_row - 3)), 3)
-	_add_modular_building_sprite(root, "lantern", Vector2i(max(0, door_col - 1), foundation_row - 1), 3)
+		_add_modular_building_sprite(root, plaque_id, Vector2i(door_col, max(2, foundation_row - 3)), 3, atlas_texture)
+	_add_modular_building_sprite(root, "lantern", Vector2i(max(0, door_col - 1), foundation_row - 1), 3, atlas_texture)
 
 	var window_columns: Array = _building_window_columns(size.x, door_col)
 	var window_rows: Array = [2, 4]
@@ -710,10 +739,69 @@ func _draw_manual_town_building(building_data: Dictionary) -> void:
 			if not is_public and x < door_col:
 				continue
 			var tile_id := "window_arch" if is_public else "window"
-			_add_modular_building_sprite(root, tile_id, Vector2i(x, row), 3)
+			_add_modular_building_sprite(root, tile_id, Vector2i(x, row), 3, atlas_texture)
 
 	if size.x >= 6 or building_data["id"] in ["elder_hall", "tavern", "workshop", "inn"]:
-		_add_modular_building_sprite(root, "chimney", Vector2i(size.x - 2, 0), 3)
+		_add_modular_building_sprite(root, "chimney", Vector2i(size.x - 2, 0), 3, atlas_texture)
+
+func _draw_elder_hall_manual_town_building(building_data: Dictionary) -> void:
+	var size: Vector2i = building_data.get("size", Vector2i(7, 9))
+	var atlas_texture: Texture2D = _elder_hall_modular_building_atlas if _elder_hall_modular_building_atlas else _modular_building_atlas
+	var atlas_coords: Dictionary = _elder_hall_modular_building_atlas_coords if not _elder_hall_modular_building_atlas_coords.is_empty() else _modular_building_atlas_coords
+	var root := Node2D.new()
+	root.name = "Building_%s" % building_data["id"]
+	root.position = Vector2(building_data["grid"] * TILE_SIZE)
+	root.z_index = 2
+	building_layer.add_child(root)
+
+	_add_soft_shadow(
+		building_layer,
+		root.position + Vector2(2, max(4, size.y * TILE_SIZE - 1)),
+		Vector2(max(28, size.x * TILE_SIZE - 4), 2),
+		1,
+		BUILDING_CONTACT_SHADOW_COLOR
+	)
+
+	var door_col: int = _building_door_column(building_data, size)
+	var foundation_row: int = size.y - 1
+
+	for x in range(size.x):
+		var roof_tile := "roof_mid"
+		if x == 0:
+			roof_tile = "roof_left"
+		elif x == size.x - 1:
+			roof_tile = "roof_right"
+		elif x == int(size.x / 2):
+			roof_tile = "roof_ridge"
+		_add_modular_building_sprite(root, roof_tile, Vector2i(x, 0), 4, atlas_texture, atlas_coords)
+
+	for x in range(size.x):
+		_add_modular_building_sprite(root, "roof_eave", Vector2i(x, 1), 4, atlas_texture, atlas_coords)
+
+	_add_modular_building_sprite(root, "chimney", Vector2i(size.x - 2, -1), 4, atlas_texture, atlas_coords)
+
+	for y in range(2, foundation_row):
+		for x in range(size.x):
+			var wall_tile := "wall"
+			if x == 0 or x == size.x - 1:
+				wall_tile = "wall_timber"
+			elif y in [3, 5] and (x == 1 or x == size.x - 2):
+				wall_tile = "wall_shadow"
+			elif y == 4 and (x == 2 or x == size.x - 3):
+				wall_tile = "wall_brace"
+			_add_modular_building_sprite(root, wall_tile, Vector2i(x, y), 3, atlas_texture, atlas_coords)
+
+	for x in range(size.x):
+		var foundation_tile := "foundation_moss" if x == 0 or x == size.x - 1 else "foundation"
+		_add_modular_building_sprite(root, foundation_tile, Vector2i(x, foundation_row), 2, atlas_texture, atlas_coords)
+
+	_add_modular_building_sprite(root, "door", Vector2i(door_col, foundation_row - 1), 4, atlas_texture, atlas_coords)
+	_add_modular_building_sprite(root, "threshold", Vector2i(door_col, foundation_row), 2, atlas_texture, atlas_coords)
+	_add_modular_building_sprite(root, "plaque_blank", Vector2i(door_col, 2), 4, atlas_texture, atlas_coords)
+
+	for x in [1, size.x - 2]:
+		_add_modular_building_sprite(root, "window_arch", Vector2i(x, 3), 4, atlas_texture, atlas_coords)
+		_add_modular_building_sprite(root, "window_arch", Vector2i(x, 5), 4, atlas_texture, atlas_coords)
 
 func _draw_weapon_shop_tiles(root: TileMapLayer, upper_root: TileMapLayer, size: Vector2i, door_col: int, wall_start: int, foundation_row: int) -> void:
 	for x in range(size.x):
@@ -773,14 +861,16 @@ func _add_modular_building_tile(tilemap: TileMapLayer, tile_id: String, local_gr
 		return
 	tilemap.set_cell(local_grid, 0, _modular_building_atlas_coords[tile_id])
 
-func _add_modular_building_sprite(parent: Node, tile_id: String, local_grid: Vector2i, z_index: int) -> void:
-	if _modular_building_atlas == null or not _modular_building_atlas_coords.has(tile_id):
+func _add_modular_building_sprite(parent: Node, tile_id: String, local_grid: Vector2i, z_index: int, atlas_texture: Texture2D = null, atlas_coords: Dictionary = {}) -> void:
+	var source_texture: Texture2D = atlas_texture if atlas_texture else _modular_building_atlas
+	var source_coords: Dictionary = atlas_coords if not atlas_coords.is_empty() else _modular_building_atlas_coords
+	if source_texture == null or not source_coords.has(tile_id):
 		return
 	var sprite := Sprite2D.new()
 	sprite.name = "Tile_%s_%d_%d" % [tile_id, local_grid.x, local_grid.y]
-	sprite.texture = _modular_building_atlas
+	sprite.texture = source_texture
 	sprite.region_enabled = true
-	var atlas_coord: Vector2i = _modular_building_atlas_coords[tile_id]
+	var atlas_coord: Vector2i = source_coords[tile_id]
 	sprite.region_rect = Rect2(Vector2(atlas_coord) * TILE_SIZE, Vector2(TILE_SIZE, TILE_SIZE))
 	sprite.centered = false
 	sprite.position = Vector2(local_grid) * TILE_SIZE
